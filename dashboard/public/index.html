@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="https://zeonhq.b-cdn.net/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="Zeon"
+      content="Zeon Web App"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>Zeon</title>
+    
+      <!-- Paste the script snippet in the head of your app's index.html -->
+      <script
+        async
+        src="https://js.stripe.com/v3/pricing-table.js">
+      </script>
+    
+  <!-- OpenReplay Tracking Code for Web App -->
+<script>
+  var initOpts = {
+    projectKey: "i2LU34lNpWHNDdgvPA2Y",
+    defaultInputMode: 0,
+    obscureTextNumbers: false,
+    obscureTextEmails: false,
+  };
+  var startOpts = { userID: "" };
+  (function(A,s,a,y,e,r){
+    r=window.OpenReplay=[e,r,y,[s-1, e]];
+    s=document.createElement('script');s.src=A;s.async=!a;
+    document.getElementsByTagName('head')[0].appendChild(s);
+    r.start=function(v){r.push([0])};
+    r.stop=function(v){r.push([1])};
+    r.setUserID=function(id){r.push([2,id])};
+    r.setUserAnonymousID=function(id){r.push([3,id])};
+    r.setMetadata=function(k,v){r.push([4,k,v])};
+    r.event=function(k,p,i){r.push([5,k,p,i])};
+    r.issue=function(k,p){r.push([6,k,p])};
+    r.isActive=function(){return false};
+    r.getSessionToken=function(){};
+  })("//static.openreplay.com/latest/openreplay-assist.js",1,0,initOpts,startOpts);
+</script>
+</head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+
+    <script src="https://unpkg.com/jwt-decode@2.2.0/build/jwt-decode.min.js"></script>
+    <script>
+      const at = localStorage.getItem("at");
+        if (at) {
+        const decoded = jwt_decode(at);
+        !(function (b, c, f, d, a, e) {
+          b.dclsPxl ||
+              ((((d = b.dclsPxl =
+                  function () {
+                      d.callMethod
+                          ? d.callMethod.apply(d, arguments)
+                          : d.queue.push(arguments);
+                  }).push = d).queue = []),
+              ((a = c.createElement("script")).async = !0),
+              (a.src = f),
+              (e = c.getElementsByTagName("script")[0]).parentNode.insertBefore(
+                  a,
+                  e
+              ));
+      })(window, document, "https://ducalis.io/js/widget.js");
+      dclsPxl("initWidget", {
+          appId: "e760d0ac71ed98e637dc9b3e2c69bedf5441be54", // Required
+          boardId: "e030a925513f5f875977c3ee49894126", // Required
+          user: {
+              // required
+                email: decoded.email,
+                hash: at,
+                // optional
+                userID: decoded.userId,
+                name: decoded.name,
+                avatar: `https://ui-avatars.com/api/?name=${decoded.name}`,
+          },
+      });
+
+    }
+  </script>
+  
+  </body>
+</html>

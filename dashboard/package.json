@@ -1,0 +1,101 @@
+{
+  "name": "dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@formspark/use-formspark": "^0.1.39",
+    "@lottiefiles/react-lottie-player": "^3.4.7",
+    "@mantine/carousel": "^6.0.19",
+    "@mantine/core": "^6.0.19",
+    "@mantine/dates": "^6.0.19",
+    "@mantine/dropzone": "^6.0.19",
+    "@mantine/form": "^6.0.19",
+    "@mantine/hooks": "^6.0.19",
+    "@mantine/modals": "^6.0.19",
+    "@mantine/notifications": "^6.0.19",
+    "@mantine/nprogress": "^6.0.19",
+    "@mantine/prism": "^6.0.19",
+    "@mantine/spotlight": "^6.0.19",
+    "@mantine/tiptap": "^6.0.19",
+    "@reduxjs/toolkit": "^1.8.3",
+    "@tabler/icons-react": "^2.31.0",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.3.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@tiptap/extension-link": "^2.1.6",
+    "@tiptap/react": "^2.1.6",
+    "@tiptap/starter-kit": "^2.1.6",
+    "@types/dot-prop": "^5.0.1",
+    "@types/jest": "^27.5.2",
+    "@types/lodash": "^4.14.191",
+    "@types/node": "^16.11.43",
+    "@types/react": "^18.0.15",
+    "@types/react-dom": "^18.0.6",
+    "@types/react-router-dom": "^5.3.3",
+    "axios": "^0.27.2",
+    "chart.js": "^3.9.1",
+    "date-fns": "^2.30.0",
+    "dayjs": "^1.11.9",
+    "dot-prop": "^5.3.0",
+    "embla-carousel-react": "^7.1.0",
+    "emoji-dictionary": "^1.0.11",
+    "jwt-decode": "^4.0.0",
+    "lodash.words": "^4.2.0",
+    "lottie-react": "^2.3.1",
+    "moment": "^2.29.4",
+    "moment-timezone": "^0.5.39",
+    "react": "^18.2.0",
+    "react-chartjs-2": "^4.3.1",
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.46.2",
+    "react-icons": "^4.6.0",
+    "react-phone-input-2": "^2.15.1",
+    "react-redux": "^8.0.2",
+    "react-router": "^6.3.0",
+    "react-router-dom": "^6.3.0",
+    "react-scripts": "5.0.1",
+    "react-select": "^5.3.2",
+    "react-toastify": "^9.0.8",
+    "redux": "^4.2.0",
+    "socket.io-client": "^4.5.4",
+    "styled-components": "^5.3.5",
+    "tabler-icons-react": "^1.52.0",
+    "typescript": "^4.7.4",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start:local": "cross-env PORT=3001 && REACT_APP_ENVIRONMENT=local react-scripts start",
+    "start:prod": "cross-env PORT=80 && REACT_APP_ENVIRONMENT=prod react-scripts start",
+    "start": "cross-env PORT=80 && REACT_APP_ENVIRONMENT=prod react-scripts start",
+    "start:dev": "cross-env PORT=80 && REACT_APP_ENVIRONMENT=dev react-scripts start",
+    "build:local": "REACT_APP_ENVIRONMENT=local react-scripts build",
+    "build:dev": "REACT_APP_ENVIRONMENT=dev react-scripts build",
+    "build:prod": "REACT_APP_ENVIRONMENT=prod react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/moment": "^2.13.0",
+    "@types/styled-components": "^5.1.25",
+    "cross-env": "^7.0.3"
+  }
+}

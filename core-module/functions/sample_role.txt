@@ -1,0 +1,30 @@
+{
+    "role" : "owner",
+    "accountId" : "j251yu",
+    "resourceActions" : [
+        {
+            "_id" : ObjectId("613100de566d334b5de492dc"),
+            "resource" : "channel",
+            "resourceName" : "Channel",
+            "actions" : [
+                {
+                    "id" : "create",
+                    "description" : "Channel create permission",
+                },
+                {
+                    "id" : "edit",
+                    "description" : "Channel edit permission"
+                },
+                {
+                    "id" : "view",
+                    "description" : "Channel list & view permission"
+                },
+                {
+                    "id" : "delete",
+                    "description" : "Channel delete permission"
+                }
+            ]
+        },
+        
+    ]
+}
