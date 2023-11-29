@@ -1,0 +1,115 @@
+version: '3.8'
+services:
+  zeon_db:
+    container_name: zeon_db
+    image: mongo:latest
+    restart: always
+    ports:
+      - "2717:27017"
+    volumes:
+      - zeon_db:/data/db
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  zeon-dashboard:
+    container_name: zeon-dashboard
+    restart: always
+    build:
+      context: ./dashboard
+    ports:
+      - "5687:3000"
+    volumes:
+      - ./dashboard:/app
+      - /app/node_modules
+    command: npm start
+
+  zeon-chat-widget:
+    container_name: zeon-chat-widget
+    restart: always
+    build:
+      context: ./zeon-widget
+    ports:
+      - "4005:4005"
+    volumes:
+      - ./zeon-widget:/app
+      - /app/node_modules
+    command: npm start
+
+  zeon-core-module:
+    container_name: zeon-core-module
+    restart: always
+    build:
+      context: ./core-module
+    ports:
+      - "3005:3005"
+    volumes:
+      - ./core-module:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - DB_URI=${DB_URI}
+      - DB_NAME=${DB_NAME}
+      - JWT_SECRET=${JWT_SECRET}
+      - CORE_BACKEND_PORT=${CORE_BACKEND_PORT}
+      - MAILER_URL=${MAILER_URL}
+      - BREVO_KEY=${BREVO_KEY}
+    depends_on:
+      - zeon_db 
+
+  zeon-chat-backend:
+    container_name: zeon-chat-backend
+    restart: always
+    build:
+      context: ./chat-backend
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./chat-backend:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - CHAT_BACKEND_PORT=${CHAT_BACKEND_PORT}
+      - DB_URI=${DB_URI}
+      - DB_NAME=${DB_NAME}
+    command: npm start
+    depends_on:
+      - zeon_db 
+ 
+  zeon-ticket-backend:
+    container_name: zeon-ticket-backend
+    restart: always
+    build:
+      context: ./ticket-backend
+    ports:
+      - "6000:6000"
+    volumes:
+      - ./ticket-backend:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - TICKET_BACKEND_PORT=${TICKET_BACKEND_PORT}
+      - DB_URI=${DB_URI}
+      - DB_NAME=${DB_NAME}
+      - MQ_URI=${MQ_URI}
+    command: npm start
+    depends_on:
+      - zeon_db
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx_static_server
+    ports:
+      - "8080:80"
+    volumes:
+      - ./server-folder/:/usr/share/nginx/html:ro 
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3.9-management
+    ports:
+      - "5672:5672"
+      - "15672:15672" # default username: guest and password: guest
+    restart: always
+
+volumes:
+  zeon_db: {}
