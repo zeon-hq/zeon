@@ -97,14 +97,33 @@ const getUserWorkspaces = async () => {
               </Text>
           </TopBarDivWrapper>
           <InnerDivWrapper>
-              <Image
+          <Text
                   className="ducalis-changelog-widget pointer"
-                  maw={20}
-                  mx="auto"
-                  radius="md"
-                  src={topBarDocs}
-                  alt="Random image"
-              />
+                  fw={"500"}
+                  fz="14px"
+                  style={{
+                    borderRadius: "6px",
+                  }}
+                  color="#101828"
+                pl={'12px'}
+                pr={'12px'}
+                pt={'4px'}
+                pb={'4px'}
+                  // bg={'#f2f4f7'}
+                  onClick={() => {
+                      dispatch(setShowSidebar(true));
+                      dispatch(
+                          setSelectedPage({
+                              type: "detail",
+                              name: "inbox",
+                              //@ts-ignore
+                              channelId: channelsInfo?.channels[0].channelId,
+                          })
+                      );
+                  }}
+              >
+                  Roadmap
+              </Text>
               <TopBarWorkSpaceRightSelect workspaceId={workspaceId || ""} />
           </InnerDivWrapper>
       </TopBarWrapper>
