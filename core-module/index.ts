@@ -32,7 +32,7 @@ initializeDB()
 
 // setup cors to allow all origins
 app.use(cors({
-  origin: ["http://localhost:3000", "http://localhost:3001","https://dev.zeonhq.com", "https://zeon-finance.flutterflow.app","http://localhost:5687"],
+  origin: ["http://localhost:3000", "http://localhost:3001","https://dev.zeonhq.com", "https://zeon-finance.flutterflow.app","http://localhost:5687","https://app.zeonhq.com","http://zeon-dashboard:5687"],
   // ALLOW ALL METHODs
   methods: "*",
   // ALLOW ALL HEADERS
