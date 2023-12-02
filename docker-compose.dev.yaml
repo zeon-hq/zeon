@@ -19,6 +19,7 @@ services:
     restart: always
     build:
       context: ./dashboard
+      dockerfile: Dockerfile.dev
     ports:
       - "5687:3000"
     volumes:
@@ -31,6 +32,7 @@ services:
     restart: always
     build:
       context: ./zeon-widget
+      dockerfile: Dockerfile.dev
     ports:
       - "4005:4005"
     volumes:
@@ -43,6 +45,9 @@ services:
     restart: always
     build:
       context: ./core-module
+      dockerfile: Dockerfile.dev
+    expose:
+      - '3005'
     ports:
       - "3005:3005"
     volumes:
@@ -57,12 +62,16 @@ services:
       - BREVO_KEY=${BREVO_KEY}
     depends_on:
       - zeon_db 
+    command: npm run dev
 
   zeon-chat-backend:
     container_name: zeon-chat-backend
     restart: always
     build:
       context: ./chat-backend
+      dockerfile: Dockerfile.dev
+    expose:
+      - '4000'
     ports:
       - "4000:4000"
     volumes:
@@ -81,6 +90,9 @@ services:
     restart: always
     build:
       context: ./ticket-backend
+      dockerfile: Dockerfile.dev
+    expose:
+      - '6000'
     ports:
       - "6000:6000"
     volumes:
