@@ -19,18 +19,15 @@ const Workspaces = () => {
         dispatch(setLoading(true))
         try {
             const res = await getWorkspaces()
-            if (res?.workspaces?.length > 0) {
-                dispatch(setWorkspaces(res.workspaces));
+                dispatch(setWorkspaces(res.workspaces ?? []));
                 dispatch(setLoading(false));
-            } else {
-                showNotification({
-                    title: "Workspace fetching failed",
-                    message: "Issue while fetching workspace",
-                    color: "red",
-                  });
-            }
         } catch (error) {
             dispatch(setLoading(false))
+            showNotification({
+                title: "Workspace fetching failed",
+                message: "Issue while fetching workspace",
+                color: "red",
+              });
         }
     }
 
