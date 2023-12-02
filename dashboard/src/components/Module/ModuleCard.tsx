@@ -11,7 +11,7 @@ const StyledGuideCards = styled.div`
 
 const HeaderText = styled(Text)`
   color: #101828;
-  font-family: Inter;
+
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
@@ -21,7 +21,7 @@ const HeaderText = styled(Text)`
 const ContentText = styled(Text)`
   color: #475467;
   /* Text sm/Regular */
-  font-family: Inter;
+
   font-size: 14px;
   font-style: normal;
   font-weight: 400;

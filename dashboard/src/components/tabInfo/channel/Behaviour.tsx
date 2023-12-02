@@ -6,7 +6,7 @@ import {
   Select,
   Space,
   TextInput,
-  Textarea
+  Textarea,
 } from "@mantine/core";
 import { TimeInput } from "@mantine/dates";
 import { showNotification } from "@mantine/notifications";
@@ -29,21 +29,21 @@ import { inputWrapperData } from "util/Constant";
 import { InfoContainer } from "../tabInfo.styles";
 
 export const MainDiv = styled.div`
-    width: 100%;
+  width: 100%;
 `;
 
 const TetInputLabel = styled(Label)`
   margin-top: 16px;
-  font-family: Inter;
+
   font-size: 13px;
   font-style: normal;
   font-weight: 500;
   line-height: 20px;
 `;
 export const Wrapper = styled.div`
-    display: grid;
-    grid-template-columns: 70% 30%;
-    overflow: none;
+  display: grid;
+  grid-template-columns: 70% 30%;
+  overflow: none;
 `;
 const Behavior = () => {
   const { channelsInfo, selectedPage } = useDashboard();
@@ -99,7 +99,6 @@ const Behavior = () => {
         <InfoContainer>
           <MainDiv>
             <Box mb={24} fw={600}>
-
               <SwitchWithLabel
                 onClick={(e) => {
                   handleChange({
@@ -227,9 +226,7 @@ const Behavior = () => {
               </Grid>
             </Box>
 
-
             <Box mb={16} fw={600}>
-
               <SwitchWithLabel
                 onClick={(e) => {
                   handleChange({
@@ -249,7 +246,7 @@ const Behavior = () => {
 
               {behaviourDetails.operatingHours.enableOperatingHours && (
                 <>
-{/*                   <SwitchWithLabel
+                  {/*                   <SwitchWithLabel
                     onClick={(e) => {
                       handleChange({
                         subType: "operatingHours",
@@ -338,18 +335,18 @@ const Behavior = () => {
             </Box>
           </MainDiv>
           <Button
-          radius="md"
-          className="primary"
-          leftIcon={<img src={ProfileSave} />}
-          color="indigo"
-          onClick={() => {
-            handleSave();
-          }}
-        >
-          {" "}
-          Save{" "}
-        </Button>
-        </InfoContainer>  
+            radius="md"
+            className="primary"
+            leftIcon={<img src={ProfileSave} />}
+            color="indigo"
+            onClick={() => {
+              handleSave();
+            }}
+          >
+            {" "}
+            Save{" "}
+          </Button>
+        </InfoContainer>
       </Wrapper>
     </>
   );
