@@ -1,0 +1,7 @@
+{
+  "API_DOMAIN": "http://0.0.0.0:4000",
+  "TICKET_SERVICE": "http://0.0.0.0:6000",
+  "widgetJSFile": "https://userstak-widget.ams3.digitaloceanspaces.com/userstak-widget.css",
+  "widgetCSSFile": "https://userstak-widget.ams3.digitaloceanspaces.com/userstak-widget.js",
+  "CORE_API_DOMAIN" : "http://0.0.0.0:3005"
+}
