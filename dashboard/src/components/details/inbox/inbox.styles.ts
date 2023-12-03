@@ -64,7 +64,8 @@ export const ListWrapper = styled.div<IListWrapper>`
   display: flex;
   flex-direction: row;
   padding: 0px;
-  border-bottom: ${(props) => props.showBorder === true ? '1px solid #EAECF0' : '0px solid #fff'};
+  border-bottom: ${(props) =>
+    props.showBorder === true ? "1px solid #EAECF0" : "0px solid #fff"};
 `;
 
 export const ListText = styled(Text)`
@@ -87,7 +88,7 @@ export const TextHeading = styled.p`
 
 export const TextDesc = styled.p`
   color: #475467;
-  font-family: Inter;
+
   font-size: 14px;
   margin: 0px;
   padding: 0px;
@@ -101,37 +102,36 @@ export const SideBarTopWrapper = styled.div`
   padding: 8px 0px 16px 0px;
 `;
 
-export const SideBarInnerWrapper = styled.div`
-`;
+export const SideBarInnerWrapper = styled.div``;
 
 export const Block = styled.div`
-display:flex;
-width:100%;
+  display: flex;
+  width: 100%;
 `;
 
 export const DNDContainer = styled.div`
-      border: 1px dashed #EAECF0;
-    border-radius: 12px;
-    padding: 16px 24px;
-    width:428px;
-`
+  border: 1px dashed #eaecf0;
+  border-radius: 12px;
+  padding: 16px 24px;
+  width: 428px;
+`;
 
 export const HelperText = styled.p`
   font-size: 12px;
   color: #475467;
   text-align: center;
-`
+`;
 
 export const IconContainer = styled.div`
-    display: flex;
-    justify-content: center;
-`
+  display: flex;
+  justify-content: center;
+`;
 
 export const IconP = styled.p`
-   padding: 8px;
-   border-radius: 100%;
-   background: #F9FAFB;
-`
+  padding: 8px;
+  border-radius: 100%;
+  background: #f9fafb;
+`;
 
 export const Label = styled.p`
   font-weight: ${(props: { large?: boolean; bold?: boolean }) =>
@@ -141,47 +141,45 @@ export const Label = styled.p`
   margin-bottom: 4px;
 `;
 
-
-
 export const SettingInbox = styled(TextInput)`
-height:44px;
-width:244px;
-border-radius:8px;
-`
+  height: 44px;
+  width: 244px;
+  border-radius: 8px;
+`;
 
 export const SettingLabel = styled(Text)`
-color:#344054;
-/* Text sm/Medium */
-font-family: Inter;
-font-size: 14px;
-font-style: normal;
-font-weight: 500;
-line-height: 20px; /* 142.857% */
-`
+  color: #344054;
+  /* Text sm/Medium */
+
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px; /* 142.857% */
+`;
 
 export const SettingSubLabel = styled(Text)`
-color: #475467;
-/* Text sm/Regular */
-font-family: Inter;
-font-size: 14px;
-font-style: normal;
-font-weight: 400;
-line-height: 20px; /* 142.857% */
-`
+  color: #475467;
+  /* Text sm/Regular */
+
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px; /* 142.857% */
+`;
 
 export const OuterWrapper = styled.div`
-display:flex;
-justify-content:space-between;
-width:80%;
-`
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+`;
 
 export const LeftWrapper = styled.div`
-display:flex;
-flex:4;
-`
+  display: flex;
+  flex: 4;
+`;
 
 export const RightWrapper = styled.div`
-display:flex;
-justify-content:space-between;
-flex:6;
-`
+  display: flex;
+  justify-content: space-between;
+  flex: 6;
+`;

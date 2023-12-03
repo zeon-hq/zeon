@@ -18,7 +18,7 @@ const StyledButton = styled.button`
   padding: 5px 10px;
   background-color: white;
   border: 1px solid #d0d5dd;
-  font-family: Inter;
+
   font-size: 14px;
   font-style: normal;
   font-weight: 600;
@@ -45,7 +45,7 @@ const StyledInput = styled.input`
 const StyledDescription = styled.p`
   color: #475467;
   /* Text sm/Regular */
-  font-family: Inter;
+
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
@@ -53,14 +53,14 @@ const StyledDescription = styled.p`
 `;
 
 const TextInputLabel = styled(Text)`
-color: #344054;
-font-family: Inter;
-font-size: 14px;
-font-style: normal;
-font-weight: 500;
-line-height: 20px; 
-margin-bottom:6px;
-`
+  color: #344054;
+
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+  margin-bottom: 6px;
+`;
 
 const SelectColor = ({
   value,
@@ -106,8 +106,7 @@ const SelectColor = ({
             )}
           </Grid.Col>
         </Grid>
-        {description &&
-        <StyledDescription>{description}</StyledDescription>}
+        {description && <StyledDescription>{description}</StyledDescription>}
       </div>
     </>
   );

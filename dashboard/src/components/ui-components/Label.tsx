@@ -1,28 +1,26 @@
-import { MantineSize, Text } from '@mantine/core'
-import React from 'react'
-import styled from 'styled-components'
+import { MantineSize, Text } from "@mantine/core";
+import React from "react";
+import styled from "styled-components";
 
 type Props = {
-    text:string,
-    style?: React.CSSProperties
-    size?: MantineSize
-}
+  text: string;
+  style?: React.CSSProperties;
+  size?: MantineSize;
+};
 
 const TextInputLabel = styled(Text)`
-color: #344054;
-font-family: Inter;
-font-size: 14px;
-font-style: normal;
-font-weight: 500;
-line-height: 20px; 
-margin-top:32px;
-margin-bottom:6px;
-`
+  color: #344054;
 
-const Label = ({style={},text, size="xs"}: Props) => {
-  return (
-    <TextInputLabel> {text} </TextInputLabel>
-  )
-}
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+  margin-top: 32px;
+  margin-bottom: 6px;
+`;
 
-export default Label
+const Label = ({ style = {}, text, size = "xs" }: Props) => {
+  return <TextInputLabel> {text} </TextInputLabel>;
+};
+
+export default Label;

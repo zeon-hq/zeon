@@ -15,7 +15,13 @@ import { useEffect, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { useDispatch } from "react-redux";
-import { IUser, initDashboard, setDefaultWorkSpaceSettingTab, setSelectedPage, setShowSidebar } from 'reducer/slice';
+import {
+  IUser,
+  initDashboard,
+  setDefaultWorkSpaceSettingTab,
+  setSelectedPage,
+  setShowSidebar,
+} from "reducer/slice";
 import {
   addUsersToChannel,
   getChannelUsers,
@@ -32,7 +38,7 @@ interface IAddUserToChannel {
 const UserInviteInfoAddText = styled.p`
   color: var(--gray-600, #475467);
   /* Text sm/Regular */
-  font-family: Inter;
+
   font-size: 14px;
   font-style: normal;
   margin-top: 24px;
@@ -43,7 +49,7 @@ const UserInviteInfoAddText = styled.p`
 const UserInviteInfoAddInfo = styled.p`
   color: var(--gray-600, #475467);
   /* Text sm/Regular */
-  font-family: Inter;
+
   font-size: 14px;
   font-style: normal;
   margin-top: 12px;
@@ -103,8 +109,8 @@ const AddUserToChannel = ({ channelId }: IAddUserToChannel) => {
   const addUsersToChannelFunc = async () => {
     try {
       let id = channelId ? channelId : selectedPage.name;
-      const addUser =  await addUsersToChannel(id || "", value);
-      if (addUser.status == 200){
+      const addUser = await addUsersToChannel(id || "", value);
+      if (addUser.status == 200) {
         getAllUsersForThisChannels();
         setValue([]);
         //@ts-ignore
@@ -112,7 +118,8 @@ const AddUserToChannel = ({ channelId }: IAddUserToChannel) => {
       } else {
         showNotification({
           title: "Error",
-          message: "Error while adding user to the channel, please contact zeon support team",
+          message:
+            "Error while adding user to the channel, please contact zeon support team",
         });
       }
     } catch (error) {}
@@ -121,19 +128,20 @@ const AddUserToChannel = ({ channelId }: IAddUserToChannel) => {
   const openWorkSpace = (
     type: "detail" | "channel" | "loading",
     name: string
-  ) =>{
+  ) => {
     dispatch(
       setSelectedPage({
         type,
         name,
       })
     );
-  }
+  };
 
   useEffect(() => {
     const addedUsersArrayList = addedUsers.map((user: any) => user.userId);
 
-    const newOptions = (allUsers || []).filter((data)=> !addedUsersArrayList.includes(data.userId))
+    const newOptions = (allUsers || [])
+      .filter((data) => !addedUsersArrayList.includes(data.userId))
       .map((user: IUser) => ({
         value: user.userId,
         label: `${user.name}`,
@@ -145,22 +153,22 @@ const AddUserToChannel = ({ channelId }: IAddUserToChannel) => {
 
   useEffect(() => {
     getAllUsersForThisChannels();
-  },[]);
+  }, []);
 
   return (
     <>
       <Flex w={"100%"} justify={"space-between"} h={"40px"}>
         <MultiSelect
-        width={'100%'}
-        value={value}
-        style={{width:'100%'}}
-        rightSection={<MdKeyboardArrowDown />}
-        placeholder="Select Users"
-        data={options || []}
-        radius="md"
-        onChange={(id) => {
-          setValue([...id]);
-        }}
+          width={"100%"}
+          value={value}
+          style={{ width: "100%" }}
+          rightSection={<MdKeyboardArrowDown />}
+          placeholder="Select Users"
+          data={options || []}
+          radius="md"
+          onChange={(id) => {
+            setValue([...id]);
+          }}
         />
         <Button
           disabled={value.length == 0}
@@ -180,41 +188,45 @@ const AddUserToChannel = ({ channelId }: IAddUserToChannel) => {
       </UserInviteInfoAddText>
       <UserInviteInfoAddInfo>
         {" "}
-        <a onClick={()=>{
-                dispatch(setDefaultWorkSpaceSettingTab(IWorkSpaceSettings.USERS));
-                openWorkSpace("detail", "account");
-                dispatch(setShowSidebar(false));
-        }} className="underline pointer">
+        <a
+          onClick={() => {
+            dispatch(setDefaultWorkSpaceSettingTab(IWorkSpaceSettings.USERS));
+            openWorkSpace("detail", "account");
+            dispatch(setShowSidebar(false));
+          }}
+          className="underline pointer"
+        >
           {" "}
           Click here
         </a>{" "}
         to add user to the workspace.
       </UserInviteInfoAddInfo>
 
-
-   {
-    !usersLoading
-   ?    <ChannelUsersList
-           userList={addedUsers}
-           onDeleteClick={(userId: string) => {
-             setRemovedUser(userId);
-             setOpened(true);
-           }}
-         />
-   
-   : <div style={{height:'48px', display:'flex', justifyContent:'center'}}><Loader size={30} /></div>
-  }
-  <ConfirmationDialog 
-  headerTitle="Are you sure you want to remove the user from the channel ?"
-    opened={opened}
-    onClose={()=>{
-      setOpened(false);
-    }}
-    onCTAClick={()=>{
-      handleRemove(removedUser);
-    }}
-  />
-
+      {!usersLoading ? (
+        <ChannelUsersList
+          userList={addedUsers}
+          onDeleteClick={(userId: string) => {
+            setRemovedUser(userId);
+            setOpened(true);
+          }}
+        />
+      ) : (
+        <div
+          style={{ height: "48px", display: "flex", justifyContent: "center" }}
+        >
+          <Loader size={30} />
+        </div>
+      )}
+      <ConfirmationDialog
+        headerTitle="Are you sure you want to remove the user from the channel ?"
+        opened={opened}
+        onClose={() => {
+          setOpened(false);
+        }}
+        onCTAClick={() => {
+          handleRemove(removedUser);
+        }}
+      />
     </>
   );
 };

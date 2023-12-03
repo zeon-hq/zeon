@@ -5,7 +5,7 @@ import styled from "styled-components";
 const ModalHeaderTitle = styled.p`
   color: var(--gray-900, #101828);
   /* Text lg/Semibold */
-  font-family: Inter;
+
   font-size: 16px;
   font-style: normal;
   font-weight: 600;
@@ -15,7 +15,7 @@ const ModalHeaderTitle = styled.p`
 const ModalLabel = styled.p`
   color: var(--gray-600, #475467);
   /* Text sm/Regular */
-  font-family: Inter;
+
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
@@ -24,23 +24,30 @@ const ModalLabel = styled.p`
 `;
 
 interface ICreateChannelHeader {
-    header:string;
-    label:string;
-    onCloseClick:() =>void;
+  header: string;
+  label: string;
+  onCloseClick: () => void;
 }
 
-const CreateChannelHeader = ({header, label, onCloseClick}:ICreateChannelHeader) => {
+const CreateChannelHeader = ({
+  header,
+  label,
+  onCloseClick,
+}: ICreateChannelHeader) => {
   return (
-       <>
-    <Flex w={"100%"} justify={"space-between"} align={"center"}>
-    <ModalHeaderTitle>{header}</ModalHeaderTitle>
-    <AiOutlineClose className="pointer" onClick={()=>{
-      onCloseClick();
-    }}/>
-  </Flex>
-  <ModalLabel>{label}</ModalLabel>
-  </>
-  )
-}
+    <>
+      <Flex w={"100%"} justify={"space-between"} align={"center"}>
+        <ModalHeaderTitle>{header}</ModalHeaderTitle>
+        <AiOutlineClose
+          className="pointer"
+          onClick={() => {
+            onCloseClick();
+          }}
+        />
+      </Flex>
+      <ModalLabel>{label}</ModalLabel>
+    </>
+  );
+};
 
-export default CreateChannelHeader
+export default CreateChannelHeader;

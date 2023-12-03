@@ -48,9 +48,8 @@ p {
 }
 
 .mantine-Navbar-root {
-padding: 10px  !important;
+  padding: 10px !important;
 }
-
 
 .pointer {
   cursor: pointer;
@@ -61,30 +60,28 @@ padding: 10px  !important;
 }
 
 .mantine-InputWrapper-description {
-  margin-top:6px;
+  margin-top: 6px;
 }
 
-.mantine-Modal-title{
+.mantine-Modal-title {
   color: #101828;
-font-family: Inter;
-font-size: 18px;
-font-style: normal;
-font-weight: 600;
-line-height: 28px; /* 155.556% */
+
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 28px; /* 155.556% */
 }
 
-.mantine-Select-input{
+.mantine-Select-input {
   font-weight: 500;
-  color:#344054;
-  font-size: 13px;
-  
-}
-
-.mantine-Input-input{
+  color: #344054;
   font-size: 13px;
 }
 
-.mantine-Modal-content{
-  border: 1px solid #D0D5DD;
+.mantine-Input-input {
+  font-size: 13px;
+}
 
+.mantine-Modal-content {
+  border: 1px solid #d0d5dd;
 }

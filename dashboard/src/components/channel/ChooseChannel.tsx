@@ -18,7 +18,7 @@ const ChannelCardTitle = styled.p<ISingleCardWrapper>`
   color: ${(props: ISingleCardWrapper) =>
     props.selected == true ? "#243f8b" : "#344054"};
   /* Text sm/Medium */
-  font-family: Inter;
+
   font-size: 12px;
   font-style: normal;
   font-weight: 500;
@@ -29,7 +29,7 @@ const ChannelCardLable = styled.p<ISingleCardWrapper>`
   color: ${(props: ISingleCardWrapper) =>
     props.selected == true ? "#243f8b" : "#344054"};
   /* Text sm/Regular */
-  font-family: Inter;
+
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -57,32 +57,32 @@ const SingleCardWrapper = styled.div<ISingleCardWrapper>`
 `;
 
 const ComingSoonCardWrapper = styled.div`
-display: flex;
-padding: 2px 8px;
-align-items: center;
-border-radius: 16px;
-width:104px;
-margin-left: 8px;
-background: #F2F4F7;
-`
+  display: flex;
+  padding: 2px 8px;
+  align-items: center;
+  border-radius: 16px;
+  width: 104px;
+  margin-left: 8px;
+  background: #f2f4f7;
+`;
 const ComingSoonText = styled.p`
-color: var(--gray-700, #344054);
-text-align: center;
-/* Text xs/Medium */
-font-family: Inter;
-font-size: 12px;
-width:432px;
-font-style: normal;
-font-weight: 500;
-line-height: 18px; /* 150% */
-`
-const ComingSoonCard = () =>{
-return (
-  <ComingSoonCardWrapper>
-    <ComingSoonText>Coming Soon</ComingSoonText>
-  </ComingSoonCardWrapper>
-)
-}
+  color: var(--gray-700, #344054);
+  text-align: center;
+  /* Text xs/Medium */
+
+  font-size: 12px;
+  width: 432px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 18px; /* 150% */
+`;
+const ComingSoonCard = () => {
+  return (
+    <ComingSoonCardWrapper>
+      <ComingSoonText>Coming Soon</ComingSoonText>
+    </ComingSoonCardWrapper>
+  );
+};
 
 const SingleChannelCard = ({ title, label, selected }: ISingleChannelCard) => {
   return (
@@ -94,7 +94,13 @@ const SingleChannelCard = ({ title, label, selected }: ISingleChannelCard) => {
             <ChannelCardLable selected={selected}>{label}</ChannelCardLable>
           </Container>
           <Container m={0} p={0}>
-            {selected ? <img src={WorkSpaceProfile} /> : <><ComingSoonCard/></>}
+            {selected ? (
+              <img src={WorkSpaceProfile} />
+            ) : (
+              <>
+                <ComingSoonCard />
+              </>
+            )}
           </Container>
         </Flex>
       </SingleCardWrapper>
