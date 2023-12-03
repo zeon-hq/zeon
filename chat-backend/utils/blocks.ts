@@ -1,9 +1,8 @@
 import dotenv from "dotenv";
-import config from "config";
 
 dotenv.config();
 
-const WEBSITE_URL = config.get('WEBSITE_URL') as string;
+const WEBSITE_URL = process.env.WEBSITE_URL as string;
 
 export enum SlackMesageType {
   TRIAL_WILL_END,

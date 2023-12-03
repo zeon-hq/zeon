@@ -12,7 +12,6 @@ dotenv.config();
 
 const uri: string = process.env.DB_URI as string;
 const dbName: string = process.env.DB_NAME as string;
-const client: MongoClient = new MongoClient(uri);
 
 /**
  * Stores a ticket in the database

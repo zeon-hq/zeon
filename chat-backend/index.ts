@@ -39,17 +39,7 @@ app.use(cors())
 app.use(express.json());
 
 
-mongoose
-  //@ts-ignore
-  .connect(process.env.DB_URI,{dbName:process.env.DB_NAME})
-  .then(() => {
-    initializeDB();
-    console.log("Connected to DB");
-    initializeDB();
-  })
-  .catch((e) => {
-    console.log('DB Connection Failed Error Message: ',e);
-  });
+initializeDB();
 
 app.use("/channel", channelRouter);
 app.use("/user", userRouter);
