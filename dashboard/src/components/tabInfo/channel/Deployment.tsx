@@ -42,7 +42,7 @@ const Deployment = (props: Props) => {
       <Box mt={20}>
         <Heading
           heading="Deployment"
-          subheading="Deploy Zeon on your website"
+          subheading="Deploy Zeon chat widget on your website"
         />
         <Code
           mt={20}
