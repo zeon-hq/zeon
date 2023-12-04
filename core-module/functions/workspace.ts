@@ -157,7 +157,7 @@ export const initializeDB = async (): Promise<void> => {
   //@ts-ignore
   .connect(process.env.DB_URI, {dbName: process.env.DB_NAME})
   .then(() => {
-    console.log("Connected to DB");
+    console.log("Connected to DB in core module");
   })
   .catch((e) => {
     console.log(e);
