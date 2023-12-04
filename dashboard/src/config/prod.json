@@ -1,7 +1,7 @@
 {
   "API_DOMAIN": "https://chat.zeonhq.com",
   "TICKET_SERVICE": "https://tickets.zeonhq.com",
-  "widgetJSFile": "https://userstak-widget.ams3.digitaloceanspaces.com/userstak-widget.css",
-  "widgetCSSFile": "https://userstak-widget.ams3.digitaloceanspaces.com/userstak-widget.js",
+  "widgetJSFile": "https://zeonhq.b-cdn.net/zeon-widget.css",
+  "widgetCSSFile": "https://zeonhq.b-cdn.net/zeon-widget.js",
   "CORE_API_DOMAIN" : "https://core.zeonhq.com"
 }
