@@ -32,7 +32,7 @@ const Deployment = (props: Props) => {
       channelsInfo[selectedPage.name]?.channelId
     }></div>
     
-    <!-- Add these two lines just before the closing body tag. -->
+    <!-- Add these two lines just before the closing body tag -->
     <link href="${Config("widgetCSSFile")}" rel="stylesheet"/>    
     <script src="${Config("widgetJSFile")}" async></script>
   `
