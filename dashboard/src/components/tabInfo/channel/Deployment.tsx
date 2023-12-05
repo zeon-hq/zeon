@@ -28,7 +28,7 @@ const Deployment = (props: Props) => {
 
   const scriptToAttach = `
     <!-- Add this in the body tag in your code -->
-    <div id="userstak-widget" data-symbol=${
+    <div id="zeon-widget" data-symbol=${
       channelsInfo[selectedPage.name]?.channelId
     }></div>
     
