@@ -156,7 +156,7 @@ io.on("connection", (socket) => {
 const MONGODB_DB_URI: string = process.env.DB_URI as string;
 
 mongoose.connect(MONGODB_DB_URI).then(() => {
-  console.log("Connected to DB in ticket backend");
+  console.log("Connected to DB in ticket backend!");
 }).catch((err: any) => {
   console.log(`Error: MongoDB connection error for  Db. Please make sure MongoDB is running. ${err}`);
 });
