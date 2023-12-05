@@ -153,7 +153,7 @@ io.on("connection", (socket) => {
     }
   );
 });
-const MONGODB_DB_URI: string = process.env.DB_URI as string;
+const MONGODB_DB_URI: string = process.env.DB_URI as string + process.env.DB_NAME as string;
 
 mongoose.connect(MONGODB_DB_URI).then(() => {
   console.log("Connected to DB in ticket backend!");
