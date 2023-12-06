@@ -15,6 +15,7 @@ import styled from "styled-components"
 const MainWrapper = styled.div`
     height: calc(100vh - 62px);
     overflow: auto;
+    border-right: 1px solid #eaecf0;
     padding: 16px;
 `
 
