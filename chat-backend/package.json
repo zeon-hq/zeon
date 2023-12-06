@@ -1,5 +1,5 @@
 {
-  "name": "userstak-chatbot-server",
+  "name": "zeon-chatbot-server",
   "version": "1.0.0",
   "description": "Server for userstak widget and dashboard",
   "main": "index.ts",
