@@ -8,8 +8,14 @@ import {useDispatch} from "react-redux";
 import { initDashboard, MessageType, updateConversation, updateInbox } from 'reducer/slice';
 import {useParams} from "react-router-dom"
 import socketInstance from 'socket';
+import styled from 'styled-components'
 
-const Layout = () => {
+const ChildWrapper = styled.div`
+  height: calc(100vh - 45px);
+    overflow: hidden;
+`
+
+const Layout = ({children}:{children:any}) => {
   const dispatch = useDispatch();
   const {workspaceId} = useParams();
   const { showSidebar } = useDashboard();
@@ -39,22 +45,39 @@ const Layout = () => {
   },[socketInstance])
 
   return (
-    <AppShell
-      padding="0px"
-      navbar={workspaceId && showSidebar == true ? <Sidebar workspaceId={workspaceId} /> : <></>}
-      header={<Topbar workspaceId={workspaceId || ""}/>}
-      styles={(theme) => ({
-        main: { 
-          height:'100vh',
-          overflowY: 'auto',
-          backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.white ,
-          marginTop:'0px',
-        },
+    <>
+      <Topbar workspaceId={workspaceId || ""}/>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "20% 80%",
+          height: "calc(100vh - 45px)",
+          overflow: "hidden",
+        }}
+      >
+        {workspaceId && showSidebar == true ? <Sidebar workspaceId={workspaceId} /> : <></>}
+        <ChildWrapper>
+        {children}
+        </ChildWrapper>
+      </div>
+     
+    </>
+    // <AppShell
+    //   padding="0px"
+    //   navbar={workspaceId && showSidebar == true ? <Sidebar workspaceId={workspaceId} /> : <></>}
+    //   header={<Topbar workspaceId={workspaceId || ""}/>}
+    //   styles={(theme) => ({
+    //     main: { 
+    //       height:'100vh',
+    //       overflowY: 'auto',
+    //       backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.white ,
+    //       marginTop:'0px',
+    //     },
           
-      })}
-    >
-      <Details/>
-    </AppShell>
+    //   })}
+    // >
+    //   <Details/>
+    // </AppShell>
   );
 }
 

@@ -9,7 +9,7 @@ const DivWrapper = styled.div`
   background-color: white;
   display: flex;
   flex-direction: column;
-  padding-top: 65px;
+  padding: 16px 0px;
 `;
 
 const HeaderAndSearchContainer = styled.div`

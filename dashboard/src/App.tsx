@@ -11,6 +11,8 @@ import ProtectedRoute from "components/auth/ProtectedRoute"
 import { Notifications } from '@mantine/notifications'
 import WorkspaceCreation from "components/core/WorkspaceCreation"
 import InviteUsers from "components/core/InviteUsers"
+import Details from "components/details/Details"
+import Finance from "finance/expense/Finance"
 
 function MyGlobalStyles() {
   return (
@@ -51,7 +53,9 @@ function App() {
               <Route
                 path="/dashboard/:workspaceId"
                 element={
-                  <Layout />
+                  <Layout >
+                    <Details/>
+                  </Layout>
                 }
               />
               <Route
@@ -79,6 +83,11 @@ function App() {
                 }
               />
               <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/finance/:workspaceId" element={
+                <Layout >
+                <Finance/>
+              </Layout>
+              } />
             </Routes>
           </BrowserRouter>
         </MantineProvider>

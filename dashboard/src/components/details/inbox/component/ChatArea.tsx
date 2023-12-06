@@ -137,7 +137,7 @@ const ChatArea = () => {
                   // height: "100%",
                   flexDirection: "column",
                   position:"relative",
-                  height: "80%"
+                  height: "calc(100vh - 180px)"
               }}
           >
               <div
@@ -194,8 +194,7 @@ const ChatArea = () => {
               <div
                   className=""
                   style={{
-                     
-                      position: "absolute",
+                    
                       width: "100%",
                       bottom: "0px"
 

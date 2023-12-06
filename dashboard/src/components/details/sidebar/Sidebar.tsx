@@ -10,6 +10,13 @@ import { useDispatch } from "react-redux";
 import { ISelectedPage, setActiveChat, setSelectedPage } from "reducer/slice";
 import ChannelList, { IChannelData } from "../inbox/component/ChannelList";
 import { SideBarInnerWrapper, SideBarTopWrapper } from "../inbox/inbox.styles";
+import styled from "styled-components"
+
+const MainWrapper = styled.div`
+    height: calc(100vh - 62px);
+    overflow: auto;
+    padding: 16px;
+`
 
 const Sidebar = ({ workspaceId }: { workspaceId: string }) => {
   const dispatch = useDispatch();
@@ -56,12 +63,7 @@ const Sidebar = ({ workspaceId }: { workspaceId: string }) => {
 
   return (
     <>
-      <Navbar
-        width={{ base: 220 }}
-        bg={'red'}
-        height={"100vh"}
-        style={{ backgroundColor: "white" }}
-      >
+      <MainWrapper>
         <SideBarTopWrapper>
           <SideBarInnerWrapper style={{ paddingBottom: "12px" }}>
             <PanelLabel
@@ -98,7 +100,7 @@ const Sidebar = ({ workspaceId }: { workspaceId: string }) => {
             </div>
           </Navbar.Section>
         </SideBarTopWrapper>
-      </Navbar>
+      </MainWrapper>
 
       {/* <CreateChannelModal
         opened={openChannelModal}
