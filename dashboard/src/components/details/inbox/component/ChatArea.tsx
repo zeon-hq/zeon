@@ -144,7 +144,7 @@ const ChatArea = () => {
               id='chat_container_div'
                   style={{
                       padding: "0px 12px 24px 12px",
-                      height: "70vh",
+                      height: "calc(100vh - 171px)",
                       backgroundColor: "#F9FAFB",
                       overflowY: "scroll"
                   }}
