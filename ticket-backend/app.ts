@@ -153,10 +153,10 @@ io.on("connection", (socket) => {
     }
   );
 });
-const MONGODB_DB_URI: string = process.env.DB_URI as string;
+const MONGODB_DB_URI: string = process.env.DB_URI as string + process.env.DB_NAME as string;
 
 mongoose.connect(MONGODB_DB_URI).then(() => {
-  console.log("Connected to DB");
+  console.log("Connected to DB in ticket backend!");
 }).catch((err: any) => {
   console.log(`Error: MongoDB connection error for  Db. Please make sure MongoDB is running. ${err}`);
 });
@@ -284,6 +284,7 @@ httpServer.on("listening", () => init());
 httpServer.listen(port, async () => console.log(`Listening on port ${port}`));
 
 app.use("/health", (req: Request, res: Response)=>{
+  console.log('ticket service health check')
   res.send("all ok from ticket backend");
 });
 

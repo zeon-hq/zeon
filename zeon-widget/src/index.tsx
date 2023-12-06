@@ -4,7 +4,7 @@ import { store } from "store";
 import App from "./App";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
-const widgetDiv = document.getElementById('userstak-widget') as HTMLDivElement;
+const widgetDiv = document.getElementById('zeon-widget') as HTMLDivElement;
 
 
 ReactDOM.render(

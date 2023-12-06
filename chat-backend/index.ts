@@ -44,7 +44,7 @@ mongoose
   .connect(process.env.DB_URI,{dbName:process.env.DB_NAME})
   .then(() => {
     initializeDB();
-    console.log("Connected to DB");
+    console.log("Connected to DB chat backend");
     initializeDB();
   })
   .catch((e) => {
@@ -57,7 +57,10 @@ app.use("/team", teamRouter);
 app.use("/ticket", ticketRouter);
 
 
-app.get("/health", (req, res) => res.send("all ok from chat-backend"));
+app.use("/health", (req, res)=>{
+  console.log('chat backend health check');
+  res.send("all ok from chat-backend");
+});
 
 
 app.listen(port, () => {

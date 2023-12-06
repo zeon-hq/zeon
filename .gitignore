@@ -4,7 +4,7 @@ dist
 .env
 .env_dev
 .env_prod
-**/local.json
-**/dev.json
-**/prod.json
+# **/local.json
+# **/dev.json
+# **/prod.json
 database-data

@@ -23,7 +23,6 @@
   },
   "homepage": "https://github.com/UserStak/ticket-service#readme",
   "devDependencies": {
-    "@types/config": "^3.3.1",
     "@types/amqplib": "^0.10.1",
     "@types/express": "^4.17.14",
     "@types/node": "^18.7.22",
@@ -37,7 +36,6 @@
     "@socket.io/mongo-adapter": "^0.2.1",
     "@socket.io/mongo-emitter": "^0.1.0",
     "amqplib": "^0.10.3",
-    "config": "^3.3.9",
     "axios": "^0.27.2",
     "cors": "^2.8.5",
     "dotenv": "^16.0.2",

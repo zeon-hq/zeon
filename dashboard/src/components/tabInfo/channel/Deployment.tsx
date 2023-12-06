@@ -27,12 +27,12 @@ const Deployment = (props: Props) => {
   }
 
   const scriptToAttach = `
-    <!-- Add this in the body tag -->
-    <div id="userstak-widget" data-symbol=${
+    <!-- Add this in the body tag in your code -->
+    <div id="zeon-widget" data-symbol=${
       channelsInfo[selectedPage.name]?.channelId
     }></div>
     
-    <!-- Add these two lines just before the closing body tag. -->
+    <!-- Add these two lines just before the closing body tag -->
     <link href="${Config("widgetCSSFile")}" rel="stylesheet"/>    
     <script src="${Config("widgetJSFile")}" async></script>
   `
@@ -42,7 +42,7 @@ const Deployment = (props: Props) => {
       <Box mt={20}>
         <Heading
           heading="Deployment"
-          subheading="Deploy Zeon on your website"
+          subheading="Deploy Zeon chat widget on your website"
         />
         <Code
           mt={20}

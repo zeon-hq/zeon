@@ -52,6 +52,7 @@ app.use("/companies",verifyIdentity, companyRoutes);
 app.use("/contacts",verifyIdentity, contactRoutes);
 
 app.use("/health", (req: Request, res: Response)=>{
+  console.log('core service health check');
   res.send("all ok from zeon core service");
 });
 

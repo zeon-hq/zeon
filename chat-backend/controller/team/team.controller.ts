@@ -1,4 +1,3 @@
-import config from "config";
 import dotenv from "dotenv";
 import { Request, Response } from "express";
 import { IncomingForm } from "formidable";
@@ -6,6 +5,7 @@ import fs from "fs";
 import https from "https";
 import path from 'path';
 import { SessionRequest } from "supertokens-node/framework/express";
+// @ts-ignore
 import { createUserWithUserIdAndWorkspaceId, createWorkspace, getAllUsers, getWorkspaceByWorkspaceId } from "zeon-core/dist/func";
 import { UserInterface, ZeonModulesArray } from "zeon-core/dist/types";
 import { Channel, IChannelsInfo } from "../../schema/channel";
@@ -20,8 +20,7 @@ import {
 
 dotenv.config();
 
-// @ts-ignore
-const WEBSITE_URL = config.get('WEBSITE_URL') as string;
+const WEBSITE_URL = process.env.WEBSITE_URL as string;
 
 
 export const createTeam = async (req: Request, res: Response) => {

@@ -1,5 +1,6 @@
 import amqp from "amqplib";
-
+import dotenv from "dotenv";
+dotenv.config();
 
 const mq_uri = process.env.MQ_URI as string;
 
