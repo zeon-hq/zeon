@@ -50,7 +50,7 @@ const Layout = ({children}:{children:any}) => {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "20% 80%",
+          gridTemplateColumns: showSidebar ? "20% 80%" : "100%",
           height: "calc(100vh - 45px)",
           overflow: "hidden",
         }}
