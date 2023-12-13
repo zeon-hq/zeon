@@ -15,6 +15,7 @@ export default class CommunicationController {
                 "templateId": templateId,
                 "params":params
               }
+            console.log(`Email Initiating to ${email}`);
             const sendEmailResponse = await CommunicationService.sendEmail(emailBodyPayload);
 
             if (sendEmailResponse) {
