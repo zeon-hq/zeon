@@ -29,6 +29,7 @@ import {
 import {
   openTicket,
 } from "./services/SlackService";
+import CoreService from "./services/CoreService"
 
 const app = express();
 const httpServer = createServer(app);
@@ -50,9 +51,10 @@ io.on("connection", (socket) => {
   console.log("New client connected ", socket.id);
   socket.on("open-ticket", async (ticketOptions: TicketOptions) => {
     try {
+      console.log('------ ticket Options: ', ticketOptions)
       const openTicketData: any = await openTicket(ticketOptions, socket.id);
       socket.emit("open-ticket-complete", openTicketData);
-
+      console.log('----------- open ticket', openTicketData)
       const socketIds = await getConnectedDashboardSockets(
         ticketOptions.workspaceId
       );
@@ -65,6 +67,10 @@ io.on("connection", (socket) => {
         ticketId: openTicketData.ticketId,
         widgetId:ticketOptions.widgetId
       });
+
+      // send email 
+      console.log('---------------- send email')
+      await CoreService.sendMail(ticketOptions.message, ticketOptions.customerEmail, ticketOptions.customerEmail);
     } catch (error) {
       console.error(error);
     }
