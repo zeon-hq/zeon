@@ -21,7 +21,7 @@ export default class CommunicationService {
         return new Promise(async (resolve, reject) => {
             return new Promise((resolve, reject) => {
                 try {
-      
+                    console.log(`Sending Email: ${JSON.stringify(emailPayload)}`)
                     const emailSendUrl = `https://api.brevo.com/v3/smtp/email`;
                     return axios.post(emailSendUrl,emailPayload,{
                         headers: {
@@ -30,8 +30,10 @@ export default class CommunicationService {
                     })
                         .then(async (response: AxiosResponse<any>) => {
                             if (response.status === 201 ) {
+                                console.log(`Email sent successfully, MessageId: ${response.data?.messageId}`);
                                 return resolve(response.data?.messageId);
                             } else {
+                                console.error(`Error in sending email from core service, Error: ${response}`);
                                 return reject(null);
                             }
                         })

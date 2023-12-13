@@ -50,6 +50,7 @@ let mqConnection: Connection;
 io.on("connection", (socket) => {
   console.log("New client connected ", socket.id);
   socket.on("open-ticket", async (ticketOptions: TicketOptions) => {
+    console.log('-------------------------');
     try {
       console.log('------ ticket Options: ', ticketOptions)
       const openTicketData: any = await openTicket(ticketOptions, socket.id);
@@ -58,6 +59,7 @@ io.on("connection", (socket) => {
       const socketIds = await getConnectedDashboardSockets(
         ticketOptions.workspaceId
       );
+      console.log('-------------------------');
       io.to(socketIds).emit("open-ticket", {
         workspaceId: ticketOptions.workspaceId,
         message: ticketOptions.message,
