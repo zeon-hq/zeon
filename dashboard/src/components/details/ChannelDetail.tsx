@@ -61,7 +61,7 @@ const ChannelDetail = () => {
     {
       name: TabsName.INTEGRATIONS,
       icon: <img src={IntegrationDashboard} />,
-      active: false,
+      active: true,
     },
     {
       name: TabsName.BEHAVIORS,
@@ -116,7 +116,7 @@ const ChannelDetail = () => {
         h="100%"
         orientation="vertical"
         defaultValue={TabsName.DEPLOYMENT}
-      >
+      >  
         <Tabs.List w={"258px"} >
           <SidebarBack
             onBackClick={() => {

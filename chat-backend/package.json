@@ -1,7 +1,7 @@
 {
   "name": "zeon-chatbot-server",
   "version": "1.0.0",
-  "description": "Server for userstak widget and dashboard",
+  "description": "Server for zeon widget and dashboard",
   "main": "index.ts",
   "scripts": {
     "preserve": "npm run build",

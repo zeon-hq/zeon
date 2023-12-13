@@ -5,6 +5,8 @@ export interface ResponseInterface {
   email: string; 
   message: string;
 }
+
+console.log(Config("ticketService"),'-----------1', process.env.TICKET_SERVICE_URL);
 const ticketServiceUrl:string = Config("ticketService");
 
 export const getChannelById = async (channelId: string) => {

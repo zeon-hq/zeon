@@ -17,6 +17,7 @@ const port = process.env.CORE_BACKEND_PORT
 
 import { UserInterface } from "./schema/User"
 import { initializeDB } from "./functions/workspace"
+import CommunicationController from "./controller/CommunicationController";
 
 declare global {
   namespace Express {
@@ -47,9 +48,11 @@ app.use(express.urlencoded({ extended: true }));
 // set up routes
 app.use("/auth", authRoutes);
 app.use("/user", verifyIdentity, userRoutes);
-app.use("/workspaces", verifyIdentity,workspaceRoutes );
+app.use("/workspaces", verifyIdentity,workspaceRoutes);
 app.use("/companies",verifyIdentity, companyRoutes);
 app.use("/contacts",verifyIdentity, contactRoutes);
+
+app.use("/communication/send-email", verifyIdentity, CommunicationController.sendEmail);
 
 app.use("/health", (req: Request, res: Response)=>{
   console.log('core service health check');
