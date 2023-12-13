@@ -71,7 +71,7 @@ const channelSchema = new Schema({
     workspaceId: String,
     channelId: String,
     inChatWidgets: [inChatWidgetSchema],
-    members: [Schema.Types.ObjectId],
+    members: [String],
 },{
     timestamps:true
 });

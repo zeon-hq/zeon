@@ -30,6 +30,8 @@ import {
   openTicket,
 } from "./services/SlackService";
 import CoreService from "./services/CoreService"
+import ChannelModel from "./model/ChannelModel";
+import User from "./model/UserModel";
 
 const app = express();
 const httpServer = createServer(app);
@@ -72,7 +74,12 @@ io.on("connection", (socket) => {
 
       // send email 
       console.log('---------------- send email')
-      await CoreService.sendMail(ticketOptions.message, ticketOptions.customerEmail, ticketOptions.customerEmail);
+      const channel = await ChannelModel.findOne({channelId:ticketOptions.channelId})
+      channel?.members.forEach(async (member:any) => {
+        const user = await User.findOne({userId:member})
+  
+        await CoreService.sendMail(ticketOptions.message, user?.email, ticketOptions.customerEmail);
+      })
     } catch (error) {
       console.error(error);
     }
