@@ -5,7 +5,7 @@ export default class CoreService {
     public static sendMail = async (ticketMessage:string, toEmail:string, fromEmail:string): Promise<any> => {
         return new Promise((resolve, reject) => {
             try {
-                const mailURLHost = process.env.CORE_SERVICE_URL + '/communication/send-email';
+                const mailURLHost = process.env.CORE_SERVICE_URL + '/internal/communication/send-email';
                 console.log('mailURLHost', mailURLHost);
 
                 const sendEmailPayload = {

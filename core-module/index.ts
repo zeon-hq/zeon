@@ -52,7 +52,7 @@ app.use("/workspaces", verifyIdentity,workspaceRoutes);
 app.use("/companies",verifyIdentity, companyRoutes);
 app.use("/contacts",verifyIdentity, contactRoutes);
 
-app.use("/communication/send-email", verifyIdentity, CommunicationController.sendEmail);
+app.use("/internal/communication/send-email", CommunicationController.sendEmail);
 
 app.use("/health", (req: Request, res: Response)=>{
   console.log('core service health check');
