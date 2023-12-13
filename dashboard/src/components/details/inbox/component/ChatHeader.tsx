@@ -134,7 +134,7 @@ const ChatHeader = () => {
           style={{
               width: "100%",
               borderBottom: "1px solid #EAECF0",
-              padding: "58px 12px 16px 12px",
+              padding: "16px",
               backgroundColor: "white",
           }}
       >

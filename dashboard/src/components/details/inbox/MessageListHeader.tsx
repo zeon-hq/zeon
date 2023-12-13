@@ -16,6 +16,10 @@ import {
 import styled from "styled-components";
 import { TicketSearch } from "./TicketSearch";
 
+const Wrapper = styled.div`
+    border-bottom: 1px solid #eaecf0;
+`
+
 const MainFilterContainer = styled.div`
   width: 100%;
   margin-bottom: 8px;
@@ -62,7 +66,7 @@ const onFilterChange = (value: FilterName) => {
   dispatch(setSelectedFilter(value));
 };
   return (
-      <>
+      <Wrapper>
           {" "}
           <div style={{ padding: "0px 12px" }}>
               <PanelLabel
@@ -162,7 +166,7 @@ const onFilterChange = (value: FilterName) => {
                   />
               </RightFilterContainer>
           </MainFilterContainer>
-      </>
+      </Wrapper>
   );
 }
   

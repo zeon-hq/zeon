@@ -32,8 +32,9 @@ const MessageBox = styled.div`
 `;
 
 const Wrapper = styled.div`
-  overflow-y: auto;
-  height: 82vh;
+      height: calc(100vh - 179px);
+    overflow: auto;
+
 `;
 
 const DetailWrapper = styled.div`

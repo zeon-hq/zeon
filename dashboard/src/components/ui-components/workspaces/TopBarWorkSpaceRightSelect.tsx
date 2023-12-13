@@ -131,7 +131,7 @@ const TopBarWorkSpaceRightSelect = ({
                   style={{
                       borderColor: "#D0D5DD",
                       color: "#101828",
-                      backgroundColor: "#F9FAFB",
+                      backgroundColor: "#FFFFFF",
                       fontWeight: 500,
                   }}
               >

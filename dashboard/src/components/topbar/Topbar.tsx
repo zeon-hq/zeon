@@ -20,7 +20,6 @@ const Topbar = ({ workspaceId }: { workspaceId: string }) => {
     background-color: white;
     justify-content: space-between;
     justify-items: space-between; /* Note: justify-items is not a valid CSS property */
-    position: fixed;
     z-index: 1000;
     border-bottom: 1px solid #eaecf0;
     padding: 0px 16px;

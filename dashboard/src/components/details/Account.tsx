@@ -95,7 +95,7 @@ const Account = () => {
 
 
   return (
-    <Box h={"100%"} style={{ backgroundColor: "white" }} pt={"50px"}>
+    <Box h={"100%"} style={{ backgroundColor: "white" }} >
       <Tabs
         styles={() => ({
           tab: {

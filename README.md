@@ -96,9 +96,11 @@ Please ensure that your code adheres to the project's coding standards and conve
 
 ## 🫡 Acknowledgements
 
-Thank you to [Ducalis](https://ducalis.io/) for providing us an awesome roadmap and changelog tool management tool to help us keep track of our progress as an open-source company.
+[Ducalis](https://ducalis.io/) for providing us an awesome roadmap and changelog tool management tool to help us keep track of our progress as an open-source company.
 
-Kudos to [RabbitMQ](https://ducalis.io/) for creating an amazing message broker that powers our microservices.
+[RabbitMQ](https://www.rabbitmq.com/) for creating an amazing message broker that powers our microservices.
+
+[Formbricks](https://formbricks.com/) for creating an amazing experience management that powers Zeon customer experience.
 
 ## 📄 License
 

@@ -137,14 +137,14 @@ const ChatArea = () => {
                   // height: "100%",
                   flexDirection: "column",
                   position:"relative",
-                  height: "80%"
+                  height: "calc(100vh - 180px)"
               }}
           >
               <div
               id='chat_container_div'
                   style={{
                       padding: "0px 12px 24px 12px",
-                      height: "70vh",
+                      height: "calc(100vh - 171px)",
                       backgroundColor: "#F9FAFB",
                       overflowY: "scroll"
                   }}
@@ -194,8 +194,7 @@ const ChatArea = () => {
               <div
                   className=""
                   style={{
-                     
-                      position: "absolute",
+                    
                       width: "100%",
                       bottom: "0px"
 
