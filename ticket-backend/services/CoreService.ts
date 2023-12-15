@@ -2,7 +2,7 @@ import axios from "axios";
 import { AxiosResponse } from "axios";
 
 export default class CoreService {
-    public static sendMail = async (ticketMessage:string, toEmail:string, fromEmail:string): Promise<any> => {
+    public static sendMail = async (ticketMessage:string, toEmail:string, fromEmail:string, ticketId:string, channelId:string, workspaceId:string): Promise<any> => {
         return new Promise((resolve, reject) => {
             try {
                 const mailURLHost = process.env.CORE_SERVICE_URL + '/internal/communication/send-email';
@@ -12,8 +12,8 @@ export default class CoreService {
                     "email": toEmail,
                     "templateId": 27,
                     "params": {
-                      "ticketlink": "https://zeonhq.com",
-                      "ticketmail": fromEmail,
+                      ticketlink: `${process.env.WEBSITE_URL}/dashboard/${workspaceId}?channelId=${channelId}&ticketId=${ticketId}`,
+                      ticketmail: fromEmail,
                       ticketmessage: ticketMessage
                     }
                   }
