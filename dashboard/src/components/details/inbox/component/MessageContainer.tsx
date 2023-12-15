@@ -67,7 +67,7 @@ const TicketStatusBadge = ({ ticketType }: ITicketStatusBadge) => {
       <>
           <Badge
               size="sm"
-              variant="dot"
+              variant="filled"
               radius="sm"
               color={ticketType == ITicketType.OPEN ? "red" : "green"}
           >
