@@ -82,7 +82,7 @@ const TicketStatusBadge = ({ ticketType }: ITicketStatusBadge) => {
 const MessageContainer = () => {
   const { inbox:{selectedFilter, selectedSubFilter, selectedChronology, ticketFilterText,allConversations}, user, activeChat, channelsInfo, selectedPage } = useDashboard();
   const dispatch = useDispatch();
-  const location = useLocation()
+  const location = useLocation();
   const handleClick = ({ type, name, channelId }: ISelectedPage) => {
     dispatch(
       setSelectedPage({
@@ -98,6 +98,7 @@ const MessageContainer = () => {
        const queryParameters = new URLSearchParams(location.search)
        // if the url has channelId param, set the channelId
        const channelIdInUrl = queryParameters.get("channelId");
+       const ticketIdInUrl = queryParameters.get("ticketId");
    
        if (channelIdInUrl) {
    
@@ -112,6 +113,16 @@ const MessageContainer = () => {
        });
        //@ts-ignore
        dispatch(setActiveChat(null));
+
+       if (ticketIdInUrl) {
+          const conversation = allConversations.find(
+            (ticket) => ticket.ticketId === ticketIdInUrl
+          );
+          if (conversation) {
+            dispatch(setActiveChat(conversation));
+            dispatch(setNewMessageToFalse(conversation.ticketId));
+          }
+       }
      } else {
       //@ts-ignore
     dispatch(setSelectedPage({ type: "detail", name: "inbox", channelId: channelsInfo.channels[0].channelId }));
