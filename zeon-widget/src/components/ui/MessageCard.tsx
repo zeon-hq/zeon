@@ -45,16 +45,12 @@ const MessageCard = ({info}:any) => {
   const newMessage = preProcessText(message,{email})
   return (
     <>
-      
       <SingleChat type={type}>
         <Wrapper type={type}>
           <Text style={{margin:0}} dangerouslySetInnerHTML={{ __html: newMessage }} linkColor = {type === MessageType.SENT ? "white" : ""} color={type === MessageType.SENT ? "white" : "black"} size="medium" weight="normal"/>
         </Wrapper>
         <Text size="small" weight="normal" >{getTime(info.createdAt || info.time)} </Text>
       </SingleChat>
-      
-      
-      
     </>
   );
 };

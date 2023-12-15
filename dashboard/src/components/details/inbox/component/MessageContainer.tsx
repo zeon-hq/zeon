@@ -6,9 +6,12 @@ import useDashboard from "hooks/useDashboard";
 import _ from "lodash";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { setActiveChat, setNewMessageToFalse, setSelectedPage } from "reducer/slice";
+import { ISelectedPage, setActiveChat, setNewMessageToFalse, setSelectedPage } from "reducer/slice";
 import styled from "styled-components";
 import { getTime, preProcessText } from "util/dashboardUtils";
+import {
+  useLocation
+} from "react-router-dom";
 
 enum ITicketType {
   OPEN = "Open",
@@ -79,10 +82,40 @@ const TicketStatusBadge = ({ ticketType }: ITicketStatusBadge) => {
 const MessageContainer = () => {
   const { inbox:{selectedFilter, selectedSubFilter, selectedChronology, ticketFilterText,allConversations}, user, activeChat, channelsInfo, selectedPage } = useDashboard();
   const dispatch = useDispatch();
+  const location = useLocation()
+  const handleClick = ({ type, name, channelId }: ISelectedPage) => {
+    dispatch(
+      setSelectedPage({
+        type,
+        name,
+        channelId,
+      })
+    );
+  };
 
   useEffect(()=>{
-    //@ts-ignore
+       // read channelId param from url
+       const queryParameters = new URLSearchParams(location.search)
+       // if the url has channelId param, set the channelId
+       const channelIdInUrl = queryParameters.get("channelId");
+   
+       if (channelIdInUrl) {
+   
+       localStorage.setItem(
+         "userstak-dashboard-channelId",
+         channelIdInUrl
+       );
+       handleClick({
+         type: "detail",
+         name: "inbox",
+         channelId: channelIdInUrl,
+       });
+       //@ts-ignore
+       dispatch(setActiveChat(null));
+     } else {
+      //@ts-ignore
     dispatch(setSelectedPage({ type: "detail", name: "inbox", channelId: channelsInfo.channels[0].channelId }));
+     }
   },[])
   
   return (

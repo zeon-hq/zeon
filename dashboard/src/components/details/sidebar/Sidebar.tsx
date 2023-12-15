@@ -7,11 +7,13 @@ import useDashboard from "hooks/useDashboard";
 import _ from "lodash";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import {
+  useLocation
+} from "react-router-dom";
 import { ISelectedPage, setActiveChat, setSelectedPage } from "reducer/slice";
+import styled from "styled-components";
 import ChannelList, { IChannelData } from "../inbox/component/ChannelList";
 import { SideBarInnerWrapper, SideBarTopWrapper } from "../inbox/inbox.styles";
-import styled from "styled-components"
-
 const MainWrapper = styled.div`
     height: calc(100vh - 62px);
     overflow: auto;
@@ -23,7 +25,7 @@ const Sidebar = ({ workspaceId }: { workspaceId: string }) => {
   const dispatch = useDispatch();
   const [openChannelModal, setOpenChannelModal] = useState(false);
   const { channel, loading, workspaceInfo } = useDashboard();
-
+  const location = useLocation()
   const isWorkSpaceEmpty = !!_.isEmpty(workspaceInfo);
 
   const handleClick = ({ type, name, channelId }: ISelectedPage) => {
@@ -53,14 +55,45 @@ const Sidebar = ({ workspaceId }: { workspaceId: string }) => {
       );
   }, [workspaceInfo]);
 
+  // useEffect(() => {
+  //   if (channel.length > 0) {
+  //     localStorage.setItem(
+  //       "userstak-dashboard-channelId",
+  //       channel[0].channelId
+  //     );
+  //   }
+  // }, [channel.length > 0]);
+
   useEffect(() => {
+    // read channelId param from url
+    
+    const queryParameters = new URLSearchParams(location.search)
+
+    // if the url has channelId param, set the channelId
+    const channelIdInUrl = queryParameters.get("channelId");
+
+    if (channelIdInUrl) {
+
+    localStorage.setItem(
+      "userstak-dashboard-channelId",
+      channelIdInUrl
+    );
+    handleClick({
+      type: "detail",
+      name: "inbox",
+      channelId: channelIdInUrl,
+    });
+    //@ts-ignore
+    dispatch(setActiveChat(null));
+  } else {
     if (channel.length > 0) {
       localStorage.setItem(
         "userstak-dashboard-channelId",
         channel[0].channelId
       );
     }
-  }, [channel.length > 0]);
+  }
+  }, [channel.length > 0]); 
 
   return (
     <>
