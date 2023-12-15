@@ -6,7 +6,7 @@ import { docsArray } from "util/Constant";
 const Modules = () => {
   const modulesArrayData = [
     {
-      title: "Communications & Ticketing",
+      title: "Communications &  Ticketing",
       description:
         "Create channels to receive incoming messages & tickets. You can deploy a chat widget or embed them onto your website",
       docUrl: "https://www.google.com",
