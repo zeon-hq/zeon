@@ -89,7 +89,6 @@ const Behavior = () => {
 
   return (
     <>
-      <Space h={20} />
       <Heading
         showDivider
         heading={"Behaviour"}

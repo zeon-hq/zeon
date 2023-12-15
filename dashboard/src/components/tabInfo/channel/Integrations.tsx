@@ -22,7 +22,6 @@ const Integrations = (props: Props) => {
 
   return (
     <div>
-      <Space h="20px" />
       <Heading
         heading="Integrations"
         subheading="Supercharge your workflow and connect the tools you use every day."

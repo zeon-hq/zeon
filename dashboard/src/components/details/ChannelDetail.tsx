@@ -98,7 +98,7 @@ const ChannelDetail = () => {
 
   return (
     // <Navbar width={{ base: 300 }} height={"100vh"} style={{backgroundColor:'white'}}>
-    <Box w={"300"} h="100%" pt={"25px"} style={{ backgroundColor: "white" }}>
+    <Box w={"300"} h="100%" style={{ backgroundColor: "white" }}>
       <Tabs
         styles={() => ({
           tab: {
@@ -141,7 +141,7 @@ const ChannelDetail = () => {
                 style={{
                   color: "#101828",
                   fontWeight: "500",
-                  fontSize: "14px",
+                  fontSize: "12px",
                   marginTop: "2px",
                 }}
                 value={tab.name}

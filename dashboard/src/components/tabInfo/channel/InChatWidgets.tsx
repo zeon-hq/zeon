@@ -86,7 +86,6 @@ const InChatWidgets = () => {
 
   return (
     <>
-      <Space h="20px" />
       <Heading
         heading="In Chat Widgets"
         showDivider

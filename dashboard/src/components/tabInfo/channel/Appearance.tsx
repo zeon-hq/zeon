@@ -115,7 +115,6 @@ const Appearance = () => {
   return (
     <>
       <div className="">
-        <Space h="20px" />
         <Box>
           <Heading
             icon={<img src={ProfileSave} />}

@@ -39,10 +39,10 @@ export const InfoDiv = styled.div`
 `;
 
 export const GoBackText = styled(Text)`
-  font-size: 14px;
+  font-size: 12px;
   color: #3054b9;
-  font-weight: 500;
-  margin-left: 12px;
+  font-weight: 600;
+  margin-left: 4px;
 `;
 
 export const MenuList = styled.div`
