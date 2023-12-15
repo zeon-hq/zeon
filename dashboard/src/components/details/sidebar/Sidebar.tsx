@@ -15,7 +15,7 @@ import styled from "styled-components";
 import ChannelList, { IChannelData } from "../inbox/component/ChannelList";
 import { SideBarInnerWrapper, SideBarTopWrapper } from "../inbox/inbox.styles";
 const MainWrapper = styled.div`
-    height: calc(100vh - 62px);
+    //height: calc(100vh - 50px);
     overflow: auto;
     border-right: 1px solid #eaecf0;
     padding: 16px;
