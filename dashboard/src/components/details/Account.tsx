@@ -106,6 +106,7 @@ const Account = () => {
           },
           tabsList: {
             padding: "8px !important",
+            borderRight: "1px solid #EAECF0",
           },
         })}
         orientation="vertical"
