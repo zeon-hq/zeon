@@ -104,6 +104,8 @@ const Admin = () => {
         />
       ) : (
         <>
+          <Space h={24} />
+
           <Heading
             heading="Workspace Members"
             showDocsBtn

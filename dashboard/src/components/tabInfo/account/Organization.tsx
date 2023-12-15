@@ -1,4 +1,4 @@
-import { Button, Divider, Flex, Select, Text } from "@mantine/core";
+import { Button, Divider, Flex, Select, Space, Text } from "@mantine/core";
 import ProfileSave from "assets/profile_save.png";
 import Heading from "components/details/inbox/component/Heading";
 import {
@@ -23,25 +23,32 @@ const showTimeZoneField = true;
 const Organization = () => {
   const { workspaceInfo } = useDashboard();
   const dispatch = useDispatch();
-  const [workspaceName, setWorkSpaceName] = useState<string>(workspaceInfo.workspaceName); 
-  const [timezone, setTimeZone] = useState<string | undefined>(workspaceInfo?.workspaceConfig?.timezone);
-  const [organizationPic, setOrganizationPic] = useState<string|any>(workspaceInfo?.workspaceConfig?.logo);
+  const [workspaceName, setWorkSpaceName] = useState<string>(
+    workspaceInfo.workspaceName
+  );
+  const [timezone, setTimeZone] = useState<string | undefined>(
+    workspaceInfo?.workspaceConfig?.timezone
+  );
+  const [organizationPic, setOrganizationPic] = useState<string | any>(
+    workspaceInfo?.workspaceConfig?.logo
+  );
 
   const saveOrganizationInfo = async () => {
     const workSpaceId = workspaceInfo.workspaceId;
 
-    const workSpacePayload:IWorkspaceInfoUpdatePayload = {
+    const workSpacePayload: IWorkspaceInfoUpdatePayload = {
       workspaceName: workspaceName,
       timezone: timezone,
       logo: organizationPic,
     };
-    await updateWorkSpaceInformation(workSpacePayload,workSpaceId);
+    await updateWorkSpaceInformation(workSpacePayload, workSpaceId);
     //@ts-ignore
     dispatch(initDashboard(workspaceInfo.workspaceId));
-    }
-    
+  };
+
   return (
     <>
+      <Space h={24} />
       <Heading
         showDivider
         heading="Organization"
@@ -71,7 +78,8 @@ const Organization = () => {
         <ProfileUpload
           name="Workspace Logo"
           description="This will be displayed on your workspace profile."
-          logoImage={organizationPic} setLogoImage={setOrganizationPic}
+          logoImage={organizationPic}
+          setLogoImage={setOrganizationPic}
         />
       </Flex>
 
@@ -85,7 +93,7 @@ const Organization = () => {
 
           <RightWrapper>
             <Select
-            defaultValue={timezone}
+              defaultValue={timezone}
               rightSection={<MdKeyboardArrowDown />}
               icon={<AiOutlineClockCircle size="1rem" />}
               clearable={false}
@@ -99,7 +107,7 @@ const Organization = () => {
                 value: name,
                 label: name,
               }))}
-              onChange={(value:any) => {
+              onChange={(value: any) => {
                 setTimeZone(value);
               }}
             />
@@ -116,7 +124,6 @@ const Organization = () => {
           color="indigo"
           onClick={async () => {
             await saveOrganizationInfo();
-            
           }}
         >
           {" "}

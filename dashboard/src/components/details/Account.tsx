@@ -95,7 +95,7 @@ const Account = () => {
 
 
   return (
-    <Box h={"100%"} style={{ backgroundColor: "white" }} >
+    <Box h={"100%"} style={{ backgroundColor: "white" }}>
       <Tabs
         styles={() => ({
           tab: {
@@ -114,7 +114,7 @@ const Account = () => {
         value={defaultWorkSpaceSettingTab}
         defaultValue={defaultWorkSpaceSettingTab}
       >
-        <Tabs.List w={"230px"} >
+        <Tabs.List w={"230px"}>
           <Flex
             align={"center"}
             className="pointer"
@@ -131,6 +131,8 @@ const Account = () => {
             }}
           >
             <SideBarInnerWrapper>
+              <Space h={16} />
+
               <PanelLabel
                 labelTitle="Personal"
                 icon={channelCreate}
@@ -144,11 +146,11 @@ const Account = () => {
             .filter((tab) => tab.active) // Filter tabs where active is true
             .map((tab: TabInfo, index) => (
               <Tabs.Tab
-              key={index}
-              onClick={()=>{
-                //@ts-ignore
-                dispatch(setDefaultWorkSpaceSettingTab(tab.name));
-              }}
+                key={index}
+                onClick={() => {
+                  //@ts-ignore
+                  dispatch(setDefaultWorkSpaceSettingTab(tab.name));
+                }}
                 style={{
                   color: "#101828",
                   fontWeight: "500",
@@ -162,8 +164,10 @@ const Account = () => {
                 {tab.name}
               </Tabs.Tab>
             ))}
-            
-          <SideBarInnerWrapper style={{marginTop:'10px', marginBottom:'12px'}}>
+
+          <SideBarInnerWrapper
+            style={{ marginTop: "10px", marginBottom: "12px" }}
+          >
             <PanelLabel
               labelTitle="Workspace Settings"
               icon={channelCreate}
@@ -171,15 +175,15 @@ const Account = () => {
               iconOnClick={() => {}}
             />
           </SideBarInnerWrapper>
-          
+
           {workSpaceSetting
             .filter((tab) => tab.active) // Filter tabs where active is true
             .map((tab: TabInfo) => (
               <Tabs.Tab
-              onClick={()=>{
-                //@ts-ignore
-                dispatch(setDefaultWorkSpaceSettingTab(tab.name));
-              }}
+                onClick={() => {
+                  //@ts-ignore
+                  dispatch(setDefaultWorkSpaceSettingTab(tab.name));
+                }}
                 style={{
                   color: "#101828",
                   fontWeight: "500",
@@ -193,25 +197,25 @@ const Account = () => {
                 {tab.name}
               </Tabs.Tab>
             ))}
-            <Tabs.Tab
-            onClick={()=>{
+          <Tabs.Tab
+            onClick={() => {
               logOutUtils();
             }}
-                style={{
-                  color: "#B42318",
-                  fontWeight: "500",
-                  fontSize: "13px",
-                  marginTop: "3px",
-                }}
-                value={'Log out workspace'}
-                icon={<img src={logout} style={{color:'red'}} />}
-              >
-                Log out workspace
-              </Tabs.Tab>
+            style={{
+              color: "#B42318",
+              fontWeight: "500",
+              fontSize: "13px",
+              marginTop: "3px",
+            }}
+            value={"Log out workspace"}
+            icon={<img src={logout} style={{ color: "red" }} />}
+          >
+            Log out workspace
+          </Tabs.Tab>
         </Tabs.List>
 
-
-        {profileSetting.concat(workSpaceSetting)
+        {profileSetting
+          .concat(workSpaceSetting)
           .filter((tab) => tab.active) // Filter tabs where active is true
           .map((tab: TabInfo) => (
             <Tabs.Panel style={{ padding: "0px 32px" }} value={tab.name}>
