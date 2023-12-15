@@ -18,7 +18,7 @@ const Modules = () => {
     <>
       <Space h={24} />
       <Heading
-        heading="Workspace Modules"
+        heading="Workspace Modules "
         subheading="Manage modules provisioned for your workspace"
       />
       <Space h={15} />
