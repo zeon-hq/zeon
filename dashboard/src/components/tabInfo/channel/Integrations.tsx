@@ -37,16 +37,15 @@ const Integrations = (props: Props) => {
             <Box>
               <Text weight="600" size="14px">
                 {" "}
-                Slack{" "}
+                Slack New Ticket Notification{" "}
               </Text>
               <Text color="#475467" weight="400" size="14px">
                 {" "}
-                Send incoming conversations and respond to them within slack as
-                threads{" "}
+                Receive new ticket notifications directly in your slack channel.
+                Your slack channel must be set to public.{" "}
               </Text>
             </Box>
-          </Flex>
-          <Flex gap="16px">
+          
             <Button
               radius="sm"
               onClick={handleIntegrateSlack}
@@ -57,7 +56,7 @@ const Integrations = (props: Props) => {
               {" "}
               {channelsInfo[selectedPage.name]?.channelId
                 ? "Disconnect"
-                : "Connect"}{" "}              
+                : "Connect"}{" "}
             </Button>
           </Flex>
           <Flex gap="16px">
@@ -68,7 +67,7 @@ const Integrations = (props: Props) => {
             <Box>
               <Text weight="600" size="14px">
                 {" "}
-                Slack{" "}
+                Slack 2-Way Sync{" "}
               </Text>
               <Text color="#475467" weight="400" size="14px">
                 {" "}
@@ -76,8 +75,7 @@ const Integrations = (props: Props) => {
                 threads{" "}
               </Text>
             </Box>
-          </Flex>
-          <Flex gap="16px">
+          
             <Button
               radius="sm"
               onClick={handleIntegrateSlack}
