@@ -218,8 +218,8 @@ const MessageContainer = () => {
                   <div style={{ width: "100%" }}>
                     <DetailWrapper style={{ marginBottom: "8px" }}>
                       <Text
-                        color={isSelected ? "#3054B9" : conversation.hasNewMessage === 1 ? '#344054' :'#667085'}
-                        weight={500}
+                        color={isSelected ? "#3054B9" : conversation.hasNewMessage === 1 ? '#000000' :'#667085'}
+                        weight={isSelected ? 600 : conversation.hasNewMessage === 1 ? 600 : 400}
                         style={{ fontSize: "13px" }}
                         size="md"
                       >
