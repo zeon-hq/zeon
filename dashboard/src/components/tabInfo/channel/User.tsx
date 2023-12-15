@@ -126,7 +126,6 @@ const User = ({ channelId }: Props) => {
 
   return (
     <>
-      <Space h="md" />
       <Heading
         showDivider
         heading="Users"

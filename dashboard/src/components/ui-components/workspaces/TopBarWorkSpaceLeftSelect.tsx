@@ -43,7 +43,7 @@ const TopBarWorkSpaceLeftSelect = ({ workspaceId }: { workspaceId: string }) => 
                           <Image maw={20} radius="md" src={workSpaceDropdown} />
                       }
                       style={{
-                          borderColor: "#D0D5DD",
+                          //borderColor: "#D0D5DD",
                           color: "#101828",
                           backgroundColor: "#FFFFFF",
                           fontWeight: 500,

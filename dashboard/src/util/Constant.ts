@@ -1,6 +1,6 @@
 export const docsArray = [
     {
-        name: "HTML",
+        name: "Learn how to deploy Zeon Support pipeline in your website or app",
         link: "",
     }
 ]
@@ -11,17 +11,22 @@ export const inputWrapperData: ('label' | 'input' | 'description' | 'error')[] =
     "description"]
 
 export const channelListData = [
-    {
-        title: 'Chat Widget',
-        description: 'Embed a widget to collect user queries and respond to them on Zeon',
-        enabled: true
-    }, {
-        title: 'Embed Chat On Page/App ',
-        description: 'Embed a live chat component onto a page, app or other popular no-code platforms',
-        enabled: false
-    }, {
-        title: 'AI Assisted Chat Widget',
-        description: 'Deploy an AI Model to act on your behalf to solve or triage queries to escalate to human users',
-        enabled: false
-    }
-]
+  {
+    title: "Support Chat",
+    description:
+      "Embed a widget to collect user queries and respond to them on Zeon support pipeline",
+    enabled: true,
+  },
+  {
+    title: "Internal Chat",
+    description:
+      "Work asynchronously in real-time using direct messages or group conversions",
+    enabled: false,
+  },
+  {
+    title: "Public Group Chat",
+    description:
+      "Create a public group chat for your users to discuss and share ideas",
+    enabled: false,
+  },
+];

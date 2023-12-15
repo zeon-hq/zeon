@@ -13,9 +13,11 @@ const ReadDocsButton = ({hideDocIcon}:IShowDocs) => {
       color: "black",
       backgroundColor: "white",
       borderColor: "white",
+      fontWeight: 600,
+      fontSize: "12px",
     }}
-    onClick={()=>{
-        
+    onClick={() => {
+      window.open('https://docs.zeonhq.com', '_blank');
     }}
   >
     Read Docs

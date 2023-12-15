@@ -8,7 +8,7 @@ interface ISidebarBack {
 
 const SidebarBack = ({ onBackClick }: ISidebarBack) => {
   return (
-    <Flex align={"center"} className="pointer" onClick={onBackClick}>
+    <Flex align={"center"} className="pointer" onClick={onBackClick} style={{paddingLeft: '8px'}}>
       <AiOutlineArrowLeft fontWeight={"800"} color="#3054B9" />
       <GoBackText>Go Back</GoBackText>
     </Flex>

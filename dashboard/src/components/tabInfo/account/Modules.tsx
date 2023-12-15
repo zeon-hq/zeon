@@ -16,6 +16,7 @@ const Modules = () => {
 
   return (
     <>
+      <Space h={24} />
       <Heading
         heading="Workspace Modules"
         subheading="Manage modules provisioned for your workspace"
@@ -25,7 +26,12 @@ const Modules = () => {
         {modulesArrayData.map((data) => {
           return (
             <Grid.Col span={4}>
-              <ModuleCard description={data.description} isLaunched={data.isLaunched} name={data.title} link={data.docUrl} />
+              <ModuleCard
+                description={data.description}
+                isLaunched={data.isLaunched}
+                name={data.title}
+                link={data.docUrl}
+              />
             </Grid.Col>
           );
         })}

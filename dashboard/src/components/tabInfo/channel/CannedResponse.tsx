@@ -22,7 +22,6 @@ const Header = styled.div`
 `;
 
 const Wrapper = styled.div`
-  margin-top: 10px;
 `;
 
 type Props = {};
