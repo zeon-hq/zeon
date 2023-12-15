@@ -121,7 +121,7 @@ const TopBarWorkSpaceRightSelect = ({
   ];
 
   return (
-      <Menu width={230} shadow="xs">
+      <Menu position="bottom-end" width={230} shadow="xs">
           <Menu.Target>
               <Button
                   leftIcon={<Image maw={12} radius="4px" src={UserTopRight} />}

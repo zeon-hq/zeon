@@ -36,7 +36,7 @@ const TopBarWorkSpaceLeftSelect = ({ workspaceId }: { workspaceId: string }) => 
 
   return (
       <>
-          <Menu width={335} shadow="md">
+          <Menu position="bottom-start" width={335} shadow="md">
               <Menu.Target>
                   <Button
                       rightIcon={
