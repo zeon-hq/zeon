@@ -129,7 +129,7 @@ const TopBarWorkSpaceRightSelect = ({
                       <Image maw={18} radius="sm" src={workSpaceDropdown} />
                   }
                   style={{
-                      borderColor: "#D0D5DD",
+                      //borderColor: "#D0D5DD",
                       color: "#101828",
                       backgroundColor: "#FFFFFF",
                       fontWeight: 500,
