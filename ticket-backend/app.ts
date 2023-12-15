@@ -78,7 +78,7 @@ io.on("connection", (socket) => {
       channel?.members.forEach(async (member:any) => {
         const user = await User.findOne({userId:member})
   
-        await CoreService.sendMail(ticketOptions.message, user?.email, ticketOptions.customerEmail);
+        await CoreService.sendMail(ticketOptions.message, user?.email, ticketOptions.customerEmail, openTicketData.ticketId, ticketOptions.channelId, ticketOptions.workspaceId);
       })
     } catch (error) {
       console.error(error);
