@@ -109,7 +109,7 @@ const ChannelDetail = () => {
             },
           },
           tabsList: {
-            padding: " 42px 8px 8px 8px !important",
+            padding: " 24px 8px 8px 8px !important",
             borderRight: "1px solid #EAECF0",
           },
         })}
