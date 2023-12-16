@@ -33,14 +33,14 @@ const CannedResponseData = ({
   return (
     <StyledBorderDiv>
       <div style={{ padding: "0px 24px" }} key={item._id}>
-        <Header key={index} style={{ padding: "10px 0px" }}>
+        <Header key={index} style={{ padding: "14px 0px" }}>
           <Box>
-            <Text style={{ fontSize: "14px", fontWeight: "600" }}>
+            <Text style={{ fontSize: "14px", fontWeight: "500" }}>
               {" "}
               {item.title}{" "}
             </Text>
-            <Space h="10px" />
-            <Text style={{ fontSize: "14px", fontWeight: "400" }}>
+            <Space h="4px" />
+            <Text style={{ fontSize: "12px", fontWeight: "400" }}>
               {" "}
               {item.message}{" "}
             </Text>

@@ -97,7 +97,7 @@ const Behavior = () => {
       <Wrapper>
         <InfoContainer>
           <MainDiv>
-            <Box mb={24} fw={600}>
+            <Box mb={24} fw={500}>
               <SwitchWithLabel
                 onClick={(e) => {
                   handleChange({

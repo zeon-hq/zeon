@@ -90,29 +90,20 @@ const InChatWidgets = () => {
         heading="In Chat Widgets"
         showDivider
         icon={<img src={ProfileSave} />}
-        subheading="Establish a consistent tone across channels as you interact with your users"
+        subheading="Create widgets with content and give them a link. This is useful if you want to create a button for scheduling meetings, documentation and invites to your social channels."
         onSave={() => handleSave()}
         buttonText="Save"
       />
       <Wrapper>
         <InfoContainer>
           <MainDiv>
-            <Label text={"In Chat Widgets"} size="sm" />
-            <HelperText
-              showBlack={true}
-              text={
-                "Create widgets with content and give them a link. This is useful if you want to create a button for scheduling a meeting, documentation, invites to your social channel or slack/discord groups. Max 4 Widgets allowed. Upload a logo for each widget with a transparent background. PNG, SVG Supported. 20px by 10px. We already a collection of logos which might be useful to you. View the collection here."
-              }
-            />
-
             {(inChatWidgets || []).map(
               (item: InChatWidgetInterface, index: number) => (
                 <>
-                  <Space h="md" />
                   <Label text={`Widget ${index + 1}`} />
                   <Label text={"Title"} />
                   <Grid>
-                    <Grid.Col>
+                    <Grid.Col >
                       <TextInput
                         value={item.title}
                         placeholder={"Enter title here"}

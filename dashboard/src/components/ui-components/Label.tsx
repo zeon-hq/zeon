@@ -15,8 +15,8 @@ const TextInputLabel = styled(Text)`
   font-style: normal;
   font-weight: 500;
   line-height: 20px;
-  margin-top: 32px;
-  margin-bottom: 6px;
+  margin-top: 24px;
+  margin-bottom: 8px;
 `;
 
 const Label = ({ style = {}, text, size = "xs" }: Props) => {

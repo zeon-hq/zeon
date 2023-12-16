@@ -144,7 +144,6 @@ const Appearance = () => {
                   description="Branding can only be disabled on paid plans."
                 />
 
-
                 <Space style={{ marginTop: "32px" }} />
 
                 <Grid>
@@ -172,16 +171,18 @@ const Appearance = () => {
                 <Space style={{ marginTop: "32px" }} />
 
                 <SelectColor
-                description="Color should be in HEX format."
-                label={'Color'}
-                  value={appearenceDetails?.widgetButtonSetting.widgetButtonColor}
+                  description="Color should be in HEX format."
+                  label={"Color"}
+                  value={
+                    appearenceDetails?.widgetButtonSetting.widgetButtonColor
+                  }
                   handleChange={(colorValue: string) => {
                     handleChange({
                       subType: "widgetButtonSetting",
                       key: "widgetButtonColor",
                       value: colorValue,
                       type: "appearance",
-                    })
+                    });
                   }}
                 />
               </Box>
@@ -189,7 +190,7 @@ const Appearance = () => {
               <Box mb={16}>
                 {/* <img src={TopBannerSvg} alt="Widget Header Section" /> */}
                 <Space mb={"20px"} />
-{/*                 <SelectColor
+                {/*                 <SelectColor
                 // description="dfdf"
                 label={'Top Banner Color'}
                   value={appearenceDetails?.widgetHeaderSection?.topBannerColor}
@@ -250,7 +251,7 @@ const Appearance = () => {
                 </Grid>
                 <Space mb={"20px"} />
 
-{/*                 <Label text={"Text Color"} />
+                {/*                 <Label text={"Text Color"} />
                 <Grid>
                   <Grid.Col>
                     <Select
@@ -278,7 +279,7 @@ const Appearance = () => {
                   </Grid.Col>
                 </Grid>
  */}
-{/*                 <Label text={"Stroke Color"} />
+                {/*                 <Label text={"Stroke Color"} />
 
                 <Grid>
                   <Grid.Col>
@@ -317,8 +318,8 @@ const Appearance = () => {
                 <Label text={"Button Color"} />
 
                 <SelectColor
-                description="This sets the color of the new conversation button. Color should be in HEX format."
-                label={'Color'}
+                  description="This sets the color of the new conversation button. Color should be in HEX format."
+                  label={"Color"}
                   value={appearenceDetails?.newConversationButton?.buttonColor}
                   handleChange={(colorValue: string) => {
                     handleChange({
@@ -326,7 +327,7 @@ const Appearance = () => {
                       key: "buttonColor",
                       value: colorValue,
                       type: "appearance",
-                    })
+                    });
                   }}
                 />
                 <Label text={"Title"} />
@@ -350,7 +351,7 @@ const Appearance = () => {
                   </Grid.Col>
                 </Grid>
 
-{/*                 <Label text={"Sub Title"} />
+                {/*                 <Label text={"Sub Title"} />
                 <Grid>
                   <Grid.Col>
                     <TextInput
@@ -372,7 +373,7 @@ const Appearance = () => {
                   </Grid.Col>
                 </Grid> */}
 
-{/*                 <Label text={"Text Color"} />
+                {/*                 <Label text={"Text Color"} />
 
                 <Grid>
                   <Grid.Col>
@@ -400,6 +401,7 @@ const Appearance = () => {
                     />
                   </Grid.Col>
                 </Grid> */}
+                <Space h="32px" />
               </Box>
             </MainDiv>
           </InfoContainer>

@@ -117,7 +117,13 @@ const CannedResponse = () => {
             justify="space-between"
             align="center"
           >
-            <Text weight="500" color="#475467">
+            <Text
+              color="#475467"
+              sx={{
+                fontWeight: 500,
+                fontSize: "12px",
+              }}
+            >
               {" "}
               Saved Responses
             </Text>

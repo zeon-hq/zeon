@@ -35,7 +35,7 @@ const Flex = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 24px;
+  padding: 16px 16px;
   border: 1px solid #eaecf0;
 `;
 
@@ -137,6 +137,8 @@ const User = ({ channelId }: Props) => {
         color="#344054"
         sx={{
           fontWeight: 500,
+          fontSize: "14px",
+          paddingBottom: "6px",
         }}
       >
         Invite to Channel
@@ -169,24 +171,30 @@ const User = ({ channelId }: Props) => {
           Add User{" "}
         </Button>
       </Wrapper>
-      <Space h="md" />
-      <Space h="md" />
+      <Space h="xl" />
       <Box>
         <Text
           color="#344054"
           sx={{
             fontWeight: 500,
+            fontSize: "14px",
+            paddingBottom: "2px",
           }}
         >
           Channel Users
         </Text>
-        <Text color="#475467">
-          Only users who are added to the chat channel can receive incoming chat
-          queries. Alternatively you can use the slack integration to manage
-          incoming and outgoing conversations within a channel.
+        <Text
+          color="#475467"
+          sx={{
+            fontWeight: 500,
+            fontSize: "12px",
+            paddingBottom: "6px",
+          }}
+        >
+          Only users who are added to this support channel can view this channel
+          and reply to queries.
         </Text>
-        <Space h="md" />
-        <Space h="md" />
+        <Space h="xl" />
         <MFlex
           sx={{
             borderRadius: "8px 8px 0px 0px",
@@ -197,7 +205,13 @@ const User = ({ channelId }: Props) => {
           justify="space-between"
           align="center"
         >
-          <Text weight="500" color="#475467">
+          <Text
+            color="#475467"
+            sx={{
+              fontWeight: 500,
+              fontSize: "12px",
+            }}
+          >
             {" "}
             Name
           </Text>
