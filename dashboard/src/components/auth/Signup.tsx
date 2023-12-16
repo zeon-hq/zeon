@@ -68,7 +68,7 @@ const Signup = () => {
     // if at is present, redirect to workspaces
     const at = localStorage.getItem("at")
     if (at) {
-      navigate("/workspaces")
+      navigate("/workspaces/chat")
     }
   }, [])
 

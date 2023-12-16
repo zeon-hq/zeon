@@ -43,7 +43,7 @@ const SubscribeModal = ({openModal}:ISubscribeModal) => {
         radius="md"
         color="indigo"
         variant="outline"
-        onClick={() => navigate("/workspaces")}
+        onClick={() => navigate("/workspaces/chat")}
       >
         {" "}
         Go Back to Workspaces{" "}

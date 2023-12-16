@@ -12,7 +12,7 @@ export default class CoreService {
                     "email": toEmail,
                     "templateId": 27,
                     "params": {
-                      ticketlink: `${process.env.WEBSITE_URL}/dashboard/${workspaceId}?channelId=${channelId}&ticketId=${ticketId}`,
+                      ticketlink: `${process.env.WEBSITE_URL}/${workspaceId}/chat?channelId=${channelId}&ticketId=${ticketId}`,
                       ticketmail: fromEmail,
                       ticketmessage: ticketMessage
                     }

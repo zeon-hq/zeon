@@ -79,7 +79,7 @@ const Login = () => {
 
 
         if(res.at)
-        navigate("/workspaces")
+        navigate("/workspaces/chat")
 
       }).catch((err) => {
         setLoading(false)
@@ -105,7 +105,7 @@ const Login = () => {
     // if at is present, redirect to workspaces
     const at = localStorage.getItem("at")
     if (at) {
-      navigate("/workspaces")
+      navigate("/workspaces/chat")
     }
   }, [])
 

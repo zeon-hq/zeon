@@ -54,7 +54,7 @@ const WorkspaceCard = ({ name, info, isInvite = false, onAccept, onReject, works
   return (
     <Wrapper
     onClick={()=>{
-      navigate(`/dashboard/${workspaceId}`)
+      navigate(`/${workspaceId}/chat`)
     }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)} 

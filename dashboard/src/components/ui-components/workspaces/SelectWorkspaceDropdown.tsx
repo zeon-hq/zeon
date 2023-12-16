@@ -21,7 +21,7 @@ const SelectWorkspaceDropdown = ({ workspaceId }: Props) => {
 
   const handleChange = (value: string | null) => {
     if(value) {
-        navigate(`/dashboard/${value}`)
+        navigate(`/${value}/chat`)
         window.location.reload()
     } else {
         console.log(">>>", "No value")

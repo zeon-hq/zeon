@@ -51,7 +51,7 @@ function App() {
                 }
               />
               <Route
-                path="/dashboard/:workspaceId"
+                path="/:workspaceId/chat"
                 element={
                   <Layout >
                     <Details/>
@@ -67,7 +67,7 @@ function App() {
                 }
               />
               <Route
-                path="/workspaces"
+                path="/workspaces/chat"
                 element={
                   <ProtectedRoute>
                    <Workspaces/>

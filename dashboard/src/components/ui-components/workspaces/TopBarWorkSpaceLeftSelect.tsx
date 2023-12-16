@@ -22,7 +22,7 @@ const TopBarWorkSpaceLeftSelect = ({ workspaceId }: { workspaceId: string }) => 
   };
 
   const handleChange = (value: string | null) => {
-      navigate(`/dashboard/${value}`);
+      navigate(`/${value}/chat`);
       window.location.reload();    
   };
 

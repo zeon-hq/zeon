@@ -122,7 +122,7 @@ const WorkspaceCreation = (props: Props) => {
                   color: "#3054B9",
                   fontWeight: "600",
                 }}
-                to={"/workspaces"}
+                to={"/workspaces/chat"}
               >
                 <p> Skip and go to workspace selection </p>
               </Link>
