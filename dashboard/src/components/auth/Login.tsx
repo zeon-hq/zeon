@@ -66,7 +66,7 @@ const Login = () => {
                 // optional
                 userID: "${decoded.userId}",
                 name: "${decoded.name}",
-                avatar: "https://ui-avatars.com/api/?name=${decoded.name}",
+                avatar: "https://api.dicebear.com/7.x/fun-emoji/svg?seed=${decoded.name}",
             },
         });`;
 

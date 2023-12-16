@@ -17,7 +17,7 @@ const TopBarWorkSpaceLeftSelect = ({ workspaceId }: { workspaceId: string }) => 
     return workspaces?.map((item: any) => ({
       label: item.workspaceName,
       value: item.workspaceId,
-      logo: item.workspaceConfig.logo || `https://ui-avatars.com/api/?name=${item.workspaceName}`
+      logo: item.workspaceConfig.logo || `https://api.dicebear.com/7.x/initials/svg?seed=${item.workspaceName}`
     }));
   };
 
