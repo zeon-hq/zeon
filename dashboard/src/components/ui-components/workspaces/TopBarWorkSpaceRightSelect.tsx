@@ -29,6 +29,14 @@ type MenuItem = {
   showBottomOrder: boolean;
 };
 
+const AvatarImage = styled.img`
+margin-right: 10px;
+width: 28px;
+height: 28px;
+border-radius: 4px;
+`;
+
+
 const TopBarWorkSpaceRightSelect = ({
   workspaceId,
 }: {
@@ -124,7 +132,7 @@ const TopBarWorkSpaceRightSelect = ({
       <Menu position="bottom-end" width={230} shadow="xs">
           <Menu.Target>
               <Button
-                  leftIcon={<Image maw={12} radius="4px" src={UserTopRight} />}
+                  leftIcon={<AvatarImage src={user?.profilePic || `https://api.dicebear.com/7.x/fun-emoji/svg?seed=${user?.name}`} />}                  
                   rightIcon={
                       <Image maw={18} radius="sm" src={workSpaceDropdown} />
                   }
