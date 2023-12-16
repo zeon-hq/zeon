@@ -2,8 +2,6 @@ import { Box, Chip, Grid, Space, Text } from "@mantine/core";
 import UserDeleteIcon from "assets/user_remove_icon.svg";
 import useDashboard from "hooks/useDashboard";
 import { useDispatch } from "react-redux";
-import { initDashboard } from "reducer/slice";
-import { changeUserRole } from "service/CoreService";
 type Props = {
   email: string;
   rank: string | undefined;
@@ -23,19 +21,6 @@ const AdminDiv = ({
 }: Props) => {
   const { workspaceInfo } = useDashboard();
   const dispatch = useDispatch();
-
-  const callChangeRoleApi = async (role: string) => {
-    try {
-      if (!role) {
-        return;
-      }
-      await changeUserRole(workspaceInfo.workspaceId, role);
-      //@ts-ignore
-      dispatch(initDashboard(workspaceInfo.workspaceId || ""));
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   return (
     <Box sx={{ borderBottom: "1px solid #EAECF0" }}>

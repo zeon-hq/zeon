@@ -23,7 +23,6 @@ const Details = () => {
   return (
     <>
       <div style={{ height: "100vh", overflow: "hidden" }}>
-        {/* <Box bg={'red'} h="100vh" mt={name !== "inbox" ? "10px" : ""}> */}
         {type === "loading" ? (
           <LoadingOverlay visible={loading} />
         ) : type === "detail" ? (

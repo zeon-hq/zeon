@@ -7,24 +7,11 @@ import useDashboard from "hooks/useDashboard";
 import { Copy } from "tabler-icons-react";
 import { docsArray } from "util/Constant";
 
-type Props = {};
 
-const Deployment = (props: Props) => {
+const Deployment = () => {
   const clipboard = useClipboard({ timeout: 500 });
-  const { workspaceInfo } = useDashboard();
   const { selectedPage, channelsInfo } = useDashboard();
 
-  const handleIntegrateSlack = () => {
-    if (channelsInfo[selectedPage.name]?.channelId) return;
-    localStorage.setItem(
-      "userstak-dashboard-workspaceId",
-      workspaceInfo.workspaceId || ""
-    );
-    window.open(
-      "https://slack.com/oauth/v2/authorize?client_id=3769512251410.4269280938033&scope=channels:history,channels:join,channels:read,chat:write,incoming-webhook,users.profile:read&user_scope=",
-      "_blank"
-    );
-  };
 
   const scriptToAttach = `
     <!-- Add this in the body tag in your code -->

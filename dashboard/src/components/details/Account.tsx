@@ -13,11 +13,12 @@ import { TabInfo, TabsName, IWorkSpaceSettings } from "components/types";
 import PanelLabel from "components/widget/PanelLabel";
 import useDashboard from "hooks/useDashboard";
 import { useDispatch } from "react-redux";
-import { setDefaultWorkSpaceSettingTab, setSelectedPage, setShowSidebar } from "reducer/slice";
+import { initDashboard, setDefaultWorkSpaceSettingTab, setSelectedPage, setShowSidebar } from "reducer/slice";
 import { Lock } from "tabler-icons-react";
 import { SideBarInnerWrapper } from "./inbox/inbox.styles";
 import logout from "assets/red_logout.svg";
 import { logOutUtils } from "util/dashboardUtils";
+import { useEffect } from "react";
 
 const Account = () => {
   const dispatch = useDispatch();
