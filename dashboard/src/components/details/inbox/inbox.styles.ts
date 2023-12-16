@@ -65,8 +65,12 @@ export const ListWrapper = styled.div<IListWrapper>`
   flex-direction: row;
   padding: 0px;
   border-bottom: ${(props) =>
-    props.showBorder === true ? "1px solid #EAECF0" : "0px solid #fff"};
+  props.showBorder === true ? "1px solid #EAECF0" : "0px solid #fff"};
+  &:hover {
+    background-color: #f2f4f7;
+  }
 `;
+
 
 export const ListText = styled(Text)`
   color: #344054;
