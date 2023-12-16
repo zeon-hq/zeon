@@ -1,7 +1,7 @@
 export const docsArray = [
     {
         name: "Learn how to deploy Zeon Support pipeline in your website or app",
-        link: "",
+        link: "https://docs.zeonhq.com",
     }
 ]
 
