@@ -121,7 +121,7 @@ const getUserWorkspaces = async () => {
                       );
                   }}
               >
-                  Roadmap
+                  Updates & Requests
               </Text>
               <TopBarWorkSpaceRightSelect workspaceId={workspaceId || ""} />
           </InnerDivWrapper>
