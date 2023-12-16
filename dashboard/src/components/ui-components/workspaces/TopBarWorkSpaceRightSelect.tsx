@@ -6,9 +6,6 @@ import RoadMapSetting from "assets/roadmap_setting_right.svg";
 import SlackCommunity from "assets/slack_community_right.svg";
 import UserSetting from "assets/user_setting_right.svg";
 import workSpaceDropdown from "assets/workSpaceDropdown.svg";
-import { useDispatch } from "react-redux";
-import { setDefaultWorkSpaceSettingTab, setSelectedPage, setShowSidebar } from "reducer/slice";
-import UserTopRight from "assets/user_top_right.svg";
 import WorkSpaceSetting from "assets/workspace_setting_right.svg";
 import {
   FooterWrapper,
@@ -19,23 +16,17 @@ import {
 import { IWorkSpaceSettings, RightPanelSettingName } from "components/types";
 import useDashboard from "hooks/useDashboard";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setDefaultWorkSpaceSettingTab, setSelectedPage, setShowSidebar } from "reducer/slice";
 import styled from "styled-components";
-import CreateWorkspaceModal from "./CreateWorkspaceModal";
 import { logOutUtils } from "util/dashboardUtils";
+import CreateWorkspaceModal from "./CreateWorkspaceModal";
 
 type MenuItem = {
   name: RightPanelSettingName;
   icon: JSX.Element;
   showBottomOrder: boolean;
 };
-
-const AvatarImage = styled.img`
-margin-right: 10px;
-width: 28px;
-height: 28px;
-border-radius: 4px;
-`;
-
 
 const TopBarWorkSpaceRightSelect = ({
   workspaceId,
@@ -132,7 +123,18 @@ const TopBarWorkSpaceRightSelect = ({
       <Menu position="bottom-end" width={230} shadow="xs">
           <Menu.Target>
               <Button
-                  leftIcon={<AvatarImage src={user?.profilePic || `https://api.dicebear.com/7.x/fun-emoji/svg?seed=${user?.name}`} />}                  
+                  leftIcon={<Image
+                    className="pointer"
+                    width={"25"}
+                    height={"25"}
+                    style={{
+                      marginRight: "10px"
+                    }}
+                    mx="auto"
+                    radius="sm"
+                    src={user?.profilePic || `https://api.dicebear.com/7.x/fun-emoji/svg?seed=${user?.name}`}
+                    alt="User image"
+                  />}                  
                   rightIcon={
                       <Image maw={18} radius="sm" src={workSpaceDropdown} />
                   }
