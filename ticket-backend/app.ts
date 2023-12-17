@@ -80,6 +80,8 @@ io.on("connection", (socket) => {
   
         await CoreService.sendMail(ticketOptions.message, user?.email, ticketOptions.customerEmail, openTicketData.ticketId, ticketOptions.channelId, ticketOptions.workspaceId);
       })
+
+      await CoreService.sendSlackMessage(channel?.channelId, ticketOptions.message, channel?.accessToken);
     } catch (error) {
       console.error(error);
     }

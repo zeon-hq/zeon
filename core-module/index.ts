@@ -18,6 +18,7 @@ const port = process.env.CORE_BACKEND_PORT
 import { UserInterface } from "./schema/User"
 import { initializeDB } from "./functions/workspace"
 import CommunicationController from "./controller/CommunicationController";
+import oauthController from "./controller/oauthController";
 
 declare global {
   namespace Express {
@@ -52,11 +53,13 @@ app.use("/workspaces", verifyIdentity,workspaceRoutes);
 app.use("/companies",verifyIdentity, companyRoutes);
 app.use("/contacts",verifyIdentity, contactRoutes);
 
-app.use("/internal/communication/send-email", CommunicationController.sendEmail);
+app.post("/internal/communication/send-email", CommunicationController.sendEmail);
 
-app.use("/health", (req: Request, res: Response)=>{
+app.post('/internal/slack/message', oauthController.sendMessage);
+
+app.get("/health", (req: Request, res: Response)=>{
   console.log('core service health check');
-  res.send("all ok from zeon core service");
+  res.send("all ok from zeon core service health |");
 });
 
 

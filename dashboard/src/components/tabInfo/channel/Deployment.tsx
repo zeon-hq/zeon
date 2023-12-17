@@ -1,4 +1,4 @@
-import { Box, Button, Code, Grid, Space, Text } from "@mantine/core";
+import { Box, Button, Code, Grid, Space } from "@mantine/core";
 import { useClipboard } from "@mantine/hooks";
 import Heading from "components/details/inbox/component/Heading";
 import GuideCards from "components/ui-components/workspaces/GuideCards";

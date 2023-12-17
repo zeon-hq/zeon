@@ -1,4 +1,4 @@
-import { Box, LoadingOverlay } from "@mantine/core"
+import { LoadingOverlay } from "@mantine/core"
 import useDashboard from "hooks/useDashboard"
 import Account from "./Account"
 import ChannelDetail from "./ChannelDetail"

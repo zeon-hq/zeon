@@ -1,5 +1,6 @@
 import { Box, Flex, Space, Tabs } from "@mantine/core";
 import channelCreate from "assets/channelCreate.svg";
+import logout from "assets/red_logout.svg";
 import WorkSpaceBilling from "assets/workspace_billing.svg";
 import WorkSpaceModules from "assets/workspace_modules.svg";
 import WorkSpaceOrganization from "assets/workspace_organization.svg";
@@ -9,16 +10,14 @@ import { Admin, Billing, Referral } from "components/tabInfo";
 import Modules from "components/tabInfo/account/Modules";
 import Organization from "components/tabInfo/account/Organization";
 import Profile from "components/tabInfo/account/Profile";
-import { TabInfo, TabsName, IWorkSpaceSettings } from "components/types";
+import { IWorkSpaceSettings, TabInfo, TabsName } from "components/types";
 import PanelLabel from "components/widget/PanelLabel";
 import useDashboard from "hooks/useDashboard";
 import { useDispatch } from "react-redux";
-import { initDashboard, setDefaultWorkSpaceSettingTab, setSelectedPage, setShowSidebar } from "reducer/slice";
+import { setDefaultWorkSpaceSettingTab, setSelectedPage, setShowSidebar } from "reducer/slice";
 import { Lock } from "tabler-icons-react";
-import { SideBarInnerWrapper } from "./inbox/inbox.styles";
-import logout from "assets/red_logout.svg";
 import { logOutUtils } from "util/dashboardUtils";
-import { useEffect } from "react";
+import { SideBarInnerWrapper } from "./inbox/inbox.styles";
 
 const Account = () => {
   const dispatch = useDispatch();
@@ -26,7 +25,7 @@ const Account = () => {
   const profileSetting: TabInfo[] = [
     {
       name: IWorkSpaceSettings.PROFILE,
-      icon: <img src={WorkSpaceProfile} />,
+      icon: <img alt="test"src={WorkSpaceProfile} />,
       active: true,
     },
   ];
@@ -34,22 +33,22 @@ const Account = () => {
   const workSpaceSetting: TabInfo[] = [
     {
       name: IWorkSpaceSettings.ORGANIZATION,
-      icon: <img src={WorkSpaceOrganization} />,
+      icon: <img alt="test"src={WorkSpaceOrganization} />,
       active: true,
     },
     {
       name: IWorkSpaceSettings.MODULES,
-      icon: <img src={WorkSpaceModules} />,
+      icon: <img alt="test"src={WorkSpaceModules} />,
       active: true,
     },
     {
       name: IWorkSpaceSettings.USERS,
-      icon: <img src={WorkSpaceUser} />,
+      icon: <img alt="test"src={WorkSpaceUser} />,
       active: true,
     },
     {
       name: IWorkSpaceSettings.BILLING,
-      icon: <img src={WorkSpaceBilling} />,
+      icon: <img alt="test"src={WorkSpaceBilling} />,
       active: false, // currently disabled
     },
   ];
@@ -210,7 +209,7 @@ const Account = () => {
               marginTop: "3px",
             }}
             value={"Log out workspace"}
-            icon={<img src={logout} style={{ color: "red" }} />}
+            icon={<img alt="test"src={logout} style={{ color: "red" }} />}
           >
             Log out workspace
           </Tabs.Tab>

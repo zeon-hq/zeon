@@ -63,7 +63,8 @@ export interface IChannelsInfo {
   };
   inChatWidgets: InChatWidgetInterface[];
   workspaceId: string;
-  slackChannedId: string;
+  slackChannelId:string;
+  accessToken:string;
   members: string[];
   channelId: string;
   cannedResponses: string[];
@@ -71,6 +72,8 @@ export interface IChannelsInfo {
 
 const ChannelSchema: Schema = new Schema({
   name: { type: String, required: true },
+  slackChannelId:{type:String},
+  accessToken:{type:String},
   appearance: {
     newConversationButton: {
       buttonColor: { type: String, default: "#4C6EF5" },

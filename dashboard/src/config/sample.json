@@ -3,5 +3,6 @@
     "TICKET_SERVICE": "",
     "widgetJSFile":"",
     "widgetCSSFile":"",
-    "CORE_API_DOMAIN" : ""
+    "CORE_API_DOMAIN" : "",
+    "SLACK_REDIRECTION_URL":""
   }

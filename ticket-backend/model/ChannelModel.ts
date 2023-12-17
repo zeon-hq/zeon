@@ -50,6 +50,8 @@ const inChatWidgetSchema = new Schema({
 
 const channelSchema = new Schema({
     name: String,
+    slackChannelId:{type:String},
+    accessToken:{type:String},
     appearance: {
         newConversationButton: {
             buttonColor: String,
