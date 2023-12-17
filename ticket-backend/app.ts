@@ -58,7 +58,7 @@ const port: string | number = process.env.TICKET_BACKEND_PORT || 8080;
 
 
 let mqChannel: Channel;
-
+let mqConnection: Connection;
 io.on("connection", (socket) => {
   
   socket.on("open-ticket", async (ticketOptions: TicketOptions) => {
@@ -307,7 +307,7 @@ app.get("/channel/:channelId", async (req, res) => {
 });
 
 httpServer.on("listening", () => init());
-httpServer.listen(port, async () => 
+httpServer.listen(port, async () => console.log(`Listening on port ${port}`));
 
 app.use("/health", (req: Request, res: Response)=>{
   res.send("all ok from ticket backend");

@@ -1,7 +1,6 @@
 import axios from "axios";
 import { AxiosResponse } from "axios";
 import { ISocketTicketPayload } from "../app";
-import { IChannelsInfo } from "../model/ChannelModel";
 
 export default class CoreService {
     public static sendMail = async (ticketMessage:string, toEmail:string, fromEmail:string, ticketId:string, channelId:string, workspaceId:string): Promise<any> => {
@@ -38,7 +37,7 @@ export default class CoreService {
         });
     }
 
-    public static sendSlackMessage = async (channel:IChannelsInfo, message:string, ticketPayload:ISocketTicketPayload): Promise<any> => {
+    public static sendSlackMessage = async (channel:any, message:string, ticketPayload:ISocketTicketPayload): Promise<any> => {
         return new Promise((resolve, reject) => {
             try {
                 const slackURL = process.env.CORE_SERVICE_URL + '/internal/slack/message';
@@ -87,7 +86,7 @@ export default class CoreService {
                     }
                 ]
                 const sendSlackPayload = {
-                    channelId:channel.channelId, message, token:channel.accessToken, blocks
+                    channelId:channel.slackChannelId, message, token:channel.accessToken, blocks
                   }
 
                 return axios.post(slackURL, sendSlackPayload)
