@@ -13,8 +13,8 @@ const styles = {
 
 const ZLabel = ({ label }: Props & TextProps) => {
   return <Text sx={{
-    fontSize: "14px",
-    fontWeight: 500,
+    fontSize: "12px",
+    fontWeight: 600,
     color: "#344054",
   }}>{label as Props["label"]}</Text>;
 };
