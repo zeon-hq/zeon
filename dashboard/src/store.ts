@@ -1,9 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 import dashboardReducer from "reducer/slice"
+import financeReducer from "reducer/financeSlice"
+
 
 export const store = configureStore({
   reducer:{
-    dashboard:dashboardReducer
+    dashboard:dashboardReducer,
+    finance:financeReducer
   } 
 })
 

@@ -6,9 +6,12 @@ type Props = {
   control: Control<any>;
   name: string;
   rules?: any;
-  defaultValue?: string;
   setValue: UseFormSetValue<any>;
     label: string;
+  defaultValue?: {
+    value: string;
+    currency: string
+  }
 };
 
 const ZCurrency = ({ control, name, rules, defaultValue, setValue, label }: Props) => {
@@ -55,6 +58,16 @@ const ZCurrency = ({ control, name, rules, defaultValue, setValue, label }: Prop
       inputRef.current.selectionEnd = cursorPosition;
     }
   };
+
+  useEffect(() => {
+    if (defaultValue) {
+      setCommaSeparatedValue(defaultValue.value);
+      setCurrency(defaultValue.currency);
+
+      setValue(`${name}.value`, parseFloat(defaultValue.value.replace(/[^0-9.]/g, "")));
+      setValue(`${name}.currency`, defaultValue.currency);
+    }
+  },[])
 
   const handleCurrencyChange = (value: string) => setCurrency(value);
 

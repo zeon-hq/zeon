@@ -1,21 +1,42 @@
 import { Space } from "@mantine/core";
+import { notifications, showNotification } from "@mantine/notifications";
+import ZActionText from "components/ui-components/Button/ZActionText";
 import ZCurrency from "components/ui-components/common/ZCurrency";
 import ZDate from "components/ui-components/common/ZDate";
 import ZSelect from "components/ui-components/common/ZSelect";
 import ZTextInput from "components/ui-components/common/ZTextInput";
 import ZInput from "components/ui-components/common/ZTextInput";
-import { createExpense } from "finance/FinanceService";
+import { createExpense, deleteExpense } from "finance/FinanceService";
 import { ExpenseDetailsContainer } from "finance/styles";
-import useDashboard from "hooks/useDashboard";
-import React from "react";
+import useFinance from "finance/useFinance";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router";
+import { initFinance } from "reducer/financeSlice";
+import { Trash } from "tabler-icons-react";
 
 type Props = {};
 
 const ExpenseDetails = (props: Props) => {
-  const { control, setValue, handleSubmit } = useForm();
+  const  {
+    selectedExpense
+  } = useFinance();
+  const dispatch = useDispatch();
+  const { control, setValue, handleSubmit } = useForm({
+    defaultValues: {
+      ...selectedExpense,
+      amount: selectedExpense?.totalAmount?.value || "",
+      tax: selectedExpense?.tax?.value || "",
+      invoiceDate: selectedExpense?.invoiceDate || "",
+      paymentDate: selectedExpense?.paymentDate || "",
+      status: selectedExpense?.status || "unpaid",
+      category: selectedExpense?.categoryId || "",
+      tags: selectedExpense?.tags?.map((tag: any) => ({ label: tag, value: tag })) || [],
+      vendor: selectedExpense?.vendor || "",
+    }
+  });
   const {workspaceId} = useParams<{workspaceId: string}>();
+
   const onSubmit = async (data: any) => {
     console.log(data);
     // get value of category
@@ -24,6 +45,7 @@ const ExpenseDetails = (props: Props) => {
     const tags = data?.tags?.map((tag: any) => tag.value) || [];
     // get vendor
     const vendor = data?.vendor?.value || "";
+    const status = data?.status?.value || "unpaid";
     delete data.category;
     
     const expenseData = {
@@ -32,16 +54,49 @@ const ExpenseDetails = (props: Props) => {
       tags,
       vendor,
       workspaceId,
-    };
+      status    };
 
     try {
       const res = await createExpense(expenseData);
+      //@ts-ignore
+      dispatch(initFinance({workspaceId}));
       console.log(res);
     } catch (error) {
       console.log(error);
 
     }
   };
+
+  const onDelete = async () => {
+    console.log("delete");
+    if(!selectedExpense?.expenseId) {
+     showNotification({
+        title: "Error",
+        message: "Expense not selected",
+        color: "red",
+     })
+
+      return;
+    }
+    try {
+        const res = await deleteExpense(selectedExpense?.expenseId);
+        //@ts-ignore
+        dispatch(initFinance({workspaceId}));
+        showNotification({
+          title: "Success",
+          message: "Expense deleted successfully",
+          color: "green",
+        })
+    } catch (error) {
+      console.log(error);
+      showNotification({
+        title: "Error",
+        message: "Something went wrong",
+        color: "red",
+      })
+      
+    }
+  }
 
   return (
     <ExpenseDetailsContainer as="form">
@@ -55,6 +110,10 @@ const ExpenseDetails = (props: Props) => {
             { label: "Vendor 1", value: "vendor1" },
             { label: "Vendor 2", value: "vendor2" },
           ],
+          defaultValue: {
+            label: selectedExpense?.vendor || "Vendor 1",
+            value: selectedExpense?.vendor || "vendor1"
+          }
         }}
         formProps={{
           name: "vendor",
@@ -71,6 +130,7 @@ const ExpenseDetails = (props: Props) => {
         formProps={{
           name: "invoiceNumber",
           control,
+          defaultValue: selectedExpense?.invoiceNumber || "",
         }}
       />
        <Space h="sm" />
@@ -79,6 +139,9 @@ const ExpenseDetails = (props: Props) => {
           label: "Invoice Date",
           placeholder: "Invoice Date",
           required: true,
+
+          //@ts-ignore
+          defaultValue: new Date(selectedExpense?.invoiceDate) || null,
         }}
         formProps={{
           name: "invoiceDate",
@@ -91,6 +154,8 @@ const ExpenseDetails = (props: Props) => {
           label: "Payment Date",
           placeholder: "Payment Date",
           required: true,
+          //@ts-ignore
+          defaultValue: new Date(selectedExpense?.paymentDate) || null,
         }}
         formProps={{
           name: "paymentDate",
@@ -102,20 +167,55 @@ const ExpenseDetails = (props: Props) => {
         control={control}
         name="amount"
         rules={{ required: true }}
-        defaultValue=""
+        defaultValue={
+        {
+          //@ts-ignore
+          value: selectedExpense?.amount?.value || "",
+          currency: selectedExpense?.totalAmount?.currency || "USD"
+        }
+        }
         setValue={setValue}
         label="Amount"
+        
       />
        <Space h="sm" />
       <ZCurrency
         control={control}
         name="tax"
         rules={{ required: true }}
-        defaultValue=""
+        defaultValue={
+          {
+            //@ts-ignore
+            value: selectedExpense?.tax?.value || "",
+            currency: selectedExpense?.tax?.currency || "USD"
+          }
+        }
         setValue={setValue}
         label="Tax"
       />
        <Space h="sm" />
+       {/* Status */}
+        <ZSelect
+          label={"Status"}
+          inputProps={{
+            placeholder: "Status",
+            required: true,
+            options: [
+              { label: "Paid", value: "paid" },
+              { label: "Unpaid", value: "unpaid" },
+              { label: "Rejected", value: "rejected"},
+
+            ],
+            defaultValue: {
+              label: selectedExpense?.status || "Unpaid",
+              value: selectedExpense?.status || "unpaid"
+            }
+          }}
+          formProps={{
+            name: "status",
+            control,
+          }}
+        />
       <ZSelect
         label={"Category"}
         inputProps={{
@@ -151,6 +251,7 @@ const ExpenseDetails = (props: Props) => {
       />
 
       <input type="submit" onClick={handleSubmit(onSubmit)} />
+      <ZActionText onClick={onDelete} secondaryColor="#fef3f2" label="Delete Expense" color="#d92d20" leftIcon={<Trash size="14px" />} />
     </ExpenseDetailsContainer>
   );
 };
