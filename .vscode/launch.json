@@ -1,0 +1,12 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "node-terminal",
+        "name": "Local",
+        "request": "launch",
+        "command": "npm run start:local",
+        "cwd": "${workspaceFolder}/chat-backend"
+      }
+    ]
+  }
