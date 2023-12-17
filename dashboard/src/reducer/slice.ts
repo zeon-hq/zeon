@@ -106,6 +106,7 @@ export interface ChannelsInfo {
     inChatWidgets: InChatWidgetInterface[];
     name: string;
     channelId: string;
+    slackChannelId?: string;
     members: string[];
   };
 }

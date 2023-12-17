@@ -20,6 +20,8 @@ const Integrations = () => {
     const stateParameter = encodeURIComponent(JSON.stringify(stateObject));
 
     // if (channelsInfo[selectedPage.name]?.channelId) return;
+    console.log('channelinfo', channelsInfo);
+    
     localStorage.setItem(
       "userstak-dashboard-workspaceId",
       workspaceInfo.workspaceId || ""
@@ -33,7 +35,6 @@ const Integrations = () => {
     );
 
   };
-  // https://slack.com/oauth/v2/authorize?client_id=3769512251410.4269280938033&scope=channels:history,channels:join,incoming-webhook,users.profile:read&user_scope=
 
   return (
     <div>
@@ -64,14 +65,13 @@ const Integrations = () => {
             <Button
               radius="sm"
               onClick={handleIntegrateSlack}
-              // disabled={!!channelsInfo[selectedPage.name]?.channelId}
               leftIcon={<Plus />}
+              disabled={!!channelsInfo[selectedPage.name]?.slackChannelId}
               sx={{ backgroundColor: "#F5F8FF", color: "#3054B9" }}
             >
               {" "}
-              {channelsInfo[selectedPage.name]?.channelId
-                ? "Disconnect"
-                : "Connect"}{" "}
+              {channelsInfo[selectedPage.name]?.slackChannelId
+                ? "Connect":'Connect'}
             </Button>
           </Flex>
           <Flex gap="16px">
@@ -93,16 +93,11 @@ const Integrations = () => {
           
             <Button
               radius="sm"
-              onClick={handleIntegrateSlack}
-              disabled={!!channelsInfo[selectedPage.name]?.channelId}
+              disabled={true}
               leftIcon={<Plus />}
               sx={{ backgroundColor: "#F5F8FF", color: "#3054B9" }}
             >
-              {" "}
-              {channelsInfo[selectedPage.name]?.channelId
-                ? "Disconnect"
-                : "Connect"}{" "}
-            </Button>
+                Coming Soon            </Button>
           </Flex>
         </Flex>
       }

@@ -3,6 +3,6 @@
   "TICKET_SERVICE": "https://devservice.zeonhq.com",
   "widgetJSFile":"https://zeonhq.b-cdn.net/zeon-widget.js",
   "widgetCSSFile":"https://zeonhq.b-cdn.net/zeon-widget.css",
-  "CORE_API_DOMAIN" : "http://zeon-core-module:3005",
+  "CORE_API_DOMAIN" : "https://core.zeonhq.com",
   "SLACK_REDIRECTION_URL":"https://chat.zeonhq.com/oauth/slack/authorize"
 }
