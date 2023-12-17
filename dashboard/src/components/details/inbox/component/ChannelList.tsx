@@ -18,7 +18,9 @@ interface IChannel {
   onChannelClick: (data: IChannelData) => void;
   selected: boolean;
 }
-
+/**
+ * Created a separate root component called NavItem
+ */
 const Channel = ({ channelInfo, onChannelClick, selected }: IChannel) => {
   const [onHover, setOnHover] = useState(false);
   return (

@@ -9,9 +9,16 @@ import { initDashboard, MessageType, updateConversation, updateInbox } from 'red
 import {useParams} from "react-router-dom"
 import socketInstance from 'socket';
 import styled from 'styled-components'
+import FinanceTopbar from '../../finance/expense/FinanceTopbar';
+import ChatSidebar from 'components/chat/ChatSidebar';
+import FinanceSidebar from 'finance/expense/FinanceSidebar';
 
-const ChildWrapper = styled.div`
-  height: calc(100vh - 45px);
+const ChildWrapper = styled.div<
+  {isFinance: boolean}
+>`
+  height: ${
+    props => props.isFinance ? "calc(100vh - 100px)" : "calc(100vh - 53px)"
+  } calc(100vh - 100px);
     overflow: hidden;
 `
 
@@ -19,6 +26,11 @@ const Layout = ({children}:{children:any}) => {
   const dispatch = useDispatch();
   const {workspaceId} = useParams();
   const { showSidebar } = useDashboard();
+
+  // get tge url
+  const url = window.location.href;
+  // check if location has finance
+  const isFinance = url.includes("finance");
   
   useEffect(() => {
     //@ts-ignore
@@ -47,16 +59,23 @@ const Layout = ({children}:{children:any}) => {
   return (
     <>
       <Topbar workspaceId={workspaceId || ""}/>
+      {
+        isFinance && <FinanceTopbar/>
+      }
+      
       <div
         style={{
           display: "grid",
           gridTemplateColumns: showSidebar ? "20% 80%" : "100%",
-          height: "calc(100vh - 45px)",
+          height: isFinance ? "calc(100vh - 100px)" : "calc(100vh - 53px)",
           overflow: "hidden",
         }}
       >
-        {workspaceId && showSidebar == true ? <Sidebar workspaceId={workspaceId} /> : <></>}
-        <ChildWrapper>
+        {workspaceId && showSidebar == true ? 
+         (
+          isFinance ? <FinanceSidebar workspaceId={workspaceId}/> : <ChatSidebar workspaceId={workspaceId} />
+         ) : <></>}
+        <ChildWrapper isFinance={isFinance}>
         {children}
         </ChildWrapper>
       </div>

@@ -9,35 +9,16 @@ import { useDispatch } from "react-redux";
 import { setLoading, setSelectedPage, setShowSidebar, setWorkspaces } from "reducer/slice";
 import { getWorkspaces } from 'service/CoreService';
 import styled from "styled-components";
+import Pill from "./Pill";
+import { useNavigate } from "react-router";
+import { InnerDivWrapper, TopBarDivWrapper, TopBarWrapper } from "./topbar.styles";
+
+
 const Topbar = ({ workspaceId }: { workspaceId: string }) => {
+  const navigate = useNavigate()
   const dispatch = useDispatch();
   const { channelsInfo } = useDashboard();
 
-  const TopBarWrapper = styled.div`
-    width: 100%;
-    height: 45px;
-    display: flex;
-    background-color: white;
-    justify-content: space-between;
-    justify-items: space-between; /* Note: justify-items is not a valid CSS property */
-    z-index: 1000;
-    border-bottom: 1px solid #eaecf0;
-    padding: 0px 16px;
-  `;
-
-  const TopBarDivWrapper = styled.div`
-    display: flex;
-    align-content: center;
-    align-items: center;
-    gap: 14px;
-  `;
-
-  const InnerDivWrapper = styled.div`
-    display: flex;
-    align-content: center;
-    align-items: center;
-    gap: 14px;
-  `;
 
   useEffect(() => {
   getUserWorkspaces();
@@ -67,20 +48,8 @@ const getUserWorkspaces = async () => {
       <TopBarWrapper>
           <TopBarDivWrapper>
               <TopBarWorkSpaceLeftSelect workspaceId={workspaceId || ""} />
-              <Text
-                  className="pointer"
-                  fw={"500"}
-                  fz="14px"
-                  style={{
-                    borderRadius: "6px",
-                  }}
-                  color="#101828"
-                pl={'12px'}
-                pr={'12px'}
-                pt={'4px'}
-                pb={'4px'}
-                  bg={'#f2f4f7'}
-                  onClick={() => {
+              <Pill label="Chat" onClick={() => {
+                    navigate(`/dashboard/${workspaceId}`)
                       dispatch(setShowSidebar(true));
                       dispatch(
                           setSelectedPage({
@@ -90,10 +59,10 @@ const getUserWorkspaces = async () => {
                               channelId: channelsInfo?.channels[0].channelId,
                           })
                       );
-                  }}
-              >
-                  Chat
-              </Text>
+                  }} />
+                  <Pill label="Finance" onClick={() => { 
+                      navigate(`/finance/${workspaceId}`)
+                  }} />
           </TopBarDivWrapper>
           <InnerDivWrapper>
           <Text

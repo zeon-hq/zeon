@@ -3,5 +3,6 @@
   "TICKET_SERVICE": "https://tickets.zeonhq.com",
   "widgetJSFile": "https://zeonhq.b-cdn.net/zeon-widget.js",
   "widgetCSSFile": "https://zeonhq.b-cdn.net/zeon-widget.css",
-  "CORE_API_DOMAIN" : "https://core.zeonhq.com"
+  "CORE_API_DOMAIN" : "https://core.zeonhq.com",
+  "FINANCE_API_DOMAIN" : "http://localhost:4001"
 }

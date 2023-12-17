@@ -1,7 +1,8 @@
 {
-  "API_DOMAIN": "https://devserver.zeonhq.com",
-  "TICKET_SERVICE": "https://devservice.zeonhq.com",
+  "API_DOMAIN": "https://chat.zeonhq.com",
+  "TICKET_SERVICE": "https://tickets.zeonhq.com",
   "widgetJSFile": "https://zeonhq.b-cdn.net/zeon-widget.js",
   "widgetCSSFile": "https://zeonhq.b-cdn.net/zeon-widget.css",
-  "CORE_API_DOMAIN" : "http://zeon-core-module:3005"
+  "CORE_API_DOMAIN" : "https://core.zeonhq.com",
+  "FINANCE_API_DOMAIN" : "http://localhost:4001"
 }

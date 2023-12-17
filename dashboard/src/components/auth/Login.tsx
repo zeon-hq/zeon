@@ -114,7 +114,7 @@ const Login = () => {
       <AuthContainer>
         <AuthForm onSubmit={handleSubmit(onSubmit)}>
           <AuthFormHeader>
-            <AuthHeading> Log In </AuthHeading>
+            <AuthHeading> Welcome back </AuthHeading>
             <AuthSubHeading>
               {" "}
               Welcome back! Please enter your details to continue.{" "}
