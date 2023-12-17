@@ -62,42 +62,75 @@ export default class oauthController {
     }
 
     public static async sendMessage(req: Request, res: Response): Promise<any> {
-        const { channelId, message, token } = req.body;
+        try {
+            const { channelId, message, token,blocks } = req.body;
+
+            if (!channelId || !(message || blocks) || !token) {
+                return res.status(400).send({
+                    code: "400",
+                    message: "Required parameters missing",
+                });
+            }
 
 
-        let channelIdArray = [];
-        if (typeof channelId === "string") {
-            channelIdArray.push(channelId);
-        } else if (Array.isArray(channelId)) {
-            channelIdArray = channelId;
-        } else {
-            return res.status(400).send({
-                code: "400",
-                message: "Invalid channel IDs",
-            });
-        }
+            let channelIdArray = [];
+            if (typeof channelId === "string") {
+                channelIdArray.push(channelId);
+            } else if (Array.isArray(channelId)) {
+                channelIdArray = channelId;
+            } else {
+                return res.status(400).send({
+                    code: "400",
+                    message: "Invalid channel IDs",
+                });
+            }
 
-        const web = new WebClient(token);
-        const results = [];
+            const web = new WebClient(token);
+            const results = [];
 
-        for (const channelId of channelIdArray) {
-            // Post a message to a channel
-            const result = await web.chat.postMessage({
-                channel: channelId,
-                text: message,
-            });
+            for (const channelId of channelIdArray) {
+                // Post a message to a channel
+                const result = await web.chat.postMessage({
+                    channel: channelId,
+                    text: message,
+                    blocks:blocks
+                });
 
-            results.push({
-                channelId,
+                results.push({
+                    channelId,
+                    code: "200",
+                    message: `Successfully sent message in conversation ${channelId}`,
+                });
+
+            }
+            res.status(200).send({
                 code: "200",
-                message: `Successfully sent message in conversation ${channelId}`,
+                message: "Successfully message sent",
+                data: results,
             });
-
+        } catch (e) {
+            if (e.response) {
+                const ZeonResponse = {
+                    code: e.response.data ? e.response.data.code : e.response.status,
+                    message: e.response.data ? e.response.data.message : e.message,
+                    data: e.response.data ? e.response.data.data : null
+                };
+                return res.status(e.response.status).json(ZeonResponse);
+            }
+            else if (e) {
+                const ZeonResponse = {
+                    code: "400",
+                    message: e.message
+                };
+                return res.status(400).json(ZeonResponse);
+            }
+            else {
+                const ZeonResponse = {
+                    code: "500",
+                    message: e.message || e
+                };
+                return res.status(500).json(ZeonResponse);
+            }
         }
-        res.status(200).send({
-            code: "200",
-            data: results,
-        });
-
     }
 }

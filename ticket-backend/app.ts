@@ -33,6 +33,17 @@ import CoreService from "./services/CoreService"
 import ChannelModel from "./model/ChannelModel";
 import User from "./model/UserModel";
 
+export interface ISocketTicketPayload {
+  workspaceId: string;
+  message: string;
+  customerEmail: string;
+  isOpen: boolean;
+  assignedUser: string;
+  ticketId: string;
+  widgetId: string;
+}
+
+
 const app = express();
 const httpServer = createServer(app);
 app.use(cors());
@@ -44,36 +55,34 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const port: string | number = process.env.TICKET_BACKEND_PORT || 8080;
-console.log('ticket_backend_port', port);
+
 
 let mqChannel: Channel;
-let mqConnection: Connection;
 
 io.on("connection", (socket) => {
-  console.log("New client connected ", socket.id);
+  
   socket.on("open-ticket", async (ticketOptions: TicketOptions) => {
-    console.log('-------------------------');
+    
     try {
-      console.log('------ ticket Options: ', ticketOptions)
+      
       const openTicketData: any = await openTicket(ticketOptions, socket.id);
       socket.emit("open-ticket-complete", openTicketData);
-      console.log('----------- open ticket', openTicketData)
-      const socketIds = await getConnectedDashboardSockets(
-        ticketOptions.workspaceId
-      );
-      console.log('-------------------------');
-      io.to(socketIds).emit("open-ticket", {
-        workspaceId: ticketOptions.workspaceId,
-        message: ticketOptions.message,
-        customerEmail: ticketOptions.customerEmail,
-        isOpen: ticketOptions.isOpen,
-        assignedUser: ticketOptions.assignedUser,
-        ticketId: openTicketData.ticketId,
-        widgetId:ticketOptions.widgetId
-      });
+      
+      const socketIds = await getConnectedDashboardSockets(ticketOptions.workspaceId);
 
-      // send email 
-      console.log('---------------- send email')
+    const socketTicketPayload:ISocketTicketPayload  = {
+      workspaceId: ticketOptions.workspaceId,
+      message: ticketOptions.message,
+      customerEmail: ticketOptions.customerEmail,
+      isOpen: ticketOptions.isOpen,
+      assignedUser: ticketOptions.assignedUser,
+      ticketId: openTicketData.ticketId,
+      widgetId:ticketOptions.widgetId
+    }
+
+      io.to(socketIds).emit("open-ticket",socketTicketPayload);
+
+      
       const channel = await ChannelModel.findOne({channelId:ticketOptions.channelId})
       channel?.members.forEach(async (member:any) => {
         const user = await User.findOne({userId:member})
@@ -81,7 +90,7 @@ io.on("connection", (socket) => {
         await CoreService.sendMail(ticketOptions.message, user?.email, ticketOptions.customerEmail, openTicketData.ticketId, ticketOptions.channelId, ticketOptions.workspaceId);
       })
 
-      await CoreService.sendSlackMessage(channel?.channelId, ticketOptions.message, channel?.accessToken);
+      await CoreService.sendSlackMessage(channel, ticketOptions.message, socketTicketPayload);
     } catch (error) {
       console.error(error);
     }
@@ -105,7 +114,7 @@ io.on("connection", (socket) => {
     try {
       await createDashboardSocket(workspaceId, socket.id);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   });
 
@@ -113,7 +122,7 @@ io.on("connection", (socket) => {
     try {
       await removeDashboardSocket(socket.id);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   });
 
@@ -121,7 +130,7 @@ io.on("connection", (socket) => {
     try {
       await removeDashboardSocket(socket.id);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   });
 
@@ -129,7 +138,7 @@ io.on("connection", (socket) => {
     try {
       await createDashboardSocket(workspaceId, socket.id);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   });
 
@@ -165,7 +174,7 @@ io.on("connection", (socket) => {
           }
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     }
   );
@@ -298,10 +307,9 @@ app.get("/channel/:channelId", async (req, res) => {
 });
 
 httpServer.on("listening", () => init());
-httpServer.listen(port, async () => console.log(`Listening on port ${port}`));
+httpServer.listen(port, async () => 
 
 app.use("/health", (req: Request, res: Response)=>{
-  console.log('ticket service health check')
   res.send("all ok from ticket backend");
 });
 
@@ -312,7 +320,7 @@ async function init() {
       io.adapter(createAdapter(collection));
       console.log("Server event adapter created");
     })
-    .catch((error) => console.log(error));
+    .catch((error) => console.error(error));
 
   // Open a message queue connection
   let queue = await connectQueue();

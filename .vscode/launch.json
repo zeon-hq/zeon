@@ -3,10 +3,24 @@
     "configurations": [
       {
         "type": "node-terminal",
-        "name": "Local",
+        "name": "chat-backend",
         "request": "launch",
         "command": "npm run start:local",
         "cwd": "${workspaceFolder}/chat-backend"
+      },
+      {
+        "type": "node-terminal",
+        "name": "core-module",
+        "request": "launch",
+        "command": "npm run dev",
+        "cwd": "${workspaceFolder}/core-module"
+      },
+      {
+        "type": "node-terminal",
+        "name": "core-module",
+        "request": "launch",
+        "command": "npm run start:local",
+        "cwd": "${workspaceFolder}/ticket-backend"
       }
     ]
   }

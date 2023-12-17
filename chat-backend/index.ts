@@ -45,7 +45,7 @@ mongoose
   .connect(process.env.DB_URI,{dbName:process.env.DB_NAME})
   .then(() => {
     initializeDB();
-    console.log("Connected to DB chat backend");
+    console.log("Connected to DB chat backend",port);
     initializeDB();
   })
   .catch((e) => {
@@ -64,6 +64,8 @@ app.use("/health", (req, res)=>{
 });
 
 app.get('/oauth/slack/authorize', oauthController.oauthSlackAuthorize);
+
+app.get('/oauth/slack/un-authorize/:channelId', oauthController.unOAuthSlackAuthorize);
 
 
 app.listen(port, () => {

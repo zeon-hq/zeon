@@ -52,8 +52,38 @@ export default class oauthController {
                 res.status(500).json({ error: data.error });
             }
 
-        } catch (error) {
+        } catch (e:any) {
+            if (e.response) {
+                const ZeonResponse = {
+                    code: e.response.data ? e.response.data.code : e.response.status,
+                    message: e.response.data ? e.response.data.message : e.message,
+                    data: e.response.data ? e.response.data.data : null
+                };
+                return res.status(e.response.status).json(ZeonResponse);
+            }
+            else if (e) {
+                const ZeonResponse = {
+                    code: "400",
+                    message: e.message
+                };
+                return res.status(400).json(ZeonResponse);
+            }
+            else {
+                const ZeonResponse = {
+                    code: "500",
+                    message: e.message || e
+                };
+                return res.status(500).json(ZeonResponse);
+            }
+        }
+    }
 
+    public static async unOAuthSlackAuthorize(req: Request, res: Response): Promise<any> {
+        try {
+            const { channelId } = req.params;
+            
+        } catch (error) {
+            
         }
     }
 }

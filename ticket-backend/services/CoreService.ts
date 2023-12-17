@@ -1,5 +1,7 @@
 import axios from "axios";
 import { AxiosResponse } from "axios";
+import { ISocketTicketPayload } from "../app";
+import { IChannelsInfo } from "../model/ChannelModel";
 
 export default class CoreService {
     public static sendMail = async (ticketMessage:string, toEmail:string, fromEmail:string, ticketId:string, channelId:string, workspaceId:string): Promise<any> => {
@@ -36,14 +38,56 @@ export default class CoreService {
         });
     }
 
-    public static sendSlackMessage = async (channelId:string, message:string, token:string): Promise<any> => {
+    public static sendSlackMessage = async (channel:IChannelsInfo, message:string, ticketPayload:ISocketTicketPayload): Promise<any> => {
         return new Promise((resolve, reject) => {
             try {
                 const slackURL = process.env.CORE_SERVICE_URL + '/internal/slack/message';
                 console.log('slackURLHost', slackURL);
-
+                const blocks=[
+                    {
+                        "type": "section",
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": "You have a new ticket:\n<fakeLink.toEmployeeProfile.com|Chat Message goes here>"
+                        }
+                    },
+                    {
+                        "type": "divider"
+                    },
+                    {
+                        "type": "section",
+                        "fields": [
+                            {
+                                "type": "mrkdwn",
+                                "text": "Type:\nChannel Name"
+                            },
+                            {
+                                "type": "mrkdwn",
+                                "text": `E-Mail:\n${ticketPayload.customerEmail}`
+                            },
+                            {
+                                "type": "mrkdwn",
+                                "text": `Ticket ID:\n${ticketPayload.ticketId}`
+                            },
+                            {
+                                "type": "mrkdwn",
+                                "text": "Location:\nNew York, United States"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "divider"
+                    },
+                    {
+                        "type": "section",
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": message
+                        }
+                    }
+                ]
                 const sendSlackPayload = {
-                    channelId, message, token
+                    channelId:channel.channelId, message, token:channel.accessToken, blocks
                   }
 
                 return axios.post(slackURL, sendSlackPayload)
