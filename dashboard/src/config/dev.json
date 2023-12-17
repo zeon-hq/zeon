@@ -4,5 +4,5 @@
   "widgetJSFile":"https://zeonhq.b-cdn.net/zeon-widget.js",
   "widgetCSSFile":"https://zeonhq.b-cdn.net/zeon-widget.css",
   "CORE_API_DOMAIN" : "http://zeon-core-module:3005",
-  "SLACK_REDIRECTION_URL":"https://n6ndj8h9-4000.inc1.devtunnels.ms/oauth/slack/authorize"
+  "SLACK_REDIRECTION_URL":"https://chat.zeonhq.com/oauth/slack/authorize"
 }
