@@ -11,7 +11,7 @@ import TicketModel from "./model/TicketModel";
 import { connectQueue } from "./mq/connect";
 import { initConsumer } from "./mq/consumer";
 import { sendMessage } from "./mq/producer";
-import { MessageOptions, TicketOptions } from "./schema/types/ticket";
+import { MessageOptions, ITicketOptions } from "./schema/types/ticket";
 import {
   createDashboardSocket,
   getAdapterCollection,
@@ -32,6 +32,7 @@ import {
 import CoreService from "./services/CoreService"
 import ChannelModel from "./model/ChannelModel";
 import User from "./model/UserModel";
+import ExternalService from "./services/ExternalService";
 
 export interface ISocketTicketPayload {
   workspaceId: string;
@@ -61,7 +62,7 @@ let mqChannel: Channel;
 let mqConnection: Connection;
 io.on("connection", (socket) => {
   
-  socket.on("open-ticket", async (ticketOptions: TicketOptions) => {
+  socket.on("open-ticket", async (ticketOptions: ITicketOptions) => {
     
     try {
       
@@ -89,8 +90,8 @@ io.on("connection", (socket) => {
   
         await CoreService.sendMail(ticketOptions.message, user?.email, ticketOptions.customerEmail, openTicketData.ticketId, ticketOptions.channelId, ticketOptions.workspaceId);
       })
-
-      await CoreService.sendSlackMessage(channel, ticketOptions.message, socketTicketPayload);
+      const getLocation = await ExternalService.getLocationFromIp(ticketOptions.ipAddress)
+      await CoreService.sendSlackMessage(channel, ticketOptions, socketTicketPayload, openTicketData.ticketId, getLocation);
     } catch (error) {
       console.error(error);
     }

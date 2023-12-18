@@ -1,6 +1,6 @@
 import { Collection, MongoClient, ObjectId } from "mongodb";
 import dotenv from "dotenv";
-import { MessageOptions, TicketOptions } from "../schema/types/ticket";
+import { MessageOptions, ITicketOptions } from "../schema/types/ticket";
 import TicketModel from "../model/TicketModel";
 import MessageModel from "../model/MessageModel";
 import SocketModel from "../model/SocketModel";
@@ -17,7 +17,7 @@ const dbName: string = process.env.DB_NAME as string;
  * Stores a ticket in the database
  * @returns
  */
-export async function storeTicket(ticketOptions: TicketOptions) {
+export async function storeTicket(ticketOptions: ITicketOptions) {
   try {
 
     const createTicket = await TicketModel.create({

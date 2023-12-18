@@ -3,7 +3,7 @@ import { ReadStream } from "fs";
 /**
  * Ticket event data options
  */
-export interface TicketOptions {
+export interface ITicketOptions {
   workspaceId: string;
   channelId: string;
   customerEmail: string;
@@ -15,6 +15,7 @@ export interface TicketOptions {
   messageCount?: number;
   assignedUser?: string;
   widgetId?:string;
+  ipAddress?:string;
 }
 
 /**

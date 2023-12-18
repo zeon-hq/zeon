@@ -14,6 +14,11 @@ export const getChannelById = async (channelId: string) => {
   return res
 }
 
+export const getIPAddress = async () => {
+  const res:any = await axios.get(`https://api.ipify.org/?format=json`);
+  return res
+}
+
 
 export const getOpenTicket = async (widgetId:string)=>{
   const res:any = await axios.get(`${ticketServiceUrl}/ticket/${widgetId}`);

@@ -20,6 +20,7 @@ import {
 import { MessageType } from "components/chat/Chat.types";
 import { generateId } from "components/util/utils";
 import { ErrorMessage } from '@hookform/error-message';
+import { getIPAddress } from "api/api";
 
 /**
  *
@@ -57,6 +58,7 @@ const Form = () => {
     dispatch(setEmail(email));
     const widgetId = localStorage.getItem('widgetId');
     try {
+      const output = await getIPAddress();
       dispatch(clearPrevChat());
       socketInstance.emit(
         "open-ticket",
@@ -71,6 +73,7 @@ const Form = () => {
           type: "Computer (laptop)",
           ticketId: localStorage.getItem("ticketId") || "",
           threadId: localStorage.getItem("threadId") || "",
+          ipAddress:output?.data?.ip || ""
         },(data:any) => console.log("emited",data)
       );
       const uniqueId = generateId(6);
