@@ -47,6 +47,7 @@ const NoContentDialogue = ({
           fullWidth
           style={{
             background: "#3C69E7",
+            marginTop: "16px",
           }}
           variant="filled"
           leftIcon={
