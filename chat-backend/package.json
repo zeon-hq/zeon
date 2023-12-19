@@ -38,7 +38,7 @@
     "os": "^0.1.2",
     "sib-api-v3-sdk": "^8.4.2",
     "stripe": "^10.16.0",
-    "supertokens-node": "^12.1.4",
+    "supertokens-node": "^16.6.8",
     "ts-node": "^10.9.1",
     "zeon-core": "^1.0.23"
   },
