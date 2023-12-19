@@ -1,14 +1,14 @@
 import { Badge, Flex, Image, Text, Tooltip } from "@mantine/core";
 import readChatProfileLogo from "assets/readChatProfileLogo.svg";
 import selectedChatProfileLogo from "assets/selectedChatProfileLogo.svg";
-import { ChronologyName, FilterName, SubFilterName } from "components/types";
+import { ChronologyName, FilterName, IWorkSpaceSettings, RightPanelSettingName, SubFilterName } from "components/types";
 import useDashboard from "hooks/useDashboard";
 import _ from "lodash";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { useLocation, useParams } from "react-router-dom";
-import { ISelectedPage, setActiveChat, setLoading, setNewMessageToFalse, setSelectedPage, setShowSidebar } from "reducer/slice";
+import { ISelectedPage, setActiveChat, setDefaultWorkSpaceSettingTab, setLoading, setNewMessageToFalse, setSelectedPage, setShowSidebar } from "reducer/slice";
 import styled from "styled-components";
 import { getTime, preProcessText } from "util/dashboardUtils";
 
@@ -94,6 +94,18 @@ const MessageContainer = () => {
     );
   };
 
+  const handleWorkSpaceChangeClick = (
+    type: "detail" | "channel" | "loading",
+    name: string
+  ) => {
+    dispatch(
+      setSelectedPage({
+        type,
+        name,
+      })
+    );
+  };
+
   useEffect(() => {
     // read channelId param from url
     const queryParameters = new URLSearchParams(location.search)
@@ -133,6 +145,26 @@ const MessageContainer = () => {
       }, 500);
     } else if (pageName) {
       // goes to workspace settings page
+      switch (pageName) {
+        case IWorkSpaceSettings.ORGANIZATION:
+          dispatch(setDefaultWorkSpaceSettingTab(IWorkSpaceSettings.ORGANIZATION));
+          handleWorkSpaceChangeClick("detail", "account");
+          dispatch(setShowSidebar(false));
+          break;    
+        case IWorkSpaceSettings.PROFILE:
+          dispatch(setDefaultWorkSpaceSettingTab(IWorkSpaceSettings.PROFILE));
+          handleWorkSpaceChangeClick("detail", "account");
+          dispatch(setShowSidebar(false));
+          break;      
+        case IWorkSpaceSettings.USERS:
+          dispatch(setDefaultWorkSpaceSettingTab(IWorkSpaceSettings.USERS));
+          handleWorkSpaceChangeClick("detail", "account");
+          dispatch(setShowSidebar(false));
+          break;
+  
+        default:
+          break;
+      }
     } else {
       //@ts-ignore
       dispatch(setSelectedPage({ type: "detail", name: "inbox", channelId: channelsInfo.channels[0].channelId }));

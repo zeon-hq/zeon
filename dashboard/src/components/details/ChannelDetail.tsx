@@ -30,8 +30,8 @@ import SidebarBack from "./sidebar/SidebarBack";
 const ChannelDetail = () => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const navigate = useNavigate()
-  const {workspaceId} = useParams()
+  const navigate = useNavigate();
+  const {workspaceId} = useParams();
   const { channelsInfo } = useDashboard();
   const [tabValue, setTabValue] = useState(TabsName.DEPLOYMENT);
   const channelSettingListArray: TabInfo[] = [
