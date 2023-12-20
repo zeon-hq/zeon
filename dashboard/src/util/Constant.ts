@@ -14,19 +14,24 @@ export const channelListData = [
   {
     title: "Support Chat",
     description:
-      "Embed a widget to collect user queries and respond to them on Zeon support pipeline",
+      "Deploy a chat widget to answer customer queries, as a chat widget or as a component on-page",
     enabled: true,
   },
-  {
-    title: "Internal Chat",
+/*   {
+    title: "Form",
     description:
-      "Work asynchronously in real-time using direct messages or group conversions",
+      "Create forms to collect user responses and data, shared by links.",
     enabled: false,
   },
   {
-    title: "Public Group Chat",
+    title: "Embedded Form",
     description:
-      "Create a public group chat for your users to discuss and share ideas",
+      "Embed a form to collect user responses and data, triggered by a button",
     enabled: false,
   },
+  {
+    title: "Concerige",
+    description: "Self-serve support & payment portal for your users",
+    enabled: false,
+  }, */
 ];
