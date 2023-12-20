@@ -92,7 +92,7 @@ const getUserWorkspaces = async () => {
                       );
                   }}
               >
-                  Chat
+                  Front Desk
               </Text>
           </TopBarDivWrapper>
           <InnerDivWrapper>
