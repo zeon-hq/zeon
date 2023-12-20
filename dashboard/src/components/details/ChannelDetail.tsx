@@ -154,6 +154,8 @@ const ChannelDetail = () => {
                   channelId: channelsInfo?.channels[0].channelId,
                 })
               );
+              // @ts-ignore
+              navigate(`/${workspaceId}/chat`);
             }}
           />
           <Space h="10px" />
