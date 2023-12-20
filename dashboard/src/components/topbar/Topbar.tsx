@@ -95,7 +95,7 @@ const getUserWorkspaces = async () => {
               navigate(`/${workspaceId}/chat`);
                   }}
               >
-                  Chat
+                  Front Desk
               </Text>
           </TopBarDivWrapper>
           <InnerDivWrapper>

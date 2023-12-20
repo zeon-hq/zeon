@@ -100,8 +100,6 @@ Please ensure that your code adheres to the project's coding standards and conve
 
 [RabbitMQ](https://www.rabbitmq.com/) for creating an amazing message broker that powers our microservices.
 
-[Formbricks](https://formbricks.com/) for creating an amazing experience management that powers Zeon customer experience.
-
 ## 📄 License
 
 Zeon is licensed under the [MIT License](https://license.com/licenses/mit/).
