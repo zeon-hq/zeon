@@ -8,11 +8,12 @@ import { useEffect } from 'react';
 import { useDispatch } from "react-redux";
 import { setLoading, setSelectedPage, setShowSidebar, setWorkspaces } from "reducer/slice";
 import { getWorkspaces } from 'service/CoreService';
+import { useNavigate } from "react-router";
 import styled from "styled-components";
 const Topbar = ({ workspaceId }: { workspaceId: string }) => {
   const dispatch = useDispatch();
   const { channelsInfo } = useDashboard();
-
+  const navigate = useNavigate();
   const TopBarWrapper = styled.div`
     width: 100%;
     height: 45px;
@@ -90,9 +91,11 @@ const getUserWorkspaces = async () => {
                               channelId: channelsInfo?.channels[0].channelId,
                           })
                       );
+              // @ts-ignore
+              navigate(`/${workspaceId}/chat`);
                   }}
               >
-                  Chat
+                  Front Desk
               </Text>
           </TopBarDivWrapper>
           <InnerDivWrapper>

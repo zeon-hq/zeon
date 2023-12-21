@@ -52,12 +52,11 @@ export function MessageListHeader() {
   };
   const gotoSettingsPage = () => {
     dispatch(setShowSidebar(false));
-    const channelId: any = localStorage.getItem("userstak-dashboard-channelId");
+    const channelId: string | null = localStorage.getItem("userstak-dashboard-channelId");
     dispatch(setLoading(true));
     handleClick({ type: "loading", name: "Loading.." });
-    localStorage.setItem("userstak-dashboard-channelId", channelId);
     setTimeout(() => {
-      handleClick({ type: "channel", name: channelId });
+      handleClick({ type: "channel", name: channelId || "" });
       dispatch(setLoading(false));
     }, 500);
   };

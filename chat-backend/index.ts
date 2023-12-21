@@ -11,10 +11,11 @@ console.log("NODE_ENV: " + config.util.getEnv("NODE_ENV"));
 const app: Express = express();
 
 
+
 declare global {
   namespace Express {
     interface Request {
-      user : UserInterface
+      user : UserInterface;
     }
   }
 }

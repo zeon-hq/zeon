@@ -17,7 +17,7 @@
       },
       {
         "type": "node-terminal",
-        "name": "core-module",
+        "name": "ticket-backend",
         "request": "launch",
         "command": "npm run start:local",
         "cwd": "${workspaceFolder}/ticket-backend"

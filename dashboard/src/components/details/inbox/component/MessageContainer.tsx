@@ -1,17 +1,16 @@
 import { Badge, Flex, Image, Text, Tooltip } from "@mantine/core";
 import readChatProfileLogo from "assets/readChatProfileLogo.svg";
 import selectedChatProfileLogo from "assets/selectedChatProfileLogo.svg";
-import { ChronologyName, FilterName, SubFilterName } from "components/types";
+import { ChronologyName, FilterName, IWorkSpaceSettings, RightPanelSettingName, SubFilterName } from "components/types";
 import useDashboard from "hooks/useDashboard";
 import _ from "lodash";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { ISelectedPage, setActiveChat, setNewMessageToFalse, setSelectedPage } from "reducer/slice";
+import { useNavigate } from "react-router";
+import { useLocation, useParams } from "react-router-dom";
+import { ISelectedPage, setActiveChat, setDefaultWorkSpaceSettingTab, setLoading, setNewMessageToFalse, setSelectedPage, setShowSidebar } from "reducer/slice";
 import styled from "styled-components";
 import { getTime, preProcessText } from "util/dashboardUtils";
-import {
-  useLocation
-} from "react-router-dom";
 
 enum ITicketType {
   OPEN = "Open",
@@ -23,7 +22,7 @@ const MessageBox = styled.div`
     margin-top: 0px;
     margin-bottom: 0px;
     background-color: ${(props: { selected: boolean }) =>
-        props.selected ? "#F5F8FF" : ""};
+    props.selected ? "#F5F8FF" : ""};
     padding: 12px 16px;
     color: ${(props: { selected: boolean }) => (props.selected ? "" : "")};
     border-radius: 0px;
@@ -64,24 +63,26 @@ type ITicketStatusBadge = {
 
 const TicketStatusBadge = ({ ticketType }: ITicketStatusBadge) => {
   return (
-      <>
-          <Badge
-              size="sm"
-              variant="filled"
-              radius="sm"
-              color={ticketType == ITicketType.OPEN ? "red" : "green"}
-          >
-              {" "}
-              
-              {ticketType}
-          </Badge>
-      </>
+    <>
+      <Badge
+        size="sm"
+        variant="filled"
+        radius="sm"
+        color={ticketType == ITicketType.OPEN ? "red" : "green"}
+      >
+        {" "}
+
+        {ticketType}
+      </Badge>
+    </>
   );
 };
 
 const MessageContainer = () => {
-  const { inbox:{selectedFilter, selectedSubFilter, selectedChronology, ticketFilterText,allConversations}, user, activeChat, channelsInfo, selectedPage } = useDashboard();
+  const { inbox: { selectedFilter, selectedSubFilter, selectedChronology, ticketFilterText, allConversations }, user, activeChat, channelsInfo, selectedPage } = useDashboard();
   const dispatch = useDispatch();
+  const navigate = useNavigate()
+  const {workspaceId} = useParams()
   const location = useLocation();
   const handleClick = ({ type, name, channelId }: ISelectedPage) => {
     dispatch(
@@ -93,42 +94,83 @@ const MessageContainer = () => {
     );
   };
 
-  useEffect(()=>{
-       // read channelId param from url
-       const queryParameters = new URLSearchParams(location.search)
-       // if the url has channelId param, set the channelId
-       const channelIdInUrl = queryParameters.get("channelId");
-       const ticketIdInUrl = queryParameters.get("ticketId");
-   
-       if (channelIdInUrl) {
-   
-       localStorage.setItem(
-         "userstak-dashboard-channelId",
-         channelIdInUrl
-       );
-       handleClick({
-         type: "detail",
-         name: "inbox",
-         channelId: channelIdInUrl,
-       });
-       //@ts-ignore
-       dispatch(setActiveChat(null));
+  const handleWorkSpaceChangeClick = (
+    type: "detail" | "channel" | "loading",
+    name: string
+  ) => {
+    dispatch(
+      setSelectedPage({
+        type,
+        name,
+      })
+    );
+  };
 
-       if (ticketIdInUrl) {
-          const conversation = allConversations.find(
-            (ticket) => ticket.ticketId === ticketIdInUrl
-          );
-          if (conversation) {
-            dispatch(setActiveChat(conversation));
-            dispatch(setNewMessageToFalse(conversation.ticketId));
-          }
-       }
-     } else {
+  useEffect(() => {
+    // read channelId param from url
+    const queryParameters = new URLSearchParams(location.search)
+    // if the url has channelId param, set the channelId
+    const channelIdInUrl = queryParameters.get("channelId");
+    const ticketIdInUrl = queryParameters.get("ticketId");
+    const pageName = queryParameters.get("pageName");
+
+    if (channelIdInUrl && ticketIdInUrl) {
+      localStorage.setItem(
+        "userstak-dashboard-channelId",
+        channelIdInUrl
+      );
+      handleClick({
+        type: "detail",
+        name: "inbox",
+        channelId: channelIdInUrl,
+      });
       //@ts-ignore
-    dispatch(setSelectedPage({ type: "detail", name: "inbox", channelId: channelsInfo.channels[0].channelId }));
-     }
-  },[])
+      dispatch(setActiveChat(null));
+
+      const conversation = allConversations.find(
+        (ticket) => ticket.ticketId === ticketIdInUrl
+      );
+      if (conversation) {
+        dispatch(setActiveChat(conversation));
+        dispatch(setNewMessageToFalse(conversation.ticketId));
+      }
+    } else if (channelIdInUrl && pageName) {
+      // goes to channel settings page page and in the ChannelDetail.tsx page, useEffect will set the selectedPage
+      dispatch(setShowSidebar(false));
+      dispatch(setLoading(true));
+      handleClick({ type: "loading", name: "Loading.." });
+      setTimeout(() => {
+        handleClick({ type: "channel", name: channelIdInUrl || "" });
+        dispatch(setLoading(false));
+      }, 500);
+    } else if (pageName) {
+      // goes to workspace settings page
+      switch (pageName) {
+        case IWorkSpaceSettings.ORGANIZATION:
+          dispatch(setDefaultWorkSpaceSettingTab(IWorkSpaceSettings.ORGANIZATION));
+          handleWorkSpaceChangeClick("detail", "account");
+          dispatch(setShowSidebar(false));
+          break;    
+        case IWorkSpaceSettings.PROFILE:
+          dispatch(setDefaultWorkSpaceSettingTab(IWorkSpaceSettings.PROFILE));
+          handleWorkSpaceChangeClick("detail", "account");
+          dispatch(setShowSidebar(false));
+          break;      
+        case IWorkSpaceSettings.USERS:
+          dispatch(setDefaultWorkSpaceSettingTab(IWorkSpaceSettings.USERS));
+          handleWorkSpaceChangeClick("detail", "account");
+          dispatch(setShowSidebar(false));
+          break;
   
+        default:
+          break;
+      }
+    } else {
+      //@ts-ignore
+      dispatch(setSelectedPage({ type: "detail", name: "inbox", channelId: channelsInfo.channels[0].channelId }));
+    }
+  }, [])
+
   return (
     <Wrapper>
       {allConversations
@@ -177,11 +219,11 @@ const MessageContainer = () => {
             // If user input is empty, return all tickets
             return true;
           }
-        
+
           // Check if the user input matches customerEmail or ticketId
           const emailMatch = ticket.customerEmail.toLowerCase().includes(ticketFilterText.toLowerCase());
           const ticketIdMatch = ticket.ticketId.toLowerCase() === ticketFilterText.toLowerCase();
-        
+
           // Return true if there is a match in either customerEmail or ticketId
           return emailMatch || ticketIdMatch;
         })
@@ -199,7 +241,7 @@ const MessageContainer = () => {
         .map((conversation) => {
           const isSelected = activeChat?.ticketId === conversation.ticketId;
           const messageLength = conversation.messages.length;
-          const lengthCondition =  messageLength > 1;
+          const lengthCondition = messageLength > 1;
           const lastMessageIndex = messageLength - 1;
           const lastMessage = preProcessText(lengthCondition ? conversation.messages[lastMessageIndex].message || '' : conversation.text || '', {
             email: conversation?.customerEmail,
@@ -211,6 +253,7 @@ const MessageContainer = () => {
                   localStorage.setItem("usci", conversation.channelId);
                   dispatch(setActiveChat(conversation));
                   dispatch(setNewMessageToFalse(conversation.ticketId));
+                  navigate(`/${workspaceId}/chat?channelId=${conversation.channelId}&ticketId=${conversation.ticketId}`);
                 }}
                 selected={isSelected}
               >
@@ -218,7 +261,7 @@ const MessageContainer = () => {
                   <div style={{ width: "100%" }}>
                     <DetailWrapper style={{ marginBottom: "8px" }}>
                       <Text
-                        color={isSelected ? "#3054B9" : conversation.hasNewMessage === 1 ? '#000000' :'#667085'}
+                        color={isSelected ? "#3054B9" : conversation.hasNewMessage === 1 ? '#000000' : '#667085'}
                         weight={isSelected ? 600 : conversation.hasNewMessage === 1 ? 600 : 400}
                         style={{ fontSize: "13px" }}
                         size="md"
@@ -266,7 +309,7 @@ const MessageContainer = () => {
                               width: "wrap-content",
                             }}
                             truncate
-                            color={isSelected ? "#3054B9" : conversation.hasNewMessage === 1 ? '#344054' :'#667085'}
+                            color={isSelected ? "#3054B9" : conversation.hasNewMessage === 1 ? '#344054' : '#667085'}
                             weight="500"
                             size="13px"
                           >
@@ -274,7 +317,7 @@ const MessageContainer = () => {
                           </Text>
                         </Tooltip>
                         <Text
-                          color={isSelected ? "#3054B9" : conversation.hasNewMessage === 1 ? '#344054' :'#667085'}
+                          color={isSelected ? "#3054B9" : conversation.hasNewMessage === 1 ? '#344054' : '#667085'}
                           weight={500}
                           size="13px"
                         >

@@ -75,9 +75,6 @@ const Login = () => {
       // Append the script to the document
       document.body.appendChild(script);
 
-
-
-
         if(res.at)
         navigate("/workspaces/chat")
 

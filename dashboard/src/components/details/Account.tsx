@@ -18,10 +18,30 @@ import { setDefaultWorkSpaceSettingTab, setSelectedPage, setShowSidebar } from "
 import { Lock } from "tabler-icons-react";
 import { logOutUtils } from "util/dashboardUtils";
 import { SideBarInnerWrapper } from "./inbox/inbox.styles";
-
+import { useEffect, useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
+import { useNavigate } from "react-router";
 const Account = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const {workspaceId} = useParams();
+  const queryParameters = new URLSearchParams(location.search)
   const { channelsInfo, defaultWorkSpaceSettingTab } = useDashboard();
+  const [tabValue, setTabValue] = useState(defaultWorkSpaceSettingTab);
+
+  useEffect(() => {
+    const pageName = queryParameters.get("pageName");
+    const channelIdInUrl:string | null = queryParameters.get("channelId");
+    // menuClick(pageName as RightPanelSettingName)
+
+    if (pageName && !channelIdInUrl) {
+      setTabValue(pageName as IWorkSpaceSettings);
+    }
+
+  }, []);
+
+  
   const profileSetting: TabInfo[] = [
     {
       name: IWorkSpaceSettings.PROFILE,
@@ -112,8 +132,12 @@ const Account = () => {
         orientation="vertical"
         h="100%"
         color="dark"
-        value={defaultWorkSpaceSettingTab}
-        defaultValue={defaultWorkSpaceSettingTab}
+        value={tabValue}
+        onTabChange={(value) => {
+          setTabValue(value as IWorkSpaceSettings);
+          navigate(`/${workspaceId}/chat?pageName=${value}`);
+        }}
+        defaultValue={tabValue}
       >
         <Tabs.List w={"230px"}>
           <Flex

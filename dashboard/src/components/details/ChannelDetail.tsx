@@ -20,13 +20,20 @@ import {
 } from "components/tabInfo/index";
 import { TabInfo, TabsName } from "components/types";
 import useDashboard from "hooks/useDashboard";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
+import { useLocation, useParams } from "react-router-dom";
 import { setSelectedPage, setShowSidebar } from "reducer/slice";
 import SidebarBack from "./sidebar/SidebarBack";
 
 const ChannelDetail = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const {workspaceId} = useParams();
   const { channelsInfo } = useDashboard();
+  const [tabValue, setTabValue] = useState(TabsName.DEPLOYMENT);
   const channelSettingListArray: TabInfo[] = [
     {
       name: TabsName.Overview,
@@ -96,6 +103,18 @@ const ChannelDetail = () => {
     }
   };
 
+  useEffect(() => {
+    const queryParameters = new URLSearchParams(location.search)
+    const pageName = queryParameters.get("pageName");
+    const channelIdInUrl:string | null = queryParameters.get("channelId");
+
+    if (pageName && channelIdInUrl) {
+      setTabValue(pageName as TabsName);
+    } else {
+      setTabValue(TabsName.DEPLOYMENT as TabsName);
+    }
+  }, []);
+
   return (
     // <Navbar width={{ base: 300 }} height={"100vh"} style={{backgroundColor:'white'}}>
     <Box w={"300"} h="100%" style={{ backgroundColor: "white" }}>
@@ -114,8 +133,14 @@ const ChannelDetail = () => {
           },
         })}
         h="100%"
+        value={tabValue}
+        onTabChange={(value) => {
+          setTabValue(value as TabsName);
+          // @ts-ignore
+          navigate(`/${workspaceId}/chat?channelId=${channelsInfo?.channels[0].channelId}&pageName=${value}`);
+        }}
         orientation="vertical"
-        defaultValue={TabsName.DEPLOYMENT}
+        defaultValue={tabValue}
       >  
         <Tabs.List w={"258px"} >
           <SidebarBack
@@ -129,6 +154,8 @@ const ChannelDetail = () => {
                   channelId: channelsInfo?.channels[0].channelId,
                 })
               );
+              // @ts-ignore
+              navigate(`/${workspaceId}/chat`);
             }}
           />
           <Space h="10px" />
