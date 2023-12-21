@@ -337,7 +337,7 @@ export const changeInviteStatus = async (req: Request, res: Response) => {
       console.log(`User - ${user.userId} created from invite - ${inviteId}`)
     }
 
-    creturn res.status(200).json({ invite })
+    return res.status(200).json({ invite })
   } catch (error) {
     console.error(error)
     return res.status(500).json({ error })
