@@ -1,6 +1,8 @@
 import { TextInput,TextInputProps } from '@mantine/core'
 import {  RegisterOptions, Controller, Control } from 'react-hook-form'
 import React from 'react'
+import ErrorMessage from './ErrorMessage'
+import { error } from 'console'
 
 /**
  * inspect element to see the class name
@@ -16,7 +18,7 @@ import React from 'react'
  * if class is not there, then suck thumb
  */
 
-const styles = {
+const styles = { 
   // style class .mantine-TextInput-input
   input: {
     border: '1px solid #d5d5d5',
@@ -32,7 +34,10 @@ type Props = {
     formProps: { control: Control<any>,
     name: string,
     rules?: RegisterOptions,
-    defaultValue?: string},
+    defaultValue?: string,
+    error ?: string | undefined
+  },
+    
 
     inputProps: TextInputProps
 }
@@ -42,16 +47,21 @@ const ZTextInput = (props: Props) => {
     const { formProps, inputProps } = props
 
   return (
-    <Controller
-        {...formProps}
-        render={({ field }) => (
-            <TextInput
-                {...field}
-                {...inputProps}
-                styles={styles}
-            />
-        )}
-    />
+    <>
+      <Controller
+          {...formProps}
+          render={({ field }) => (
+              <TextInput
+                  {...field}
+                  {...inputProps}
+                  styles={styles} 
+              />
+          )}
+      />
+      {
+        formProps.error && <ErrorMessage message={formProps.error} />
+      }
+    </>
   )
 }
 

@@ -58,3 +58,7 @@ export const deleteExpense = async (expenseId: string) => {
     return {};
   }
 }
+
+export const getWorkspaceFinanceInfo = async (workspaceId: string) => {
+  
+}

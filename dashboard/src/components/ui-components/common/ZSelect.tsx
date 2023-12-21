@@ -2,6 +2,7 @@ import { Control, Controller, RegisterOptions } from "react-hook-form";
 import Select, { Props as SelectProps } from "react-select";
 import ZLabel from "./ZLabel";
 import { Space } from "@mantine/core";
+import ErrorMessage from "./ErrorMessage";
 
 type Props = {
   label: string;
@@ -10,6 +11,7 @@ type Props = {
     name: string;
     rules?: RegisterOptions;
     defaultValue?: string;
+    error?: string | undefined;
   };
   inputProps: SelectProps;
 };
@@ -59,6 +61,7 @@ const ZSelect = (props: Props) => {
           />
         )}
       />
+      {formProps.error && <ErrorMessage message={formProps.error} />}
     </>
   );
 };

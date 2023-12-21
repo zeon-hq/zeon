@@ -13,8 +13,9 @@ const initialState:IFinance = {
 
 const getFirstLoadInfo = async (workspaceId: string) => {
     try {
-        const response = await getAllExpenses(workspaceId);
-        return response.expenses;
+        const expenseResponse = await ge(workspaceId);
+        const get
+        return expenseResponse.expenses;
     } catch (error) {
         
     }

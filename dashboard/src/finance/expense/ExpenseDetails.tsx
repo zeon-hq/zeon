@@ -22,7 +22,9 @@ const ExpenseDetails = (props: Props) => {
     selectedExpense
   } = useFinance();
   const dispatch = useDispatch();
-  const { control, setValue, handleSubmit } = useForm({
+  const { control, setValue, handleSubmit, setError, formState:{
+    errors
+  }} = useForm({
     defaultValues: {
       ...selectedExpense,
       amount: selectedExpense?.totalAmount?.value || "",
@@ -47,6 +49,15 @@ const ExpenseDetails = (props: Props) => {
     const vendor = data?.vendor?.value || "";
     const status = data?.status?.value || "unpaid";
     delete data.category;
+ 
+    // check if amount.currency and tax.currency are same
+    if(data.amount.currency !== data.tax.currency) {
+      setError("tax", {
+        type: "manual",
+        message: "Currency of amount and tax should be same"
+      })
+      return;
+    }
     
     const expenseData = {
       ...data,
@@ -126,11 +137,16 @@ const ExpenseDetails = (props: Props) => {
           label: "Invoice Number",
           placeholder: "Invoice Number",
           required: true,
+         
         }}
         formProps={{
           name: "invoiceNumber",
           control,
           defaultValue: selectedExpense?.invoiceNumber || "",
+          error: errors?.invoiceNumber?.message || "",
+          rules: {
+            required: "Invoice Number is required",
+          }
         }}
       />
        <Space h="sm" />
@@ -146,6 +162,9 @@ const ExpenseDetails = (props: Props) => {
         formProps={{
           name: "invoiceDate",
           control,
+          rules: {
+            required: "Invoice Date is required",
+          }
         }}
       />
        <Space h="sm" />
@@ -160,6 +179,9 @@ const ExpenseDetails = (props: Props) => {
         formProps={{
           name: "paymentDate",
           control,
+          rules: {
+            required: "Payment Date is required",
+          }
         }}
       />
        <Space h="sm" />
@@ -192,6 +214,7 @@ const ExpenseDetails = (props: Props) => {
         }
         setValue={setValue}
         label="Tax"
+        error={errors?.tax?.message || ""}
       />
        <Space h="sm" />
        {/* Status */}
@@ -214,6 +237,9 @@ const ExpenseDetails = (props: Props) => {
           formProps={{
             name: "status",
             control,
+            rules: {
+              required: "Status is required",
+            }
           }}
         />
       <ZSelect
@@ -228,7 +254,7 @@ const ExpenseDetails = (props: Props) => {
         }}
         formProps={{
           name: "category",
-          control,
+          control
         }}
       />
         <Space h="sm" />

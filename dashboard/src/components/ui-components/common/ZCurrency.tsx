@@ -1,20 +1,31 @@
 import React, { ChangeEvent, useState, useEffect, useRef } from "react";
 import { TextInput, Select, Text } from "@mantine/core";
 import { Control, Controller, UseFormSetValue } from "react-hook-form";
+import { error } from "console";
+import ErrorMessage from "./ErrorMessage";
 
 type Props = {
   control: Control<any>;
   name: string;
   rules?: any;
   setValue: UseFormSetValue<any>;
-    label: string;
+  label: string;
+  error ?: string | undefined;
   defaultValue?: {
     value: string;
-    currency: string
-  }
+    currency: string;
+  };
 };
 
-const ZCurrency = ({ control, name, rules, defaultValue, setValue, label }: Props) => {
+const ZCurrency = ({
+  control,
+  name,
+  rules,
+  defaultValue,
+  setValue,
+  label,
+  error
+}: Props) => {
   const [commaSeparatedValue, setCommaSeparatedValue] = useState("");
   const [currency, setCurrency] = useState("USD");
   const [symbol, setSymbol] = useState("$");
@@ -64,30 +75,38 @@ const ZCurrency = ({ control, name, rules, defaultValue, setValue, label }: Prop
       setCommaSeparatedValue(defaultValue.value);
       setCurrency(defaultValue.currency);
 
-      setValue(`${name}.value`, parseFloat(defaultValue.value.replace(/[^0-9.]/g, "")));
+      setValue(
+        `${name}.value`,
+        parseFloat(defaultValue.value.replace(/[^0-9.]/g, ""))
+      );
       setValue(`${name}.currency`, defaultValue.currency);
     }
-  },[])
+  }, []);
 
   const handleCurrencyChange = (value: string) => setCurrency(value);
-
+ console.log(error)
   return (
-    <TextInput
-      label={label}
-      type="text"
-      value={commaSeparatedValue}
-      icon={<Text size="sm">{symbol}</Text>}
-      onChange={handleInputChange}
-      ref={inputRef}
-      rightSection={
-        <Select
-          data={Object.keys(currencyData)}
-          value={currency}
-          onChange={handleCurrencyChange}
-        />
+    <>
+      <TextInput
+        label={label}
+        type="text"
+        value={commaSeparatedValue}
+        icon={<Text size="sm">{symbol}</Text>}
+        onChange={handleInputChange}
+        ref={inputRef}
+        rightSection={
+          <Select
+            data={Object.keys(currencyData)}
+            value={currency}
+            onChange={handleCurrencyChange}
+          />
+        }
+        rightSectionWidth={100}
+      />
+      {
+        error && <ErrorMessage message={error} />
       }
-      rightSectionWidth={100}
-    />
+    </>
   );
 };
 
