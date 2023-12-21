@@ -30,6 +30,10 @@ const UserWorkspaceSchema = new mongoose.Schema<UserWorkspaceInterface>({
     roleId: { type: String, required: true },
     isActive: { type: Boolean, required: true, default: true },
     isDeleted: { type: Boolean, required: true, default: false },
+},{
+    // add createdAt and updatedAt fields
+    timestamps: true
+
 });
 
 // index on userId and workspaceId

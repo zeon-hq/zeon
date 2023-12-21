@@ -14,7 +14,7 @@ export interface UserInterface {
   isActive: boolean
   isDeleted: boolean
 
-  profilePic?: string
+  profilePic?: string,
 }
 
 // Create a Schema corresponding to the document interface.
@@ -33,6 +33,9 @@ const UserSchema = new mongoose.Schema<UserInterface>({
   isDeleted: { type: Boolean, required: true, default: false },
 
   profilePic: { type: String, required: false, default: null },
+},{
+  // add createdAt and updatedAt fields
+  timestamps: true
 })
 
 // index on userId and workspaceId

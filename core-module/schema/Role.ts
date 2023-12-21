@@ -15,6 +15,9 @@ const RoleSchema = new mongoose.Schema<RoleInterface>({
     description: { type: String, required: true },
     workspaceId: { type: String, required: true },
     isInternal: { type: Boolean, required: true, default: false },
+},{
+    // add createdAt and updatedAt fields
+    timestamps: true
 });
 
 

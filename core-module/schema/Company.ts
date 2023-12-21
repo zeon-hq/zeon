@@ -156,6 +156,8 @@ const schema = new Schema<Company>(
     },
   {
     versionKey: false,
+    // add createdAt and updatedAt fields
+    timestamps: true,
   },
 );
 

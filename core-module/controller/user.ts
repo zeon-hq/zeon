@@ -323,21 +323,21 @@ export const changeInviteStatus = async (req: Request, res: Response) => {
         return res.status(400).json({ error: "User does not exist" })
       }
 
-      const newUser = new User({
-        userId: user.userId,
-        name: user.name,
-        email: user.email,
-        password: user.password,
-        roleId: invite.roleId,
-        workspaceId: invite.workspaceId,
-      })
+      // const newUser = new User({
+      //   userId: user.userId,
+      //   name: user.name,
+      //   email: user.email,
+      //   password: user.password,
+      //   roleId: invite.roleId,
+      //   workspaceId: invite.workspaceId,
+      // })
 
-      // save the user
-      await newUser.save()
+      // // save the user
+      // await newUser.save()
       console.log(`User - ${user.userId} created from invite - ${inviteId}`)
     }
 
-    return res.status(200).json({ invite })
+    creturn res.status(200).json({ invite })
   } catch (error) {
     console.error(error)
     return res.status(500).json({ error })
