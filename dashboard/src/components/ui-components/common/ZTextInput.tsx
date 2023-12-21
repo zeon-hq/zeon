@@ -25,8 +25,8 @@ const styles = {
   },
   label: {
     color: '#344054',
-    fontSize: '14px',
-    fontWeight: 500
+    fontSize: '12px',
+    fontWeight: 600
   }
 }
 
