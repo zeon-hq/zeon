@@ -149,6 +149,8 @@ const schema = new Schema<Contacts>(
   },
   {
     versionKey: false,
+    // add createdAt and updatedAt fields
+    timestamps: true,
   },
 );
 
