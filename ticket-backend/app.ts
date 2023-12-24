@@ -237,7 +237,8 @@ app.post("/ticket/status", async (req, res) => {
 
 app.post("/channel", async (req, res) => {
   try {
-    const channelId = await getChannelIDByReferenceCode(req.body.channelCode);
+    const {channelCode} = req.body;
+    const channelId = await getChannelIDByReferenceCode(channelCode);
     res.send({ channelId: channelId });
   } catch (error) {
     console.error(error);
@@ -272,7 +273,7 @@ app.get("/ticket/messages/:ticketId", async (req, res) => {
 });
 
 app.get("/ticket/:widgetId", async(req, res)=>{
-  const widgetId = req.params.widgetId;
+  const {widgetId} = req.params;
   let getTicket = await TicketModel.find({widgetId, isOpen:true}).populate('messages');
   const allTicketId = getTicket.map((data)=> data.ticketId);
 
@@ -290,7 +291,7 @@ app.get("/ticket/:widgetId", async(req, res)=>{
 
 app.get("/channel/:channelId", async (req, res) => {
   try {
-    const channelId = req.params.channelId;
+    const {channelId} = req.params;
     const channel = await getChannelByID(channelId);
     if (!channel) {
       return res.status(400).json({
