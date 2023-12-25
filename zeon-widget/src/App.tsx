@@ -27,15 +27,12 @@ function App({ widgetId }: any) {
 
   return (
     <>
-      {channelId ? (
-        <BrowserRouter>
-          <Routes>
-            <Route path="/channel/:channelId" element={<ZeonWidgetModal />} />
-          </Routes>
-        </BrowserRouter>
-      ) : (
-        <WidgetButton />
-      )}
+      <BrowserRouter>
+        <Routes>
+          <Route path="/channel/:channelId" element={<ZeonWidgetModal />} />
+          <Route path="/" element={<WidgetButton />} />
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }
