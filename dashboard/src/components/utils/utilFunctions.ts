@@ -28,3 +28,10 @@ export const getReadableDate = (date: string) => {
   return newDate;
 
 }
+
+/**
+ * function takes in string and makes first char uppercase
+ */
+export const capitalizeFirstLetter = (string: string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}

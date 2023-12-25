@@ -45,7 +45,7 @@ type Props = {
 const ZTextInput = (props: Props) => {
 
     const { formProps, inputProps } = props
-
+    console.log(inputProps)
   return (
     <>
       <Controller
@@ -55,6 +55,7 @@ const ZTextInput = (props: Props) => {
                   {...field}
                   {...inputProps}
                   styles={styles} 
+                  defaultValue={inputProps.defaultValue}
               />
           )}
       />

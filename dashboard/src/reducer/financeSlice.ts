@@ -1,6 +1,6 @@
 // create a finance slice using createSlice
 // create a finance reducer using createReducer
-import { getAllExpenses } from "../finance/FinanceService";
+import { getAllExpenses, getWorkspaceFinanceInfo } from "../finance/FinanceService";
 import {IExpense, IExpenseDTO, IFinance} from "../finance/type"
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
@@ -8,14 +8,16 @@ const initialState:IFinance = {
     expense: {
         expenseList: [],
         selectedExpense: null
-    }
+    },
+    categories: [],
+    tags: []
 }
 
 const getFirstLoadInfo = async (workspaceId: string) => {
     try {
-        const expenseResponse = await ge(workspaceId);
-        const get
-        return expenseResponse.expenses;
+        const expenseResponse = await getWorkspaceFinanceInfo(workspaceId);
+        console.log(expenseResponse); 
+        return expenseResponse;
     } catch (error) {
         
     }
@@ -31,12 +33,12 @@ export const initFinance = createAsyncThunk(
         const response = await getFirstLoadInfo(workspaceId);
         if(selectedExpense) {
             return {
-                expense : [...response],
+                ...response,
                 selectedExpense
             }
         }
         return {
-            expense : [...response],
+            ...response,
             selectedExpense: response[0]?.expenseId
         }
       } catch (error) {
@@ -62,10 +64,12 @@ export const financeSlice = createSlice({
     extraReducers: (builder) => { 
         builder
         .addCase(initFinance.fulfilled, (state, action) => {
-            state.expense.expenseList = action.payload.expense;
+            state.expense.expenseList = action.payload.expenses;
+            state.categories = action.payload.categories;
+            state.tags = action.payload.tags;
             if(action.payload.selectedExpense) {
                 // get the selected expense
-                const selectedExpenseDetails = action.payload.expense.find((expense: IExpenseDTO) => expense.expenseId === action.payload.selectedExpense);
+                const selectedExpenseDetails = action.payload.expenses.find((expense: IExpenseDTO) => expense.expenseId === action.payload.selectedExpense);
                 state.expense.selectedExpense = selectedExpenseDetails || null;
             }
         })
@@ -79,5 +83,5 @@ export const financeSlice = createSlice({
 })
 
 export const { setExpenseList, setSelectedExpense } = financeSlice.actions;
-
 export default financeSlice.reducer;
+

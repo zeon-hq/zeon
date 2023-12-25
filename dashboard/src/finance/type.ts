@@ -1,5 +1,7 @@
 export interface IFinance {
     expense: IExpense;
+    categories: ICategory[];
+    tags: ITag[];
 }
 
 export interface IExpense {
@@ -30,4 +32,35 @@ export interface IExpenseDTO {
     workspaceId: string;
     customerFields: [],
     status: string;
+}
+
+export interface ICategory {
+    _id: string;
+    name: string;
+    description: string;
+    parentCategory: string;
+    categoryId: string;
+    isDeleted: boolean;
+    workspaceId: string;
+    __v: number;
+    childCategories: ICategory[];
+}
+/**
+ * {
+            "_id": "657cbd9cbee5e9aa0f3ced6d",
+            "name": "tag1",
+            "tagId": "fb7m1004xl",
+            "isDeleted": false,
+            "workspaceId": "ymw1tm",
+            "__v": 0
+        }
+ */
+
+export interface ITag {
+    _id: string;
+    name: string;
+    tagId: string;
+    isDeleted: boolean;
+    workspaceId: string;
+    __v: number;
 }

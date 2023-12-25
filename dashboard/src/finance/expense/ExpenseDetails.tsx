@@ -8,7 +8,9 @@ import ZTextInput from "components/ui-components/common/ZTextInput";
 import ZInput from "components/ui-components/common/ZTextInput";
 import { createExpense, deleteExpense } from "finance/FinanceService";
 import { ExpenseDetailsContainer } from "finance/styles";
+import { ICategory, ITag } from "finance/type";
 import useFinance from "finance/useFinance";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router";
@@ -18,13 +20,15 @@ import { Trash } from "tabler-icons-react";
 type Props = {};
 
 const ExpenseDetails = (props: Props) => {
-  const  {
-    selectedExpense
-  } = useFinance();
+  const { selectedExpense, tags, categories, getFlatCategories } = useFinance();
   const dispatch = useDispatch();
-  const { control, setValue, handleSubmit, setError, formState:{
-    errors
-  }} = useForm({
+  const {
+    control,
+    setValue,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm({
     defaultValues: {
       ...selectedExpense,
       amount: selectedExpense?.totalAmount?.value || "",
@@ -33,11 +37,15 @@ const ExpenseDetails = (props: Props) => {
       paymentDate: selectedExpense?.paymentDate || "",
       status: selectedExpense?.status || "unpaid",
       category: selectedExpense?.categoryId || "",
-      tags: selectedExpense?.tags?.map((tag: any) => ({ label: tag, value: tag })) || [],
+      tags:
+        selectedExpense?.tags?.map((tag: any) => ({
+          label: tag,
+          value: tag,
+        })) || [],
       vendor: selectedExpense?.vendor || "",
-    }
+    },
   });
-  const {workspaceId} = useParams<{workspaceId: string}>();
+  const { workspaceId } = useParams<{ workspaceId: string }>();
 
   const onSubmit = async (data: any) => {
     console.log(data);
@@ -49,65 +57,80 @@ const ExpenseDetails = (props: Props) => {
     const vendor = data?.vendor?.value || "";
     const status = data?.status?.value || "unpaid";
     delete data.category;
- 
+
     // check if amount.currency and tax.currency are same
-    if(data.amount.currency !== data.tax.currency) {
+    if (data.amount.currency !== data.tax.currency) {
       setError("tax", {
         type: "manual",
-        message: "Currency of amount and tax should be same"
-      })
+        message: "Currency of amount and tax should be same",
+      });
       return;
     }
-    
+
     const expenseData = {
       ...data,
       categoryId: category,
       tags,
       vendor,
       workspaceId,
-      status    };
+      status,
+    };
 
     try {
       const res = await createExpense(expenseData);
       //@ts-ignore
-      dispatch(initFinance({workspaceId}));
+      dispatch(initFinance({ workspaceId }));
       console.log(res);
     } catch (error) {
       console.log(error);
-
     }
   };
 
   const onDelete = async () => {
     console.log("delete");
-    if(!selectedExpense?.expenseId) {
-     showNotification({
+    if (!selectedExpense?.expenseId) {
+      showNotification({
         title: "Error",
         message: "Expense not selected",
         color: "red",
-     })
+      });
 
       return;
     }
     try {
-        const res = await deleteExpense(selectedExpense?.expenseId);
-        //@ts-ignore
-        dispatch(initFinance({workspaceId}));
-        showNotification({
-          title: "Success",
-          message: "Expense deleted successfully",
-          color: "green",
-        })
+      const res = await deleteExpense(selectedExpense?.expenseId);
+      //@ts-ignore
+      dispatch(initFinance({ workspaceId }));
+      showNotification({
+        title: "Success",
+        message: "Expense deleted successfully",
+        color: "green",
+      });
     } catch (error) {
       console.log(error);
       showNotification({
         title: "Error",
         message: "Something went wrong",
         color: "red",
-      })
-      
+      });
     }
-  }
+  };
+
+  const categoryOptions = getFlatCategories(categories || []);
+  const categoryDefaultValue = categoryOptions.find(
+    (option: any) => option.value === selectedExpense?.categoryId
+  )
+
+  const tagOptions = tags.map((tag: ITag) => ({
+    label: tag.name,
+    value: tag.name,
+  }));
+  const tagDefaultValue = selectedExpense?.tags?.map((tag: any) => ({
+    label: tag,
+    value: tag,
+  })) || []
+
+  useEffect(() => {}, [selectedExpense]);
 
   return (
     <ExpenseDetailsContainer as="form">
@@ -122,9 +145,9 @@ const ExpenseDetails = (props: Props) => {
             { label: "Vendor 2", value: "vendor2" },
           ],
           defaultValue: {
-            label: selectedExpense?.vendor || "Vendor 1",
-            value: selectedExpense?.vendor || "vendor1"
-          }
+            label: selectedExpense?.vendor,
+            value: selectedExpense?.vendor,
+          },
         }}
         formProps={{
           name: "vendor",
@@ -137,7 +160,7 @@ const ExpenseDetails = (props: Props) => {
           label: "Invoice Number",
           placeholder: "Invoice Number",
           required: true,
-         
+          defaultValue: selectedExpense?.invoiceNumber || "",
         }}
         formProps={{
           name: "invoiceNumber",
@@ -146,10 +169,10 @@ const ExpenseDetails = (props: Props) => {
           error: errors?.invoiceNumber?.message || "",
           rules: {
             required: "Invoice Number is required",
-          }
+          },
         }}
       />
-       <Space h="sm" />
+      <Space h="sm" />
       <ZDate
         inputProps={{
           label: "Invoice Date",
@@ -164,10 +187,10 @@ const ExpenseDetails = (props: Props) => {
           control,
           rules: {
             required: "Invoice Date is required",
-          }
+          },
         }}
       />
-       <Space h="sm" />
+      <Space h="sm" />
       <ZDate
         inputProps={{
           label: "Payment Date",
@@ -181,103 +204,105 @@ const ExpenseDetails = (props: Props) => {
           control,
           rules: {
             required: "Payment Date is required",
-          }
+          },
         }}
       />
-       <Space h="sm" />
+      <Space h="sm" />
       <ZCurrency
         control={control}
         name="amount"
         rules={{ required: true }}
-        defaultValue={
-        {
+        defaultValue={{
           //@ts-ignore
           value: selectedExpense?.amount?.value || "",
-          currency: selectedExpense?.totalAmount?.currency || "USD"
-        }
-        }
+          currency: selectedExpense?.totalAmount?.currency || "USD",
+        }}
         setValue={setValue}
         label="Amount"
-        
       />
-       <Space h="sm" />
+      <Space h="sm" />
       <ZCurrency
         control={control}
         name="tax"
         rules={{ required: true }}
-        defaultValue={
-          {
-            //@ts-ignore
-            value: selectedExpense?.tax?.value || "",
-            currency: selectedExpense?.tax?.currency || "USD"
-          }
-        }
+        defaultValue={{
+          //@ts-ignore
+          value: selectedExpense?.tax?.value || "",
+          currency: selectedExpense?.tax?.currency || "USD",
+        }}
         setValue={setValue}
         label="Tax"
         error={errors?.tax?.message || ""}
       />
-       <Space h="sm" />
-       {/* Status */}
-        <ZSelect
-          label={"Status"}
-          inputProps={{
-            placeholder: "Status",
-            required: true,
-            options: [
-              { label: "Paid", value: "paid" },
-              { label: "Unpaid", value: "unpaid" },
-              { label: "Rejected", value: "rejected"},
-
-            ],
-            defaultValue: {
-              label: selectedExpense?.status || "Unpaid",
-              value: selectedExpense?.status || "unpaid"
-            }
-          }}
-          formProps={{
-            name: "status",
-            control,
-            rules: {
-              required: "Status is required",
-            }
-          }}
-        />
+      <Space h="sm" />
+      {/* Status */}
+      <ZSelect
+        label={"Status"}
+        inputProps={{
+          placeholder: "Status",
+          required: true,
+          options: [
+            { label: "Paid", value: "paid" },
+            { label: "Unpaid", value: "unpaid" },
+            { label: "Rejected", value: "rejected" },
+          ],
+          defaultValue: {
+            label: selectedExpense?.status,
+            value: selectedExpense?.status,
+          },
+        }}
+        formProps={{
+          name: "status",
+          control,
+          rules: {
+            required: "Status is required",
+          },
+        }}
+      />
       <ZSelect
         label={"Category"}
         inputProps={{
           placeholder: "Category",
           required: true,
-          options: [
-            { label: "Cash", value: "cash" },
-            { label: "Credit Card", value: "creditCard" },
-          ],
+          options: categoryOptions,
+          defaultValue: categoryDefaultValue,
         }}
         formProps={{
           name: "category",
-          control
+          control,
+          defaultValue: categoryDefaultValue
         }}
       />
-        <Space h="sm" />
+      <Space h="sm" />
       <ZSelect
         label={"Tags"}
         inputProps={{
           placeholder: "Tags",
           isMulti: true,
           required: true,
-          options: [
-            { label: "Tag 1", value: "tag1" },
-            { label: "Tag 2", value: "tag2" },
-            { label: "Tag 3", value: "tag3"}
-          ],
+          options: tagOptions,
+          defaultValue: tagDefaultValue,
+            
         }}
         formProps={{
           name: "tags",
           control,
+          defaultValue:
+            selectedExpense?.tags?.map((tag: any) => ({
+              label: tag,
+              value: tag,
+            })) || [],
         }}
       />
 
       <input type="submit" onClick={handleSubmit(onSubmit)} />
-      <ZActionText onClick={onDelete} secondaryColor="#fef3f2" label="Delete Expense" color="#d92d20" leftIcon={<Trash size="14px" />} />
+      <ZActionText
+        onClick={onDelete}
+        secondaryColor="#fef3f2"
+        label="Delete Expense"
+        color="#d92d20"
+        leftIcon={<Trash size="14px" />}
+      />
     </ExpenseDetailsContainer>
   );
 };

@@ -60,5 +60,10 @@ export const deleteExpense = async (expenseId: string) => {
 }
 
 export const getWorkspaceFinanceInfo = async (workspaceId: string) => {
-  
+  try {
+    const res = await axiosInstance.get(`http://localhost:4001/${workspaceId}`);
+    return res.data;
+  } catch (error) {
+    return {};
+  }
 }

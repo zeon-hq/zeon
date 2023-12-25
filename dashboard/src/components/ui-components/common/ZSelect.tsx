@@ -10,7 +10,7 @@ type Props = {
     control: Control<any>;
     name: string;
     rules?: RegisterOptions;
-    defaultValue?: string;
+    defaultValue?: { label: string; value: string } |  { label: string; value: string } [] | undefined;
     error?: string | undefined;
   };
   inputProps: SelectProps;
@@ -31,6 +31,7 @@ const styles = {
 
 const ZSelect = (props: Props) => {
   const { formProps, inputProps, label } = props;
+  console.log(inputProps)
   return (
     <>
       <ZLabel label={label} />
@@ -56,6 +57,7 @@ const ZSelect = (props: Props) => {
         render={({ field: { onChange, onBlur, value, name, ref } }) => (
           <Select
             {...inputProps}
+            defaultValue={inputProps.defaultValue}
             onChange={onChange}
             styles={styles}
           />

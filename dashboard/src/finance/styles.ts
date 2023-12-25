@@ -6,9 +6,36 @@ export const FinanceContainer = styled.div`
 `;
 
 export const ExpenseListingContainer = styled.div`
-  height: calc(100vh - 100px);
-  overflow-y: auto;
+  height: calc(100vh - 60px);
+  overflow-y: hidden;
   border-right: 1px solid #e0e0e0;
+`;
+
+export const ExpenseFilterContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+`;
+
+export const SingleExpenseContainer = styled.div`
+  height: calc(100vh - 186px);
+  overflow-y: auto;
+`;
+
+export const ExpenseListFooter = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #e0e0e0;
+  background: #eaecf0;
+  
+`;
+
+export const ExpenseListFooterText = styled.div`
+  padding:  8px 24px;
+  color: #475467;
+  font-weight: 600;
+  font-size: 12px;
 `;
 
 export const ExpenseDetailsContainer = styled.div`
@@ -58,4 +85,14 @@ export const Status = styled.div<{ status: string }>`
     }
   }};
   border-radius: 50%;
+`;
+
+export const ActionText = styled.div`
+  font-size: 14px;
+  font-weight: 600;
+  color: #3054b9;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 `;
