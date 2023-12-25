@@ -105,7 +105,7 @@ export const SingleCard = ({
 
 // Remove after test
 
-const Card = () => {
+const ZeonWidgetCard = () => {
   const dispatch = useDispatch();
   const { widgetDetails, isOutOfOperatingHours, allOpenConversations } =
     useWidget();
@@ -136,13 +136,13 @@ const Card = () => {
 
   return (
     <>
-      {widgetDetails.behavior?.operatingHours?.enableOperatingHours &&
-      widgetDetails.behavior.operatingHours
+      {widgetDetails?.behavior?.operatingHours?.enableOperatingHours &&
+      widgetDetails?.behavior.operatingHours
         .hideNewConversationButtonWhenOffline &&
       isOutOfOperatingHours(
-        widgetDetails.behavior?.operatingHours?.operatingHours.to,
-        widgetDetails.behavior?.operatingHours?.operatingHours.from,
-        widgetDetails.behavior?.operatingHours?.timezone
+        widgetDetails?.behavior?.operatingHours?.operatingHours.to,
+        widgetDetails?.behavior?.operatingHours?.operatingHours.from,
+        widgetDetails?.behavior?.operatingHours?.timezone
       ) ? (
         <></>
       ) : (
@@ -194,7 +194,7 @@ const Card = () => {
         {" "}
         Resources{" "}
       </Text>
-      {widgetDetails.inChatWidgets.map((item) => (
+      {widgetDetails?.inChatWidgets.map((item) => (
         <SingleCard
           key={item.title + item.subTitle}
           heading={item.title}
@@ -207,4 +207,4 @@ const Card = () => {
   );
 };
 
-export default Card;
+export default ZeonWidgetCard;

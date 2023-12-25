@@ -36,8 +36,8 @@ const Header = ({ isForm }: { isForm: boolean }) => {
   return (
     <Wrapper
     //@ts-ignore
-      stroke={widgetDetails.appearance.widgetHeaderSection.strokeColor}
-      bg={widgetDetails.appearance.widgetHeaderSection.topBannerColor}
+      stroke={widgetDetails?.appearance.widgetHeaderSection.strokeColor}
+      bg={widgetDetails?.appearance.widgetHeaderSection.topBannerColor}
     >
       <IconContainer>
         <div>
@@ -45,7 +45,7 @@ const Header = ({ isForm }: { isForm: boolean }) => {
             <Avatar
               onClick={() => dispatch(setStep("initial"))}
               src={
-                widgetDetails.appearance.widgetHeaderSection.topLogo ||
+                widgetDetails?.appearance.widgetHeaderSection.topLogo ||
                 "https://zeonhq.b-cdn.net/ZeonPowered.svg"
               }
             />
@@ -54,28 +54,28 @@ const Header = ({ isForm }: { isForm: boolean }) => {
             <AiOutlineArrowLeft
               onClick={() => dispatch(setStep("initial"))}
               size={"1rem"}
-              color={widgetDetails.appearance.widgetHeaderSection.textColor}
+              color={widgetDetails?.appearance.widgetHeaderSection.textColor}
             />
           )}
         </div>
       </IconContainer>
 
       <Text
-        color={widgetDetails.appearance.widgetHeaderSection.textColor}
+        color={widgetDetails?.appearance.widgetHeaderSection.textColor}
         size="large"
         weight="bold"
       >
         {" "}
-        {widgetDetails.appearance.widgetHeaderSection.mainHeading}{" "}
+        {widgetDetails?.appearance.widgetHeaderSection.mainHeading}{" "}
       </Text>
 
       <Text
-        color={widgetDetails.appearance.widgetHeaderSection.textColor}
+        color={widgetDetails?.appearance.widgetHeaderSection.textColor}
         size="medium"
         weight="normal"
       >
         {" "}
-        {widgetDetails.appearance.widgetHeaderSection.subHeading}{" "}
+        {widgetDetails?.appearance.widgetHeaderSection.subHeading}{" "}
       </Text>
 
       {!isForm && (
@@ -87,13 +87,13 @@ const Header = ({ isForm }: { isForm: boolean }) => {
           }}
           style={{
             backgroundColor:
-              widgetDetails.appearance.newConversationButton.buttonColor,
+              widgetDetails?.appearance.newConversationButton.buttonColor,
             borderRadius: "8px",
           }}
           leftIcon={<BsChatLeftDots size={15} />}
         >
           {" "}
-          {widgetDetails.appearance.newConversationButton.title}
+          {widgetDetails?.appearance.newConversationButton.title}
         </Button>
       )}
     </Wrapper>

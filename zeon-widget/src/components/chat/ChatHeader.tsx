@@ -49,7 +49,7 @@ const ChatHeader = () => {
     dispatch(setMessage([]))
   }
 
-  let firstName = localStorage.getItem("us-firstName") || widgetDetails.behavior.widgetBehavior.agentName
+  let firstName = localStorage.getItem("us-firstName") || widgetDetails?.behavior.widgetBehavior.agentName
   firstName = firstName === "undefined" || firstName === "null" ? "Agent" : firstName
 
   let lastName = localStorage.getItem("us-lastName")
@@ -57,10 +57,10 @@ const ChatHeader = () => {
 
   return (
     //@ts-ignore
-    <Wrapper stroke={widgetDetails.appearance.widgetHeaderSection.strokeColor}  bg={widgetDetails?.appearance?.widgetHeaderSection?.topBannerColor}>
+    <Wrapper stroke={widgetDetails?.appearance.widgetHeaderSection.strokeColor}  bg={widgetDetails?.appearance?.widgetHeaderSection?.topBannerColor}>
       <IconWrapper>
         <ActionIcon size="lg" onClick={handleBackClick} radius="md" variant="outline">
-        <AiOutlineArrowLeft color={widgetDetails.appearance.widgetHeaderSection.textColor || "black"} size={"1rem"} />
+        <AiOutlineArrowLeft color={widgetDetails?.appearance.widgetHeaderSection.textColor || "black"} size={"1rem"} />
         </ActionIcon>
         
         <Box sx={{display:"flex", justifyContent:"space-between", alignItems:"center", width:"100%"}}>

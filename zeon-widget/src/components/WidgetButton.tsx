@@ -1,5 +1,5 @@
 import socketInstance from "api/socket";
-import Modal from "components/modal/Modal";
+import ZeonWidgetModal from "components/modal/ZeonWidgetModal";
 import { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { clearPrevChat, setMessage, setShowWidget, setStep } from "redux/slice";
@@ -10,7 +10,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import { notificationSound, widgetImageUrl } from "config/Config";
 import { generateRandomString } from "./hooks/commonUtils";
 
-const Wrapper = styled.div`
+const ZeonWidgetWrapper = styled.div`
   z-index: 10000000000;
   position: fixed;
   right: 15px;
@@ -82,35 +82,37 @@ const WidgetButton = () => {
     }
   }, []);
 
+  const openWidget = () => {
+    const getWidgetId = localStorage.getItem("widgetId");
+    if (getWidgetId){
+      dispatch(setShowWidget(true))
+    }else {
+      const widgetId = generateRandomString(6);
+      localStorage.setItem("widgetId", widgetId);
+      dispatch(setShowWidget(true))
+    }
+  }
+
   const dispatch = useDispatch();
-  const {showWidget,widgetDetails} = useWidget()
+  const {showWidget, widgetDetails} = useWidget();
+  
   return (
     <>
-      <Wrapper bg={widgetDetails?.appearance?.widgetButtonSetting?.widgetButtonColor} onClick={() => {
-        const getWidgetId = localStorage.getItem("widgetId");
-        if (getWidgetId){
-          dispatch(setShowWidget(true))
-        }else {
-          const widgetId = generateRandomString(6);
-          localStorage.setItem("widgetId", widgetId);
-          dispatch(setShowWidget(true))
-        }
-          
-        }}>
+      <ZeonWidgetWrapper bg={widgetDetails?.appearance?.widgetButtonSetting?.widgetButtonColor} onClick={openWidget}>
         {
           !showWidget ? (
             <img width={"35px"} src={widgetImageUrl} alt="wserstak-widget"/>
           ) : (
             <>
-            <AiOutlineClose size={"2rem"} color={widgetDetails.appearance.newConversationButton.textColor} />
+            <AiOutlineClose size={"2rem"} color={widgetDetails?.appearance.newConversationButton.textColor} />
             </>
           )
         }
         
-      </Wrapper>
+      </ZeonWidgetWrapper>
       {
         showWidget && (
-            <Modal/>
+            <ZeonWidgetModal/>
         )
       }
       <audio ref={audioPlayer} src={notificationSound} />

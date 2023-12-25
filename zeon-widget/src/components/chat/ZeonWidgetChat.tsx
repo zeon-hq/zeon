@@ -89,7 +89,7 @@ const Chat = () => {
       if (!isSubmitting) {
         socketInstance.emit("message", {
           threadId: localStorage.getItem("threadId"),
-          workspaceId: widgetDetails.workspaceId,
+          workspaceId: widgetDetails?.workspaceId,
           channelId: localStorage.getItem("usci"),
           ticketId: localStorage.getItem("ticketId"),
           message,

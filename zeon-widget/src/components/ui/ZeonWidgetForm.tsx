@@ -41,7 +41,7 @@ const Wrapper = styled.div`
   border-radius: 8px;
 `;
 
-const Form = () => {
+const ZeonWidgetForm = () => {
   const dispatch = useDispatch();
 
   const { widgetDetails, isOutOfOperatingHours } = useWidget();
@@ -63,8 +63,8 @@ const Form = () => {
       socketInstance.emit(
         "open-ticket",
         {
-          workspaceId: widgetDetails.workspaceId ,
-          channelId: widgetDetails.channelId,
+          workspaceId: widgetDetails?.workspaceId ,
+          channelId: widgetDetails?.channelId,
           customerEmail: email,
           createdAt: Date.now().toString(),
           message,
@@ -89,17 +89,17 @@ const Form = () => {
       dispatch(setStep("chat"));
       
       if(
-        widgetDetails.behavior.operatingHours.enableOperatingHours && 
+        widgetDetails?.behavior.operatingHours.enableOperatingHours && 
         isOutOfOperatingHours(
-          widgetDetails.behavior.operatingHours.operatingHours.to,
-          widgetDetails.behavior.operatingHours.operatingHours.from,
-          widgetDetails.behavior.operatingHours.timezone
+          widgetDetails?.behavior.operatingHours.operatingHours.to,
+          widgetDetails?.behavior.operatingHours.operatingHours.from,
+          widgetDetails?.behavior.operatingHours.timezone
         )
       ) {
         setTimeout(() => {
           dispatch(
             setMessage({
-              message: widgetDetails.behavior?.operatingHours.autoReplyMessageWhenOffline,
+              message: widgetDetails?.behavior?.operatingHours.autoReplyMessageWhenOffline,
               type: MessageType.RECEIVED,
               time: Date.now().toString(),
             })
@@ -109,17 +109,17 @@ const Form = () => {
             createdAt: Date.now().toString(),
             threadId: localStorage.getItem("threadId"),
             ticketId: localStorage.getItem("ticketId"),
-            workspaceId: widgetDetails.workspaceId,
+            workspaceId: widgetDetails?.workspaceId,
             channelId: localStorage.getItem("usci"),
             type: MessageType.RECEIVED,
-            message: widgetDetails.behavior?.operatingHours.autoReplyMessageWhenOffline,
+            message: widgetDetails?.behavior?.operatingHours.autoReplyMessageWhenOffline,
           })
         },3000)
-      } else if(widgetDetails.behavior?.widgetBehavior.autoReply ) {
+      } else if(widgetDetails?.behavior?.widgetBehavior.autoReply ) {
         setTimeout(() => {
           dispatch(
             setMessage({
-              message: widgetDetails.behavior?.widgetBehavior.autoReply,
+              message: widgetDetails?.behavior?.widgetBehavior.autoReply,
               type: MessageType.RECEIVED,
               time: Date.now().toString(),
             })
@@ -127,9 +127,9 @@ const Form = () => {
 
           socketInstance.emit("message", {
             threadId: localStorage.getItem("threadId"),
-            workspaceId: widgetDetails.workspaceId,
+            workspaceId: widgetDetails?.workspaceId,
             channelId: localStorage.getItem("usci"),
-            message: widgetDetails.behavior?.widgetBehavior.autoReply,
+            message: widgetDetails?.behavior?.widgetBehavior.autoReply,
             createdAt: Date.now().toString(),
             ticketId: localStorage.getItem("ticketId"),
             type: MessageType.RECEIVED,
@@ -159,7 +159,7 @@ const Form = () => {
       
       <Wrapper as={"form"} onSubmit={handleSubmit(submitForm)}>
         <Text size="medium" weight="bold">
-          {widgetDetails.behavior.widgetBehavior.emailTitle}
+          {widgetDetails?.behavior.widgetBehavior.emailTitle}
         </Text>
         <TextInput
           {...register("email", {
@@ -171,7 +171,7 @@ const Form = () => {
           })}
           type="email"
           placeholder={
-            widgetDetails.behavior.widgetBehavior.placeholderTextForEmailCapture
+            widgetDetails?.behavior.widgetBehavior.placeholderTextForEmailCapture
           }
           required
           radius={'sm'}
@@ -208,8 +208,8 @@ const Form = () => {
 
         <Button
           style={{
-            backgroundColor: `${widgetDetails.appearance?.newConversationButton?.buttonColor}`,
-            color: `${widgetDetails.appearance?.newConversationButton?.textColor}`,
+            backgroundColor: `${widgetDetails?.appearance?.newConversationButton?.buttonColor}`,
+            color: `${widgetDetails?.appearance?.newConversationButton?.textColor}`,
             borderRadius:'8px',
             // padding:'18px'
           }}
@@ -221,8 +221,9 @@ const Form = () => {
         </Button>
           </div>
       </Wrapper>
+      
     </div>
   );
 };
 
-export default Form;
+export default ZeonWidgetForm;

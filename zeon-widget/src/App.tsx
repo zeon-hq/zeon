@@ -1,33 +1,38 @@
-import './App.css';
-import WidgetButton from 'components/WidgetButton';
-import { useEffect } from 'react';
-import { getChannelById } from 'api/api';
-import { useDispatch } from 'react-redux';
-import { setWidgetDetails } from 'redux/slice';
+import { getChannelById } from "api/api";
+import ZeonWidgetModal from "components/modal/ZeonWidgetModal";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { BrowserRouter, Route, Routes, useParams } from "react-router-dom";
+import { setWidgetDetails } from "redux/slice";
+import "./App.css";
 
+function App({ widgetId }: any) {
+  const dispatch = useDispatch();
+  let { embedd_flag } = useParams();
 
-
-function App({widgetId}:any) {
-  const dispatch = useDispatch()
   const getChannel = async () => {
     try {
-      const res = await getChannelById(widgetId)
-      dispatch(setWidgetDetails(res.data.channel))
+      const res = await getChannelById("mR3D18");
+      dispatch(setWidgetDetails(res.data.channel));
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
     // get channelId from the invoke script of the widget
-    getChannel()
-  },[])
+    getChannel();
+  }, []);
 
   return (
-    <>  
-      <WidgetButton/>
+    <>
+      {/* <WidgetButton/> */}
+      <BrowserRouter>
+        <Routes>
+          <Route path="/test/:embedd_flag" element={<ZeonWidgetModal />} />
+        </Routes>
+      </BrowserRouter>
     </>
-    
   );
 }
 
