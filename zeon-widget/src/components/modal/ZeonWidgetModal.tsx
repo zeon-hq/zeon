@@ -76,14 +76,14 @@ const ZeonWidgetModal = () => {
   const wrapperRef = useRef(null);
   const { step, widgetDetails } = useWidget();
   const dispatch = useDispatch();
-  let { embedd_flag } = useParams();
+  let { channelId } = useParams();
   useOutsideAlerter(wrapperRef, () => {
     dispatch(setShowWidget(false));
   });
 
-  const getChannel = async () => {
+  const getChannel = async (channelId:string) => {
     try {
-      const res = await getChannelById("mR3D18");
+      const res = await getChannelById(channelId);
       dispatch(setWidgetDetails(res.data.channel));
       getOpenTicketData();
     } catch (error) {
@@ -93,8 +93,8 @@ const ZeonWidgetModal = () => {
 
   useEffect(() => {
     // get channelId from the invoke script of the widget
-    getChannel();
-  }, []);
+    channelId && getChannel(channelId as string);
+  }, [channelId]);
 
   // useEffect(() => {
   // getOpenTicketData();

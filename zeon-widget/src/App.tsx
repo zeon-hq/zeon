@@ -5,14 +5,15 @@ import { useDispatch } from "react-redux";
 import { BrowserRouter, Route, Routes, useParams } from "react-router-dom";
 import { setWidgetDetails } from "redux/slice";
 import "./App.css";
+import WidgetButton from "components/WidgetButton";
 
 function App({ widgetId }: any) {
   const dispatch = useDispatch();
-  let { embedd_flag } = useParams();
+  let { channelId } = useParams();
 
   const getChannel = async () => {
     try {
-      const res = await getChannelById("mR3D18");
+      const res = await getChannelById(widgetId || channelId);
       dispatch(setWidgetDetails(res.data.channel));
     } catch (error) {
       console.log(error);
@@ -26,12 +27,15 @@ function App({ widgetId }: any) {
 
   return (
     <>
-      {/* <WidgetButton/> */}
-      <BrowserRouter>
-        <Routes>
-          <Route path="/test/:embedd_flag" element={<ZeonWidgetModal />} />
-        </Routes>
-      </BrowserRouter>
+      {channelId ? (
+        <BrowserRouter>
+          <Routes>
+            <Route path="/channel/:channelId" element={<ZeonWidgetModal />} />
+          </Routes>
+        </BrowserRouter>
+      ) : (
+        <WidgetButton />
+      )}
     </>
   );
 }
