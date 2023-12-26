@@ -1,49 +1,53 @@
 export interface IFinance {
-    expense: IExpense;
-    categories: ICategory[];
-    tags: ITag[];
+  expense: IExpense;
+  categories: ICategory[];
+  tags: ITag[];
 }
 
 export interface IExpense {
-    expenseList: IExpenseDTO[];
-    selectedExpense: IExpenseDTO | null;
+  expenseList: IExpenseDTO[];
+  selectedExpense: IExpenseDTO | null;
 }
 
 export interface IExpenseDTO {
-    vendor: string;
-    expenseId: string;
-    amount: {
-        currency: string;
-        value: number;
-    };
-    invoiceDate: string;
-    invoiceNumber: string;
-    paymentDate: string;
-    tax: {
-        currency: string;
-        value: number;
-    };
-    totalAmount: {
-        currency: string;
-        value: number;
-    };
-    tags : string[];
-    categoryId: string;
-    workspaceId: string;
-    customerFields: [],
-    status: string;
+  vendor: string;
+  expenseId: string;
+  amount: {
+    currency: string;
+    value: number;
+  };
+  invoiceDate: string;
+  invoiceNumber: string;
+  paymentDate: string;
+  tax: {
+    currency: string;
+    value: number;
+  };
+  totalAmount: {
+    currency: string;
+    value: number;
+  };
+  tags: string[];
+  categoryId: string;
+  workspaceId: string;
+  customerFields: [];
+  status: string;
+  attachedDocuments: {
+    description: string;
+    url: string;
+  }[];
 }
 
 export interface ICategory {
-    _id: string;
-    name: string;
-    description: string;
-    parentCategory: string;
-    categoryId: string;
-    isDeleted: boolean;
-    workspaceId: string;
-    __v: number;
-    childCategories: ICategory[];
+  _id: string;
+  name: string;
+  description: string;
+  parentCategory: string;
+  categoryId: string;
+  isDeleted: boolean;
+  workspaceId: string;
+  __v: number;
+  childCategories: ICategory[];
 }
 /**
  * {
@@ -57,10 +61,10 @@ export interface ICategory {
  */
 
 export interface ITag {
-    _id: string;
-    name: string;
-    tagId: string;
-    isDeleted: boolean;
-    workspaceId: string;
-    __v: number;
+  _id: string;
+  name: string;
+  tagId: string;
+  isDeleted: boolean;
+  workspaceId: string;
+  __v: number;
 }

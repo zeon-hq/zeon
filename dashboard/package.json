@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@cyntler/react-doc-viewer": "^1.14.1",
     "@emotion/react": "^11.11.1",
     "@formspark/use-formspark": "^0.1.39",
     "@lottiefiles/react-lottie-player": "^3.4.7",
@@ -48,6 +49,7 @@
     "react": "^18.2.0",
     "react-chartjs-2": "^4.3.1",
     "react-dom": "^18.2.0",
+    "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.46.2",
     "react-icons": "^4.6.0",
     "react-phone-input-2": "^2.15.1",
