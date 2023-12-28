@@ -1,4 +1,4 @@
-import { Card as MTCard, Space, Text, Tooltip } from "@mantine/core";
+import { Card as MTCard, Space, Text } from "@mantine/core";
 import { MessageType } from "components/chat/Chat.types";
 import { preProcessText } from "components/hooks/commonUtils";
 import useWidget from "components/hooks/useWidget";
@@ -6,18 +6,6 @@ import { ReactNode } from "react";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 import { setEmail, setMessage, setStep } from "redux/slice";
-import {
-  Book2,
-  BrandDiscord,
-  BrandInstagram,
-  BrandLinkedin,
-  BrandSlack,
-  BrandTwitch,
-  BrandTwitter,
-  BrandYoutube,
-  Calendar,
-  Message2,
-} from "tabler-icons-react";
 
 type SingleCardProps = {
   heading: string;
@@ -107,43 +95,19 @@ export const SingleCard = ({
 
 const ZeonWidgetCard = () => {
   const dispatch = useDispatch();
-  const { widgetDetails, isOutOfOperatingHours, allOpenConversations } =
-    useWidget();
-  const iconAndNameMapping = (name: string) => {
-    switch (name) {
-      case "slack":
-        return <BrandSlack size={20} color="black" strokeWidth={1} />;
-      case "twitch":
-        return <BrandTwitch size={20} color="black" strokeWidth={1} />;
-      case "twitter":
-        return <BrandTwitter size={20} color="black" strokeWidth={1} />;
-      case "youtube":
-        return <BrandYoutube size={20} color="black" strokeWidth={1} />;
-      case "discord":
-        return <BrandDiscord size={20} color="black" strokeWidth={1} />;
-      case "instagram":
-        return <BrandInstagram size={20} color="black" strokeWidth={1} />;
-      case "calendly":
-        return <Calendar size={20} color="black" strokeWidth={1} />;
-      case "linkedin":
-        return <BrandLinkedin size={20} color="black" strokeWidth={1} />;
-      case "docs":
-        return <Book2 size={20} color="black" strokeWidth={1} />;
-      default:
-        return <Message2 size={20} color="black" strokeWidth={1} />;
-    }
-  };
+  const { widgetDetails, isOutOfOperatingHours, allOpenConversations } = useWidget();
+
+  const enableDuringOperatingHours = widgetDetails?.behavior?.operatingHours?.enableOperatingHours;
+  const hideNewConversationButtonWhenOffline = widgetDetails?.behavior?.operatingHours?.hideNewConversationButtonWhenOffline;
+  const operatingHoursToTime = widgetDetails?.behavior?.operatingHours?.operatingHours.to;
+  const operatingHoursFromTime = widgetDetails?.behavior?.operatingHours?.operatingHours.from;
+  const operatingHoursTimeZone = widgetDetails?.behavior?.operatingHours?.timezone;
+
 
   return (
     <>
-      {widgetDetails?.behavior?.operatingHours?.enableOperatingHours &&
-      widgetDetails?.behavior.operatingHours
-        .hideNewConversationButtonWhenOffline &&
-      isOutOfOperatingHours(
-        widgetDetails?.behavior?.operatingHours?.operatingHours.to,
-        widgetDetails?.behavior?.operatingHours?.operatingHours.from,
-        widgetDetails?.behavior?.operatingHours?.timezone
-      ) ? (
+      {enableDuringOperatingHours && hideNewConversationButtonWhenOffline && isOutOfOperatingHours(operatingHoursToTime, operatingHoursFromTime, operatingHoursTimeZone) 
+      ? (
         <></>
       ) : (
         <>
@@ -160,12 +124,7 @@ const ZeonWidgetCard = () => {
                 <>
                   <SingleCard
                     heading={`Ticket Number: ${data.ticketId}`}
-                    text={`${
-                      data.messages[data.messages.length - 1]?.type ===
-                      MessageType.SENT
-                        ? "You"
-                        : "Agent"
-                    } : ${messageReplaced}`}
+                    text={`${data.messages[data.messages.length - 1]?.type === MessageType.SENT ? "You" : "Agent"} : ${messageReplaced}`}
                     onClick={() => {
                       localStorage.setItem("ticketId", data.ticketId);
                       const messageDataArray = [
