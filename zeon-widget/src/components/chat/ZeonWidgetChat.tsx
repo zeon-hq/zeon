@@ -10,7 +10,7 @@ import { BsArrow90DegDown, BsChatLeftDots } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import { Message, setMessage } from "redux/slice";
 import styled from "styled-components";
-import { MessageType } from "./Chat.types";
+import { MessageType, IPropsType } from "./Chat.types";
 import ChatHeader from "./ChatHeader";
 import useEmbeddable from "../hooks/useEmbeddable";
 import { BrandingWrapper } from "components/ui-components/uStyleComponents";
@@ -26,7 +26,9 @@ const TopText = styled.div`
 `;
 
 const Wrapper = styled.div`
-  background-color: white;
+background-color: ${(props: IPropsType) => {
+  return props.theme.isEmbeddable ? 'white' :'white';
+}};
   border-radius: 12px;
   @media only screen and (max-width: 650px) {
     max-height: 100vh;

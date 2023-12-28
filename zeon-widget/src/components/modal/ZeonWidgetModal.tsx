@@ -6,7 +6,7 @@ import useWidget from "components/hooks/useWidget";
 import { BrandingWrapper } from "components/ui-components/uStyleComponents";
 import Header from "components/ui/Header";
 import ZeonWidgetCard from "components/ui/ZeonWidgetCard";
-import Form from "components/ui/ZeonWidgetForm";
+import ZeonWidgetForm from "components/ui/ZeonWidgetForm";
 import { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -127,7 +127,7 @@ const ZeonWidgetModal = () => {
                 {step === "initial" ? (
                   <ZeonWidgetCard />
                 ) : step === "form" ? (
-                  <Form />
+                  <ZeonWidgetForm />
                 ) : (
                   <p> {step} </p>
                 )}

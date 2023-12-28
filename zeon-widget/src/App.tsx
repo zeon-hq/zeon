@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Routes, useParams } from "react-router-dom";
 import { setWidgetDetails } from "redux/slice";
 import "./App.css";
 import WidgetButton from "components/WidgetButton";
+import ZThemeProvider from "components/provider/ZThemeProvider";
 
 function App({ widgetId }: any) {
   const dispatch = useDispatch();
@@ -27,12 +28,14 @@ function App({ widgetId }: any) {
 
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/channel/:channelId" element={<ZeonWidgetModal />} />
-          <Route path="/" element={<WidgetButton />} />
-        </Routes>
-      </BrowserRouter>
+      <ZThemeProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/channel/:channelId" element={<ZeonWidgetModal />} />
+            <Route path="/" element={<WidgetButton />} />
+          </Routes>
+        </BrowserRouter>
+      </ZThemeProvider>
     </>
   );
 }
