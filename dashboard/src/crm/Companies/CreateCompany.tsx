@@ -53,7 +53,7 @@ function CreateCompanies() {
 
   return (
     <form onSubmit={form.onSubmit((values) => console.log(values))}>
-      <Group m="lg" pt={20} position="apart">
+      <Group m="lg" position="apart">
       <Flex
           align={"center"}
           gap={8}

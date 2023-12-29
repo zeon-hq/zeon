@@ -79,7 +79,7 @@ import {
     return (
       <Container>
         <LeftContainer>
-          <Group my="lg" pt={20} position="apart">
+          <Group my="lg" position="apart">
             <BackButton align="center" gap={8} onClick={handleBack}>
               <Image
                 maw={16}

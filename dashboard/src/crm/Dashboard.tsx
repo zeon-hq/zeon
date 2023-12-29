@@ -2,8 +2,12 @@ import { Box, Flex, Button, Image } from "@mantine/core";
 import styled from "styled-components";
 import companyIcon from "assets/companies.svg";
 import contactIcon from "assets/contacts.svg";
+import { setSelectedCompanyPage, setSelectedContactPage, setSelectedPage } from "reducer/crmSlice";
+import { useDispatch } from "react-redux";
 
 function Dashboard() {
+  const dispatch = useDispatch();
+
   const Heading = styled.h1`
     font-size: 28px;
     font-weight: 600;
@@ -14,8 +18,18 @@ function Dashboard() {
       linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
   `;
 
+  const handleAddCompany = () => {
+    dispatch(setSelectedPage({ type: "companies" }));
+    dispatch(setSelectedCompanyPage({ type: "create" }));
+  }
+
+  const handleAddContact = () => {
+    dispatch(setSelectedPage({ type: "contacts" }));
+    dispatch(setSelectedContactPage({ type: "create" }));
+  }
+
   return (
-    <Flex justify="space-between" align="center">
+    <Flex justify="space-between" mx={10} align="center">
       <Heading>Welcome back, Aryan</Heading>
       <Box>
         <Button
@@ -40,6 +54,7 @@ function Dashboard() {
           }
           color="dark"
           variant="outline"
+          onClick={handleAddCompany}
         >
           Add Company
         </Button>
@@ -53,7 +68,6 @@ function Dashboard() {
             paddingLeft: "14px",
             border: "1px solid #D0D5DD",
             paddingRight: "14px",
-            marginRight: "10px",
           }}
           radius="xs"
           size="xs"
@@ -66,6 +80,7 @@ function Dashboard() {
           }
           color="dark"
           variant="outline"
+          onClick={handleAddContact}
         >
           Add Contact
         </Button>

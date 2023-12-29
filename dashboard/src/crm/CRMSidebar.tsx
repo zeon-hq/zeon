@@ -1,4 +1,4 @@
-import { LoadingOverlay, Navbar, Space } from "@mantine/core"
+import { LoadingOverlay, Navbar } from "@mantine/core"
 import channelCreate from "assets/channelCreate.svg"
 import SubscribeModal from "components/Billing/SubscribeModal"
 import PanelLabel from "components/widget/PanelLabel"
@@ -26,7 +26,7 @@ const MainWrapper = styled.div`
 `
 
 const CRMSidebar = ({ workspaceId }: { workspaceId: string }) => {
-  const { channel, loading, workspaceInfo } = useDashboard()
+  const { loading, workspaceInfo } = useDashboard()
   const dispatch = useDispatch()
 
   const { selectedPage } = useCrm();
@@ -42,7 +42,7 @@ const CRMSidebar = ({ workspaceId }: { workspaceId: string }) => {
       onClick: () => {handleSidebarOptionClick("dashboard")},
     },
     {
-      label: "Contact",
+      label: "Contacts",
       icon: contactIcon,
       onClick: () => {handleSidebarOptionClick("contacts")},
     },
@@ -91,6 +91,7 @@ const CRMSidebar = ({ workspaceId }: { workspaceId: string }) => {
                 onClick={item.onClick}
                 icon={item.icon}
                 label={item.label}
+                selected={selectedPage.type === item.label.toLowerCase()}
               />
             )
           })}
