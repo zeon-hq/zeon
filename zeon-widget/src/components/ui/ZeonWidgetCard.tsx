@@ -6,6 +6,12 @@ import { ReactNode } from "react";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 import { setEmail, setMessage, setStep } from "redux/slice";
+import styled from "styled-components";
+import { IPropsType } from "components/chat/Chat.types";
+
+const WholeWrapper = styled.div`
+${(props: IPropsType) => props.theme.isEmbeddable ? 'height: 100%;' : ''}
+`;
 
 type SingleCardProps = {
   heading: string;
@@ -106,6 +112,7 @@ const ZeonWidgetCard = () => {
 
   return (
     <>
+    <WholeWrapper>
       {enableDuringOperatingHours && hideNewConversationButtonWhenOffline && isOutOfOperatingHours(operatingHoursToTime, operatingHoursFromTime, operatingHoursTimeZone) 
       ? (
         <></>
@@ -162,6 +169,7 @@ const ZeonWidgetCard = () => {
           textColor={"black"}
         />
       ))}
+      </WholeWrapper>
     </>
   );
 };

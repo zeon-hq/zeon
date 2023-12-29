@@ -20,7 +20,7 @@ const Wrapper = styled.div`
   max-height: ${(props: IPropsType) => {
     return props.theme.isEmbeddable ? '100%' :'70vh';
   }};
-  /* overflow-y:auto; */
+  ${(props: IPropsType) => props.theme.isEmbeddable ? 'height: 100%;' : ''}
   border: 1px solid #eaecf0;
   border-radius: 12px;
   box-shadow: 0px 8px 8px -4px rgba(16, 24, 40, 0.03),
@@ -83,6 +83,7 @@ const Wrapper = styled.div`
 const Info = styled.div`
   padding: 10px 20px 20px;
   gap: 10px;
+  ${(props: IPropsType) => props.theme.isEmbeddable ? 'height: 100%;' : ''}
   border-radius: 12px;
   max-height: ${(props: IPropsType) => {
     return props.theme.isEmbeddable ? '100%' :'47vh';
