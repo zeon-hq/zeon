@@ -84,8 +84,12 @@ const ZeonWidgetModal = () => {
   const getChannel = async (channelId:string) => {
     try {
       const res = await getChannelById(channelId);
-      dispatch(setWidgetDetails(res.data.channel));
-      getOpenTicketData();
+      if (res.status != 200) {
+        dispatch(setWidgetDetails(res.data.channel));
+        getOpenTicketData();
+      } else {
+        // Handle Error here
+      }
     } catch (error) {
       console.log(error);
     }
@@ -96,9 +100,6 @@ const ZeonWidgetModal = () => {
     channelId && getChannel(channelId as string);
   }, [channelId]);
 
-  // useEffect(() => {
-  // getOpenTicketData();
-  // }, []);
 
   const getOpenTicketData = async () => {
     const getWidgetId: any = localStorage.getItem("widgetId");
