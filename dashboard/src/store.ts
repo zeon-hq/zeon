@@ -1,12 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 import dashboardReducer from "reducer/slice"
 import financeReducer from "reducer/financeSlice"
-
+import crmReducer from "reducer/crmSlice"
 
 export const store = configureStore({
   reducer:{
     dashboard:dashboardReducer,
-    finance:financeReducer
+    finance:financeReducer,
+    crm: crmReducer,
   } 
 })
 
