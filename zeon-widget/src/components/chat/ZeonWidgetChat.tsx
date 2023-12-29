@@ -6,14 +6,12 @@ import MessageCard from "components/ui/MessageCard";
 import EmojiPicker from "emoji-picker-react";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { BsArrow90DegDown, BsChatLeftDots } from "react-icons/bs";
+import { BsArrow90DegDown } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import { Message, setMessage } from "redux/slice";
 import styled from "styled-components";
 import { MessageType, IPropsType } from "./Chat.types";
 import ChatHeader from "./ChatHeader";
-import useEmbeddable from "../hooks/useEmbeddable";
-import { BrandingWrapper } from "components/ui-components/uStyleComponents";
 
 const TopText = styled.div`
   background: #f2f4f7;

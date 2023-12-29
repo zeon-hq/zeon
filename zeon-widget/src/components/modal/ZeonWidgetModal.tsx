@@ -1,5 +1,6 @@
 import { Text } from "@mantine/core";
 import { getChannelById, getOpenTicket } from "api/api";
+import { IPropsType } from "components/chat/Chat.types";
 import ZeonWidgetChat from "components/chat/ZeonWidgetChat";
 import useEmbeddable, { IEmbeddableOutput } from "components/hooks/useEmbeddable";
 import useOutsideAlerter from "components/hooks/useOutsideAlerter";
@@ -10,45 +11,69 @@ import ZeonWidgetCard from "components/ui/ZeonWidgetCard";
 import ZeonWidgetForm from "components/ui/ZeonWidgetForm";
 import { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
 import { setAllOpenConversations, setShowWidget, setWidgetDetails } from "redux/slice";
 import styled from "styled-components";
 const Wrapper = styled.div`
-  /* TODO: Discuss with ajay if we need fixed height or thr height should depend upon content */
-  /* height: 92vh; */
-  width: 480px;
-  max-height: 70vh;
+  width: ${(props: IPropsType) => {
+    return props.theme.isEmbeddable ? '100%' :'480px';
+  }};
+  max-height: ${(props: IPropsType) => {
+    return props.theme.isEmbeddable ? '100%' :'70vh';
+  }};
   /* overflow-y:auto; */
   border: 1px solid #eaecf0;
   border-radius: 12px;
   box-shadow: 0px 8px 8px -4px rgba(16, 24, 40, 0.03),
     0px 20px 24px -4px rgba(16, 24, 40, 0.08);
   position: fixed;
-  right: 16px;
-  bottom: 12vh;
+  right: ${(props: IPropsType) => {
+    return props.theme.isEmbeddable ? '0px' :'16px';
+  }};
+  bottom: ${(props: IPropsType) => {
+    return props.theme.isEmbeddable ? '0vh' :'12vh';
+  }};
   z-index: 100000000000;
   display: flex;
   flex-direction: column;
 
   @media only screen and (max-width: 1300px) {
-    width: 480px;
+    ${(props: IPropsType) => props.theme.isEmbeddable ? 'height: 100%;' : ''}
+    width: ${(props: IPropsType) => {
+      return props.theme.isEmbeddable ? '100%' :'480px';
+    }};
+  }
+
+  @media only screen and (min-width: 1301px) {
+    ${(props: IPropsType) => props.theme.isEmbeddable ? 'height: 100%;' : ''}
+    ${(props: IPropsType) => props.theme.isEmbeddable ? 'width: 100%;' : ''}
   }
 
   @media only screen and (max-width: 1024px) {
-    width: 480px;
+    ${(props: IPropsType) => props.theme.isEmbeddable ? 'height: 100%;' : ''}
+    width: ${(props: IPropsType) => {
+      return props.theme.isEmbeddable ? '100%' :'480px';
+    }};
   }
 
   @media only screen and (max-width: 650px) {
-    width: 80vw;
-    height: 100vh;
+    width: ${(props: IPropsType) => {
+      return props.theme.isEmbeddable ? '100%' :'80vw';
+    }};
+    height: ${(props: IPropsType) => {
+      return props.theme.isEmbeddable ? '100%' :'100vh';
+    }};
     position: fixed;
     right: 0px;
     bottom: 0px;
   }
 
   @media only screen and (max-width: 500px) {
-    width: 100vw;
-    height: 100vh;
+    width: ${(props: IPropsType) => {
+      return props.theme.isEmbeddable ? '100vw' :'100%';
+    }};
+    height: ${(props: IPropsType) => {
+      return props.theme.isEmbeddable ? '100vh' :'100%';
+    }};
     position: fixed;
     right: 0px;
     bottom: 0px;
@@ -59,17 +84,23 @@ const Info = styled.div`
   padding: 10px 20px 20px;
   gap: 10px;
   border-radius: 12px;
-  max-height: 47vh;
+  max-height: ${(props: IPropsType) => {
+    return props.theme.isEmbeddable ? '100%' :'47vh';
+  }};
   overflow: auto;
   background: white;
   /* border-radius: 8px; */
 
   @media only screen and (max-width: 650px) {
-    height: 100vh;
+    height: ${(props: IPropsType) => {
+      return props.theme.isEmbeddable ? '100%' :'100vh';
+    }};
   }
 
   @media only screen and (max-width: 500px) {
-    height: 100vh;
+    height: ${(props: IPropsType) => {
+      return props.theme.isEmbeddable ? '100%' :'100vh';
+    }};
   }
 `;
 
