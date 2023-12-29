@@ -1,12 +1,18 @@
 import {
     Box,
+    Button,
+    Flex,
     Group,
+    Image,
+    Text,
     Textarea, // Import Textarea component from @mantine/core
     TextInput
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDispatch } from "react-redux";
-import { setSelectedContactPage } from "reducer/crmSlice";
+import { setSelectedCompanyPage } from "reducer/crmSlice";
+import userPlus from "assets/userPlusWhite.svg";
+import leftArrowIcon from "assets/leftArrow.svg";
 
 function CreateCompanies() {
   const dispatch = useDispatch();
@@ -42,13 +48,64 @@ function CreateCompanies() {
   };
 
   const handleBack = () => {
-    dispatch(setSelectedContactPage({ type: "all" }));
+    dispatch(setSelectedCompanyPage({ type: "all" }));
   };
 
   return (
     <form onSubmit={form.onSubmit((values) => console.log(values))}>
       <Group m="lg" pt={20} position="apart">
-        {/* ... Existing code for back button and Add Contact button */}
+      <Flex
+          align={"center"}
+          gap={8}
+          onClick={handleBack}
+          style={{
+            cursor: "pointer",
+          }}
+        >
+          <Image
+            maw={16}
+            color="#FFFFFF"
+            mx="auto"
+            src={leftArrowIcon}
+            alt="back"
+          />
+          <Text size={14} weight={600} color="#3054B9">
+            Companies
+          </Text>
+          <Text size={14} weight={600} color="#3054B9">
+            /
+          </Text>
+          <Text size={14} weight={600}>
+            Create
+          </Text>
+        </Flex>
+        <Button
+          type="submit"
+          style={{
+            borderRadius: "8px",
+            paddingTop: "8px",
+            paddingBottom: "8px",
+            color: "#FFFFFF",
+            paddingLeft: "14px",
+            border: "1px solid #3C69E7",
+            paddingRight: "14px",
+            marginRight: "10px",
+            background: "#3C69E7",
+          }}
+          radius="xs"
+          size="xs"
+          fw={600}
+          fs={{
+            fontSize: "14px",
+          }}
+          leftIcon={
+            <Image maw={15} mx="auto" src={userPlus} alt="add contact" />
+          }
+          color="dark"
+          variant="outline"
+        >
+          Add Contact
+        </Button>
       </Group>
       <Box mx="auto" mt="md" maw={452}>
         {/* ... Existing code for First Name, Last Name, Email, Phone, LinkedIn, etc. */}

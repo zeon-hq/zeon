@@ -79,7 +79,7 @@ function ContactsDetails() {
   return (
     <Container>
       <LeftContainer>
-        <Group my="lg" pt={20} position="apart">
+        <Group my="lg" position="apart">
           <BackButton align="center" gap={8} onClick={handleBack}>
             <Image
               maw={16}
@@ -95,7 +95,7 @@ function ContactsDetails() {
               /
             </Text>
             <Text size={14} weight={600}>
-              Create
+              Aryan
             </Text>
           </BackButton>
         </Group>
@@ -141,7 +141,7 @@ function ContactsDetails() {
       </LeftContainer>
 
       <RightContainer>
-        <Group my="lg" pt={20} position="left">
+        <Group my="lg" position="left">
           <Button
             style={{
               borderRadius: "8px",

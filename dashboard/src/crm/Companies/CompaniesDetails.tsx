@@ -16,7 +16,7 @@ import {
   import phoneIcon from "assets/phoneCall.svg";
   import plusIcon from "assets/plus.svg";
   import { useDispatch } from "react-redux";
-  import { setSelectedContactPage } from "reducer/crmSlice";
+  import { setSelectedCompanyPage } from "reducer/crmSlice";
   import styled from "styled-components";
   import Stepper, { StepType } from "../Stepper";
   
@@ -56,7 +56,7 @@ import {
     const dispatch = useDispatch();
   
     const handleBack = () => {
-      dispatch(setSelectedContactPage({ type: "all" }));
+      dispatch(setSelectedCompanyPage({ type: "all" }));
     };
   
     const stepsData = [
@@ -89,13 +89,13 @@ import {
                 alt="back"
               />
               <Text size={14} weight={600} color="#3054B9">
-                Contacts
+                Companies
               </Text>
               <Text size={14} weight={600} color="#3054B9">
                 /
               </Text>
               <Text size={14} weight={600}>
-                Create
+                Zeon
               </Text>
             </BackButton>
           </Group>

@@ -23,7 +23,7 @@ function Contacts() {
   
     return (
       <>
-        <Box h="100vh" mt={"40px"} bg={"white"}>
+        <Box h="100vh" bg={"white"}>
             {getPage(type)}
         </Box>
       </>
