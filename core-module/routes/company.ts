@@ -5,7 +5,8 @@ import {
     getCompanyController,
     editCompanyController,
     deleteCompanyController,
-    bulkDeleteCompanyController
+    bulkDeleteCompanyController,
+    addNoteToCompanyController
 } from "../controller/company"
 
 
@@ -26,6 +27,9 @@ router.delete("/:companyId", deleteCompanyController)
 
 // Bulk delete company by companyIs
 router.delete("/", bulkDeleteCompanyController)
+
+// add note to company
+router.put("/:companyId/notes", addNoteToCompanyController)
 
 
 

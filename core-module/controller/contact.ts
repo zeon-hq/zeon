@@ -5,6 +5,7 @@ import {
     updateContact,
     getAllContacts,
     getContact,
+    addNoteToContact,
 } from "../functions/contact"
 
 export const createContactController = async (req: Request, res: Response) => {
@@ -117,6 +118,32 @@ export const deleteContactController = async (req: Request, res: Response) => {
       }
 
     const contact = await deleteContact(contactId)
+    return res.status(200).json({
+      success: true,
+      data: contact,
+    })
+  } catch (error) {
+    console.log(error)
+    throw {
+      code: 500,
+      message: error,
+      error,
+    }
+  }
+}
+
+export const addNoteToContactController = async (req: Request, res: Response) => {
+  try {
+    const {  note } = req.body
+    const { contactId } = req.params
+    if (!contactId)
+      throw {
+        code: 500,
+        message: "Invalid contactId",
+        error: "Invalid contactId",
+      }
+
+    const contact = await addNoteToContact(contactId, note)
     return res.status(200).json({
       success: true,
       data: contact,

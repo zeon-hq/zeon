@@ -36,6 +36,7 @@ export default interface Contacts {
   workspaceId: string;
   contactId: string;
   isDeleted: boolean;
+  notes?: string[];
 }
 
 const schema = new Schema<Contacts>(
@@ -143,8 +144,13 @@ const schema = new Schema<Contacts>(
     },
     isDeleted: {
         type: Schema.Types.Boolean,
-        required: true,
+        required: false,
         default: false,
+    },
+    notes: {
+        type: [Schema.Types.String],
+        required: false,
+        default: [],
     },
   },
   {

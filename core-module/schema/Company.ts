@@ -64,6 +64,7 @@ export enum CompanySize {
     companyId: string;
     workspaceId: string;
     isDeleted: boolean;
+    notes?: string[];
   }
 
 const schema = new Schema<Company>(
@@ -72,6 +73,11 @@ const schema = new Schema<Company>(
       type: Schema.Types.String,
       required: true,
       maxlength: 500,
+    },
+    notes: {
+      type: [Schema.Types.String],
+      required: false,
+      default: [],
     },
     description: {
       type: Schema.Types.String,
@@ -150,7 +156,7 @@ const schema = new Schema<Company>(
     },
     isDeleted: {
         type: Schema.Types.Boolean,
-        required: true,
+        required: false,
         default: false,
     }
     },

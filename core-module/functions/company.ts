@@ -157,3 +157,47 @@ export const deleteCompany = async (companyId: string) => {
     }
   }
 }
+
+export const addNoteToCompany = async (companyId: string, note: string) => {
+  try {
+    if (!companyId)
+      throw {
+        code: 500,
+        message: "Invalid companyId",
+        error: "Invalid companyId",
+      }
+
+    if (!note)
+      throw {
+        code: 500,
+        message: "Invalid note",
+        error: "Invalid note",
+      }
+
+    const company = await CompanyModel.findOne({ companyId, isDeleted: false })
+    if (!company) {
+      throw {
+        code: 500,
+        message: "Invalid companyId",
+        error: "Invalid companyId",
+      }
+    }
+
+    company.notes.push(note)
+
+    const updated_at = new Date()
+
+    company.updated_at = updated_at
+
+    await company.save()
+
+    return company
+  } catch (error) {
+    console.log(error)
+    throw {
+      code: 500,
+      message: error,
+      error,
+    }
+  }
+}
