@@ -78,6 +78,8 @@ function MyDropzone({ callback }: { callback: (data: any) => void }) {
       // pdf
       "application/pdf": [".pdf"],
     },
+    // max size is 5mb
+    maxSize: 5242880,
   })
 
   return (
