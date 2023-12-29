@@ -35,6 +35,7 @@ export interface IExpenseDTO {
   attachedDocuments: {
     description: string;
     url: string;
+    key : string;
   }[];
 }
 

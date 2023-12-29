@@ -23,6 +23,8 @@ import expenseIcon from "assets/line-chart-down-03.svg";
 import incomeIcon from "assets/file-x-02.svg"
 import contactIcon from "assets/user-square.svg"
 import companyIcon from "assets/bank.svg"
+import { setSelectedExpense } from "reducer/financeSlice"
+import { useNavigate } from "react-router"
 const MainWrapper = styled.div`
   height: calc(100vh - 62px);
   overflow: auto;
@@ -94,6 +96,8 @@ const navItems = [
 
 const FinanceSidebar = ({ workspaceId }: { workspaceId: string }) => {
   const { channel, loading, workspaceInfo } = useDashboard();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const isWorkSpaceEmpty = !!_.isEmpty(workspaceInfo);
 
@@ -122,7 +126,10 @@ const FinanceSidebar = ({ workspaceId }: { workspaceId: string }) => {
             <PanelLabel
               labelTitle="General"
               icon={channelCreate}
-              iconOnClick={() => {}}
+              iconOnClick={() => {
+                dispatch(setSelectedExpense(null))
+                navigate(`/finance/${workspaceId}`)
+              }}
             />
           </SideBarInnerWrapper>
           {navItems.map((item, index) => {

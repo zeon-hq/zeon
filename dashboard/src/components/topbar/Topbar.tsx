@@ -63,6 +63,10 @@ const getUserWorkspaces = async () => {
                   <Pill label="Finance" onClick={() => { 
                       navigate(`/finance/${workspaceId}`)
                   }} />
+                  <Pill label="CRM" onClick={() => {
+                        navigate(`/crm/${workspaceId}`)
+                    }
+                    } />
           </TopBarDivWrapper>
           <InnerDivWrapper>
           <Text

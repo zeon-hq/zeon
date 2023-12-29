@@ -57,8 +57,15 @@ export const financeSlice = createSlice({
             state.expense.expenseList= action.payload;
             state.expense.selectedExpense = action.payload[0] || null;
         },
-        setSelectedExpense: (state, action: PayloadAction<IExpenseDTO>) => {
+        setSelectedExpense: (state, action: PayloadAction<IExpenseDTO | null>) => {
             state.expense.selectedExpense = action.payload;
+        },
+        updatedSelectedExpense: (state, action: PayloadAction<{
+            key: string;
+            value: any;
+        }>) => {
+            // @ts-ignore
+            state.expense.selectedExpense[action.payload.key] = action.payload.value;
         }
     },
     extraReducers: (builder) => { 
@@ -82,6 +89,6 @@ export const financeSlice = createSlice({
     }
 })
 
-export const { setExpenseList, setSelectedExpense } = financeSlice.actions;
+export const { setExpenseList, setSelectedExpense,updatedSelectedExpense } = financeSlice.actions;
 export default financeSlice.reducer;
 

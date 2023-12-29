@@ -41,6 +41,15 @@ export async function createExpense(data: IExpenseDTO) {
   }
 }
 
+export async function updateExpense({data, expenseId}:{data: IExpenseDTO, expenseId: string}) {
+  try {
+    const res = await axiosInstance.put(`${financeApiDomain}/expense/${expenseId}`, data);
+    return res.data;
+  } catch (error) {
+    return {};
+  }
+}
+
 export const getAllExpenses = async (workspaceId: string) => {
   try {
     const res = await axiosInstance.get(`${financeApiDomain}/expense/${workspaceId}`);

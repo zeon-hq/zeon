@@ -81,7 +81,7 @@ const ZCurrency = ({
       );
       setValue(`${name}.currency`, defaultValue.currency);
     }
-  }, []);
+  }, [defaultValue, name, setValue]);
 
   const handleCurrencyChange = (value: string) => setCurrency(value);
  console.log(error)

@@ -1,70 +1,121 @@
-import { Space } from "@mantine/core";
-import { notifications, showNotification } from "@mantine/notifications";
-import ZActionText from "components/ui-components/Button/ZActionText";
-import ZCurrency from "components/ui-components/common/ZCurrency";
-import ZDate from "components/ui-components/common/ZDate";
-import ZSelect from "components/ui-components/common/ZSelect";
-import ZTextInput from "components/ui-components/common/ZTextInput";
-import ZInput from "components/ui-components/common/ZTextInput";
-import { createExpense, deleteExpense } from "finance/FinanceService";
-import { ExpenseDetailsContainer } from "finance/styles";
-import { ICategory, ITag } from "finance/type";
-import useFinance from "finance/useFinance";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
-import { useParams } from "react-router";
-import { initFinance } from "reducer/financeSlice";
-import { Trash } from "tabler-icons-react";
+import { Button, Space } from "@mantine/core"
+import { notifications, showNotification } from "@mantine/notifications"
+import ZActionText from "components/ui-components/Button/ZActionText"
+import ZCurrency from "components/ui-components/common/ZCurrency"
+import ZDate from "components/ui-components/common/ZDate"
+import ZSelect from "components/ui-components/common/ZSelect"
+import ZTextInput from "components/ui-components/common/ZTextInput"
+import ZInput from "components/ui-components/common/ZTextInput"
+import {
+  createExpense,
+  deleteExpense,
+  updateExpense,
+} from "finance/FinanceService"
+import { ExpenseDetailsContainer } from "finance/styles"
+import { ICategory, ITag } from "finance/type"
+import useFinance from "finance/useFinance"
+import moment from "moment"
+import { useEffect } from "react"
+import { useForm } from "react-hook-form"
+import { useDispatch } from "react-redux"
+import { useNavigate, useParams } from "react-router"
+import { initFinance, setSelectedExpense } from "reducer/financeSlice"
+import { Trash } from "tabler-icons-react"
 
-type Props = {};
+type Props = {}
 
 const ExpenseDetails = (props: Props) => {
-  const { selectedExpense, tags, categories, getFlatCategories } = useFinance();
-  const dispatch = useDispatch();
+  const { selectedExpense, tags, categories, getFlatCategories } = useFinance()
+  const dispatch = useDispatch()
   const {
     control,
     setValue,
     handleSubmit,
     setError,
+    reset,
     formState: { errors },
-  } = useForm({
-    defaultValues: {
-      ...selectedExpense,
-      amount: selectedExpense?.totalAmount?.value || "",
-      tax: selectedExpense?.tax?.value || "",
-      invoiceDate: selectedExpense?.invoiceDate || "",
-      paymentDate: selectedExpense?.paymentDate || "",
-      status: selectedExpense?.status || "unpaid",
-      category: selectedExpense?.categoryId || "",
-      tags:
-        selectedExpense?.tags?.map((tag: any) => ({
-          label: tag,
-          value: tag,
-        })) || [],
-      vendor: selectedExpense?.vendor || "",
-    },
-  });
-  const { workspaceId } = useParams<{ workspaceId: string }>();
+  } = useForm() 
+  const navigate = useNavigate()
+
+  const categoryOptions = getFlatCategories(categories || [])
+  useEffect(() => {
+    if (selectedExpense) {
+      const categoryDefaultValue = categoryOptions.find(
+        (option: any) => option.value === selectedExpense?.categoryId
+      )
+      reset({
+        ...selectedExpense,
+        invoiceNumber: selectedExpense.invoiceNumber || "",
+        amount: {
+          //@ts-ignore
+          value: selectedExpense.amount?.value || "",
+          currency: selectedExpense.amount?.currency || "USD",
+        },
+        tax: {
+          //@ts-ignore
+          value: selectedExpense.tax?.value || "",
+          currency: selectedExpense.tax?.currency || "USD",
+        },
+        invoiceDate: new Date(selectedExpense?.invoiceDate) || new Date(),
+        paymentDate: new Date(selectedExpense?.paymentDate) || new Date(),
+        status: {
+          label: selectedExpense?.status || "unpaid",
+          value: selectedExpense?.status || "unpaid",
+        },
+        category: categoryDefaultValue,
+        tags:
+          selectedExpense?.tags?.map((tag: any) => ({
+            label: tag,
+            value: tag,
+          })) || [],
+        vendor: selectedExpense.vendor || "",
+      })
+    } else {
+      reset({
+        invoiceNumber: "",
+        amount: {
+          value: "",
+          currency: "USD",
+        },
+        tax: {
+          value: "",
+          currency: "USD",
+        },
+        invoiceDate: null,
+        paymentDate: null,
+        status: {
+          label: "unpaid",
+          value: "unpaid",
+        },
+        category: "",
+        tags: [],
+        vendor: "",
+      })
+    }
+  }, [selectedExpense, reset])
+
+  const { workspaceId } = useParams<{ workspaceId: string }>()
 
   const onSubmit = async (data: any) => {
-    console.log(data);
+    console.log(data)
     // get value of category
-    const category = data?.category?.value || "";
+    const category = data?.category?.value || ""
     // gwt value of tags
-    const tags = data?.tags?.map((tag: any) => tag.value) || [];
+    const tags = data?.tags?.map((tag: any) => tag.value) || []
     // get vendor
-    const vendor = data?.vendor?.value || "";
-    const status = data?.status?.value || "unpaid";
-    delete data.category;
+    const vendor = data?.vendor?.value || ""
+    const status = data?.status?.value || "unpaid"
+    delete data.category
+    const attachedDocuments = selectedExpense?.attachedDocuments || []
+    delete data.totalAmount
 
     // check if amount.currency and tax.currency are same
     if (data.amount.currency !== data.tax.currency) {
       setError("tax", {
         type: "manual",
         message: "Currency of amount and tax should be same",
-      });
-      return;
+      })
+      return
     }
 
     const expenseData = {
@@ -74,63 +125,93 @@ const ExpenseDetails = (props: Props) => {
       vendor,
       workspaceId,
       status,
-    };
+      attachedDocuments,
+    }
 
     try {
-      const res = await createExpense(expenseData);
-      //@ts-ignore
-      dispatch(initFinance({ workspaceId }));
-      console.log(res);
+      if (!selectedExpense) {
+        const res = await createExpense(expenseData)
+        showNotification({
+          title: "Success",
+          message: "Expense created successfully",
+          color: "green",
+        })
+        //@ts-ignore
+        dispatch(initFinance({ workspaceId }))
+      } else {
+        //@ts-ignore
+        const res = await updateExpense({
+          data: expenseData,
+          expenseId: selectedExpense?.expenseId,
+        })
+        //@ts-ignore
+        dispatch(initFinance({ workspaceId }))
+        showNotification({
+          title: "Success",
+          message: "Expense updated successfully",
+          color: "green",
+        })
+      }
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
-  };
+  }
 
   const onDelete = async () => {
-    console.log("delete");
+    console.log("delete")
     if (!selectedExpense?.expenseId) {
       showNotification({
         title: "Error",
         message: "Expense not selected",
         color: "red",
-      });
+      })
 
-      return;
+      return
     }
     try {
-      const res = await deleteExpense(selectedExpense?.expenseId);
+      const res = await deleteExpense(selectedExpense?.expenseId)
+      dispatch(setSelectedExpense(null))
+      navigate(`/finance/${workspaceId}`)
       //@ts-ignore
-      dispatch(initFinance({ workspaceId }));
+      dispatch(initFinance({ workspaceId }))
       showNotification({
         title: "Success",
         message: "Expense deleted successfully",
         color: "green",
-      });
+      })
     } catch (error) {
-      console.log(error);
+      console.log(error)
       showNotification({
         title: "Error",
         message: "Something went wrong",
         color: "red",
-      });
+      })
     }
-  };
-
-  const categoryOptions = getFlatCategories(categories || []);
-  const categoryDefaultValue = categoryOptions.find(
-    (option: any) => option.value === selectedExpense?.categoryId
-  )
+  }
 
   const tagOptions = tags.map((tag: ITag) => ({
     label: tag.name,
     value: tag.name,
-  }));
-  const tagDefaultValue = selectedExpense?.tags?.map((tag: any) => ({
-    label: tag,
-    value: tag,
-  })) || []
+  }))
+  const tagDefaultValue =
+    selectedExpense?.tags?.map((tag: any) => ({
+      label: tag,
+      value: tag,
+    })) || []
 
-  useEffect(() => {}, [selectedExpense]);
+  useEffect(() => {}, [selectedExpense])
+
+  useEffect(() => {
+    if (selectedExpense) {
+      setValue(
+        "tags",
+        selectedExpense.tags?.map((tag: any) => ({
+          label: tag,
+          value: tag,
+        })) || []
+      )
+    }
+  }, [selectedExpense, setValue])
 
   return (
     <ExpenseDetailsContainer as="form">
@@ -144,10 +225,6 @@ const ExpenseDetails = (props: Props) => {
             { label: "Vendor 1", value: "vendor1" },
             { label: "Vendor 2", value: "vendor2" },
           ],
-          defaultValue: {
-            label: selectedExpense?.vendor,
-            value: selectedExpense?.vendor,
-          },
         }}
         formProps={{
           name: "vendor",
@@ -160,13 +237,13 @@ const ExpenseDetails = (props: Props) => {
           label: "Invoice Number",
           placeholder: "Invoice Number",
           required: true,
-          defaultValue: selectedExpense?.invoiceNumber || "",
+          // defaultValue: selectedExpense?.invoiceNumber || "",
         }}
         formProps={{
           name: "invoiceNumber",
           control,
-          defaultValue: selectedExpense?.invoiceNumber || "",
-          error: errors?.invoiceNumber?.message || "",
+          // defaultValue: selectedExpense?.invoiceNumber || "",
+          error: (errors?.invoiceNumber?.message as string) || "",
           rules: {
             required: "Invoice Number is required",
           },
@@ -180,7 +257,7 @@ const ExpenseDetails = (props: Props) => {
           required: true,
 
           //@ts-ignore
-          defaultValue: new Date(selectedExpense?.invoiceDate) || null,
+          // defaultValue: new Date(selectedExpense?.invoiceDate) || null,
         }}
         formProps={{
           name: "invoiceDate",
@@ -197,7 +274,7 @@ const ExpenseDetails = (props: Props) => {
           placeholder: "Payment Date",
           required: true,
           //@ts-ignore
-          defaultValue: new Date(selectedExpense?.paymentDate) || null,
+          // defaultValue: new Date(selectedExpense?.paymentDate) || null,
         }}
         formProps={{
           name: "paymentDate",
@@ -232,7 +309,7 @@ const ExpenseDetails = (props: Props) => {
         }}
         setValue={setValue}
         label="Tax"
-        error={errors?.tax?.message || ""}
+        error={(errors?.tax?.message as string) || ""}
       />
       <Space h="sm" />
       {/* Status */}
@@ -259,18 +336,17 @@ const ExpenseDetails = (props: Props) => {
           },
         }}
       />
+      <Space h="sm" />
       <ZSelect
         label={"Category"}
         inputProps={{
           placeholder: "Category",
           required: true,
           options: categoryOptions,
-          defaultValue: categoryDefaultValue,
         }}
         formProps={{
           name: "category",
           control,
-          defaultValue: categoryDefaultValue
         }}
       />
       <Space h="sm" />
@@ -281,30 +357,33 @@ const ExpenseDetails = (props: Props) => {
           isMulti: true,
           required: true,
           options: tagOptions,
-          defaultValue: tagDefaultValue,
-            
         }}
         formProps={{
           name: "tags",
           control,
-          defaultValue:
-            selectedExpense?.tags?.map((tag: any) => ({
-              label: tag,
-              value: tag,
-            })) || [],
         }}
       />
-
-      <input type="submit" onClick={handleSubmit(onSubmit)} />
-      <ZActionText
-        onClick={onDelete}
-        secondaryColor="#fef3f2"
-        label="Delete Expense"
-        color="#d92d20"
-        leftIcon={<Trash size="14px" />}
-      />
+      <Space h="sm" />
+      <Button
+        type="submit"
+        onClick={handleSubmit(onSubmit)}
+        className="primary"
+        fullWidth
+      >
+        Submit
+      </Button>
+      <Space h="sm" />
+      {selectedExpense && (
+        <ZActionText
+          onClick={onDelete}
+          secondaryColor="#fef3f2"
+          label="Delete Expense"
+          color="#d92d20"
+          leftIcon={<Trash size="14px" />}
+        />
+      )}
     </ExpenseDetailsContainer>
-  );
-};
+  )
+}
 
-export default ExpenseDetails;
+export default ExpenseDetails

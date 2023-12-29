@@ -57,7 +57,7 @@ const ZSelect = (props: Props) => {
         render={({ field: { onChange, onBlur, value, name, ref } }) => (
           <Select
             {...inputProps}
-            defaultValue={inputProps.defaultValue}
+            value={value}
             onChange={onChange}
             styles={styles}
           />

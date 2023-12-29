@@ -21,7 +21,7 @@ const ZActionText = (props: Props & ButtonProps) => {
   };
 
   return (
-    <Button onClick={props.onClick} styles={style} leftIcon={props.leftIcon} variant="subtle">
+    <Button fullWidth onClick={props.onClick} styles={style} leftIcon={props.leftIcon} variant="subtle">
       {props.label}
     </Button>
   );
