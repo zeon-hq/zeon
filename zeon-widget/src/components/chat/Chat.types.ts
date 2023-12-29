@@ -4,7 +4,8 @@ export enum MessageType  {
 }
 
 export type IThemeType = {
-    isEmbeddable: boolean;
+    isEmbeddable?: boolean;
+    channelId?: string;
   };
 
   export type IPropsType = {

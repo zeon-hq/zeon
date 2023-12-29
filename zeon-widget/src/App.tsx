@@ -7,14 +7,15 @@ import { setWidgetDetails } from "redux/slice";
 import "./App.css";
 import WidgetButton from "components/WidgetButton";
 import ZThemeProvider from "components/provider/ZThemeProvider";
+import useEmbeddable, { IEmbeddableOutput } from "components/hooks/useEmbeddable";
 
 function App({ widgetId }: any) {
   const dispatch = useDispatch();
-  let { channelId } = useParams();
+  const isEmbeddable:IEmbeddableOutput = useEmbeddable();
 
   const getChannel = async () => {
     try {
-      const res = await getChannelById(widgetId || channelId);
+      const res = await getChannelById(widgetId || isEmbeddable.channelId);
       dispatch(setWidgetDetails(res.data.channel));
     } catch (error) {
       console.log(error);

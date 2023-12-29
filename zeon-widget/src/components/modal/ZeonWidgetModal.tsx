@@ -1,6 +1,7 @@
 import { Text } from "@mantine/core";
 import { getChannelById, getOpenTicket } from "api/api";
 import ZeonWidgetChat from "components/chat/ZeonWidgetChat";
+import useEmbeddable, { IEmbeddableOutput } from "components/hooks/useEmbeddable";
 import useOutsideAlerter from "components/hooks/useOutsideAlerter";
 import useWidget from "components/hooks/useWidget";
 import { BrandingWrapper } from "components/ui-components/uStyleComponents";
@@ -76,7 +77,8 @@ const ZeonWidgetModal = () => {
   const wrapperRef = useRef(null);
   const { step, widgetDetails } = useWidget();
   const dispatch = useDispatch();
-  let { channelId } = useParams();
+  
+  const isEmbeddable:IEmbeddableOutput = useEmbeddable();
   useOutsideAlerter(wrapperRef, () => {
     dispatch(setShowWidget(false));
   });
@@ -97,8 +99,8 @@ const ZeonWidgetModal = () => {
 
   useEffect(() => {
     // get channelId from the invoke script of the widget
-    channelId && getChannel(channelId as string);
-  }, [channelId]);
+    isEmbeddable?.channelId && getChannel(isEmbeddable?.channelId as string);
+  }, [isEmbeddable?.channelId]);
 
 
   const getOpenTicketData = async () => {
