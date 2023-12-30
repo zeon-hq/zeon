@@ -22,6 +22,7 @@ export interface ICRMState {
   loading: boolean;
   showNoteCreateModal: boolean;
   selectedNote: any;
+  selectedResource: any;
 }
 
 const initialState: ICRMState = {
@@ -37,6 +38,7 @@ const initialState: ICRMState = {
   loading: true,
   showNoteCreateModal: false,
   selectedNote: null,
+  selectedResource: null,
 };
 
 export const crmSlice = createSlice({
@@ -61,6 +63,9 @@ export const crmSlice = createSlice({
     setSelectedNote: (state, action) => {
       state.selectedNote = action.payload;
     },
+    setSelectedResource: (state, action) => {
+      state.selectedResource = action.payload;
+    }
   },
 });
 
@@ -71,6 +76,7 @@ export const {
   setLoading,
   setShowNoteCreateModal,
   setSelectedNote,
+  setSelectedResource
 } = crmSlice.actions;
 
 export default crmSlice.reducer;
