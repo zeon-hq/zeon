@@ -10,7 +10,7 @@ export const createContact = async (params: Contact) => {
             error: "Invalid params",
         };
     
-        if (!params.first_name)
+        if (!params.firstName)
         throw {
             code: 500,
             message: "Invalid name",
@@ -102,7 +102,7 @@ export const updateContact = async (contactId: string, params: Contact) => {
             error: "Invalid params",
         };
     
-        if (!params.first_name)
+        if (!params.firstName)
         throw {
             code: 500,
             message: "Invalid name",

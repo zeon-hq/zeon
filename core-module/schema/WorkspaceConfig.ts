@@ -16,6 +16,8 @@ const WorkspaceConfigInterface = new mongoose.Schema<WorkspaceConfigInterface>({
     legalCompanyName: { type: String, required: false, default: "" },
     teamSize: { type: String, required: false, default: "" },
     industry: { type: String, required: false, default: "" },
+},{
+    timestamps: true
 });
 
 // Create a Model.

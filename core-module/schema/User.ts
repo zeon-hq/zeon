@@ -33,6 +33,8 @@ const UserSchema = new mongoose.Schema<UserInterface>({
   isDeleted: { type: Boolean, required: true, default: false },
 
   profilePic: { type: String, required: false, default: null },
+},{
+    timestamps: true
 })
 
 // index on userId and workspaceId

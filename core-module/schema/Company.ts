@@ -49,13 +49,13 @@ export enum CompanySize {
     name: string;
     description?: string;
     url?: string;
-    x_url?: string;
-    linkedin_url?: string;
+    xUrl?: string;
+    linkedInUrl?: string;
     location?: string;
-    company_size?: CompanySize;
-    phone_numbers?: FormattedPhoneNumber[];
-    company_worth?: CompanyWorth;
-    deal_value?: number;
+    companySize?: CompanySize;
+    phoneNumber?: FormattedPhoneNumber[];
+    companyWorth?: CompanyWorth;
+    dealValue?: number;
     products?: string[];
     owner?: string
     interactions?: string[];
@@ -89,12 +89,12 @@ const schema = new Schema<Company>(
       required: false,
       maxlength: 256,
     },
-    x_url: {
+    xUrl: {
       type: Schema.Types.String,
       required: false,
       maxlength: 256,
     },
-    linkedin_url: {
+    linkedInUrl: {
       type: Schema.Types.String,
       required: false,
       maxlength: 256,
@@ -104,17 +104,17 @@ const schema = new Schema<Company>(
       required: false,
       maxlength: 256,
     },
-    company_size: {
+    companySize: {
       type: Schema.Types.String,
       enum: Object.values(CompanySize),
       required: false,
       maxlength: 256,
     },
-    phone_numbers: {
+    phoneNumber: {
         type: [{ type: Schema.Types.String }],
         required: false,
     },
-    company_worth: {
+    companyWorth: {
       type: Schema.Types.String,
       enum: Object.values(CompanyWorth),
       required: false,
@@ -124,7 +124,7 @@ const schema = new Schema<Company>(
       type: [Schema.Types.String],
       required: false,
     },
-    deal_value: {
+    dealValue: {
       type: Schema.Types.Number,
       required: false,
     },
@@ -162,6 +162,7 @@ const schema = new Schema<Company>(
     },
   {
     versionKey: false,
+    timestamps: true,
   },
 );
 

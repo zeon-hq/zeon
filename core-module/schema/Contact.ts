@@ -25,12 +25,12 @@ export interface ContactPhoneNumbers {
 }
 
 export default interface Contacts {
-  first_name: string;
-  last_name: string;
-  job_position?: string;
-  linkedin_url?: string;
-  email_address?: ContactEmail[];
-  phone_numbers?: ContactPhoneNumbers[];
+  firstName: string;
+  lastName: string;
+  jobPosition?: string;
+  linkedInUrl?: string;
+  emailAddress?: ContactEmail[];
+  phoneNumber?: ContactPhoneNumbers[];
   created_at: Date;
   updated_at: Date;
   workspaceId: string;
@@ -41,27 +41,27 @@ export default interface Contacts {
 
 const schema = new Schema<Contacts>(
   {
-    first_name: {
+    firstName: {
       type: Schema.Types.String,
       required: true,
       maxlength: 500,
     },
-    last_name: {
+    lastName: {
       type: Schema.Types.String,
       required: true,
       maxlength: 500,
     },
-    job_position: {
+    jobPosition: {
       type: Schema.Types.String,
       required: false,
       maxlength: 500,
     },
-    linkedin_url: {
+    linkedInUrl: {
       type: Schema.Types.String,
       required: false,
       maxlength: 256,
     },
-    email_address: {
+    emailAddress: {
         type: [
             {
                 em_id: {
@@ -80,7 +80,7 @@ const schema = new Schema<Contacts>(
         ],
         required: false,
     },
-    phone_numbers: {
+    phoneNumber: {
         type: [
             {
                 pn_id: {
@@ -152,9 +152,11 @@ const schema = new Schema<Contacts>(
         required: false,
         default: [],
     },
+
   },
   {
     versionKey: false,
+    timestamps: true,
   },
 );
 

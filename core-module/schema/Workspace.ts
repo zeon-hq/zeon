@@ -27,6 +27,8 @@ const WorkspaceSchema = new mongoose.Schema<WorkspaceInterface>({
         isVerified: { type: Boolean, required: true }
     },
     modules: [{ type: String, required: true, default: [] }]
+},{
+    timestamps: true
 });
 
 // Create a Model.

@@ -8,29 +8,34 @@ import {
   TextInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { showNotification } from "@mantine/notifications"
 import leftArrowIcon from "assets/leftArrow.svg";
 import linkedinIcon from "assets/linkedin.svg";
 import mailIcon from "assets/mail.svg";
 import phoneIcon from "assets/phoneCall.svg";
 import userPlus from "assets/userPlusWhite.svg";
+import notification from "components/utils/notification"
+import { createContact } from "crm/CRMService"
 import { useDispatch } from "react-redux";
+import { useParams } from "react-router"
 import { setSelectedContactPage } from "reducer/crmSlice";
 
 function CreateContact() {
   const dispatch = useDispatch();
+  const {workspaceId} = useParams<{workspaceId: string}>()
 
   const form = useForm({
     initialValues: {
       firstName: "",
       lastName: "",
       company: "",
-      position: "",
-      email: "",
+      jobPosition: "",
+      emailAddress: "",
       phoneNumber: "",
       linkedin: "",
     },
     validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
+      // emailAddress: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
     },
   });
 
@@ -46,8 +51,25 @@ function CreateContact() {
     dispatch(setSelectedContactPage({ type: "all" }));
   };
 
+  const handleSubmit = async (data: any) => {
+    try {
+      data.workspaceId = workspaceId
+      const res = await createContact(data);
+      console.log(res);
+      showNotification({
+        title: "Success",
+        message: "Contact created successfully",
+        color: "blue",
+        icon: null,
+        autoClose: 5000
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
-    <form onSubmit={form.onSubmit((values) => console.log(values))}>
+    <form onSubmit={form.onSubmit(handleSubmit)}>
       <Group m="lg" position="apart">
         <Flex
           align={"center"}
@@ -137,7 +159,7 @@ function CreateContact() {
           icon={<Image maw={16} mx="auto" src={mailIcon} alt="mail" />}
           radius="md"
           labelProps={{ style: labelStyles }}
-          {...form.getInputProps("email")}
+          {...form.getInputProps("emailAddress")}
         />
         <TextInput
           label="Phone Number"
@@ -155,6 +177,7 @@ function CreateContact() {
           labelProps={{ style: labelStyles }}
           {...form.getInputProps("linkedin")}
         />
+        <Button className="primary" type="submit"> Add </Button>
       </Box>
     </form>
   );

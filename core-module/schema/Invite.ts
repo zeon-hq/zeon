@@ -20,6 +20,8 @@ const InviteSchema = new mongoose.Schema<InviteInterface>({
     isRejected: { type: Boolean, required: true, default: false },
     isAccepted: { type: Boolean, required: true, default: false },
     isDeleted: { type: Boolean, required: true, default: false },
+},{
+    timestamps: true
 });
 
 // Create a Model.

@@ -15,6 +15,10 @@ import {
     ZeonModules,
     ZeonModulesArray
 } from "./types/types"
+import { IAddContactBody } from "./types/types"
+import Contacts from "./schema/Contact"
+import Company from "./schema/Company"
+
 
 export {
     WorkspaceInterface,
