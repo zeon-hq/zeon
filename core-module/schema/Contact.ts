@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+import { INote } from '../types/types';
 
 export const DOCUMENT_NAME = 'Contacts';
 export const COLLECTION_NAME = 'contacts';
@@ -36,7 +37,7 @@ export default interface Contacts {
   workspaceId: string;
   contactId: string;
   isDeleted: boolean;
-  notes?: string[];
+  notes?: INote[];
 }
 
 const schema = new Schema<Contacts>(
@@ -148,7 +149,7 @@ const schema = new Schema<Contacts>(
         default: false,
     },
     notes: {
-        type: [Schema.Types.String],
+        type: Schema.Types.Mixed,
         required: false,
         default: [],
     },

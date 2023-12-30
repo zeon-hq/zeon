@@ -16,9 +16,11 @@ import noteIcon from "assets/note.svg";
 import phoneIcon from "assets/phoneCall.svg";
 import plusIcon from "assets/plus.svg";
 import { useDispatch } from "react-redux";
-import { setSelectedContactPage } from "reducer/crmSlice";
+import { setSelectedContactPage, setShowNoteCreateModal } from "reducer/crmSlice";
 import styled from "styled-components";
 import Stepper, { StepType } from "../Stepper";
+import useCrm from "hooks/useCrm";
+import CreateNoteModal from "crm/CreateNoteModal";
 
 const Container = styled.div`
   display: flex;
@@ -54,6 +56,7 @@ const TextInputWrapper = styled(TextInput)`
 
 function ContactsDetails() {
   const dispatch = useDispatch();
+  const {showNoteCreateModal} = useCrm();
 
   const handleBack = () => {
     dispatch(setSelectedContactPage({ type: "all" }));
@@ -188,6 +191,7 @@ function ContactsDetails() {
             }
             color="dark"
             variant="outline"
+            onClick={() => {dispatch(setShowNoteCreateModal(true))}}
           >
             Add Note
           </Button>
@@ -284,6 +288,9 @@ function ContactsDetails() {
           </Tabs.Panel>
         </Tabs>
       </RightContainer>
+      {
+        showNoteCreateModal && <CreateNoteModal showNoteCreateModal={showNoteCreateModal} />
+      }
     </Container>
   );
 }

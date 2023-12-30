@@ -1,6 +1,5 @@
 import express, { Express, Request, Response, Router } from "express"
 import {
-  addNoteToCompany,
   createCompany,
   deleteCompany,
   editCompany,
@@ -140,43 +139,6 @@ export const deleteCompanyController = async (req: Request, res: Response) => {
       message: error,
       error,
     }
-  }
-}
-
-export const addNoteToCompanyController = async (
-  req: Request,
-  res: Response
-) => {
-  try {
-    const { companyId } = req.params
-    const { note } = req.body
-
-    if (!companyId)
-      throw {
-        code: 500,
-        message: "Invalid companyId",
-        error: "Invalid companyId",
-      }
-
-    if (!note)
-      throw {
-        code: 500,
-        message: "Invalid note",
-        error: "Invalid note",
-      }
-
-    const updatedCompany = await addNoteToCompany(companyId, note)
-
-    return res.status(200).json({
-      success: true,
-      data: updatedCompany,
-    })
-  } catch (error) {
-    console.log(error)
-    return res.status(500).json({
-      success: false,
-      error,
-    })
   }
 }
 // Bulk delete company by companyIs

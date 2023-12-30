@@ -7,12 +7,15 @@ const useCrm = () => {
     const selectedContactPage = useSelector((item:RootState) => item.crm.selectedContactPage)
     const selectedCompanyPage = useSelector((item:RootState) => item.crm.selectedCompanyPage)
     const loading = useSelector((item:RootState) => item.crm.loading)
+    const showNoteCreateModal = useSelector((item:RootState) => item.crm.showNoteCreateModal)
+    const selectedNote = useSelector((item:RootState) => item.crm.selectedNote)
 
     return {
         selectedPage,
         selectedContactPage,
         selectedCompanyPage,
         loading,
+        showNoteCreateModal
     }
 }
 

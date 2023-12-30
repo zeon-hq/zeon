@@ -17,6 +17,7 @@ const port = process.env.CORE_BACKEND_PORT
 
 import { UserInterface } from "./schema/User"
 import { initializeDB } from "./functions/workspace"
+import notesRoutes from "./routes/notes";
 
 declare global {
   namespace Express {
@@ -50,6 +51,7 @@ app.use("/user", verifyIdentity, userRoutes);
 app.use("/workspaces", verifyIdentity,workspaceRoutes );
 app.use("/companies",verifyIdentity, companyRoutes);
 app.use("/contacts",verifyIdentity, contactRoutes);
+app.use("/notes",verifyIdentity, notesRoutes);
 
 app.use("/health", (req: Request, res: Response)=>{
   console.log('core service health check');

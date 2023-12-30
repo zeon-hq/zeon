@@ -5,8 +5,10 @@ import {
     updateContact,
     getAllContacts,
     getContact,
-    addNoteToContact,
 } from "../functions/contact"
+import { ICreateNoteDTO, CRMResourceType } from "../types/types"
+import { createNote } from "../functions/notes"
+
 
 export const createContactController = async (req: Request, res: Response) => {
     try {
@@ -128,27 +130,4 @@ export const deleteContactController = async (req: Request, res: Response) => {
   }
 }
 
-export const addNoteToContactController = async (req: Request, res: Response) => {
-  try {
-    const {  note } = req.body
-    const { contactId } = req.params
-    if (!contactId)
-      throw {
-        code: 500,
-        message: "Invalid contactId",
-        error: "Invalid contactId",
-      }
 
-    const contact = await addNoteToContact(contactId, note)
-    return res.status(200).json({
-      success: true,
-      data: contact,
-    })
-  } catch (error) {
-    console.log(error)
-    return res.status(500).json({
-      success: false,
-      message: error,
-    })
-  }
-}
