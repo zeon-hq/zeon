@@ -3,65 +3,25 @@ import editIcon from "assets/edit.svg";
 import mailIcon from "assets/mail.svg";
 import trashIcon from "assets/trash.svg";
 import userPlus from "assets/userPlus.svg";
+import Contacts from "crm/type";
+import useDashboard from "hooks/useDashboard";
 import {
   MRT_GlobalFilterTextInput,
   MRT_Row,
   MantineReactTable,
   useMantineReactTable,
   type MRT_ColumnDef,
+  MRT_PaginationState,
 } from "mantine-react-table";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setSelectedContactPage } from "reducer/crmSlice";
-
-export type Employee = {
-  id: number;
-  company: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  jobTitle: string;
-  salary: number;
-  startDate: string;
-};
-
-const data: Employee[] = [
-  {
-    id: 1,
-    company: "Company A",
-    firstName: "John",
-    lastName: "Doe",
-    email: "john.doe@example.com",
-    jobTitle: "Manager",
-    salary: 60000,
-    startDate: "2022-01-15",
-  },
-  {
-    id: 2,
-    company: "Company B",
-    firstName: "Jane",
-    lastName: "Smith",
-    email: "jane.smith@example.com",
-    jobTitle: "Engineer",
-    salary: 75000,
-    startDate: "2022-03-20",
-  },
-  {
-    id: 3,
-    company: "Company C",
-    firstName: "Mike",
-    lastName: "Johnson",
-    email: "mike.johnson@example.com",
-    jobTitle: "Designer",
-    salary: 55000,
-    startDate: "2022-02-10",
-  },
-  // Add more employee objects as needed
-];
+import { fetchContacts } from "service/CRMService";
 
 const ContactsTable = () => {
   const [maxAvailableWidth, setMaxAvailableWidth] = useState(0);
   const dispatch = useDispatch();
+  const { workspaceInfo } = useDashboard();
 
   // Calculate maxAvailableWidth when the component mounts
   useEffect(() => {
@@ -72,6 +32,48 @@ const ContactsTable = () => {
     }
   }, []);
 
+  const [data, setData] = useState<any[]>([]);
+  const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isRefetching, setIsRefetching] = useState(false);
+  const [row, setRow] = useState<any>(0);
+  const [pagination, setPagination] = useState<MRT_PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+
+  //if you want to avoid useEffect, look at the React Query example instead
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!data.length) {
+        setIsLoading(true);
+      } else {
+        setIsRefetching(true);
+      }
+
+      try {
+        const response = await fetchContacts(
+          workspaceInfo.workspaceId,
+          pagination.pageSize.toString(),
+          pagination.pageIndex.toString()
+        );
+        setData(response.data.contacts);
+
+        const totalCount = response.data.count;
+        const totalPages = Math.ceil(totalCount / pagination.pageSize);
+        setRow(totalPages);
+      } catch (error) {
+        setIsError(true);
+        console.error(error);
+        return;
+      }
+      setIsError(false);
+      setIsLoading(false);
+      setIsRefetching(false);
+    };
+    fetchData();
+  }, [pagination.pageIndex, pagination.pageSize, workspaceInfo.workspaceId]);
+
   const ratios = [0.8, 1.4, 4.0, 1.5, 2.0, 1.2];
 
   const totalRatio = ratios.reduce((acc, ratio) => acc + ratio, 0);
@@ -80,7 +82,7 @@ const ContactsTable = () => {
 
   const columnSizes = ratios.map((ratio) => ratio * unitWidth);
 
-  const columns = useMemo<MRT_ColumnDef<Employee>[]>(
+  const columns = useMemo<MRT_ColumnDef<any>[]>(
     () => [
       {
         accessorKey: "id",
@@ -93,7 +95,10 @@ const ContactsTable = () => {
         size: columnSizes[1],
       },
       {
-        accessorFn: (row) => `${row.firstName} ${row.lastName}`,
+        accessorFn: (row) =>
+          row.firstName && row.lastName
+            ? `${row.firstName} ${row.lastName}`
+            : "",
         id: "name",
         header: "Contact Name",
         size: columnSizes[2],
@@ -135,19 +140,19 @@ const ContactsTable = () => {
               maw={15}
               src={trashIcon}
               alt="delete"
-              onClick={() => handleDelete(row)}
+              onClick={(e) => handleDelete(e, row)}
             />
             <Image
               maw={15}
               src={editIcon}
               alt="edit"
-              onClick={() => handleEdit(row)}
+              onClick={(e) => handleEdit(e, row)}
             />
             <Image
               maw={15}
               src={mailIcon}
               alt="mail"
-              onClick={() => handleEmail(row)}
+              onClick={(e) => handleEmail(e, row)}
             />
           </Flex>
         ),
@@ -156,38 +161,59 @@ const ContactsTable = () => {
     [columnSizes]
   );
 
-  const handleDelete = (row: MRT_Row<Employee>) => {
+  const handleDelete = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    row: MRT_Row<any>
+  ) => {
     // Handle the delete action here
+    // prevent default action
+    event?.stopPropagation();
     alert(`Deleting employee with ID: ${row.getValue("id")}`);
   };
 
-  const handleEdit = (row: MRT_Row<Employee>) => {
+  const handleEdit = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    row: MRT_Row<any>
+  ) => {
     // Handle the edit action here
+    event?.stopPropagation();
     alert(`Editing employee with ID: ${row.getValue("id")}`);
   };
 
-  const handleEmail = (row: MRT_Row<Employee>) => {
+  const handleEmail = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    row: MRT_Row<any>
+  ) => {
     // Handle the email action here
+    event?.stopPropagation();
     alert(`Sending email to employee with ID: ${row.getValue("id")}`);
   };
 
   const table = useMantineReactTable({
     columns,
-    data,
+    data: data,
     enableColumnActions: false,
     enableColumnFilters: false,
-    enablePagination: false,
+    enablePagination: true,
+    onPaginationChange: setPagination,
     enableSorting: false,
+    rowCount: row,
     initialState: { showGlobalFilter: true },
     mantineSearchTextInputProps: {
       placeholder: "Search Contacts",
+    },
+    state: {
+      isLoading,
+      pagination,
+      showAlertBanner: isError,
+      showProgressBars: isRefetching,
     },
     mantineTableBodyRowProps: ({ row }) => ({
       onClick: (event) => {
         dispatch(setSelectedContactPage({ type: "view" }));
       },
       sx: {
-        cursor: 'pointer',
+        cursor: "pointer",
       },
     }),
     mantineTableProps: {

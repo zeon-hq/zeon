@@ -25,15 +25,6 @@ axiosInstance.interceptors.request.use(function (config: AxiosRequestConfig) : A
 const crmAPIDomain = 'http://localhost:3005';
 const ticketDomainUrl = Config('TICKET_SERVICE');
 
-export const createContact = async (data: ICreateContactDTO) => {
-    try {
-        const res = await axiosInstance.post(`${crmAPIDomain}/contacts`, data);
-        return res.data;
-    } catch (error) {
-        return {};
-    }
-}
-
 export const createNote = async (data: ICreateNoteDTO) => {
     try {
         const res = await axiosInstance.post(`${crmAPIDomain}/notes`, data);

@@ -2,57 +2,26 @@ import { Box, Button, Flex, Image, MantineProvider } from "@mantine/core";
 import companyIcon from "assets/companies.svg";
 import editIcon from "assets/edit.svg";
 import trashIcon from "assets/trash.svg";
+import useDashboard from "hooks/useDashboard";
 import {
-    MRT_GlobalFilterTextInput,
-    MRT_Row,
-    MantineReactTable,
-    useMantineReactTable,
-    type MRT_ColumnDef,
+  MRT_GlobalFilterTextInput,
+  MRT_Row,
+  MantineReactTable,
+  useMantineReactTable,
+  type MRT_ColumnDef,
+  MRT_PaginationState,
 } from "mantine-react-table";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setSelectedCompanyPage } from "reducer/crmSlice";
-
-export type Company = {
-  id: number;
-  company: string;
-  employeeCount: number;
-  annualRevenue: number;
-  country: string;
-  lastInteraction: string;
-};
-
-const companyData: Company[] = [
-  {
-    id: 1,
-    company: "Company A",
-    employeeCount: 100,
-    annualRevenue: 1000000,
-    country: "USA",
-    lastInteraction: "2022-12-10",
-  },
-  {
-    id: 2,
-    company: "Company B",
-    employeeCount: 50,
-    annualRevenue: 500000,
-    country: "Canada",
-    lastInteraction: "2022-11-15",
-  },
-  {
-    id: 3,
-    company: "Company C",
-    employeeCount: 75,
-    annualRevenue: 750000,
-    country: "UK",
-    lastInteraction: "2022-11-30",
-  },
-  // Add more company objects as needed
-];
+import { deleteCompany, fetchCompanies } from "service/CRMService";
+import { companySizeFormatter, companyWorthFormatter } from "crm/utils";
+import { da } from "date-fns/locale";
 
 const CompaniesTable = () => {
   const [maxAvailableWidth, setMaxAvailableWidth] = useState(0);
   const dispatch = useDispatch();
+  const { workspaceInfo } = useDashboard();
 
   // Calculate maxAvailableWidth when the component mounts
   useEffect(() => {
@@ -63,7 +32,7 @@ const CompaniesTable = () => {
     }
   }, []);
 
-  const ratios = [0.8, 4.0, 1.2, 1.2, 1.2, 1.2, 1.0];
+  const ratios = [0.8, 3.0, 1.2, 1.2, 1.2, 1.2, 1.0];
 
   const totalRatio = ratios.reduce((acc, ratio) => acc + ratio, 0);
 
@@ -71,36 +40,97 @@ const CompaniesTable = () => {
 
   const columnSizes = ratios.map((ratio) => ratio * unitWidth);
 
-  const columns = useMemo<MRT_ColumnDef<Company>[]>(
+  const [data, setData] = useState<any[]>([]);
+  const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isRefetching, setIsRefetching] = useState(false);
+  const [row, setRow] = useState<any>(0);
+  const [pagination, setPagination] = useState<MRT_PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+
+  //if you want to avoid useEffect, look at the React Query example instead
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!data.length) {
+        setIsLoading(true);
+      } else {
+        setIsRefetching(true);
+      }
+
+      try {
+        const response = await fetchCompanies(
+          workspaceInfo.workspaceId,
+          pagination.pageSize.toString(),
+          pagination.pageIndex.toString()
+        );
+        setData(response.data.companies);
+
+        const totalCount = response.data.count;
+        const totalPages = Math.ceil(totalCount / pagination.pageSize);
+        setRow(totalPages);
+      } catch (error) {
+        setIsError(true);
+        console.error(error);
+        return;
+      }
+      setIsError(false);
+      setIsLoading(false);
+      setIsRefetching(false);
+    };
+    fetchData();
+  }, [
+    data.length,
+    pagination.pageIndex,
+    pagination.pageSize,
+    workspaceInfo.workspaceId,
+  ]);
+
+  const dateFormatter = (value?: string) => {
+    if (!value) return "";
+    const date = new Date(value);
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const year = date.getFullYear();
+    return `${month}/${day}/${year}`;
+  };
+
+  const columns = useMemo<MRT_ColumnDef<any>[]>(
     () => [
       {
-        accessorKey: "id",
+        accessorKey: "companyId",
         header: "ID",
         size: columnSizes[0],
       },
       {
-        accessorKey: "company",
+        accessorKey: "name",
         header: "Company",
         size: columnSizes[1],
       },
       {
-        accessorKey: "employeeCount",
+        accessorKey: "companySize",
+        accessorFn: (row) =>
+          row.companySize ? companySizeFormatter(row.companySize) : "",
         header: "Employee Count",
         size: columnSizes[2],
       },
       {
-        accessorKey: "annualRevenue",
+        accessorKey: "companyWorth",
+        accessorFn: (row) =>
+          row.companyWorth ? companyWorthFormatter(row.companyWorth) : "",
         header: "Annual Revenue",
         size: columnSizes[3],
       },
       {
-        accessorKey: "country",
-        header: "Country",
+        accessorKey: "location",
+        header: "Location",
         size: columnSizes[4],
       },
       {
-        accessorKey: "lastInteraction",
+        accessorKey: "updatedAt",
         header: "Last Interaction",
+        accessorFn: (row) => dateFormatter(row.updatedAt),
         size: columnSizes[5],
       },
       {
@@ -113,53 +143,67 @@ const CompaniesTable = () => {
               maw={15}
               src={trashIcon}
               alt="delete"
-              onClick={() => handleDelete(row)}
+              onClick={(e) => handleDelete(e, row)}
             />
             <Image
               maw={15}
               src={editIcon}
               alt="edit"
-              onClick={() => handleEdit(row)}
+              onClick={(e) => handleEdit(e, row)}
             />
           </Flex>
         ),
       },
     ],
-    [columnSizes]
+    [pagination.pageIndex, pagination.pageSize, workspaceInfo.workspaceId]
   );
 
-  const handleDelete = (row: MRT_Row<Company>) => {
-    // Handle the delete action here
-    alert(`Deleting company with ID: ${row.getValue("id")}`);
+  const handleDelete = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    row: MRT_Row<any>
+  ) => {
+    e.stopPropagation();
+    deleteCompany(row.getValue("companyId"));
   };
 
-  const handleEdit = (row: MRT_Row<Company>) => {
+  const handleEdit = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    row: MRT_Row<any>
+  ) => {
     // Handle the edit action here
-    alert(`Editing company with ID: ${row.getValue("id")}`);
-  };
-
-  const handleEmail = (row: MRT_Row<Company>) => {
-    // Handle the email action here
-    alert(`Sending email to company with ID: ${row.getValue("id")}`);
+    e.stopPropagation();
+    dispatch(
+      setSelectedCompanyPage({ type: "edit", companyData: data[row.index] })
+    );
   };
 
   const table = useMantineReactTable({
     columns,
-    data: companyData,
+    data: data,
     enableColumnActions: false,
     enableColumnFilters: false,
-    enablePagination: false,
+    enablePagination: true,
+    onPaginationChange: setPagination,
     enableSorting: false,
+    rowCount: row,
     initialState: { showGlobalFilter: true },
     mantineSearchTextInputProps: {
       placeholder: "Search Companies",
     },
+    state: {
+      isLoading,
+      pagination,
+      showAlertBanner: isError,
+      showProgressBars: isRefetching,
+    },
     mantineTableBodyRowProps: ({ row }) => ({
       onClick: (event) => {
-        dispatch(setSelectedCompanyPage({ type: "view" }));
+        dispatch(
+          setSelectedCompanyPage({ type: "view", companyData: data[row.index] })
+        );
       },
       sx: {
-        cursor: 'pointer',
+        cursor: "pointer",
       },
     }),
     mantineTableProps: {

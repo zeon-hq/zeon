@@ -36,6 +36,7 @@ export default interface Contacts {
   updated_at: Date;
   workspaceId: string;
   contactId: string;
+  companyId: string;
   isDeleted: boolean;
   notes?: INote[];
 }
@@ -136,6 +137,10 @@ const schema = new Schema<Contacts>(
       select: false,
     },
     contactId: {
+        type: Schema.Types.String,
+        required: true,
+    },
+    companyId: {
         type: Schema.Types.String,
         required: true,
     },

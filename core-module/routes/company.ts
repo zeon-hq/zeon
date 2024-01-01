@@ -1,11 +1,11 @@
 import express, { Router } from "express"
 import {
     createCompanyController,
-    getAllCompaniesController,
     getCompanyController,
     editCompanyController,
     deleteCompanyController,
-    bulkDeleteCompanyController
+    bulkDeleteCompanyController,
+    getAllCompaniesValueLabelController
 } from "../controller/company"
 
 
@@ -15,11 +15,14 @@ const router: Router = express.Router()
 // get company by companyId
 router.get("/:companyId", getCompanyController)
 
+// get company label value pair
+router.get("/:workspaceId/all", getAllCompaniesValueLabelController)
+
 // create company
 router.post("/", createCompanyController)
 
 // edit company by companyId
-router.put("/", editCompanyController)
+router.put("/:companyId", editCompanyController)
 
 // delete company by companyId
 router.delete("/:companyId", deleteCompanyController)

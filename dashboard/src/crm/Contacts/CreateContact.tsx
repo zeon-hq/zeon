@@ -4,38 +4,56 @@ import {
   Flex,
   Group,
   Image,
+  Select,
   Text,
   TextInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { showNotification } from "@mantine/notifications"
+import { showNotification } from "@mantine/notifications";
 import leftArrowIcon from "assets/leftArrow.svg";
 import linkedinIcon from "assets/linkedin.svg";
 import mailIcon from "assets/mail.svg";
 import phoneIcon from "assets/phoneCall.svg";
 import userPlus from "assets/userPlusWhite.svg";
-import notification from "components/utils/notification"
-import { createContact } from "crm/CRMService"
+import useCrm from "hooks/useCrm";
+import useDashboard from "hooks/useDashboard";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useParams } from "react-router"
 import { setSelectedContactPage } from "reducer/crmSlice";
+import { createContact, fetchAllCompaniesPair } from "service/CRMService";
 
 function CreateContact() {
   const dispatch = useDispatch();
-  const {workspaceId} = useParams<{workspaceId: string}>()
+  const { workspaceInfo } = useDashboard();
+  const { selectedContactPage } = useCrm();
+
+  const editValues = selectedContactPage?.contactData;
+
+  const [companyOptions, setCompanyOptions] = useState<any[]>([]);
 
   const form = useForm({
     initialValues: {
-      firstName: "",
-      lastName: "",
-      company: "",
-      jobPosition: "",
-      emailAddress: "",
-      phoneNumber: "",
-      linkedin: "",
+      firstName: editValues?.firstName || "",
+      lastName: editValues?.lastName || "",
+      companyId: editValues?.companyId || "",
+      jobPosition: editValues?.jobPosition || "",
+      emailAddress: editValues?.emailAddress || "",
+      phoneNumber: editValues?.phoneNumber || "",
+      linkedInUrl: editValues?.linkedInUrl || "",
     },
     validate: {
-      // emailAddress: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
+      emailAddress: (value) =>
+        /^\S+@\S+$/.test(value) ? null : "Invalid email",
+      phoneNumber: (value) =>
+        /^\+(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\d{1,14}$/.test(
+          value
+        )
+          ? null
+          : "Invalid phone number, Please use international format",
+      linkedInUrl: (value) =>
+        /^https:\/\/www.linkedin.com\/.*/.test(value)
+          ? null
+          : "Invalid LinkedIn URL",
     },
   });
 
@@ -47,29 +65,46 @@ function CreateContact() {
     color: "#344054",
   };
 
+  useEffect(() => {
+    fetchAllCompaniesPair(workspaceInfo.workspaceId || "").then((res) => {
+      setCompanyOptions(res.data);
+    });
+  }, [workspaceInfo.workspaceId]);
+
   const handleBack = () => {
     dispatch(setSelectedContactPage({ type: "all" }));
   };
 
   const handleSubmit = async (data: any) => {
+    console.log('TESTING', data);
     try {
-      data.workspaceId = workspaceId
+      data.workspaceId = workspaceInfo.workspaceId;
+      data.emailAddress = [data?.emailAddress];
+      data.phoneNumber = [data?.phoneNumber];
+
       const res = await createContact(data);
+
       console.log(res);
+
       showNotification({
         title: "Success",
         message: "Contact created successfully",
         color: "blue",
         icon: null,
-        autoClose: 5000
-      })
+        autoClose: 5000,
+      });
+
+      dispatch(setSelectedContactPage({ type: "all" }));
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   return (
-    <form onSubmit={form.onSubmit(handleSubmit)}>
+    <form onSubmit={() => {
+      console.log("submit")
+      form.onSubmit(handleSubmit)}
+    }>
       <Group m="lg" position="apart">
         <Flex
           align={"center"}
@@ -139,12 +174,13 @@ function CreateContact() {
           labelProps={{ style: labelStyles }}
           {...form.getInputProps("lastName")}
         />
-        <TextInput
+        <Select
+          data={companyOptions}
           label="Company"
           placeholder="Company"
           radius="md"
           labelProps={{ style: labelStyles }}
-          {...form.getInputProps("company")}
+          {...form.getInputProps("companyId")}
         />
         <TextInput
           label="Position"
@@ -177,7 +213,6 @@ function CreateContact() {
           labelProps={{ style: labelStyles }}
           {...form.getInputProps("linkedin")}
         />
-        <Button className="primary" type="submit"> Add </Button>
       </Box>
     </form>
   );
