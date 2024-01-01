@@ -5,7 +5,6 @@ import contactIcon from "assets/contacts.svg";
 import { setSelectedCompanyPage, setSelectedContactPage, setSelectedPage } from "reducer/crmSlice";
 import { useDispatch } from "react-redux";
 import useCrm from "hooks/useCrm";
-import CreateCannedResponseModal from "components/ui-components/CreateCannedResponseModal";
 import CreateNoteModal from "./CreateNoteModal";
 
 function Dashboard() {
@@ -34,7 +33,7 @@ function Dashboard() {
 
   return (
     <Flex justify="space-between" mx={10} align="center">
-      <Heading>Welcome back, Aryan</Heading>
+      <Heading>Welcome back </Heading>
       <Box>
         <Button
           style={{

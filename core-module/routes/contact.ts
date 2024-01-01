@@ -16,7 +16,7 @@ router.get("/:contactId", getContactController)
 router.post("/", createContactController)
 
 // edit company by companyId
-router.put("/", updateContactController)
+router.put("/:contactId", updateContactController)
 
 // delete company by companyId
 router.delete("/:contactId", deleteContactController)

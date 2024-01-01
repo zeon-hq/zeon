@@ -91,7 +91,7 @@ export const getContactController = async (req: Request, res: Response) => {
 // update contact by contactId
 export const updateContactController = async (req: Request, res: Response) => {
   try {
-    const { contactId, data } = req.body;
+    const { contactId } = req.params;
     if (!contactId)
       throw {
         code: 500,
@@ -99,7 +99,11 @@ export const updateContactController = async (req: Request, res: Response) => {
         error: "Invalid contactId",
       };
 
-    const contact = await updateContact(contactId, data);
+    const contact = await updateContact(contactId, {
+      ...req.body,
+      emailAddress: formatEmailAddress(req.body?.emailAddress),
+      phoneNumber: formatPhoneNumber(req.body?.phoneNumber),
+    });
     return res.status(200).json({
       success: true,
       data: contact,

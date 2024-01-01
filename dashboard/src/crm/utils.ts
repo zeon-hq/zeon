@@ -47,3 +47,20 @@ export const companyWorthFormatter = (value?: CompanyWorth) => {
       return "Unknown";
   }
 };
+
+export const findPrimaryPhoneNumIntl = (phoneNumbers: any) => {
+  return phoneNumbers?.find((phoneNum: any) => phoneNum?.is_primary)?.phone_number?.international;
+};
+
+export const findPrimaryPhoneNumE164 = (phoneNumbers: any) => {
+  return phoneNumbers?.find((phoneNum: any) => phoneNum?.is_primary)?.phone_number?.e164;
+};
+
+
+export const findPrimaryEmail = (emailAddresses: any) => {
+  const primaryEmail = emailAddresses?.find(
+    (email: any) => email?.is_primary === true
+  )?.email_id;
+
+  return primaryEmail;
+}

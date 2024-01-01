@@ -164,6 +164,10 @@ const CompaniesTable = () => {
   ) => {
     e.stopPropagation();
     deleteCompany(row.getValue("companyId"));
+
+    const newData = [...data];
+    newData.splice(row.index, 1);
+    setData(newData);
   };
 
   const handleEdit = (

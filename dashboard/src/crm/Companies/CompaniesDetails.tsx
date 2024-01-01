@@ -24,7 +24,7 @@ import locationIcon from "assets/location.svg";
 import employeeCountIcon from "assets/employee_count.svg";
 import revenueIcon from "assets/revenue.svg";
 import useCrm from "hooks/useCrm";
-import { companySizeFormatter, companyWorthFormatter } from "crm/utils";
+import { companySizeFormatter, companyWorthFormatter, findPrimaryPhoneNumIntl } from "crm/utils";
 
 const Container = styled.div`
   display: flex;
@@ -65,7 +65,6 @@ const TextInputWrapper = styled(TextInput)`
 function CompaniesDetails() {
   const dispatch = useDispatch();
   const { selectedCompanyPage } = useCrm();
-  console.log(selectedCompanyPage.companyData);
 
   const handleBack = () => {
     dispatch(setSelectedCompanyPage({ type: "all" }));
@@ -191,7 +190,7 @@ function CompaniesDetails() {
           <TextInputWrapper
             label="Phone Number"
             placeholder="Company Phone Number"
-            value={selectedCompanyPage?.companyData?.phoneNumber}
+            value={findPrimaryPhoneNumIntl(selectedCompanyPage?.companyData?.phoneNumber)}
             icon={
               <Image
                 src={phoneIcon}

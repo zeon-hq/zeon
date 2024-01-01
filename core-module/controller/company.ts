@@ -149,7 +149,10 @@ export const editCompanyController = async (req: Request, res: Response) => {
         error: "Invalid companyId",
       };
 
-    const updatedCompany = await editCompany(companyId, req.body);
+    const updatedCompany = await editCompany(companyId, {
+      ...req.body,
+      phoneNumber: formatPhoneNumber(req.body?.phoneNumber),
+    });
 
     return res.status(200).json({
       success: true,
