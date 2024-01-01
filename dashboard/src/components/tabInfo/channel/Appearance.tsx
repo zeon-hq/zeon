@@ -153,11 +153,11 @@ const Appearance = () => {
                     <FileInput
                       inputWrapperOrder={inputWrapperData}
                       description="Upload your logo with a transparent background. PNG, SVG Supported. 50px by 50px"
-                      placeholder={
-                        appearenceDetails?.widgetHeaderSection?.topLogo
-                          ? "Click to change the top logo"
-                          : "Select top logo"
-                      }
+                      // placeholder={
+                      //   appearenceDetails?.widgetHeaderSection?.topLogo
+                      //     ? "Click to change the top logo"
+                      //     : "Select top logo"
+                      // }
                       label="Channel Logo"
                       // withAsterisk
                       accept="image/png,image/jpeg"

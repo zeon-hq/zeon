@@ -7,29 +7,29 @@ import {
   Select,
   Text,
   TextInput,
-} from "@mantine/core";
-import { useForm } from "@mantine/form";
-import { showNotification } from "@mantine/notifications";
-import leftArrowIcon from "assets/leftArrow.svg";
-import linkedinIcon from "assets/linkedin.svg";
-import mailIcon from "assets/mail.svg";
-import phoneIcon from "assets/phoneCall.svg";
-import userPlus from "assets/userPlusWhite.svg";
-import useCrm from "hooks/useCrm";
-import useDashboard from "hooks/useDashboard";
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { setSelectedContactPage } from "reducer/crmSlice";
-import { createContact, fetchAllCompaniesPair } from "service/CRMService";
+} from "@mantine/core"
+import { useForm } from "@mantine/form"
+import { showNotification } from "@mantine/notifications"
+import leftArrowIcon from "assets/leftArrow.svg"
+import linkedinIcon from "assets/linkedin.svg"
+import mailIcon from "assets/mail.svg"
+import phoneIcon from "assets/phoneCall.svg"
+import userPlus from "assets/userPlusWhite.svg"
+import useCrm from "hooks/useCrm"
+import useDashboard from "hooks/useDashboard"
+import { useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
+import { setSelectedContactPage } from "reducer/crmSlice"
+import { createContact, fetchAllCompaniesPair } from "service/CRMService"
 
 function CreateContact() {
-  const dispatch = useDispatch();
-  const { workspaceInfo } = useDashboard();
-  const { selectedContactPage } = useCrm();
+  const dispatch = useDispatch()
+  const { workspaceInfo } = useDashboard()
+  const { selectedContactPage } = useCrm()
 
-  const editValues = selectedContactPage?.contactData;
+  const editValues = selectedContactPage?.contactData
 
-  const [companyOptions, setCompanyOptions] = useState<any[]>([]);
+  const [companyOptions, setCompanyOptions] = useState<any[]>([])
 
   const form = useForm({
     initialValues: {
@@ -55,7 +55,7 @@ function CreateContact() {
           ? null
           : "Invalid LinkedIn URL",
     },
-  });
+  })
 
   const labelStyles = {
     fontSize: "14px",
@@ -63,28 +63,28 @@ function CreateContact() {
     lineHeight: "20px",
     letterSpacing: "0em",
     color: "#344054",
-  };
+  }
 
   useEffect(() => {
     fetchAllCompaniesPair(workspaceInfo.workspaceId || "").then((res) => {
-      setCompanyOptions(res.data);
-    });
-  }, [workspaceInfo.workspaceId]);
+      setCompanyOptions(res.data)
+    })
+  }, [workspaceInfo.workspaceId])
 
   const handleBack = () => {
-    dispatch(setSelectedContactPage({ type: "all" }));
-  };
+    dispatch(setSelectedContactPage({ type: "all" }))
+  }
 
   const handleSubmit = async (data: any) => {
-    console.log('TESTING', data);
+    console.log("TESTING", data)
     try {
-      data.workspaceId = workspaceInfo.workspaceId;
-      data.emailAddress = [data?.emailAddress];
-      data.phoneNumber = [data?.phoneNumber];
+      data.workspaceId = workspaceInfo.workspaceId
+      data.emailAddress = [data?.emailAddress]
+      data.phoneNumber = [data?.phoneNumber]
 
-      const res = await createContact(data);
+      const res = await createContact(data)
 
-      console.log(res);
+      console.log(res)
 
       showNotification({
         title: "Success",
@@ -92,19 +92,16 @@ function CreateContact() {
         color: "blue",
         icon: null,
         autoClose: 5000,
-      });
+      })
 
-      dispatch(setSelectedContactPage({ type: "all" }));
+      dispatch(setSelectedContactPage({ type: "all" }))
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
-  };
+  }
 
   return (
-    <form onSubmit={() => {
-      console.log("submit")
-      form.onSubmit(handleSubmit)}
-    }>
+    <form onSubmit={form.onSubmit(handleSubmit)}>
       <Group m="lg" position="apart">
         <Flex
           align={"center"}
@@ -215,7 +212,7 @@ function CreateContact() {
         />
       </Box>
     </form>
-  );
+  )
 }
 
-export default CreateContact;
+export default CreateContact
