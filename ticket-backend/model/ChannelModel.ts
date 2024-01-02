@@ -51,6 +51,7 @@ const inChatWidgetSchema = new Schema({
 const channelSchema = new Schema({
     name: String,
     slackChannelId:{type:String},
+    emailNewTicketNotification:{type:Boolean,default:false},
     accessToken:{type:String},
     appearance: {
         newConversationButton: {

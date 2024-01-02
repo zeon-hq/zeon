@@ -64,6 +64,7 @@ export interface IChannelsInfo {
   inChatWidgets: InChatWidgetInterface[];
   workspaceId: string;
   slackChannelId:string;
+  emailNewTicketNotification?:{type:Boolean,default:false},
   accessToken:string;
   members: string[];
   channelId: string;
@@ -73,6 +74,7 @@ export interface IChannelsInfo {
 const ChannelSchema: Schema = new Schema({
   name: { type: String, required: true },
   slackChannelId:{type:String},
+  emailNewTicketNotification:{type:Boolean,default:false},
   accessToken:{type:String},
   appearance: {
     newConversationButton: {

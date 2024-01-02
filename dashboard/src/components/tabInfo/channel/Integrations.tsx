@@ -7,8 +7,12 @@ import SlackIntegrationSVG from "assets/slack_integration_svg.svg";
 import SlackDisableIntegration from "assets/slack_disable_icon.svg";
 import SlackIntegrationEnable from "assets/slack_svg_enable.svg";
 import EmailNewTicket from "assets/email_new_ticket.svg";
-
+import { showNotification } from "@mantine/notifications"
+import { useDispatch } from "react-redux";
+import { updateChannel, uploadFile } from "service/DashboardService";
+import { updateEmailTicketCreateNotification } from "reducer/slice";
 const Integrations = () => {
+  const dispatch = useDispatch();
   const { workspaceInfo } = useDashboard();
   const { selectedPage, channelsInfo } = useDashboard();
   const handleIntegrateSlack = () => {
@@ -39,6 +43,19 @@ const Integrations = () => {
     );
 
   };
+
+  const handleEmailTicketIntegration = async () => {
+    const emailUpdatePayload = {emailNewTicketNotification:channelsInfo[selectedPage.name]?.emailNewTicketNotification ? false: true};
+    await dispatch(updateEmailTicketCreateNotification(emailUpdatePayload));
+    await updateChannel(
+      channelsInfo[selectedPage.name].channelId,
+      {...channelsInfo[selectedPage.name],...emailUpdatePayload}
+    );
+    showNotification({
+      title: "Notification",
+      message: "Saved Successfully",
+    });
+  }
 
   return (
     <div>
@@ -74,7 +91,9 @@ const Integrations = () => {
                 fontSize: "12px",
                 fontStyle: "normal",
               }}
-              onClick={handleIntegrateSlack}
+              onClick={async()=>{
+                await handleEmailTicketIntegration()
+              }}
               leftIcon={channelsInfo[selectedPage.name]?.emailNewTicketNotification ? <img src={SlackDisableIntegration} />: <img src={SlackIntegrationEnable} />}
             >
               {" "}

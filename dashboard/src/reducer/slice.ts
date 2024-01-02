@@ -447,6 +447,13 @@ export const dashboardSlice = createSlice({
         action.payload.subType
       ][action.payload.key] = action.payload.value;
     },
+    updateEmailTicketCreateNotification: (
+      state,
+      action: PayloadAction<{ emailNewTicketNotification: boolean }>
+    ) => {
+      state.channelsInfo[state.selectedPage.name].emailNewTicketNotification =
+        action.payload.emailNewTicketNotification;
+    },
     addInChatWidget: (state, action: PayloadAction<InChatWidgetInterface>) => {
       state.channelsInfo[state.selectedPage.name].inChatWidgets.push(
         action.payload
@@ -578,6 +585,7 @@ export const {
   updateAssignedUser,
   setTicketFilterText,
   setShowSidebar,
+  updateEmailTicketCreateNotification,
   setDefaultWorkSpaceSettingTab
 } = dashboardSlice.actions;
 
