@@ -84,14 +84,19 @@ io.on("connection", (socket) => {
       io.to(socketIds).emit("open-ticket",socketTicketPayload);
 
       
-      const channel = await ChannelModel.findOne({channelId:ticketOptions.channelId})
-      channel?.members.forEach(async (member:any) => {
-        const user = await User.findOne({userId:member})
-  
-        await CoreService.sendMail(ticketOptions.message, user?.email, ticketOptions.customerEmail, openTicketData.ticketId, ticketOptions.channelId, ticketOptions.workspaceId);
-      })
-      const getLocation = await ExternalService.getLocationFromIp(ticketOptions.ipAddress)
-      await CoreService.sendSlackMessage(channel, ticketOptions, socketTicketPayload, openTicketData.ticketId, getLocation);
+      const channel = await ChannelModel.findOne({channelId:ticketOptions.channelId});
+
+      if (channel?.emailNewTicketNotification) {
+        channel?.members.forEach(async (member:any) => {
+          const user = await User.findOne({userId:member})
+          await CoreService.sendMail(ticketOptions.message, user?.email, ticketOptions.customerEmail, openTicketData.ticketId, ticketOptions.channelId, ticketOptions.workspaceId);
+        })
+      }
+
+      if (channel?.slackChannelId) {
+        const getLocation = await ExternalService.getLocationFromIp(ticketOptions.ipAddress)
+        await CoreService.sendSlackMessage(channel, ticketOptions, socketTicketPayload, openTicketData.ticketId, getLocation);
+      }
     } catch (error) {
       console.error(error);
     }
