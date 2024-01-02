@@ -1,28 +1,57 @@
-import { Box, Button, Code, Grid, Space } from "@mantine/core";
+import { Box, Button, Code, Flex, Grid, Space } from "@mantine/core";
 import { useClipboard } from "@mantine/hooks";
 import Heading from "components/details/inbox/component/Heading";
 import GuideCards from "components/ui-components/workspaces/GuideCards";
 import { getConfig as Config } from "config/Config";
 import useDashboard from "hooks/useDashboard";
+import styled from "styled-components";
 import { Copy } from "tabler-icons-react";
 import { docsArray } from "util/Constant";
+import CopySVGIcon from "assets/copy_svg_icon.svg";
 
+export const SnippetHeading = styled.p`
+  color: #475467;
+  font-family: Inter;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 18px; /* 150% */
+`;
+
+export const CodeBlockContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const CodeBlockWrapper = styled.div`
+margin-top: 10px;
+`;
 
 const Deployment = () => {
   const clipboard = useClipboard({ timeout: 500 });
   const { selectedPage, channelsInfo } = useDashboard();
 
+  const channelId = channelsInfo[selectedPage.name]?.channelId;
 
-  const scriptToAttach = `
+  const widgetChatEmbedding = `
     <!-- Add this in the body tag in your code -->
     <div id="zeon-widget" data-symbol=${
-      channelsInfo[selectedPage.name]?.channelId
+      channelId
     }></div>
     
     <!-- Add these two lines just before the closing body tag -->
     <link href="${Config("widgetCSSFile")}" rel="stylesheet"/>    
     <script src="${Config("widgetJSFile")}" async></script>
   `;
+  
+  const embeddSuportChatText = `
+  <!-- Add this in the code -->
+  <iframe 
+  src="${Config("CHAT_WIDGET_URL")}/channel/${channelId}" 
+  >
+  </iframe>
+`;
 
   return (
     <>
@@ -31,33 +60,104 @@ const Deployment = () => {
           heading="Deployment"
           subheading="Deploy Zeon chat widget on your website"
         />
-        <Code
-          mt={20}
-          sx={(theme) => ({
-            backgroundColor: "#F9FAFB",
-            border: "1px solid #E0E4E7",
-            fontSize: "14px",
-            fontWeight: 400,
-            "&:hover": {
-              backgroundColor: theme.colors.gray[1],
-            },
-          })}
-          color="red"
-          p={10}
-          block
-        >
-          {scriptToAttach}
-        </Code>
-        <Button
-          radius="md"
-          onClick={() => clipboard.copy(scriptToAttach)}
-          mt={20}
-          color="#3054B9"
-          variant="default"
-          leftIcon={<Copy />}
-        >
-          {clipboard.copied ? "Copied" : "Copy Snippet"}
-        </Button>
+        <CodeBlockWrapper>
+          <CodeBlockContainer>
+            <SnippetHeading>Chat Widget</SnippetHeading>
+
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Button
+                style={{
+                  borderColor: "white",
+                  margin: 0,
+                  color: "#3054B9",
+                  fontSize: "12px",
+                  fontStyle: "normal",
+                }}
+                onClick={() => clipboard.copy(widgetChatEmbedding)}
+                mt={20}
+                color="#3054B9"
+                variant="outline"
+                leftIcon={<img src={CopySVGIcon} />}
+              >
+                {clipboard.copied ? "Copied" : "Copy"}
+              </Button>
+            </div>
+          </CodeBlockContainer>
+
+          <Code
+            mt={10}
+            sx={(theme) => ({
+              backgroundColor: "#F9FAFB",
+              border: "1px solid #E0E4E7",
+              borderRadius: "12px",
+              fontSize: "14px",
+              fontWeight: 400,
+              "&:hover": {
+                backgroundColor: theme.colors.gray[1],
+              },
+            })}
+            color="red"
+            p={10}
+            block
+          >
+            {widgetChatEmbedding}
+          </Code>
+        </CodeBlockWrapper>
+
+        <CodeBlockWrapper>
+          <CodeBlockContainer>
+            <SnippetHeading>Embedded Support Chat</SnippetHeading>
+
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <Button
+                style={{
+                  borderColor: "white",
+                  margin: 0,
+                  color: "#3054B9",
+                  fontSize: "12px",
+                  fontStyle: "normal",
+                }}
+                onClick={() => clipboard.copy(embeddSuportChatText)}
+                mt={20}
+                color="#3054B9"
+                variant="outline"
+                leftIcon={<img src={CopySVGIcon} />}
+              >
+                {clipboard.copied ? "Copied" : "Copy"}
+              </Button>
+            </div>
+          </CodeBlockContainer>
+
+          <Code
+            mt={10}
+            sx={(theme) => ({
+              backgroundColor: "#F9FAFB",
+              border: "1px solid #E0E4E7",
+              borderRadius: "12px",
+              fontSize: "14px",
+              fontWeight: 400,
+              "&:hover": {
+                backgroundColor: theme.colors.gray[1],
+              },
+            })}
+            color="red"
+            p={10}
+            block
+          >
+            {embeddSuportChatText}
+          </Code>
+        </CodeBlockWrapper>
+
         <Space h={20} />
         <Grid>
           {docsArray.map((data) => {
