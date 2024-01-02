@@ -189,7 +189,7 @@ export interface ICreateNoteDTO {
   resourceType: CRMResourceType;
   resourceId: string;
   noteType: NoteType;
-  userId: string;
+  user: UserInterface;
   source: string;
 }
 
@@ -232,7 +232,7 @@ export interface INote {
   content: string;
   createdAt: Date;
   source: string;
-  createdBy: string;
+  createdBy: UserInterface;
   noteId: string;
   isDeleted: boolean;
   noteType: NoteType;

@@ -1,16 +1,20 @@
-import { Box, Flex, Button, Image } from "@mantine/core";
-import styled from "styled-components";
-import companyIcon from "assets/companies.svg";
-import contactIcon from "assets/contacts.svg";
-import { setSelectedCompanyPage, setSelectedContactPage, setSelectedPage } from "reducer/crmSlice";
-import { useDispatch } from "react-redux";
-import useCrm from "hooks/useCrm";
-import CreateCannedResponseModal from "components/ui-components/CreateCannedResponseModal";
-import CreateNoteModal from "./CreateNoteModal";
+import { Box, Flex, Button, Image } from "@mantine/core"
+import styled from "styled-components"
+import companyIcon from "assets/companies.svg"
+import contactIcon from "assets/contacts.svg"
+import {
+  setSelectedCompanyPage,
+  setSelectedContactPage,
+  setSelectedPage,
+} from "reducer/crmSlice"
+import { useDispatch } from "react-redux"
+import useCrm from "hooks/useCrm"
+import CreateCannedResponseModal from "components/ui-components/CreateCannedResponseModal"
+import CreateNoteModal from "./CreateNoteModal"
 
 function Dashboard() {
-  const dispatch = useDispatch();
-  const {showNoteCreateModal} = useCrm();
+  const dispatch = useDispatch()
+  const { showNoteCreateModal } = useCrm()
 
   const Heading = styled.h1`
     font-size: 28px;
@@ -20,16 +24,16 @@ function Dashboard() {
     text-align: left;
     color: linear-gradient(0deg, #101828, #101828),
       linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
-  `;
+  `
 
   const handleAddCompany = () => {
-    dispatch(setSelectedPage({ type: "companies" }));
-    dispatch(setSelectedCompanyPage({ type: "create" }));
+    dispatch(setSelectedPage({ type: "companies" }))
+    dispatch(setSelectedCompanyPage({ type: "create" }))
   }
 
   const handleAddContact = () => {
-    dispatch(setSelectedPage({ type: "contacts" }));
-    dispatch(setSelectedContactPage({ type: "create" }));
+    dispatch(setSelectedPage({ type: "contacts" }))
+    dispatch(setSelectedContactPage({ type: "create" }))
   }
 
   return (
@@ -89,11 +93,8 @@ function Dashboard() {
           Add Contact
         </Button>
       </Box>
-      {
-        showNoteCreateModal && <CreateNoteModal showNoteCreateModal={showNoteCreateModal} />
-      }
     </Flex>
-  );
+  )
 }
 
-export default Dashboard;
+export default Dashboard

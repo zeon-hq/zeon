@@ -4,17 +4,17 @@ import { ICreateNoteDTO } from "../types/types";
 
 export const addNoteController = async (req: Request, res: Response) => {
   try {
-    const { note, noteType, source, resourceType, resourceId } =
+    const { content, noteType, source, resourceType, resourceId } =
       req.body as any;
     const user = req.user as any;
 
     // add note
     const payload: ICreateNoteDTO = {
-      content: note,
+      content,
       resourceId,
       resourceType,
       noteType,
-      userId: user.userId,
+      user: user,
       source,
     };
     const createdNote = await createNote(payload);

@@ -98,10 +98,27 @@ export default interface Contacts {
 
 export interface INote {
   content: string;
-  createdAt: Date;
+  createdAt: string;
   source: string;
-  createdBy: string;
+  createdBy: UserInterface;
   noteId: string;
   isDeleted: boolean;
   noteType: NoteType;
+}
+
+export interface UserInterface {
+  userId: string
+  name: string
+  password: string
+  phone?: {
+    countryCode: string
+    num: string
+  }
+  email: string
+  teamIds?: string[]
+
+  isActive: boolean
+  isDeleted: boolean
+
+  profilePic?: string
 }

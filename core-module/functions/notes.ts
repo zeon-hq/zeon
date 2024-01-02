@@ -8,6 +8,7 @@ import {
 } from "../types/types";
 import { getContact } from "./contact";
 import { getCompany } from "./company";
+import { CompanyModel } from "../schema/Company"
 
 export const createNote = async (param: ICreateNoteDTO) => {
   try {
@@ -16,10 +17,10 @@ export const createNote = async (param: ICreateNoteDTO) => {
     if (!param.resourceId) throw new Error("resourceId is required");
     if (!param.resourceType) throw new Error("resourceType is required");
     if (!param.noteType) throw new Error("noteType is required");
-    if (!param.userId) throw new Error("userId is required");
+    if (!param.user) throw new Error("userId is required");
     if (!param.source) throw new Error("source is required");
 
-    const { content, resourceId, resourceType, noteType, userId } = param;
+    const { content, resourceId, resourceType, noteType, user } = param;
 
     if (
       ![CRMResourceType.CONTACT, CRMResourceType.COMPANY].includes(resourceType)
@@ -36,7 +37,7 @@ export const createNote = async (param: ICreateNoteDTO) => {
       noteType,
       createdAt: new Date(),
       isDeleted: false,
-      createdBy: userId,
+      createdBy: user,
       noteId,
       source: param.source,
     };
@@ -64,7 +65,9 @@ export const createNote = async (param: ICreateNoteDTO) => {
       // add note to company
       company.notes.push(note);
       // save company
-      await company.save();
+      await CompanyModel.findOneAndUpdate({ companyId: resourceId }, company, {
+        new: true,
+      })
       return note;
     }
   } catch (error) {
@@ -218,7 +221,7 @@ export const getNotes = async (param: IGetNotesDTO) => {
       const allNotes = contact.notes.filter(
         (note) =>
           note.noteType === "PUBLIC" ||
-          (note.noteType === "PRIVATE" && note.createdBy === param.userId)
+          (note.noteType === "PRIVATE" && note.createdBy.userId === param.userId)
       );
       const paginatedNotes = allNotes.slice(startIndex, endIndex);
       const total = contact.notes.length;

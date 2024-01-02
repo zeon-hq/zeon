@@ -4,6 +4,7 @@ import {
   Flex,
   Group,
   Image,
+  Sx,
   Tabs,
   Text,
   TextInput,
@@ -14,7 +15,7 @@ import noteIcon from "assets/note.svg";
 import phoneIcon from "assets/phoneCall.svg";
 import plusIcon from "assets/plus.svg";
 import { useDispatch } from "react-redux";
-import { setSelectedCompanyPage } from "reducer/crmSlice";
+import { setSelectedCompanyPage, setShowNoteCreateModal } from "reducer/crmSlice";
 import styled from "styled-components";
 import Stepper from "../Stepper";
 
@@ -25,12 +26,21 @@ import employeeCountIcon from "assets/employee_count.svg";
 import revenueIcon from "assets/revenue.svg";
 import useCrm from "hooks/useCrm";
 import { companySizeFormatter, companyWorthFormatter } from "crm/utils";
+import CreateNoteModal from "crm/CreateNoteModal"
+import { CRMResourceType } from "crm/type"
+import Note from "crm/Notes/Note"
 
 const Container = styled.div`
   display: flex;
   width: 100%;
   height: 100%;
 `;
+
+const PanelStyle:Sx = {
+  padding: "0",
+  height: "calc(100vh - 163px)",
+  overflowY: "auto",
+}
 
 const LeftContainer = styled.div`
   width: 40%;
@@ -64,12 +74,15 @@ const TextInputWrapper = styled(TextInput)`
 
 function CompaniesDetails() {
   const dispatch = useDispatch();
-  const { selectedCompanyPage } = useCrm();
+  const { selectedCompanyPage, showNoteCreateModal } = useCrm();
   console.log(selectedCompanyPage.companyData);
 
   const handleBack = () => {
     dispatch(setSelectedCompanyPage({ type: "all" }));
   };
+
+  // fetch id from url
+  const resourceId = selectedCompanyPage?.companyData?.companyId || ""
 
   // const stepsData = [
   //   {
@@ -239,7 +252,7 @@ function CompaniesDetails() {
       </LeftContainer>
 
       <RightContainer>
-        <Group my="lg" pt={20} position="left">
+        <Group pt={20} position="left">
           <Button
             style={{
               borderRadius: "8px",
@@ -286,6 +299,11 @@ function CompaniesDetails() {
             }
             color="dark"
             variant="outline"
+            onClick={
+              () => {
+                dispatch(setShowNoteCreateModal(true));
+              }
+            }
           >
             Add Note
           </Button>
@@ -296,6 +314,9 @@ function CompaniesDetails() {
           defaultValue="interactions"
           radius={"md"}
           styles={(theme) => ({
+            root: {
+              marginTop:"16px"
+            },
             tab: {
               ...theme.fn.focusStyles(),
               fontSize: 14,
@@ -325,24 +346,23 @@ function CompaniesDetails() {
             </Tabs.Tab>
           </Tabs.List>
 
-          <Tabs.Panel value="interactions">
+          <Tabs.Panel sx={PanelStyle} value="interactions">
             <Stepper />
           </Tabs.Panel>
 
-          <Tabs.Panel value="notes">
+          <Tabs.Panel sx={PanelStyle} value="notes">
             <div
               style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                marginTop: "20%",
+                paddingTop:"16px"
               }}
             >
-              <Text size="lg">Coming Soon</Text>
+              <Note notes={
+                selectedCompanyPage?.companyData?.notes || []
+              }/>
             </div>
           </Tabs.Panel>
 
-          <Tabs.Panel value="associated_lists">
+          <Tabs.Panel sx={PanelStyle} value="associated_lists">
             <div
               style={{
                 display: "flex",
@@ -356,6 +376,9 @@ function CompaniesDetails() {
           </Tabs.Panel>
         </Tabs>
       </RightContainer>
+      {
+        showNoteCreateModal && <CreateNoteModal resourceId={resourceId} resourceType={CRMResourceType.COMPANY} showNoteCreateModal={showNoteCreateModal} />
+      }
     </Container>
   );
 }

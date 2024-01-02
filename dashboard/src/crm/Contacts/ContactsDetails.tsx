@@ -21,6 +21,7 @@ import styled from "styled-components";
 import Stepper, { StepType } from "../Stepper";
 import useCrm from "hooks/useCrm";
 import CreateNoteModal from "crm/CreateNoteModal";
+import { CRMResourceType } from "crm/type"
 
 const Container = styled.div`
   display: flex;
@@ -289,7 +290,7 @@ function ContactsDetails() {
         </Tabs>
       </RightContainer>
       {
-        showNoteCreateModal && <CreateNoteModal showNoteCreateModal={showNoteCreateModal} />
+        showNoteCreateModal && <CreateNoteModal resourceId={"resourceId"} resourceType={CRMResourceType.COMPANY} showNoteCreateModal={showNoteCreateModal} />
       }
     </Container>
   );
