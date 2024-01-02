@@ -3,7 +3,7 @@ import editIcon from "assets/edit.svg";
 import mailIcon from "assets/mail.svg";
 import trashIcon from "assets/trash.svg";
 import userPlus from "assets/userPlus.svg";
-import Contacts from "crm/type";
+import { findPrimaryEmail } from "crm/utils";
 import useDashboard from "hooks/useDashboard";
 import {
   MRT_GlobalFilterTextInput,
@@ -16,12 +16,17 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setSelectedContactPage } from "reducer/crmSlice";
-import { fetchContacts } from "service/CRMService";
+import {
+  deleteContact,
+  fetchAllCompaniesPair,
+  fetchContacts,
+} from "service/CRMService";
 
 const ContactsTable = () => {
   const [maxAvailableWidth, setMaxAvailableWidth] = useState(0);
   const dispatch = useDispatch();
   const { workspaceInfo } = useDashboard();
+  const [companyOptions, setCompanyOptions] = useState<any[]>([]);
 
   // Calculate maxAvailableWidth when the component mounts
   useEffect(() => {
@@ -31,6 +36,12 @@ const ContactsTable = () => {
       setMaxAvailableWidth(containerWidth - 50);
     }
   }, []);
+
+  useEffect(() => {
+    fetchAllCompaniesPair(workspaceInfo.workspaceId || "").then((res) => {
+      setCompanyOptions(res.data);
+    });
+  }, [workspaceInfo.workspaceId]);
 
   const [data, setData] = useState<any[]>([]);
   const [isError, setIsError] = useState(false);
@@ -85,13 +96,19 @@ const ContactsTable = () => {
   const columns = useMemo<MRT_ColumnDef<any>[]>(
     () => [
       {
-        accessorKey: "id",
-        header: "ID",
+        header: "id",
+        accessorKey: "companyId",
         size: columnSizes[0],
       },
       {
-        accessorKey: "company",
-        header: "Company",
+        header: "company",
+        accessorKey: "companyName",
+        accessorFn: (row) => {
+          const company = companyOptions.find(
+            (company) => company.value === row.companyId
+          );
+          return company?.label || "";
+        },
         size: columnSizes[1],
       },
       {
@@ -115,19 +132,20 @@ const ContactsTable = () => {
         ),
       },
       {
-        accessorKey: "jobTitle",
-        header: "Position",
+        header: "Job Position",
+        accessorKey: "jobPosition",
         size: columnSizes[3],
       },
       {
-        accessorKey: "email",
+        accessorKey: "emailAddress",
+        accessorFn: (row) => findPrimaryEmail(row.emailAddress),
         header: "Email",
         size: columnSizes[4],
         enableClickToCopy: true,
       },
       {
         id: "actions",
-        header: "",
+        header: "Actions",
         size: columnSizes[5],
         Cell: ({ row }) => (
           <Flex
@@ -168,7 +186,12 @@ const ContactsTable = () => {
     // Handle the delete action here
     // prevent default action
     event?.stopPropagation();
-    alert(`Deleting employee with ID: ${row.getValue("id")}`);
+    deleteContact(data[row.index].contactId);
+
+    // remove the deleted row from the table
+    const newData = [...data];
+    newData.splice(row.index, 1);
+    setData(newData);
   };
 
   const handleEdit = (
@@ -177,7 +200,9 @@ const ContactsTable = () => {
   ) => {
     // Handle the edit action here
     event?.stopPropagation();
-    alert(`Editing employee with ID: ${row.getValue("id")}`);
+    dispatch(
+      setSelectedContactPage({ type: "edit", contactData: data[row.index] })
+    );
   };
 
   const handleEmail = (
@@ -186,7 +211,7 @@ const ContactsTable = () => {
   ) => {
     // Handle the email action here
     event?.stopPropagation();
-    alert(`Sending email to employee with ID: ${row.getValue("id")}`);
+    window.open(`mailto:${findPrimaryEmail(data[row.index].emailAddress)}`);
   };
 
   const table = useMantineReactTable({
@@ -210,7 +235,18 @@ const ContactsTable = () => {
     },
     mantineTableBodyRowProps: ({ row }) => ({
       onClick: (event) => {
-        dispatch(setSelectedContactPage({ type: "view" }));
+        dispatch(
+          setSelectedContactPage({
+            type: "view",
+            contactData: {
+              ...data[row.index],
+              companyName:
+                companyOptions.find(
+                  (company) => company.value === data[row.index].companyId
+                )?.label || "",
+            },
+          })
+        );
       },
       sx: {
         cursor: "pointer",

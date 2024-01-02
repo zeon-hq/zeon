@@ -16,12 +16,16 @@ import noteIcon from "assets/note.svg";
 import phoneIcon from "assets/phoneCall.svg";
 import plusIcon from "assets/plus.svg";
 import { useDispatch } from "react-redux";
-import { setSelectedContactPage, setShowNoteCreateModal } from "reducer/crmSlice";
+import {
+  setSelectedContactPage,
+  setShowNoteCreateModal,
+} from "reducer/crmSlice";
 import styled from "styled-components";
 import Stepper, { StepType } from "../Stepper";
 import useCrm from "hooks/useCrm";
 import CreateNoteModal from "crm/CreateNoteModal";
 import { CRMResourceType } from "crm/type"
+import { findPrimaryEmail, findPrimaryPhoneNumIntl } from "crm/utils";
 
 const Container = styled.div`
   display: flex;
@@ -53,11 +57,15 @@ const TextInputWrapper = styled(TextInput)`
     letter-spacing: 0em;
     color: #344054;
   }
+  input:disabled {
+    color: #344054;
+    background-color: #ffffff;
+  }
 `;
 
 function ContactsDetails() {
   const dispatch = useDispatch();
-  const {showNoteCreateModal} = useCrm();
+  const { showNoteCreateModal, selectedContactPage } = useCrm();
 
   const handleBack = () => {
     dispatch(setSelectedContactPage({ type: "all" }));
@@ -99,7 +107,7 @@ function ContactsDetails() {
               /
             </Text>
             <Text size={14} weight={600}>
-              Aryan
+              {selectedContactPage?.contactData?.firstName || ""}{" "}
             </Text>
           </BackButton>
         </Group>
@@ -109,29 +117,53 @@ function ContactsDetails() {
             label="First Name"
             placeholder="First Name"
             radius="md"
+            value={selectedContactPage?.contactData?.firstName}
+            disabled
           />
           <TextInputWrapper
             label="Last Name"
             placeholder="Last Name"
             radius="md"
+            value={selectedContactPage?.contactData?.lastName}
+            disabled
           />
-          <TextInputWrapper label="Company" placeholder="Company" radius="md" />
+          <TextInputWrapper
+            label="Company"
+            placeholder="Company"
+            radius="md"
+            value={selectedContactPage?.contactData?.companyName}
+            disabled
+          />
           <TextInputWrapper
             label="Position"
             placeholder="Position"
             radius="md"
+            value={selectedContactPage?.contactData?.jobPosition}
+            disabled
           />
           <TextInputWrapper
             label="Email"
             placeholder="your@email.com"
             icon={<Image maw={16} mx="auto" src={mailIcon} alt="mail" />}
+            value={
+              findPrimaryEmail(
+                selectedContactPage?.contactData?.emailAddress
+              ) || ""
+            }
             radius="md"
+            disabled
           />
           <TextInputWrapper
             label="Phone Number"
             placeholder="Phone Number"
             icon={<Image maw={16} mx="auto" src={phoneIcon} alt="phone" />}
             radius="md"
+            value={
+              findPrimaryPhoneNumIntl(
+                selectedContactPage?.contactData?.phoneNumber
+              ) || ""
+            }
+            disabled
           />
           <TextInputWrapper
             label="LinkedIn"
@@ -140,6 +172,8 @@ function ContactsDetails() {
               <Image maw={16} mx="auto" src={linkedinIcon} alt="linkedin" />
             }
             radius="md"
+            value={selectedContactPage?.contactData?.linkedInUrl}
+            disabled
           />
         </Box>
       </LeftContainer>
@@ -192,7 +226,9 @@ function ContactsDetails() {
             }
             color="dark"
             variant="outline"
-            onClick={() => {dispatch(setShowNoteCreateModal(true))}}
+            onClick={() => {
+              dispatch(setShowNoteCreateModal(true));
+            }}
           >
             Add Note
           </Button>

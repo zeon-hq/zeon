@@ -38,7 +38,7 @@ function Dashboard() {
 
   return (
     <Flex justify="space-between" mx={10} align="center">
-      <Heading>Welcome back, Aryan</Heading>
+      <Heading>Welcome back </Heading>
       <Box>
         <Button
           style={{

@@ -113,3 +113,28 @@ export async function createContact(data: any) {
     return {};
   }
 }
+
+export async function editContact(contactId: string, data: any) {
+  try {
+    const res = await axiosInstance.put(
+      `${apiDomainUrl}/contacts/${contactId}`,
+      data
+    );
+    return res.data;
+  } catch (error) {
+    console.log(`[editContact] error: ${error}`);
+    return {};
+  }
+}
+
+export async function deleteContact(contactId: string) {
+  try {
+    const res = await axiosInstance.delete(
+      `${apiDomainUrl}/contacts/${contactId}`
+    );
+    return res.data;
+  } catch (error) {
+    console.log(`[deleteContact] error: ${error}`);
+    return {};
+  }
+}

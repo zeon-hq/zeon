@@ -25,10 +25,10 @@ import locationIcon from "assets/location.svg";
 import employeeCountIcon from "assets/employee_count.svg";
 import revenueIcon from "assets/revenue.svg";
 import useCrm from "hooks/useCrm";
-import { companySizeFormatter, companyWorthFormatter } from "crm/utils";
 import CreateNoteModal from "crm/CreateNoteModal"
 import { CRMResourceType } from "crm/type"
 import Note from "crm/Notes/Note"
+import { companySizeFormatter, companyWorthFormatter, findPrimaryPhoneNumIntl } from "crm/utils";
 
 const Container = styled.div`
   display: flex;
@@ -204,7 +204,7 @@ function CompaniesDetails() {
           <TextInputWrapper
             label="Phone Number"
             placeholder="Company Phone Number"
-            value={selectedCompanyPage?.companyData?.phoneNumber}
+            value={findPrimaryPhoneNumIntl(selectedCompanyPage?.companyData?.phoneNumber)}
             icon={
               <Image
                 src={phoneIcon}
