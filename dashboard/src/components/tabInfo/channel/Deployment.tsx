@@ -47,10 +47,7 @@ const Deployment = () => {
   
   const embeddSuportChatText = `
   <!-- Add this in the code -->
-  <iframe 
-  src="${Config("CHAT_WIDGET_URL")}/channel/${channelId}" 
-  >
-  </iframe>
+  <iframe src="${Config("CHAT_WIDGET_URL")}/channel/${channelId}"></iframe>
 `;
 
   return (
