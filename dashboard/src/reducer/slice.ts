@@ -108,6 +108,7 @@ export interface ChannelsInfo {
     channelId: string;
     slackChannelId?: string;
     members: string[];
+    emailNewTicketNotification?: boolean;
   };
 }
 

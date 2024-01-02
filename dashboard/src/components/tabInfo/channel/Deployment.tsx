@@ -5,7 +5,6 @@ import GuideCards from "components/ui-components/workspaces/GuideCards";
 import { getConfig as Config } from "config/Config";
 import useDashboard from "hooks/useDashboard";
 import styled from "styled-components";
-import { Copy } from "tabler-icons-react";
 import { docsArray } from "util/Constant";
 import CopySVGIcon from "assets/copy_svg_icon.svg";
 
@@ -29,7 +28,8 @@ margin-top: 10px;
 `;
 
 const Deployment = () => {
-  const clipboard = useClipboard({ timeout: 500 });
+  const clipboardChatWidgetCopy = useClipboard({ timeout: 500 });
+  const clipboardEmbeddableTextCopy = useClipboard({ timeout: 500 });
   const { selectedPage, channelsInfo } = useDashboard();
 
   const channelId = channelsInfo[selectedPage.name]?.channelId;
@@ -75,13 +75,18 @@ const Deployment = () => {
                   fontSize: "12px",
                   fontStyle: "normal",
                 }}
-                onClick={() => clipboard.copy(widgetChatEmbedding)}
+                sx={{
+                  "&:hover": {
+                    backgroundColor: 'white',
+                  }
+                }}
+                onClick={() => clipboardChatWidgetCopy.copy(widgetChatEmbedding)}
                 mt={20}
                 color="#3054B9"
                 variant="outline"
                 leftIcon={<img src={CopySVGIcon} />}
               >
-                {clipboard.copied ? "Copied" : "Copy"}
+                {clipboardChatWidgetCopy.copied ? "Copied" : "Copy"}
               </Button>
             </div>
           </CodeBlockContainer>
@@ -119,18 +124,17 @@ const Deployment = () => {
               <Button
                 style={{
                   borderColor: "white",
-                  margin: 0,
+                  backgroundColor: "white",
                   color: "#3054B9",
                   fontSize: "12px",
                   fontStyle: "normal",
                 }}
-                onClick={() => clipboard.copy(embeddSuportChatText)}
-                mt={20}
+                onClick={() => clipboardEmbeddableTextCopy.copy(embeddSuportChatText)}
                 color="#3054B9"
                 variant="outline"
                 leftIcon={<img src={CopySVGIcon} />}
               >
-                {clipboard.copied ? "Copied" : "Copy"}
+                {clipboardEmbeddableTextCopy.copied ? "Copied" : "Copy"}
               </Button>
             </div>
           </CodeBlockContainer>
