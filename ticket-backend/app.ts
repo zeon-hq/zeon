@@ -95,6 +95,7 @@ io.on("connection", (socket) => {
 
       if (channel?.slackChannelId) {
         const getLocation = await ExternalService.getLocationFromIp(ticketOptions.ipAddress)
+        console.log(`getLocation, ticketId:${openTicketData.ticketId}`, getLocation)
         await CoreService.sendSlackMessage(channel, ticketOptions, socketTicketPayload, openTicketData.ticketId, getLocation);
       }
     } catch (error) {

@@ -66,7 +66,7 @@ export default class CoreService {
                         "fields": [
                             {
                                 "type": "mrkdwn",
-                                "text": "Type:\nChannel Name"
+                                "text": `Type:\n${channel.name}`
                             },
                             {
                                 "type": "mrkdwn",
