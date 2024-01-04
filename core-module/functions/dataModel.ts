@@ -53,8 +53,10 @@ export const createDataModel = async ({
       isDeleted,
     }
     // save data model
-    const newDataModel = await DataModel.create(dataModel)
-    return newDataModel
+    const newDataModel = await DataModel.findOneAndUpdate({resourceType, resourceId},{
+        ...dataModel
+    }, {upsert: true})
+    return dataModel
   } catch (error) {
     console.log(error)
     throw error
