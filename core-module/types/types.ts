@@ -238,6 +238,24 @@ export interface INote {
   noteType: NoteType;
 }
 
+export interface IAdditionalDatafields {
+    name : string;
+    label: string;
+    type: IDatafieldType
+}
+
+export enum IDatafieldType  {
+  TEXT = "TEXT",
+  NUMBER = "NUMBER",
+  DATE = "DATE",
+  BOOLEAN = "BOOLEAN",
+  SINGLE_SELECT = "SINGLE_SELECT",
+  MULTI_SELECT = "MULTI_SELECT",
+  CURRENCY = "CURRENCY",
+  EMAIL = "EMAIL",
+  USER = "USER",
+}
+
 export interface IInviteUserBody {
   to: [{ email: string }];
   templateId: number;

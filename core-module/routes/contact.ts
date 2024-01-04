@@ -21,6 +21,10 @@ router.put("/:contactId", updateContactController)
 // delete company by companyId
 router.delete("/:contactId", deleteContactController)
 
+//update additionalDatafields
+router.put("/:contactId/additionalDatafields", updateContactController)
+
+
 
 
 

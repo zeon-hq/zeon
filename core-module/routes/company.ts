@@ -7,6 +7,7 @@ import {
     bulkDeleteCompanyController,
     getAllCompaniesValueLabelController
 } from "../controller/company"
+import { updateAdditionalDatafieldController } from "../controller/company"
 
 
 const router: Router = express.Router()
@@ -29,6 +30,10 @@ router.delete("/:companyId", deleteCompanyController)
 
 // Bulk delete company by companyIs
 router.delete("/", bulkDeleteCompanyController)
+
+// additionalData
+router.put("/:companyId/fields", updateAdditionalDatafieldController)
+
 
 
 

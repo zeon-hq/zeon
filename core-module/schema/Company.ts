@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 import { ContactPhoneNumbers } from "./Contact";
-import { INote } from "../types/types";
+import { IAdditionalDatafields, INote } from "../types/types";
 
 export const DOCUMENT_NAME = "Company";
 export const COLLECTION_NAME = "company";
@@ -65,6 +65,7 @@ export default interface Company {
   workspaceId: string;
   isDeleted: boolean;
   notes?: INote[];
+  additionalDatafields?: IAdditionalDatafields;
 }
 
 const schema = new Schema<Company>(
@@ -199,12 +200,30 @@ const schema = new Schema<Company>(
       required: false,
       default: false,
     },
+    additionalDatafields: {
+      type: Schema.Types.Mixed,
+      required: false,
+      default: {},
+    }
   },
   {
     versionKey: false,
     timestamps: true,
   }
 );
+
+// when fetching companies (find, findOne), sort the notes by descending order of createdAt
+schema.pre("find", function (next) {
+  
+
+  next();
+});
+
+schema.pre("findOne", function (next) {
+  this.populate("notes");
+  next();
+});
+
 
 export const CompanyModel = model<Company>(
   DOCUMENT_NAME,

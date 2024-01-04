@@ -62,8 +62,9 @@ export const createNote = async (param: ICreateNoteDTO) => {
       // GET THE COMPANY
       const company = await getCompany(resourceId);
       if (!company) throw new Error("Company not found");
-      // add note to company
-      company.notes.push(note);
+      // add note to company at first index
+      company.notes.unshift(note);
+     
       // save company
       await CompanyModel.findOneAndUpdate({ companyId: resourceId }, company, {
         new: true,
