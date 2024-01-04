@@ -4,8 +4,8 @@ import express, { Router } from "express"
 const router: Router = express.Router()
 
 // create data model
-router.post("/", createDataModelController)
+router.post("/create", createDataModelController)
 
 // get data model
-router.get("/", getDataModelController)
+router.post("/", getDataModelController)
 export default router

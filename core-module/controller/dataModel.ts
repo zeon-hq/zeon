@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createDataModel, getDataModel } from "../functions/dataModel";
+import { IGetDataModelDTO, createDataModel, getDataModel } from "../functions/dataModel";
 
 export const createDataModelController = async (req: Request, res: Response) => {
     try {
@@ -26,8 +26,9 @@ export const createDataModelController = async (req: Request, res: Response) => 
 export const getDataModelController = async (req: Request, res: Response) => {
     try {
         const { resourceType, resourceId } = req.body;
+
         const newDataModel = await getDataModel({
-        resourceType,
+        resourceType: resourceType as IGetDataModelDTO["resourceType"],
         resourceId,
         });
         return res.status(200).json({
