@@ -8,11 +8,13 @@ export interface ISelectedPage {
 export interface ISelectedContactPage {
   type: "all" | "create" | "edit" | "view";
   contactData?: any;
+  activeTab?: "interactions" | "notes" | "associated_lists";
 }
 
 export interface ISelectedCompanyPage {
   type: "all" | "create" | "edit" | "view";
   companyData?: any;
+  activeTab?: "interactions" | "notes" | "associated_lists";
 }
 
 export interface ICRMState {
@@ -65,7 +67,7 @@ export const crmSlice = createSlice({
     },
     setSelectedResource: (state, action) => {
       state.selectedResource = action.payload;
-    }
+    },
   },
 });
 
@@ -76,7 +78,7 @@ export const {
   setLoading,
   setShowNoteCreateModal,
   setSelectedNote,
-  setSelectedResource
+  setSelectedResource,
 } = crmSlice.actions;
 
 export default crmSlice.reducer;
