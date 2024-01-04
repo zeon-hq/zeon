@@ -1,4 +1,4 @@
-import { ActionIcon, Button, Flex, Input, Text } from "@mantine/core";
+import { Button, Text } from "@mantine/core";
 import socketInstance from "api/socket";
 import useOnScreen from "components/hooks/useOnScreen";
 import useWidget from "components/hooks/useWidget";
@@ -10,8 +10,9 @@ import { BsArrow90DegDown } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import { Message, setMessage } from "redux/slice";
 import styled from "styled-components";
-import { MessageType, IPropsType } from "./Chat.types";
+import { IPropsType, MessageType } from "./Chat.types";
 import ChatHeader from "./ChatHeader";
+import ChatMessageFooter from "./ChatMessageFooter";
 
 const TopText = styled.div`
   background: #f2f4f7;
@@ -24,6 +25,10 @@ const TopText = styled.div`
 `;
 
 const Wrapper = styled.div`
+height: 100%;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
 background-color: ${(props: IPropsType) => {
   return props.theme.isEmbeddable ? 'white' :'white';
 }};
@@ -113,6 +118,10 @@ const ZeonWidgetChat = () => {
 
   return (
     <>
+    <div className="" style={{
+      height: "100%",
+      overflow: "auto",
+    }}>
       <ChatHeader />
       <TopText>
         <Text size="sm" weight={500}>
@@ -158,51 +167,13 @@ const ZeonWidgetChat = () => {
           )}
         </ChatContainer>
 
-        <Flex
-          style={{
-            width: "90%",
-            justifyContent: "space-between",
-            alignItems: "end",
-            padding: "0px 24px",
-            marginBottom: "24px",
-          }}
-        >
-          <Input
-            sx={{
-              position: "sticky",
-              bottom: 0,
-              fontSize: "14px",
-              width: "85%",
-              borderRadius: "8px",
-            }}
-            placeholder="Message"
-            mt="8px"
-            size="md"
-            radius={"md"}
-            {...register("message")}
-          />
-
-          <ActionIcon
-          onClick={handleSubmit(submitForm)}
-          disabled={watch()?.message?.length == 0}
-            variant={"filled"}
-            style={{
-              width: "42px",
-              height: "42px",
-              borderRadius: "8px",
-              backgroundColor: "#3054B9",
-            }}
-          >
-            <img
-              width={"20px"}
-              src="https://zeonhq.b-cdn.net/send-01.svg"
-              alt="zeon-logo"
-            />
-          </ActionIcon>
-      
-        </Flex>
+      <ChatMessageFooter 
+      register={register}
+      watch={watch}
+      submitForm={handleSubmit(submitForm)}
+      />
       </Wrapper>
-      
+      </div>
     </>
   );
 };
