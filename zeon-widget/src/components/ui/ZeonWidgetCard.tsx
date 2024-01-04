@@ -118,9 +118,12 @@ const ZeonWidgetCard = () => {
         <></>
       ) : (
         <>
+        {
+          allOpenConversations.length > 0 && 
           <Text size="sm" weight={500} mt="8px">
             Open Tickets
           </Text>
+          }
           {allOpenConversations.length > 0 &&
             allOpenConversations.map((data: any) => {
               const messageReplaced = preProcessText(
@@ -156,10 +159,12 @@ const ZeonWidgetCard = () => {
         </>
       )}
 
+{widgetDetails?.inChatWidgets.length > 0 &&
       <Text size="sm" weight={500} mt="16px">
         {" "}
         Resources{" "}
       </Text>
+}
       {widgetDetails?.inChatWidgets.map((item) => (
         <SingleCard
           key={item.title + item.subTitle}
@@ -169,6 +174,7 @@ const ZeonWidgetCard = () => {
           textColor={"black"}
         />
       ))}
+
       </WholeWrapper>
     </>
   );
