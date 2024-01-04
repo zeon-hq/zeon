@@ -41,7 +41,12 @@ export default class CoreService {
 
     public static sendSlackMessage = async (channel:any, ticketOptions:ITicketOptions, ticketPayload:ISocketTicketPayload, ticketId:string, locationData:ILocationApiResponse): Promise<any> => {
         return new Promise((resolve, reject) => {
-            const locationName = `${locationData.city}, ${locationData.regionName}, ${locationData.country}` || '';
+            let locationName;
+            if (!locationData?.city || !locationData?.regionName || !locationData?.country) {
+                locationName = 'Not Found'
+            } else {
+                locationName = `${locationData.city}, ${locationData.regionName}, ${locationData.country}` || '';
+            }
             try {
                 const slackURL = process.env.CORE_SERVICE_URL + '/internal/slack/message';
                 console.log('slackURLHost', slackURL);
