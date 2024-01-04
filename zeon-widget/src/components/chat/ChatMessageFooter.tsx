@@ -16,7 +16,6 @@ const ChatMessageFooter = ({submitForm, watch, register}:IChatMessageFooter) => 
       alignItems: "end",
       padding: "0px 24px",
       marginBottom: "24px",
-      backgroundColor: "blue",
     }}
   >
     <Input
