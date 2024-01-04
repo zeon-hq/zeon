@@ -24,10 +24,11 @@ import styled from "styled-components";
 import Stepper, { StepType } from "../Stepper";
 import useCrm from "hooks/useCrm";
 import CreateNoteModal from "crm/CreateNoteModal";
-import { CRMResourceType } from "crm/type"
+import { CRMResourceType } from "crm/type";
 import { findPrimaryEmail, findPrimaryPhoneNumIntl } from "crm/utils";
 import { useEffect, useState } from "react";
 import { fetchContact } from "service/CRMService";
+import { AdditonalData } from "crm/AdditonalData/index";
 
 const Container = styled.div`
   display: flex;
@@ -36,15 +37,20 @@ const Container = styled.div`
 `;
 
 const LeftContainer = styled.div`
-  width: 40%;
+  width: 30%;
   margin-right: 2%;
   margin-left: 2%;
 `;
 
-const RightContainer = styled.div`
-  width: 60%;
+const MiddleContainer = styled.div`
+  width: 45%;
   border-left: 1px solid #e1e1e1;
   padding-left: 2%;
+`;
+
+const RightContainer = styled.div`
+  width: 25%;
+  border-left: 1px solid #e1e1e1;
 `;
 
 const BackButton = styled(Flex)`
@@ -69,8 +75,12 @@ function ContactsDetails() {
   const dispatch = useDispatch();
   const { showNoteCreateModal, selectedContactPage } = useCrm();
 
-  const [activeTab, setActiveTab] = useState<string | null>(selectedContactPage.activeTab ?? "interactions");
-  const [contactData, setContactData] = useState(selectedContactPage.contactData);
+  const [activeTab, setActiveTab] = useState<string | null>(
+    selectedContactPage.activeTab ?? "interactions"
+  );
+  const [contactData, setContactData] = useState(
+    selectedContactPage.contactData
+  );
 
   const handleBack = () => {
     dispatch(setSelectedContactPage({ type: "all" }));
@@ -86,6 +96,7 @@ function ContactsDetails() {
     }
   }, [contactData]);
 
+  console.log("contactData", contactData);
 
   const stepsData = [
     {
@@ -194,7 +205,7 @@ function ContactsDetails() {
         </Box>
       </LeftContainer>
 
-      <RightContainer>
+      <MiddleContainer>
         <Group my="lg" position="left">
           <Button
             style={{
@@ -342,10 +353,21 @@ function ContactsDetails() {
             </div>
           </Tabs.Panel>
         </Tabs>
+      </MiddleContainer>
+
+      <RightContainer>
+        <AdditonalData
+          resourceId={contactData?.id || contactData?.companyId}
+          type="contact"
+        />
       </RightContainer>
-      {
-        showNoteCreateModal && <CreateNoteModal resourceId={"resourceId"} resourceType={CRMResourceType.COMPANY} showNoteCreateModal={showNoteCreateModal} />
-      }
+      {showNoteCreateModal && (
+        <CreateNoteModal
+          resourceId={"resourceId"}
+          resourceType={CRMResourceType.COMPANY}
+          showNoteCreateModal={showNoteCreateModal}
+        />
+      )}
     </Container>
   );
 }

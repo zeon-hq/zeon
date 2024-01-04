@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { getConfig as Config } from "config/Config";
+import { CRMResourceType } from "crm/type";
 import { getAuthToken } from "util/dashboardUtils";
 let axiosInstance = axios.create({
   /*...*/
@@ -159,6 +160,52 @@ export async function deleteContact(contactId: string) {
     return res.data;
   } catch (error) {
     console.log(`[deleteContact] error: ${error}`);
+    return {};
+  }
+}
+
+export async function fetchDataModel(resourceId: string, resourceType: string) {
+  try {
+    const res = await axiosInstance.post(
+      `${apiDomainUrl}/datamodel`,
+      {
+        resourceId: resourceId,
+        resourceType: resourceType
+      }
+    );
+    return res.data;
+  } catch (error) {
+    console.log(`[fetchDataModel] error: ${error}`);
+    return {};
+  }
+}
+
+export async function addAdditionalFields(resourceId: string, resourceType: "contacts" | "companies", data: any) {
+  try {
+    const res = await axiosInstance.put(
+      `${apiDomainUrl}/${resourceType}/${resourceId}/fields`,
+      data
+    );
+    return res.data;
+  } catch (error) {
+    console.log(`[addAdditionalFields] error: ${error}`);
+    return {};
+  }
+}
+
+export async function createAdditionalFields(resourceId: string, resourceType: CRMResourceType, data: any) {
+  try {
+    const res = await axiosInstance.post(
+      `${apiDomainUrl}/datamodel/create`,
+      {
+        resourceId: resourceId,
+        resourceType: resourceType,
+        fields: data
+      }
+    );
+    return res.data;
+  } catch (error) {
+    console.log(`[createAdditionalFields] error: ${error}`);
     return {};
   }
 }
