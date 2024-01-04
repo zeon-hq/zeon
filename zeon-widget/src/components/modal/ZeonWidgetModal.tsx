@@ -14,6 +14,8 @@ import { useDispatch } from "react-redux";
 import { setAllOpenConversations, setShowWidget, setWidgetDetails } from "redux/slice";
 import styled from "styled-components";
 const Wrapper = styled.div`
+  background-color: white;
+  background: white;
   width: ${(props: IPropsType) => {
     return props.theme.isEmbeddable ? '100%' :'480px';
   }};
