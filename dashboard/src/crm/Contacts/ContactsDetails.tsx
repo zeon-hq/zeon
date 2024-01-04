@@ -26,6 +26,8 @@ import useCrm from "hooks/useCrm";
 import CreateNoteModal from "crm/CreateNoteModal";
 import { CRMResourceType } from "crm/type"
 import { findPrimaryEmail, findPrimaryPhoneNumIntl } from "crm/utils";
+import { useEffect, useState } from "react";
+import { fetchContact } from "service/CRMService";
 
 const Container = styled.div`
   display: flex;
@@ -67,9 +69,23 @@ function ContactsDetails() {
   const dispatch = useDispatch();
   const { showNoteCreateModal, selectedContactPage } = useCrm();
 
+  const [activeTab, setActiveTab] = useState<string | null>(selectedContactPage.activeTab ?? "interactions");
+  const [contactData, setContactData] = useState(selectedContactPage.contactData);
+
   const handleBack = () => {
     dispatch(setSelectedContactPage({ type: "all" }));
   };
+
+  useEffect(() => {
+    // if companyData only contains id not other data, fetch data from backend
+    if (contactData?.id && !contactData?.name) {
+      // fetch data from backend
+      fetchContact(contactData?.id).then((res) => {
+        setContactData(res.data);
+      });
+    }
+  }, [contactData]);
+
 
   const stepsData = [
     {
@@ -281,6 +297,8 @@ function ContactsDetails() {
               },
             },
           })}
+          value={activeTab}
+          onTabChange={(tab) => setActiveTab(tab)}
         >
           <Tabs.List>
             <Tabs.Tab value="interactions" h="28px">

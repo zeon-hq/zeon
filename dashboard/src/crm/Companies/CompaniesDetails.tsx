@@ -15,7 +15,10 @@ import noteIcon from "assets/note.svg";
 import phoneIcon from "assets/phoneCall.svg";
 import plusIcon from "assets/plus.svg";
 import { useDispatch } from "react-redux";
-import { setSelectedCompanyPage, setShowNoteCreateModal } from "reducer/crmSlice";
+import {
+  setSelectedCompanyPage,
+  setShowNoteCreateModal,
+} from "reducer/crmSlice";
 import styled from "styled-components";
 import Stepper from "../Stepper";
 
@@ -25,10 +28,16 @@ import locationIcon from "assets/location.svg";
 import employeeCountIcon from "assets/employee_count.svg";
 import revenueIcon from "assets/revenue.svg";
 import useCrm from "hooks/useCrm";
-import CreateNoteModal from "crm/CreateNoteModal"
-import { CRMResourceType } from "crm/type"
-import Note from "crm/Notes/Note"
-import { companySizeFormatter, companyWorthFormatter, findPrimaryPhoneNumIntl } from "crm/utils";
+import CreateNoteModal from "crm/CreateNoteModal";
+import { CRMResourceType } from "crm/type";
+import Note from "crm/Notes/Note";
+import {
+  companySizeFormatter,
+  companyWorthFormatter,
+  findPrimaryPhoneNumIntl,
+} from "crm/utils";
+import { useEffect, useState } from "react";
+import { fetchCompany } from "service/CRMService";
 
 const Container = styled.div`
   display: flex;
@@ -36,11 +45,11 @@ const Container = styled.div`
   height: 100%;
 `;
 
-const PanelStyle:Sx = {
+const PanelStyle: Sx = {
   padding: "0",
   height: "calc(100vh - 163px)",
   overflowY: "auto",
-}
+};
 
 const LeftContainer = styled.div`
   width: 40%;
@@ -68,21 +77,37 @@ const TextInputWrapper = styled(TextInput)`
   }
   input:disabled {
     color: #344054;
-    background-color: #FFFFFF;
+    background-color: #ffffff;
   }
 `;
 
 function CompaniesDetails() {
   const dispatch = useDispatch();
   const { selectedCompanyPage, showNoteCreateModal } = useCrm();
-  console.log(selectedCompanyPage.companyData);
+
+  const [activeTab, setActiveTab] = useState<string | null>(
+    selectedCompanyPage.activeTab ?? "interactions"
+  );
+  const [companyData, setCompanyData] = useState<any>(
+    selectedCompanyPage?.companyData
+  );
 
   const handleBack = () => {
     dispatch(setSelectedCompanyPage({ type: "all" }));
   };
 
   // fetch id from url
-  const resourceId = selectedCompanyPage?.companyData?.companyId || ""
+  const resourceId = companyData?.companyId || "";
+
+  useEffect(() => {
+    // if companyData only contains id not other data, fetch data from backend
+    if (companyData?.id && !companyData?.name) {
+      // fetch data from backend
+      fetchCompany(companyData?.id).then((res) => {
+        setCompanyData(res.data);
+      });
+    }
+  }, [companyData]);
 
   // const stepsData = [
   //   {
@@ -129,7 +154,7 @@ function CompaniesDetails() {
           <TextInputWrapper
             label="Company Name"
             placeholder="Company Name"
-            value={selectedCompanyPage?.companyData?.name}
+            value={companyData?.name}
             radius="md"
             disabled
           />
@@ -137,7 +162,7 @@ function CompaniesDetails() {
           <TextInputWrapper
             label="Website"
             placeholder="Website URL"
-            value={selectedCompanyPage?.companyData?.url}
+            value={companyData?.url}
             icon={
               <Image src={globeIcon} alt="website URL" width={15} height={15} />
             }
@@ -149,14 +174,14 @@ function CompaniesDetails() {
             label="About"
             placeholder="About the company"
             radius="md"
-            value={selectedCompanyPage?.companyData?.description}
+            value={companyData?.description}
             disabled
           />
 
           <TextInputWrapper
             label="LinkedIn"
             placeholder="LinkedIn URL"
-            value={selectedCompanyPage?.companyData?.linkedInUrl}
+            value={companyData?.linkedInUrl}
             icon={
               <Image
                 src={linkedinIcon}
@@ -172,7 +197,7 @@ function CompaniesDetails() {
           <TextInputWrapper
             label="Twitter"
             placeholder="Twitter URL"
-            value={selectedCompanyPage?.companyData?.xUrl}
+            value={companyData?.xUrl}
             icon={
               <Image
                 src={twitterIcon}
@@ -188,7 +213,7 @@ function CompaniesDetails() {
           <TextInputWrapper
             label="Location"
             placeholder="Company Location"
-            value={selectedCompanyPage?.companyData?.location}
+            value={companyData?.location}
             icon={
               <Image
                 src={locationIcon}
@@ -204,7 +229,7 @@ function CompaniesDetails() {
           <TextInputWrapper
             label="Phone Number"
             placeholder="Company Phone Number"
-            value={findPrimaryPhoneNumIntl(selectedCompanyPage?.companyData?.phoneNumber)}
+            value={findPrimaryPhoneNumIntl(companyData?.phoneNumber)}
             icon={
               <Image
                 src={phoneIcon}
@@ -220,7 +245,7 @@ function CompaniesDetails() {
           <TextInputWrapper
             label="Employee Count"
             placeholder="Number of Employees"
-            value={companySizeFormatter(selectedCompanyPage?.companyData?.companySize)}
+            value={companySizeFormatter(companyData?.companySize)}
             icon={
               <Image
                 src={employeeCountIcon}
@@ -236,7 +261,7 @@ function CompaniesDetails() {
           <TextInputWrapper
             label="Company Worth"
             placeholder="Company Worth"
-            value={companyWorthFormatter(selectedCompanyPage?.companyData?.companyWorth)}
+            value={companyWorthFormatter(companyData?.companyWorth)}
             icon={
               <Image
                 src={revenueIcon}
@@ -299,11 +324,9 @@ function CompaniesDetails() {
             }
             color="dark"
             variant="outline"
-            onClick={
-              () => {
-                dispatch(setShowNoteCreateModal(true));
-              }
-            }
+            onClick={() => {
+              dispatch(setShowNoteCreateModal(true));
+            }}
           >
             Add Note
           </Button>
@@ -315,7 +338,7 @@ function CompaniesDetails() {
           radius={"md"}
           styles={(theme) => ({
             root: {
-              marginTop:"16px"
+              marginTop: "16px",
             },
             tab: {
               ...theme.fn.focusStyles(),
@@ -333,6 +356,8 @@ function CompaniesDetails() {
               },
             },
           })}
+          value={activeTab}
+          onTabChange={(tab) => setActiveTab(tab)}
         >
           <Tabs.List>
             <Tabs.Tab value="interactions" h="28px">
@@ -353,12 +378,10 @@ function CompaniesDetails() {
           <Tabs.Panel sx={PanelStyle} value="notes">
             <div
               style={{
-                paddingTop:"16px"
+                paddingTop: "16px",
               }}
             >
-              <Note notes={
-                selectedCompanyPage?.companyData?.notes || []
-              }/>
+              <Note notes={companyData?.notes || []} />
             </div>
           </Tabs.Panel>
 
@@ -376,9 +399,13 @@ function CompaniesDetails() {
           </Tabs.Panel>
         </Tabs>
       </RightContainer>
-      {
-        showNoteCreateModal && <CreateNoteModal resourceId={resourceId} resourceType={CRMResourceType.COMPANY} showNoteCreateModal={showNoteCreateModal} />
-      }
+      {showNoteCreateModal && (
+        <CreateNoteModal
+          resourceId={resourceId}
+          resourceType={CRMResourceType.COMPANY}
+          showNoteCreateModal={showNoteCreateModal}
+        />
+      )}
     </Container>
   );
 }

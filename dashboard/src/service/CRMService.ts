@@ -19,6 +19,18 @@ axiosInstance.interceptors.request.use(function (
 // const apiDomainUrl = Config('CORE_API_DOMAIN');
 const apiDomainUrl = "http://localhost:3005";
 
+export async function fetchCompany(companyId: string) {
+  try {
+    const res = await axiosInstance.get(
+      `${apiDomainUrl}/companies/${companyId}`
+    );
+    return res.data;
+  } catch (error) {
+    console.log(`[fetchCompany] error: ${error}`);
+    return {};
+  }
+}
+
 export async function fetchCompanies(
   workspaceId: string,
   limit?: string,
@@ -81,6 +93,18 @@ export async function fetchAllCompaniesPair(workspaceId: string) {
     return res.data;
   } catch (error) {
     console.log(`[fetchAllCompaniesPair] error: ${error}`);
+    return {};
+  }
+}
+
+export async function fetchContact(contactId: string) {
+  try {
+    const res = await axiosInstance.get(
+      `${apiDomainUrl}/contacts/${contactId}`
+    );
+    return res.data;
+  } catch (error) {
+    console.log(`[fetchContact] error: ${error}`);
     return {};
   }
 }
