@@ -2,6 +2,7 @@ import { Text } from "@mantine/core";
 import { getChannelById, getOpenTicket } from "api/api";
 import { IPropsType } from "components/chat/Chat.types";
 import ZeonWidgetChat from "components/chat/ZeonWidgetChat";
+import { generateRandomString } from "components/hooks/commonUtils";
 import useEmbeddable, { IEmbeddableOutput } from "components/hooks/useEmbeddable";
 import useOutsideAlerter from "components/hooks/useOutsideAlerter";
 import useWidget from "components/hooks/useWidget";
@@ -147,6 +148,9 @@ const ZeonWidgetModal = () => {
       const getData: any = await getOpenTicket(getWidgetId);
       // dispatch(setMessage(getData.data.ticket))
       dispatch(setAllOpenConversations(getData.data.ticket));
+    } else {
+      const widgetId = generateRandomString(6);
+      localStorage.setItem("widgetId", widgetId);
     }
   };
 
