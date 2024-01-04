@@ -172,13 +172,14 @@ const ZeonWidgetModal = () => {
               <Header isForm={step === "form"} />
               <Info>
                 {step === "initial" ? (
-                  <ZeonWidgetCard />
-                ) : step === "form" ? (
                   <ZeonWidgetForm />
-                ) : (
+                  ) : step === "form" ? (
+                    <ZeonWidgetCard />
+                    ) : (
                   <p> {step} </p>
                 )}
 
+              </Info>
                 {showBrandingImage && (
                   <BrandingWrapper onClick={openZeon}>
                     <Text align="center" size="xs" color="gray">
@@ -191,7 +192,6 @@ const ZeonWidgetModal = () => {
                     />
                   </BrandingWrapper>
                 )}
-              </Info>
             </>
           )}
         </Wrapper>

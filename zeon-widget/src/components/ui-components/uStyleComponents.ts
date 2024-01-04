@@ -35,12 +35,10 @@ export const Text = styled.p<TextProps>`
 
 export const BrandingWrapper = styled.div`
   display: flex;
+  padding: 5px 10px 10px;
   align-items: center;
-  /* justify-content:center; */
   gap: 4px;
   margin-top: 16px;
-
-  // on hover turn cursor to pointer
   &:hover {
     cursor: pointer;
   }

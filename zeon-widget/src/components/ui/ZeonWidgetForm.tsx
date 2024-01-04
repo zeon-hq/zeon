@@ -3,7 +3,6 @@ import { TextInput } from "@mantine/core";
 import styled from "styled-components";
 import { Textarea } from "@mantine/core";
 import { Button } from "@mantine/core";
-import { AiOutlineSend } from "components/icons/icons";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import useWidget from "components/hooks/useWidget";
@@ -39,6 +38,7 @@ type FormDataType = {
 
 const Wrapper = styled.div`
   border-radius: 8px;
+  height: 100%;
 `;
 
 const ZeonWidgetForm = () => {
@@ -155,7 +155,6 @@ const ZeonWidgetForm = () => {
   }, []);
 
   return (
-    <div>
       
       <Wrapper as={"form"} onSubmit={handleSubmit(submitForm)}>
         <Text size="medium" weight="bold">
@@ -183,13 +182,17 @@ const ZeonWidgetForm = () => {
           errors={errors} name="email"
           render={({ message }) => <Text color="red" weight="normal" size="small">{message}</Text>}
         />
+        <div style={{height:'100%', display:'flex', flexDirection:'column', justifyContent:'space-between'}}>
+<div className="" style={{height:'100%'}}>
         <Textarea
           placeholder={
             'Enter message here'
           }
           label="Description"
+          style={{
+            height:'100% !important'
+          }}
           autosize
-          minRows={8}
           radius={'sm'}
           py="sm"
           {...register("message",{
@@ -200,10 +203,11 @@ const ZeonWidgetForm = () => {
           errors={errors} name="message"
           render={({ message }) => <Text color="red" weight="normal" size="small">{message}</Text>}
         />
+        </div>
         <div style={{
           width:'100%',
           display:'flex',
-          justifyContent:'flex-end'
+          justifyContent:'flex-end',
         }}>
 
         <Button
@@ -220,9 +224,9 @@ const ZeonWidgetForm = () => {
           Submit
         </Button>
           </div>
+          </div>
       </Wrapper>
       
-    </div>
   );
 };
 
