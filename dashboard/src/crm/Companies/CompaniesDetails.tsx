@@ -39,6 +39,8 @@ import {
 } from "crm/utils";
 import { useEffect, useState } from "react";
 import { fetchCompany } from "service/CRMService";
+import { useLocation, useNavigate } from "react-router-dom";
+import { AdditonalData } from "crm/AdditonalData";
 
 const Container = styled.div`
   display: flex;
@@ -53,17 +55,21 @@ const PanelStyle: Sx = {
 };
 
 const LeftContainer = styled.div`
-  width: 40%;
+  width: 30%;
   margin-right: 2%;
   margin-left: 2%;
 `;
 
-const RightContainer = styled.div`
-  width: 60%;
+const MiddleContainer = styled.div`
+  width: 45%;
   border-left: 1px solid #e1e1e1;
   padding-left: 2%;
 `;
 
+const RightContainer = styled.div`
+  width: 25%;
+  border-left: 1px solid #e1e1e1;
+`;
 const BackButton = styled(Flex)`
   cursor: pointer;
 `;
@@ -85,6 +91,9 @@ const TextInputWrapper = styled(TextInput)`
 function CompaniesDetails() {
   const dispatch = useDispatch();
   const { selectedCompanyPage, showNoteCreateModal } = useCrm();
+  const location = useLocation();
+  const navigate = useNavigate();
+
 
   const [activeTab, setActiveTab] = useState<string | null>(
     selectedCompanyPage.activeTab ?? "interactions"
@@ -95,6 +104,10 @@ function CompaniesDetails() {
 
   const handleBack = () => {
     dispatch(setSelectedCompanyPage({ type: "all" }));
+
+    const pathName = location.pathname.split("/");
+    pathName.pop();
+    navigate(pathName.join("/"));
   };
 
   // fetch id from url
@@ -109,6 +122,19 @@ function CompaniesDetails() {
       });
     }
   }, [companyData]);
+
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
+    if (!params.has("activeTab")) {
+      params.append("activeTab", activeTab ?? "interactions");
+      navigate(`${url.pathname}?${params.toString()}`);
+    } else {
+      params.set("activeTab", activeTab ?? "interactions");
+      navigate(`${url.pathname}?${params.toString()}`);
+    }
+  }, [activeTab, navigate]);
 
   // const stepsData = [
   //   {
@@ -282,7 +308,7 @@ function CompaniesDetails() {
         </Box>
       </LeftContainer>
 
-      <RightContainer>
+      <MiddleContainer>
         <Group pt={20} position="left">
           <Button
             style={{
@@ -404,6 +430,14 @@ function CompaniesDetails() {
             </div>
           </Tabs.Panel>
         </Tabs>
+      </MiddleContainer>
+
+
+      <RightContainer>
+        <AdditonalData
+          resourceId={companyData?.id || companyData?.companyId}
+          type="company"
+        />
       </RightContainer>
       {showNoteCreateModal && (
         <CreateNoteModal
