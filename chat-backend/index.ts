@@ -1,4 +1,3 @@
-import config from "config";
 import cors from "cors";
 import dotenv from "dotenv";
 import express, { Express } from "express";
@@ -7,7 +6,6 @@ import os from "os";
 import { initializeDB } from "zeon-core/dist/func";
 import { UserInterface } from "zeon-core/dist/types";
 import oauthController from "./controller/slack/oauthController";
-console.log("NODE_ENV: " + config.util.getEnv("NODE_ENV"));
 const app: Express = express();
 
 
