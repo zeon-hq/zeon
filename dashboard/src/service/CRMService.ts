@@ -208,4 +208,4 @@ export async function createAdditionalFields(resourceId: string, resourceType: C
     console.log(`[createAdditionalFields] error: ${error}`);
     return {};
   }
-}
+};

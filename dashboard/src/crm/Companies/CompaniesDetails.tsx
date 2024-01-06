@@ -16,6 +16,7 @@ import phoneIcon from "assets/phoneCall.svg";
 import plusIcon from "assets/plus.svg";
 import { useDispatch } from "react-redux";
 import {
+  initCompanyData,
   setSelectedCompanyPage,
   setShowNoteCreateModal,
 } from "reducer/crmSlice";
@@ -125,6 +126,11 @@ function CompaniesDetails() {
   //     text: "Gave an early introduction to Zeon and scheduled a call to further discuss",
   //   },
   // ];
+
+  useEffect(() => {
+    //@ts-ignore
+    dispatch(initCompanyData({companyId:selectedCompanyPage?.companyData?.companyId}));
+  })
 
   return (
     <Container>

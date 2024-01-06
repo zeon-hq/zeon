@@ -57,7 +57,7 @@ export const AdditonalData = ({ resourceId, type }: AdditionalDataProps) => {
       addAdditionalFields(
         resourceId,
         type === "contact" ? "contacts" : "companies",
-        fieldsToUpdate
+        {fields:textInputValues}
       );
     }
   };

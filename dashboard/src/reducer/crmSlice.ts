@@ -1,4 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { fetchCompany } from "service/CRMService";
 
 export interface ISelectedPage {
   type: "dashboard" | "contacts" | "companies";
@@ -43,6 +44,34 @@ const initialState: ICRMState = {
   selectedResource: null,
 };
 
+const getComapnyInfo = async (companyId: string) => {
+  try {
+    const res = await fetchCompany(companyId);
+    return res.data
+  } catch (error) {
+    return {}
+  }
+}
+
+export const initCompanyData = createAsyncThunk(
+  "finance/init",
+  async ({companyId}:{
+      companyId: string;
+  }) => {
+    try {
+      const response:any = await getComapnyInfo(companyId);
+      return {
+        ...response
+      }
+    } catch (error) {
+      return await new Promise<any>((resolve, reject) => {
+        resolve({ initialState });
+      });
+    }
+  }
+);
+
+
 export const crmSlice = createSlice({
   name: "crm",
   initialState,
@@ -69,6 +98,18 @@ export const crmSlice = createSlice({
       state.selectedResource = action.payload;
     },
   },
+  extraReducers: (builder) => { 
+    builder
+    .addCase(initCompanyData.fulfilled, (state, action) => {
+        // state.selectedCompanyPage = action.payload;
+    })
+    .addCase(initCompanyData.rejected, (state, action) => {
+        
+    })
+    .addCase(initCompanyData.pending, (state, action) => {
+        
+    })
+}
 });
 
 export const {

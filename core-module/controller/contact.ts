@@ -159,7 +159,7 @@ export const updateAdditionalDatafieldController = async (
         error: "Invalid contactId",
       })
 
-    const isDataVerified = verifyDataAgainstDataModel({
+    const isDataVerified = await verifyDataAgainstDataModel({
       resourceType: CRMResourceType.CONTACT,
       resourceId: contactId,
       fields,
