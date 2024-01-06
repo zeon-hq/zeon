@@ -29,6 +29,7 @@ import { findPrimaryEmail, findPrimaryPhoneNumIntl } from "crm/utils";
 import { useEffect, useState } from "react";
 import { fetchContact } from "service/CRMService";
 import { AdditonalData } from "crm/AdditonalData/index";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -82,8 +83,14 @@ function ContactsDetails() {
     selectedContactPage.contactData
   );
 
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const handleBack = () => {
     dispatch(setSelectedContactPage({ type: "all" }));
+    const pathName = location.pathname.split("/");
+    pathName.pop();
+    navigate(pathName.join("/"));
   };
 
   useEffect(() => {
@@ -96,7 +103,17 @@ function ContactsDetails() {
     }
   }, [contactData]);
 
-  console.log("contactData", contactData);
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
+    if (!params.has("activeTab")) {
+      params.append("activeTab", activeTab ?? "interactions");
+      navigate(`${url.pathname}?${params.toString()}`);
+    } else {
+      params.set("activeTab", activeTab ?? "interactions");
+      navigate(`${url.pathname}?${params.toString()}`);
+    }
+  }, [activeTab, navigate]);
 
   const stepsData = [
     {
@@ -133,8 +150,8 @@ function ContactsDetails() {
             <Text size={14} weight={600} color="#3054B9">
               /
             </Text>
-            <Text size={14} weight={600}>
-              {selectedContactPage?.contactData?.firstName || ""}{" "}
+            <Text size={14} weight={600} color="#000">
+              {selectedContactPage?.contactData?.firstName}
             </Text>
           </BackButton>
         </Group>

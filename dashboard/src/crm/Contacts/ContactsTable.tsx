@@ -21,12 +21,16 @@ import {
   fetchAllCompaniesPair,
   fetchContacts,
 } from "service/CRMService";
+import {useLocation, useNavigate } from "react-router-dom";
 
 const ContactsTable = () => {
   const [maxAvailableWidth, setMaxAvailableWidth] = useState(0);
   const dispatch = useDispatch();
   const { workspaceInfo } = useDashboard();
   const [companyOptions, setCompanyOptions] = useState<any[]>([]);
+
+  const location = useLocation();
+  const navigate = useNavigate();
 
   // Calculate maxAvailableWidth when the component mounts
   useEffect(() => {
@@ -247,6 +251,8 @@ const ContactsTable = () => {
             },
           })
         );
+        const contactId = data[row.index].contactId;
+        navigate(`${location.pathname}/${contactId}`);
       },
       sx: {
         cursor: "pointer",

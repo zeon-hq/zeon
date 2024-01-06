@@ -16,7 +16,7 @@ import { useDispatch } from "react-redux";
 import { setSelectedCompanyPage } from "reducer/crmSlice";
 import { deleteCompany, fetchCompanies } from "service/CRMService";
 import { companySizeFormatter, companyWorthFormatter } from "crm/utils";
-import { da } from "date-fns/locale";
+import {useLocation, useNavigate } from "react-router-dom";
 
 const CompaniesTable = () => {
   const [maxAvailableWidth, setMaxAvailableWidth] = useState(0);
@@ -49,6 +49,9 @@ const CompaniesTable = () => {
     pageIndex: 0,
     pageSize: 10,
   });
+  const navigate = useNavigate();
+  const location = useLocation();
+
 
   //if you want to avoid useEffect, look at the React Query example instead
   useEffect(() => {
@@ -155,7 +158,7 @@ const CompaniesTable = () => {
         ),
       },
     ],
-    [pagination.pageIndex, pagination.pageSize, workspaceInfo.workspaceId]
+    [columnSizes]
   );
 
   const handleDelete = (
@@ -205,6 +208,9 @@ const CompaniesTable = () => {
         dispatch(
           setSelectedCompanyPage({ type: "view", companyData: data[row.index] })
         );
+        // change route to current route/:companyId
+        const companyId = data[row.index].companyId;
+        navigate(`${location.pathname}/${companyId}`);
       },
       sx: {
         cursor: "pointer",
