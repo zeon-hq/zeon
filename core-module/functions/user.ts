@@ -10,7 +10,7 @@ import {
   UserWorkspaceRelationDTO,
 } from "../types/types"
 import { generateId } from "../utils/utils"
-import bcrypt from "bcrypt"
+import bcrypt from "bcryptjs"
 import { Request, Response, NextFunction } from "express"
 import jwt from "jsonwebtoken"
 import { getWorkspaceByWorkspaceId } from "./workspace"

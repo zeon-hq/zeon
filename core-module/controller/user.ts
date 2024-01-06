@@ -20,7 +20,7 @@ import UserWorkspace from "../schema/UserWorkspace"
 import ForgetPassword from "../schema/ForgetPassword"
 import { sendInviteEmail, sendSignupEmail } from "../functions/mailer"
 const jwt = require("jsonwebtoken")
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcryptjs")
 
 /**
  * The `signup` function is an asynchronous function that handles the signup process for a user,
