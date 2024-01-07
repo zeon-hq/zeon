@@ -1,7 +1,6 @@
 import { ISignupBody } from "../types/types"
 import axios from "axios"
 import { IForgetPasswordBody } from "../types/types"
-import fetch from "node-fetch";
 
 
 const mailerUrl = 'https://api.brevo.com/v3/contacts';
@@ -32,23 +31,23 @@ export const sendMail = async  (body: any) => {
 }
 
 export const sendSignupEmail = (body: ISignupBody) => {
-
   const options = {
-    method: 'POST',
     headers: {
       accept: 'application/json',
-      'content-type': 'application/json',
+      'Content-Type': 'application/json',
       'api-key': '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'
-    },
-    body: JSON.stringify(body)
+    }
   };
-  
-  fetch(mailerUrl, options)
-    .then((res:any) => res.json())
-    .then((json:any) => console.log(json))
-    .catch((err:any) => console.error('error:' + err));
-    // use sendMail function to send email
-    return sendMail(body)
+
+  axios.post(mailerUrl, body, options)
+    .then((response:any) => {
+      console.log(response.data);
+      // use sendMail function to send email
+      sendMail(body);
+    })
+    .catch((error:any) => {
+      console.error('error:', error);
+    });
 }
 
 export const sendForgetPasswordEmail = (body: IForgetPasswordBody) => {

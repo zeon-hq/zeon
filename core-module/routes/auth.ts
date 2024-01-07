@@ -1,9 +1,5 @@
-import express, { Express, Request, Response, Router } from "express"
-import User from "../schema/User"
-import { generateId } from "../utils/utils"
+import express, { Router } from "express"
 import { forgetPasswordController, login, newSignup, resetPasswordController } from "../controller/user"
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
 
 
 
