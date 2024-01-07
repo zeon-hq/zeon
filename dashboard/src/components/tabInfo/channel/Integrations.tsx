@@ -16,7 +16,7 @@ const Integrations = () => {
   const { workspaceInfo } = useDashboard();
   const { selectedPage, channelsInfo } = useDashboard();
   const handleIntegrateSlack = () => {
-    const slackRedirectionUrl = Config("SLACK_REDIRECTION_URL");
+    const slackRedirectionUrl = Config("API_DOMAIN") + "/oauth/slack/authorize";
     const currentUrl = window.location.href;
     // Construct the state object with accountId and currentUrl
     const stateObject = {

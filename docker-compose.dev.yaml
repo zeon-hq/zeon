@@ -25,7 +25,7 @@ services:
     volumes:
       - ./dashboard:/app
       - /app/node_modules
-    command: npm start
+    command: npm run start:docker
 
   zeon-chat-widget:
     container_name: zeon-chat-widget

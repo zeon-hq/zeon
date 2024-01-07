@@ -1,9 +1,8 @@
 {
   "API_DOMAIN": "https://devserver.zeonhq.com",
   "TICKET_SERVICE": "https://devservice.zeonhq.com",
+  "CORE_API_DOMAIN" : "https://core.zeonhq.com",
   "widgetJSFile":"https://zeonhq.b-cdn.net/zeon-widget.js",
   "widgetCSSFile":"https://zeonhq.b-cdn.net/zeon-widget.css",
-  "CORE_API_DOMAIN" : "https://core.zeonhq.com",
-  "SLACK_REDIRECTION_URL":"https://chat.zeonhq.com/oauth/slack/authorize",
   "CHAT_WIDGET_URL":"https://widget.zeonhq.com"
 }
