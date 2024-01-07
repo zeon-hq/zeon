@@ -1,8 +1,8 @@
 import { ISignupBody } from "../types/types"
 import axios from "axios"
 import { IForgetPasswordBody } from "../types/types"
+import fetch from "node-fetch";
 
-const fetch = require('node-fetch');
 
 const mailerUrl = 'https://api.brevo.com/v3/contacts';
 
