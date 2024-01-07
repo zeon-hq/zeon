@@ -23,6 +23,7 @@
   "dependencies": {
     "@slack/web-api": "^6.8.0",
     "@types/dotenv": "^8.2.0",
+    "@types/node-fetch": "^2.6.10",
     "axios": "^1.5.1",
     "bcryptjs": "2.4.3 ",
     "cors": "^2.8.5",
@@ -30,6 +31,7 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.5.2",
+    "node-fetch": "^3.3.2",
     "typescript": "^5.2.2"
   },
   "devDependencies": {
