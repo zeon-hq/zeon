@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { fetchCompany } from "service/CRMService";
+import { fetchCompany, fetchContact } from "service/CRMService";
 
 export interface ISelectedPage {
   type: "dashboard" | "contacts" | "companies";
@@ -26,6 +26,8 @@ export interface ICRMState {
   showNoteCreateModal: boolean;
   selectedNote: any;
   selectedResource: any;
+  selectedCompany: any;
+  selectedContact: any;
 }
 
 const initialState: ICRMState = {
@@ -42,6 +44,8 @@ const initialState: ICRMState = {
   showNoteCreateModal: false,
   selectedNote: null,
   selectedResource: null,
+  selectedCompany: null,
+  selectedContact: null,
 };
 
 const getComapnyInfo = async (companyId: string) => {
@@ -53,8 +57,35 @@ const getComapnyInfo = async (companyId: string) => {
   }
 }
 
+const getContactInfo = async (contactId: string) => {
+  try {
+    const res = await fetchContact(contactId);
+    return res.data
+  } catch (error) {
+    return {}
+  }
+}
+
+export const initContactData = createAsyncThunk(
+  "crm/contact/init",
+  async ({contactId}:{
+      contactId: string;
+  }) => {
+    try {
+      const response:any = await getContactInfo(contactId);
+      return {
+        ...response
+      }
+    } catch (error) {
+      return await new Promise<any>((resolve, reject) => {
+        resolve({ initialState });
+      });
+    }
+  }
+);
+
 export const initCompanyData = createAsyncThunk(
-  "finance/init",
+  "crm/company/init",
   async ({companyId}:{
       companyId: string;
   }) => {
@@ -72,7 +103,8 @@ export const initCompanyData = createAsyncThunk(
 );
 
 
-export const crmSlice = createSlice({
+
+export const crmSlice = createSlice({ 
   name: "crm",
   initialState,
   reducers: {
@@ -97,18 +129,34 @@ export const crmSlice = createSlice({
     setSelectedResource: (state, action) => {
       state.selectedResource = action.payload;
     },
+    setSelectedCompany: (state, action) => {
+      state.selectedCompany = action.payload;
+    },
+    setSelectedContact: (state, action) => {
+      state.selectedContact = action.payload;
+    },
   },
   extraReducers: (builder) => { 
     builder
     .addCase(initCompanyData.fulfilled, (state, action) => {
-        // state.selectedCompanyPage = action.payload;
+        state.selectedCompany = action.payload;
     })
     .addCase(initCompanyData.rejected, (state, action) => {
-        
+        state.selectedCompany = {}
     })
     .addCase(initCompanyData.pending, (state, action) => {
-        
+        state.selectedCompany = {}
     })
+    .addCase(initContactData.fulfilled, (state, action) => {
+        state.selectedContact = action.payload;
+    })
+    .addCase(initContactData.rejected, (state, action) => {
+        state.selectedContact = {}
+    })
+    .addCase(initContactData.pending, (state, action) => {
+        state.selectedContact = {}
+    })
+
 }
 });
 

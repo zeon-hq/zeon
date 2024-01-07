@@ -1,7 +1,7 @@
 import { Button, Modal, Select, TextInput } from "@mantine/core"
 import React from "react"
 import { useDispatch } from "react-redux"
-import { setShowNoteCreateModal } from "reducer/crmSlice"
+import { initCompanyData, initContactData, setShowNoteCreateModal } from "reducer/crmSlice"
 import { labelStyles } from "./styles"
 import { Controller, useForm } from "react-hook-form"
 import { createNote } from "./CRMService"
@@ -18,7 +18,7 @@ type Props = {
 const CreateNoteModal = ({
   showNoteCreateModal,
   resourceId,
-  resourceType,
+  resourceType
 }: Props) => {
   const dispatch = useDispatch()
   const {} = useCrm()
@@ -50,6 +50,14 @@ const CreateNoteModal = ({
         color: "blue",
       })
       dispatch(setShowNoteCreateModal(false))
+      if(resourceType === CRMResourceType.CONTACT) {
+        //@ts-ignore
+         dispatch(initContactData({contactId:resourceId}))
+      } else {
+        //@ts-ignore
+        dispatch(initCompanyData({companyId:resourceId}))
+      }
+      
     } catch (error) {
       console.log(error)
       showNotification({

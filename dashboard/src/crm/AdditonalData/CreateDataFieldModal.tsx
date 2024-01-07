@@ -11,6 +11,7 @@ type Props = {
   setAdditonalData: React.Dispatch<React.SetStateAction<any[]>>;
   resourceType: CRMResourceType;
   resourceId: string;
+  alreadyAddedFields: string[];
 };
 
 const CreateDataFieldModal = ({
@@ -18,6 +19,7 @@ const CreateDataFieldModal = ({
   setAdditonalData,
   resourceId,
   resourceType,
+  alreadyAddedFields
 }: Props) => {
   const { register, handleSubmit } = useForm({
     defaultValues: {
@@ -28,8 +30,10 @@ const CreateDataFieldModal = ({
   });
 
   const onSubmit = async (data: any) => {
+    console.log(alreadyAddedFields)
     try {
       const res = await createAdditionalFields(resourceId, resourceType, [
+        ...alreadyAddedFields,
         data,
       ]);
       setAdditonalData(res?.data?.fields);

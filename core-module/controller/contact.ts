@@ -31,7 +31,6 @@ export const createContactController = async (req: Request, res: Response) => {
     })
   }
 }
-
 // get all contacts from workspaceId
 export const getAllContactsController = async (req: Request, res: Response) => {
   try {
@@ -65,7 +64,6 @@ export const getAllContactsController = async (req: Request, res: Response) => {
     })
   }
 }
-
 // get contact by contactId
 export const getContactController = async (req: Request, res: Response) => {
   try {
@@ -90,7 +88,6 @@ export const getContactController = async (req: Request, res: Response) => {
     })
   }
 }
-
 // update contact by contactId
 export const updateContactController = async (req: Request, res: Response) => {
   try {
@@ -119,7 +116,6 @@ export const updateContactController = async (req: Request, res: Response) => {
     })
   }
 }
-
 // delete contact by contactId
 export const deleteContactController = async (req: Request, res: Response) => {
   try {
@@ -165,11 +161,14 @@ export const updateAdditionalDatafieldController = async (
       fields,
     })
 
+    const contact = await ContactsModel.findOne({ contactId })
+    const prevFields = contact.additionalDatafields || {}
+    const newFields = { ...prevFields, ...fields }
     if (isDataVerified) {
       // update contact
       await ContactsModel.findOneAndUpdate(
         { contactId },
-        { $set: { additionalDatafields: fields } },
+        { $set: { additionalDatafields: newFields } },
         { new: true }
       )
       return res.status(200).json({

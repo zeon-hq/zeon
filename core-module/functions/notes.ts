@@ -9,6 +9,7 @@ import {
 import { getContact } from "./contact";
 import { getCompany } from "./company";
 import { CompanyModel } from "../schema/Company"
+import { ContactsModel } from "../schema/Contact";
 
 export const createNote = async (param: ICreateNoteDTO) => {
   try {
@@ -51,9 +52,11 @@ export const createNote = async (param: ICreateNoteDTO) => {
       const contact = await getContact(resourceId);
       if (!contact) throw new Error("Contact not found");
       // add note to contact
-      contact.notes.push(note);
+      contact.notes.unshift(note);
       // save contact
-      await contact.save();
+      await ContactsModel.findOneAndUpdate({ contactId: resourceId }, contact, {
+        new: true,
+      })
       return note;
     }
 

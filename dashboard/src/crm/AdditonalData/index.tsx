@@ -12,6 +12,7 @@ import { addAdditionalFields, fetchDataModel } from "service/CRMService";
 interface AdditionalDataProps {
   resourceId: string | undefined;
   type: "contact" | "company";
+  additionalValue: any;
 }
 
 const Container = styled.div`
@@ -23,7 +24,7 @@ const View = styled.div`
   margin-top: 15px;
 `;
 
-export const AdditonalData = ({ resourceId, type }: AdditionalDataProps) => {
+export const AdditonalData = ({ resourceId, type,additionalValue }: AdditionalDataProps) => {
   const [additonalData, setAdditonalData] = useState<any[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [textInputValues, setTextInputValues] = useState<{
@@ -57,7 +58,7 @@ export const AdditonalData = ({ resourceId, type }: AdditionalDataProps) => {
       addAdditionalFields(
         resourceId,
         type === "contact" ? "contacts" : "companies",
-        {fields:textInputValues}
+        { fields: textInputValues }
       );
     }
   };
@@ -65,7 +66,7 @@ export const AdditonalData = ({ resourceId, type }: AdditionalDataProps) => {
   return (
     <Container>
       <PanelLabel
-        labelTitle="Additonal Data"
+        labelTitle="Additional Data"
         icon={plusIcon}
         buttonIcon={saveIcon}
         iconOnClick={() => setShowModal(true)}
@@ -81,6 +82,7 @@ export const AdditonalData = ({ resourceId, type }: AdditionalDataProps) => {
             key={data.name}
             label={data.name}
             placeholder={data.label}
+            defaultValue={additionalValue?.[data.name] || ""}
             radius="md"
             labelProps={{ style: labelStyles }}
             onChange={(event) =>
@@ -100,6 +102,7 @@ export const AdditonalData = ({ resourceId, type }: AdditionalDataProps) => {
           }
           setShowModal={setShowModal}
           setAdditonalData={setAdditonalData}
+          alreadyAddedFields={additonalData}
         />
       )}
     </Container>

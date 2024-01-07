@@ -209,11 +209,15 @@ export const updateAdditionalDatafieldController = async (
       fields,
     })
 
+    const company = await CompanyModel.findOne({ companyId })
+    const prevFields = company.additionalDatafields || {}
+    const updatedFields = { ...prevFields, ...fields }
+
     if (isDataVerified) {
       // update contact
       await CompanyModel.findOneAndUpdate(
         { companyId },
-        { $set: { additionalDatafields: fields } },
+        { $set: { additionalDatafields: updatedFields } },
         { new: true }
       )
       return res.status(200).json({

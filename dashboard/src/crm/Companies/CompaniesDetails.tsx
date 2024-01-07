@@ -39,8 +39,9 @@ import {
 } from "crm/utils";
 import { useEffect, useState } from "react";
 import { fetchCompany } from "service/CRMService";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { AdditonalData } from "crm/AdditonalData";
+import { isEmpty } from "lodash";
 
 const Container = styled.div`
   display: flex;
@@ -90,17 +91,18 @@ const TextInputWrapper = styled(TextInput)`
 
 function CompaniesDetails() {
   const dispatch = useDispatch();
-  const { selectedCompanyPage, showNoteCreateModal } = useCrm();
+  const { selectedCompanyPage, showNoteCreateModal, selectedCompany } = useCrm();
   const location = useLocation();
   const navigate = useNavigate();
+  const {
+    companyId
+  } = useParams();
 
 
   const [activeTab, setActiveTab] = useState<string | null>(
     selectedCompanyPage.activeTab ?? "interactions"
   );
-  const [companyData, setCompanyData] = useState<any>(
-    selectedCompanyPage?.companyData
-  );
+  
 
   const handleBack = () => {
     dispatch(setSelectedCompanyPage({ type: "all" }));
@@ -110,18 +112,12 @@ function CompaniesDetails() {
     navigate(pathName.join("/"));
   };
 
-  // fetch id from url
-  const resourceId = companyData?.companyId || "";
-
   useEffect(() => {
-    // if companyData only contains id not other data, fetch data from backend
-    if (companyData?.id && !companyData?.name) {
-      // fetch data from backend
-      fetchCompany(companyData?.id).then((res) => {
-        setCompanyData(res.data);
-      });
+    if(companyId){
+      //@ts-ignore
+      dispatch(initCompanyData({companyId}))
     }
-  }, [companyData]);
+  }, []);
 
 
   useEffect(() => {
@@ -155,10 +151,11 @@ function CompaniesDetails() {
 
   useEffect(() => {
     //@ts-ignore
-    dispatch(initCompanyData({companyId:selectedCompanyPage?.companyData?.companyId}));
-  })
+    dispatch(initCompanyData({companyId}));
+  },[])
 
   return (
+    !isEmpty(selectedCompany) ?
     <Container>
       <LeftContainer>
         <Group my="lg" position="apart">
@@ -186,7 +183,7 @@ function CompaniesDetails() {
           <TextInputWrapper
             label="Company Name"
             placeholder="Company Name"
-            value={companyData?.name}
+            value={selectedCompany?.name}
             radius="md"
             disabled
           />
@@ -194,7 +191,7 @@ function CompaniesDetails() {
           <TextInputWrapper
             label="Website"
             placeholder="Website URL"
-            value={companyData?.url}
+            value={selectedCompany?.url}
             icon={
               <Image src={globeIcon} alt="website URL" width={15} height={15} />
             }
@@ -206,14 +203,14 @@ function CompaniesDetails() {
             label="About"
             placeholder="About the company"
             radius="md"
-            value={companyData?.description}
+            value={selectedCompany?.description}
             disabled
           />
 
           <TextInputWrapper
             label="LinkedIn"
             placeholder="LinkedIn URL"
-            value={companyData?.linkedInUrl}
+            value={selectedCompany?.linkedInUrl}
             icon={
               <Image
                 src={linkedinIcon}
@@ -229,7 +226,7 @@ function CompaniesDetails() {
           <TextInputWrapper
             label="Twitter"
             placeholder="Twitter URL"
-            value={companyData?.xUrl}
+            value={selectedCompany?.xUrl}
             icon={
               <Image
                 src={twitterIcon}
@@ -245,7 +242,7 @@ function CompaniesDetails() {
           <TextInputWrapper
             label="Location"
             placeholder="Company Location"
-            value={companyData?.location}
+            value={selectedCompany?.location}
             icon={
               <Image
                 src={locationIcon}
@@ -261,7 +258,7 @@ function CompaniesDetails() {
           <TextInputWrapper
             label="Phone Number"
             placeholder="Company Phone Number"
-            value={findPrimaryPhoneNumIntl(companyData?.phoneNumber)}
+            value={findPrimaryPhoneNumIntl(selectedCompany?.phoneNumber)}
             icon={
               <Image
                 src={phoneIcon}
@@ -277,7 +274,7 @@ function CompaniesDetails() {
           <TextInputWrapper
             label="Employee Count"
             placeholder="Number of Employees"
-            value={companySizeFormatter(companyData?.companySize)}
+            value={companySizeFormatter(selectedCompany?.companySize)}
             icon={
               <Image
                 src={employeeCountIcon}
@@ -293,7 +290,7 @@ function CompaniesDetails() {
           <TextInputWrapper
             label="Company Worth"
             placeholder="Company Worth"
-            value={companyWorthFormatter(companyData?.companyWorth)}
+            value={companyWorthFormatter(selectedCompany?.companyWorth)}
             icon={
               <Image
                 src={revenueIcon}
@@ -413,7 +410,7 @@ function CompaniesDetails() {
                 paddingTop: "16px",
               }}
             >
-              <Note notes={companyData?.notes || []} />
+              <Note notes={selectedCompany?.notes || []} />
             </div>
           </Tabs.Panel>
 
@@ -435,19 +432,23 @@ function CompaniesDetails() {
 
       <RightContainer>
         <AdditonalData
-          resourceId={companyData?.id || companyData?.companyId}
+          resourceId={selectedCompany?.id || selectedCompany?.companyId}
           type="company"
+          additionalValue={selectedCompany?.additionalDatafields || {}}
         />
       </RightContainer>
       {showNoteCreateModal && (
         <CreateNoteModal
-          resourceId={resourceId}
+          resourceId={companyId || ""}
           resourceType={CRMResourceType.COMPANY}
           showNoteCreateModal={showNoteCreateModal}
         />
       )}
     </Container>
+    : (
+      <div>Loading...</div>
+    )
   );
-}
+} 
 
 export default CompaniesDetails;
