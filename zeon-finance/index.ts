@@ -44,7 +44,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/expense", expenseRoutes);
 app.use("/category", categoryRoutes);
 app.use("/", rootRoutes);
-app.use("/health", (req: Request, res: Response)=>{
+app.get("/health", (req: Request, res: Response)=>{
   console.log('finance service health check');
   res.send("all ok from zeon finance service");
 });
