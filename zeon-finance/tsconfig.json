@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+      "module": "commonjs",
+      "esModuleInterop": true,
+      "allowSyntheticDefaultImports": true,
+      "target": "es2015",
+      "noEmitOnError": false,
+      "noImplicitAny": true,
+      "skipLibCheck": true,
+      "moduleResolution": "node",
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true,
+      "sourceMap": true,
+      "outDir": "./dist",
+      "baseUrl": ".",
+      
+      "declaration": true,
+      "types": ["node"],
+      "paths": {
+        "*": [
+          "node_modules/*",
+          "src/types/*"
+        ]
+      }
+    },
+    // "include": ["src/**/*"]
+}
