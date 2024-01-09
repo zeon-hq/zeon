@@ -10,13 +10,13 @@ import { generateId } from "zeon-core/dist/utils/utils"
 import InvoiceMeta from "../schema/invoice_meta"
 import { getAllCategoriesController } from "../controller/category";
 
-const bucketName = 'zeon-finance-docs';
-const region = 'us-east-1';
+const bucketName = process.env.BUCKET_NAME
+const region = process.env.REGION
 
 const s3 = new S3Client({
   credentials:{
-    secretAccessKey: 'jSFJ+C4RbTNnohJVyAVeqdOaOym71rtVmELTxVm7',
-    accessKeyId: 'AKIAZ6N7FYF6FHNEUK2I',
+    secretAccessKey: process.env.SECRET_ACCESS_KEY,
+    accessKeyId:  process.env.ACCESS_KEY
   },
   region
 })
