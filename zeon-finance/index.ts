@@ -12,7 +12,7 @@ import mongoose from "mongoose"
 
 mongoose
   //@ts-ignore
-  .connect("mongodb+srv://ajaym94:Kasphersky1@cluster0.gxtzcur.mongodb.net/", {dbName: "finance"})
+  .connect(process.env.DB_URI, {dbName: process.env.DB_NAME})
   .then(() => {
     console.log("Connected to DB from finance");
     initializeDB()

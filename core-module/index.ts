@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+dotenv.config();
 import express, { Request, Response } from "express";
 import authRoutes from "./routes/auth";
 import userRoutes from "./routes/user";
@@ -10,7 +11,7 @@ import {
   verifyIdentity
 } from "./functions/user"
 
-dotenv.config();
+
 
 const app = express();
 const port = process.env.CORE_BACKEND_PORT
