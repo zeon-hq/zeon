@@ -1,0 +1,14 @@
+# Step 1: Specify the base image. Here, we're using the latest version of Node.
+FROM node:18-alpine
+
+# Step 2: Set the working directory inside the container
+WORKDIR /usr/src/app
+
+# Step 3: Copy the package.json and package-lock.json (if available) files
+COPY package*.json ./
+
+# Step 4: Install the dependencies
+RUN npm install
+
+# Step 5: Copy the rest of your app's source code
+COPY . .
