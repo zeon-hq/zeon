@@ -1,6 +1,6 @@
 import express, { Express, Request, Response, Router } from "express"
 import {
-    createCompany,
+  createCompany,
   deleteCompany,
   editCompany,
   getAllCompanies,
@@ -8,20 +8,20 @@ import {
 } from "../functions/company"
 
 export const createCompanyController = async (req: Request, res: Response) => {
-    try {
-        const company = await createCompany(req.body)
-        return res.status(200).json({
-            success: true,
-            data: company
-        })
-    } catch (error) {
-        console.log(error)
-        throw {
-            code: 500,
-            message: error,
-            error
-        }
+  try {
+    const company = await createCompany(req.body)
+    return res.status(200).json({
+      success: true,
+      data: company,
+    })
+  } catch (error) {
+    console.log(error)
+    throw {
+      code: 500,
+      message: error,
+      error,
     }
+  }
 }
 
 // get all companies from workspaceId
@@ -53,7 +53,16 @@ export const getAllCompaniesController = async (
   }
 }
 
+
 // get company by compnayId
+/**
+ * 
+ * @param req 
+ * @param res 
+ * @returns 
+ * write swagger docs
+ *
+ */
 export const getCompanyController = async (req: Request, res: Response) => {
   try {
     const { companyId } = req.params
@@ -103,7 +112,7 @@ export const editCompanyController = async (req: Request, res: Response) => {
     console.log(error)
     return res.status(500).json({
       success: false,
-      error
+      error,
     })
   }
 }
@@ -132,7 +141,6 @@ export const deleteCompanyController = async (req: Request, res: Response) => {
     }
   }
 }
-
 // Bulk delete company by companyIs
 export const bulkDeleteCompanyController = async (
   req: Request,

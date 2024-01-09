@@ -15,8 +15,14 @@ import {
   createWorkspace,
   deleteWorkspaceByWorkspaceId,
   initializeDB
-
 } from "./functions/workspace"
+
+import {
+  createNote,
+  updateNote,
+  deleteNote,
+  getNotes,
+} from "./functions/notes"
 
 
 import { createRole,getAllRolesForWorkspace} from "./functions/role"
@@ -40,5 +46,9 @@ export {
   decodeJWTToken,
   initializeDB,
   getAllRolesForWorkspace,
-  getInviteByInviteId
+  getInviteByInviteId,
+  createNote,
+  updateNote,
+  deleteNote,
+  getNotes,
 }

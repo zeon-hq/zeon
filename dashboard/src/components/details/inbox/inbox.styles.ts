@@ -102,7 +102,6 @@ export const TextDesc = styled.p`
 `;
 
 export const SideBarTopWrapper = styled.div`
-  //padding: 8px 0px 16px 0px;
 `;
 
 export const SideBarInnerWrapper = styled.div`

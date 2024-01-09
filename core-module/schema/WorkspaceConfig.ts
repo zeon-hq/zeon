@@ -17,9 +17,7 @@ const WorkspaceConfigInterface = new mongoose.Schema<WorkspaceConfigInterface>({
     teamSize: { type: String, required: false, default: "" },
     industry: { type: String, required: false, default: "" },
 },{
-    // add createdAt and updatedAt fields
     timestamps: true
-
 });
 
 // Create a Model.

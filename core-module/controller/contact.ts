@@ -6,6 +6,9 @@ import {
     getAllContacts,
     getContact,
 } from "../functions/contact"
+import { ICreateNoteDTO, CRMResourceType } from "../types/types"
+import { createNote } from "../functions/notes"
+
 
 export const createContactController = async (req: Request, res: Response) => {
     try {
@@ -16,11 +19,11 @@ export const createContactController = async (req: Request, res: Response) => {
         })
     } catch (error) {
         console.log(error)
-        throw {
-            code: 500,
-            message: error,
-            error
-        }
+        return res.status(500).json({
+            success: false,
+            message: error
+        })
+
     }
 }
 
@@ -45,11 +48,10 @@ export const getAllContactsController = async (
     })
   } catch (error) {
     console.log(error)
-    throw {
-      code: 500,
+    return res.status(500).json({
+      success: false,
       message: error,
-      error,
-    }
+    })
   }
 }
 
@@ -71,11 +73,10 @@ export const getContactController = async (req: Request, res: Response) => {
     })
   } catch (error) {
     console.log(error)
-    throw {
-      code: 500,
+    return res.status(500).json({
+      success: false,
       message: error,
-      error,
-    }
+    })
   }
 }
 
@@ -97,11 +98,10 @@ export const updateContactController = async (req: Request, res: Response) => {
     })
   } catch (error) {
     console.log(error)
-    throw {
-      code: 500,
+    return res.status(500).json({
+      success: false,
       message: error,
-      error,
-    }
+    })
   }
 }
 
@@ -123,10 +123,11 @@ export const deleteContactController = async (req: Request, res: Response) => {
     })
   } catch (error) {
     console.log(error)
-    throw {
-      code: 500,
+    return res.status(500).json({
+      success: false,
       message: error,
-      error,
-    }
+    })
   }
 }
+
+

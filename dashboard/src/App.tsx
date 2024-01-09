@@ -13,6 +13,7 @@ import WorkspaceCreation from "components/core/WorkspaceCreation"
 import InviteUsers from "components/core/InviteUsers"
 import Details from "components/details/Details"
 import Finance from "finance/expense/Finance"
+import CrmLayout from "crm/CrmLayout"
 
 function MyGlobalStyles() {
   return (
@@ -86,6 +87,11 @@ function App() {
               <Route path="/finance/:workspaceId" element={
                 <Layout >
                 <Finance/>
+              </Layout>
+              } />
+              <Route path="/crm/:workspaceId" element={
+                <Layout >
+                <CrmLayout />
               </Layout>
               } />
             </Routes>

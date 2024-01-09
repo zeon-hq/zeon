@@ -28,7 +28,6 @@ const WorkspaceSchema = new mongoose.Schema<WorkspaceInterface>({
     },
     modules: [{ type: String, required: true, default: [] }]
 },{
-    // add createdAt and updatedAt fields
     timestamps: true
 });
 

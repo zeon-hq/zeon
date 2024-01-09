@@ -34,8 +34,7 @@ const UserSchema = new mongoose.Schema<UserInterface>({
 
   profilePic: { type: String, required: false, default: null },
 },{
-  // add createdAt and updatedAt fields
-  timestamps: true
+    timestamps: true
 })
 
 // index on userId and workspaceId

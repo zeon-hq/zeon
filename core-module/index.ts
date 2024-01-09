@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+dotenv.config();
 import express, { Request, Response } from "express";
 import authRoutes from "./routes/auth";
 import userRoutes from "./routes/user";
@@ -10,7 +11,7 @@ import {
   verifyIdentity
 } from "./functions/user"
 
-dotenv.config();
+
 
 const app = express();
 const port = process.env.CORE_BACKEND_PORT
@@ -19,6 +20,7 @@ import { UserInterface } from "./schema/User"
 import { initializeDB } from "./functions/workspace"
 import CommunicationController from "./controller/CommunicationController";
 import oauthController from "./controller/oauthController";
+import notesRoutes from "./routes/notes";
 
 declare global {
   namespace Express {
@@ -52,6 +54,7 @@ app.use("/user", verifyIdentity, userRoutes);
 app.use("/workspaces", verifyIdentity,workspaceRoutes);
 app.use("/companies",verifyIdentity, companyRoutes);
 app.use("/contacts",verifyIdentity, contactRoutes);
+app.use("/notes",verifyIdentity, notesRoutes);
 
 app.post("/internal/communication/send-email", CommunicationController.sendEmail);
 

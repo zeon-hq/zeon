@@ -1,3 +1,5 @@
+import moment from "moment";
+
 export const getFullName = (firstName: string, lastName: string) => {
   return `${firstName} ${lastName}`;
 };
@@ -16,3 +18,20 @@ export const getChatWidgetLogo = () => {
     {value: "Docs", label: "Documentation"}
   ];
 };
+
+// 2023-12-09T18:30:00.000Z
+export const getReadableDate = (date: string) => {
+  // date format : 2023-12-09T18:30:00.000Z
+  // convert the date to DD/MM/YYYY
+  // USE MOMENT.JS
+  const newDate = moment(date).format("DD/MM/YYYY");
+  return newDate;
+
+}
+
+/**
+ * function takes in string and makes first char uppercase
+ */
+export const capitalizeFirstLetter = (string: string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}

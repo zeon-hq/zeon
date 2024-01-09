@@ -108,6 +108,32 @@ services:
     depends_on:
       - zeon_db
 
+  zeon-finance-backend:
+    container_name: zeon-finance-backend
+    restart: always
+    build:
+      context: ./zeon-finance
+      dockerfile: Dockerfile.dev
+    expose:
+      - '7000'
+    ports:
+      - "7000:7000"
+    volumes:
+      - ./zeon-finance:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - FINANCE_BACKEND_PORT=${FINANCE_BACKEND_PORT}
+      - DB_URI=${DB_URI}
+      - DB_NAME=${DB_NAME}
+      - MQ_URI=${MQ_URI}
+      - BUCKET_NAME=${BUCKET_NAME}
+      - REGION=${REGION}
+      - ACCESS_KEY=${ACCESS_KEY}
+      - SECRET_ACCESS_KEY=${SECRET_ACCESS_KEY}
+    command: npm start
+    depends_on:
+      - zeon_db
+
   nginx:
     image: nginx:latest
     container_name: nginx_static_server

@@ -21,7 +21,6 @@ const InviteSchema = new mongoose.Schema<InviteInterface>({
     isAccepted: { type: Boolean, required: true, default: false },
     isDeleted: { type: Boolean, required: true, default: false },
 },{
-    // add createdAt and updatedAt fields
     timestamps: true
 });
 

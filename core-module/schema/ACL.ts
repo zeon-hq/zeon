@@ -32,6 +32,9 @@ const AclSchema = new mongoose.Schema<AclInterface>({
             ]
         }
     ]
+},{
+    timestamps: true
+
 });
 
 // Create a Model.

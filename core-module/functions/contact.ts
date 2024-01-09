@@ -10,7 +10,7 @@ export const createContact = async (params: Contact) => {
             error: "Invalid params",
         };
     
-        if (!params.first_name)
+        if (!params.firstName)
         throw {
             code: 500,
             message: "Invalid name",
@@ -102,7 +102,7 @@ export const updateContact = async (contactId: string, params: Contact) => {
             error: "Invalid params",
         };
     
-        if (!params.first_name)
+        if (!params.firstName)
         throw {
             code: 500,
             message: "Invalid name",
@@ -135,6 +135,34 @@ export const deleteContact = async (contactId: string) => {
         };
     
         const contact = await ContactsModel.findOneAndUpdate({ contactId }, { isDeleted: true }, { new: true });
+        return contact;
+    } catch (error) {
+        console.log(error);
+        throw {
+        code: 500,
+        message: error,
+        error,
+        };
+    }
+}
+
+export const addNoteToContact = async (contactId: string, note: string) => {
+    try {
+        if (!contactId)
+        throw {
+            code: 500,
+            message: "Invalid contactId",
+            error: "Invalid contactId",
+        };
+    
+        if (!note)
+        throw {
+            code: 500,
+            message: "Invalid note",
+            error: "Invalid note",
+        };
+    
+        const contact = await ContactsModel.findOneAndUpdate({ contactId }, { $push: { notes: note } }, { new: true });
         return contact;
     } catch (error) {
         console.log(error);

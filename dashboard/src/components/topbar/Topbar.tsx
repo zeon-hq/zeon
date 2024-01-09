@@ -10,10 +10,14 @@ import { setLoading, setSelectedPage, setShowSidebar, setWorkspaces } from "redu
 import { getWorkspaces } from 'service/CoreService';
 import { useNavigate } from "react-router";
 import styled from "styled-components";
+import Pill from "./Pill";
+import { InnerDivWrapper, TopBarDivWrapper, TopBarWrapper } from "./topbar.styles";
+
+
 const Topbar = ({ workspaceId }: { workspaceId: string }) => {
+  const navigate = useNavigate()
   const dispatch = useDispatch();
   const { channelsInfo } = useDashboard();
-  const navigate = useNavigate();
   const TopBarWrapper = styled.div`
     width: 100%;
     height: 45px;
@@ -68,20 +72,8 @@ const getUserWorkspaces = async () => {
       <TopBarWrapper>
           <TopBarDivWrapper>
               <TopBarWorkSpaceLeftSelect workspaceId={workspaceId || ""} />
-              <Text
-                  className="pointer"
-                  fw={"500"}
-                  fz="14px"
-                  style={{
-                    borderRadius: "6px",
-                  }}
-                  color="#101828"
-                pl={'12px'}
-                pr={'12px'}
-                pt={'4px'}
-                pb={'4px'}
-                  bg={'#f2f4f7'}
-                  onClick={() => {
+              <Pill label="Chat" onClick={() => {
+                    navigate(`/dashboard/${workspaceId}`)
                       dispatch(setShowSidebar(true));
                       dispatch(
                           setSelectedPage({
@@ -91,12 +83,14 @@ const getUserWorkspaces = async () => {
                               channelId: channelsInfo?.channels[0].channelId,
                           })
                       );
-              // @ts-ignore
-              navigate(`/${workspaceId}/chat`);
-                  }}
-              >
-                  Front Desk
-              </Text>
+                  }} />
+                  <Pill label="Finance" onClick={() => { 
+                      navigate(`/finance/${workspaceId}`)
+                  }} />
+                  <Pill label="CRM" onClick={() => {
+                        navigate(`/crm/${workspaceId}`)
+                    }
+                    } />
           </TopBarDivWrapper>
           <InnerDivWrapper>
           <Text

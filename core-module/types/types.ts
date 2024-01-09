@@ -1,64 +1,65 @@
-import { UserInterface } from "../schema/User"
-import {Request} from "express"
+import { UserInterface } from "../schema/User";
+import { Request } from "express";
 
 export interface CreateUserDTO {
-    name: string
-    email: string
-    password: string
-    phone ?: {
-        countryCode: { type: String, required: false },
-        num: { type: String, required: false }
-    }
-    roleId ?: string
-    workspaceId ?: string
+  name: string;
+  email: string;
+  password: string;
+  phone?: {
+    countryCode: { type: String; required: false };
+    num: { type: String; required: false };
+  };
+  roleId?: string;
+  workspaceId?: string;
 }
 
 export interface CreateWorkspaceDTO {
-    workspaceName: string
-    primaryContactName: string
-    primaryContactEmail: string
-    signupDetails : {
-        signupMode: string
-        isVerified: boolean
-    }
-    modules: ZeonModulesArray
-    legalCompanyName ?: string
-    teamSize ?: string
-    industry ?: string
-
+  workspaceName: string;
+  primaryContactName: string;
+  primaryContactEmail: string;
+  signupDetails: {
+    signupMode: string;
+    isVerified: boolean;
+  };
+  modules: ZeonModulesArray;
+  legalCompanyName?: string;
+  teamSize?: string;
+  industry?: string;
 }
 
 export enum ZeonModules {
-    CHAT = "CHAT",
-    CRM = "CRM",
-    FINANCE = "FINANCE",
-    KNOWLEDGE_BASE = "KNOWLEDGE_BASE"
+  CHAT = "CHAT",
+  CRM = "CRM",
+  FINANCE = "FINANCE",
+  KNOWLEDGE_BASE = "KNOWLEDGE_BASE",
 }
 
-export type ZeonModulesArray = Array<typeof ZeonModules[keyof typeof ZeonModules]>;
+export type ZeonModulesArray = Array<
+  (typeof ZeonModules)[keyof typeof ZeonModules]
+>;
 
 export interface CreateRoleDTO {
-    name: string
-    description: string
-    workspaceId: string
-    roleId ?: string
+  name: string;
+  description: string;
+  workspaceId: string;
+  roleId?: string;
 }
 
 export interface ZeonError {
-    code: number
-    message: string
-    error: string
+  code: number;
+  message: string;
+  error: string;
 }
 
 export interface CreateInviteDTO {
-    email: string
-    workspaceId: string
-    roleId: string
+  email: string;
+  workspaceId: string;
+  roleId: string;
 }
 
 export interface AcceptInviteDTO {
-    inviteId: string,
-    isAccepted: boolean
+  inviteId: string;
+  isAccepted: boolean;
 }
 
 /**
@@ -79,15 +80,15 @@ export interface AcceptInviteDTO {
 
 // convert this to interface
 export interface ISignupBody {
-    email: string,
-    attributes: {
-        FIRSTNAME: string,
-        LASTNAME: string
-    },
-    emailBlacklisted: boolean,
-    smsBlacklisted: boolean,
-    listIds: Array<number>,
-    updateEnabled: boolean
+  email: string;
+  attributes: {
+    FIRSTNAME: string;
+    LASTNAME: string;
+  };
+  emailBlacklisted: boolean;
+  smsBlacklisted: boolean;
+  listIds: Array<number>;
+  updateEnabled: boolean;
 }
 
 /**
@@ -109,16 +110,13 @@ export interface ISignupBody {
 
 // export this to interface
 export interface IForgetPasswordBody {
-    to:[
-        email : string,
-        name: string
-    ],
-    templateId: number
-    params: {
-        inviter: string,
-        workspaceName: string,
-        inviteLink: string
-    }
+  to: [email: string, name: string];
+  templateId: number;
+  params: {
+    inviter: string;
+    workspaceName: string;
+    inviteLink: string;
+  };
 }
 
 /**
@@ -139,15 +137,12 @@ export interface IForgetPasswordBody {
 
 // export this to interface
 export interface IResetPasswordBody {
-    to:[
-        email : string,
-        name: string
-    ],
-    templateId: number
-    params: {
-        firstname: string,
-        resetLink: string
-    }
+  to: [email: string, name: string];
+  templateId: number;
+  params: {
+    firstname: string;
+    resetLink: string;
+  };
 }
 
 /**
@@ -168,51 +163,95 @@ export interface IResetPasswordBody {
 
 // export this to interface
 export interface IAddContactBody {
-    email: string,
-    attributes: {
-        FIRSTNAME: string,
-        LASTNAME: string
-    },
-    emailBlacklisted: boolean,
-    smsBlacklisted: boolean,
-    listIds: Array<number>,
-    updateEnabled: boolean
+  email: string;
+  attributes: {
+    FIRSTNAME: string;
+    LASTNAME: string;
+  };
+  emailBlacklisted: boolean;
+  smsBlacklisted: boolean;
+  listIds: Array<number>;
+  updateEnabled: boolean;
+}
+
+export enum CRMResourceType {
+  CONTACT = "CONTACT",
+  COMPANY = "COMPANY",
+}
+
+export enum NoteType {
+  PRIVATE = "PRIVATE",
+  PUBLIC = "PUBLIC",
+}
+
+export interface ICreateNoteDTO {
+  content: string;
+  resourceType: CRMResourceType;
+  resourceId: string;
+  noteType: NoteType;
+  userId: string;
+  source: string;
+}
+
+export interface IUpdateNoteDTO {
+  noteId: string;
+  content: string;
+  userId: string;
+  resourceId: string;
+  resourceType: CRMResourceType;
+  
+}
+
+export interface IDeleteNoteDTO {
+  noteId: string;
+  userId: string;
+  resourceId: string;
+  resourceType: CRMResourceType;
+}
+
+export interface IGetNotesDTO {
+  resourceId: string;
+  resourceType: CRMResourceType;
+  page: number;
+  limit: number;
+  userId: string;
 }
 
 /**
- * {  
-   "to":[  
-      {  
-         "email":"ajay@zorp.one",
-         "name":"Ajay M"
-      }
-   ],
-   "templateId":25,
-   "params":{  
-      "inviter":"John",
-      "workspacename":"skynet",
-      "invitelink":"zeonhq.com/io"
-   }
-}
+ * {
+"content" : "This is a note",
+ "created_at" : "2020-12-12T00:00:00.000Z",
+  "source" : "comppany" | "contact" | "deal" | "lead" | "pipeline"
+  "created_by" : "user_id"
+ "noteId" : "note_id",
+  "isDeleted" : false
+  }
  */
 
+export interface INote {
+  content: string;
+  createdAt: Date;
+  source: string;
+  createdBy: string;
+  noteId: string;
+  isDeleted: boolean;
+  noteType: NoteType;
+}
+
 export interface IInviteUserBody {
-    to:[
-        {email : string}
-    ],
-    templateId: number
-    params: {
-        inviter: string,
-        workspacename: string,
-        invitelink: string
-    }
+  to: [{ email: string }];
+  templateId: number;
+  params: {
+    inviter: string;
+    workspacename: string;
+    invitelink: string;
+  };
 }
 
 export interface UserWorkspaceRelationDTO {
-    userId: string
-    workspaceId: string
-    roleId: string
-    isActive: boolean
-    isDeleted: boolean
+  userId: string;
+  workspaceId: string;
+  roleId: string;
+  isActive: boolean;
+  isDeleted: boolean;
 }
-
