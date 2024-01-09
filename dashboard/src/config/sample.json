@@ -4,5 +4,6 @@
     "widgetJSFile":"",
     "widgetCSSFile":"",
     "CORE_API_DOMAIN" : "",
-    "CHAT_WIDGET_URL":""
+    "CHAT_WIDGET_URL":"",
+    "FINANCE_API_DOMAIN" : ""
   }
