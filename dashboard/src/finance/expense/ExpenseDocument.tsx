@@ -17,6 +17,9 @@ import {
   updatedSelectedExpense,
 } from "reducer/financeSlice";
 import { set } from "dot-prop";
+import { getConfig as Config } from "config/Config";
+
+const FINACE_API = Config("FINANCE_API_DOMAIN")
 
 function MyDropzone({
   callback,
@@ -31,7 +34,7 @@ function MyDropzone({
       formData.append("image", file);
       try {
         const response = await axios.post(
-          "http://localhost:4001/expense/upload",
+          `${FINACE_API}/expense/upload`,
           formData,
           {
             onUploadProgress: (progressEvent) => {

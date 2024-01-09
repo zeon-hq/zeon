@@ -22,7 +22,7 @@ axiosInstance.interceptors.request.use(function (config: AxiosRequestConfig) : A
 
 
 
-const crmAPIDomain = 'http://localhost:3005';
+const crmAPIDomain = Config("CORE_API_DOMAIN")
 const ticketDomainUrl = Config('TICKET_SERVICE');
 
 export const createContact = async (data: ICreateContactDTO) => {

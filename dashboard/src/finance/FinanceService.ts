@@ -19,7 +19,7 @@ axiosInstance.interceptors.request.use(function (config: AxiosRequestConfig) : A
 });
 
 
-const financeApiDomain = 'http://localhost:4001';
+const financeApiDomain = Config("FINANCE_API_DOMAIN")
 const ticketDomainUrl = Config('TICKET_SERVICE');
 
 
