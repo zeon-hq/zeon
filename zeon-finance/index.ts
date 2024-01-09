@@ -23,7 +23,7 @@ mongoose
   });
 
 const app = express();
-const port = process.env.PORT
+const port = process.env.FINANCE_BACKEND_PORT
 
 
 // setup cors to allow all origins
