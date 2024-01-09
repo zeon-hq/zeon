@@ -1,4 +1,4 @@
-import { ICategory } from "schema/categories";
+import { ICategory } from "../schema/categories";
 
 export interface ICreateCategoryDTO {
     categoryId: string;
