@@ -7,6 +7,11 @@ export interface IFinance {
 export interface IExpense {
   expenseList: IExpenseDTO[];
   selectedExpense: IExpenseDTO | null;
+  createMode: ICreateModeExpense | null;
+}
+
+export interface ICreateModeExpense {
+  attachedDocuments: any[]
 }
 
 export interface IExpenseDTO {

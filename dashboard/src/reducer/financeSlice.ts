@@ -1,13 +1,14 @@
 // create a finance slice using createSlice
 // create a finance reducer using createReducer
 import { getAllExpenses, getWorkspaceFinanceInfo } from "../finance/FinanceService";
-import {IExpense, IExpenseDTO, IFinance} from "../finance/type"
+import {ICreateModeExpense, IExpense, IExpenseDTO, IFinance} from "../finance/type"
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState:IFinance = {
     expense: {
         expenseList: [],
-        selectedExpense: null
+        selectedExpense: null,
+        createMode: null
     },
     categories: [],
     tags: []
@@ -60,6 +61,9 @@ export const financeSlice = createSlice({
         setSelectedExpense: (state, action: PayloadAction<IExpenseDTO | null>) => {
             state.expense.selectedExpense = action.payload;
         },
+        setCreateMode: (state, action: PayloadAction<ICreateModeExpense>) => {
+            state.expense.createMode = action.payload;
+        },
         updatedSelectedExpense: (state, action: PayloadAction<{
             key: string;
             value: any;
@@ -89,6 +93,6 @@ export const financeSlice = createSlice({
     }
 })
 
-export const { setExpenseList, setSelectedExpense,updatedSelectedExpense } = financeSlice.actions;
+export const { setExpenseList, setSelectedExpense,updatedSelectedExpense,setCreateMode } = financeSlice.actions;
 export default financeSlice.reducer;
 

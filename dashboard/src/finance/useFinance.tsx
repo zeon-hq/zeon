@@ -10,6 +10,7 @@ const useFinance = () => {
   const expenseList = finance.expense.expenseList;
   const categories = finance.categories;
   const tags = finance.tags;
+  const expenseCreateMode = finance.expense.createMode;
 
   const selectedExpense = finance.expense.selectedExpense;
 
@@ -70,7 +71,8 @@ const useFinance = () => {
     getRejectedAmount,
     paidAmount,
     unpaidAmount,
-    rejectedAmount
+    rejectedAmount,
+    expenseCreateMode
   };
 };
 
