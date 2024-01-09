@@ -86,7 +86,7 @@ function ContactsDetails() {
   const { contactId } = useParams();
 
   const [activeTab, setActiveTab] = useState<string | null>(
-    selectedContactPage.activeTab ?? "interactions"
+    selectedContactPage.activeTab ?? "notes"
   );
 
   const location = useLocation();
@@ -228,7 +228,7 @@ function ContactsDetails() {
 
         <MiddleContainer>
           <Group my="lg" position="left">
-            <Button
+            {/* <Button
               style={{
                 borderRadius: "8px",
                 paddingTop: "8px",
@@ -256,7 +256,7 @@ function ContactsDetails() {
               variant="outline"
             >
               Add an Interaction
-            </Button>
+            </Button> */}
 
             <Button
               style={{
@@ -346,15 +346,15 @@ function ContactsDetails() {
             onTabChange={(tab) => setActiveTab(tab)}
           >
             <Tabs.List>
-              <Tabs.Tab value="interactions" h="28px">
+              {/* <Tabs.Tab value="interactions" h="28px">
                 Interactions
-              </Tabs.Tab>
+              </Tabs.Tab> */}
               <Tabs.Tab value="notes" h="28px">
                 Notes
               </Tabs.Tab>
-              <Tabs.Tab value="associated_lists" h="28px">
+              {/* <Tabs.Tab value="associated_lists" h="28px">
                 Associated Lists
-              </Tabs.Tab>
+              </Tabs.Tab> */}
             </Tabs.List>
 
             <Tabs.Panel value="interactions">
@@ -367,7 +367,7 @@ function ContactsDetails() {
                   paddingTop: "16px",
                 }}
               >
-                <Note notes={selectedContact?.notes || []} />
+                <Note resourceId={selectedContact.contactId} resourceType={CRMResourceType.CONTACT} notes={selectedContact?.notes || []} />
               </div>
             </Tabs.Panel>
 

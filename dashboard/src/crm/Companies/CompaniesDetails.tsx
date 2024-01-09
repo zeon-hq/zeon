@@ -91,18 +91,15 @@ const TextInputWrapper = styled(TextInput)`
 
 function CompaniesDetails() {
   const dispatch = useDispatch();
-  const { selectedCompanyPage, showNoteCreateModal, selectedCompany } = useCrm();
+  const { selectedCompanyPage, showNoteCreateModal, selectedCompany } =
+    useCrm();
   const location = useLocation();
   const navigate = useNavigate();
-  const {
-    companyId
-  } = useParams();
-
+  const { companyId } = useParams();
 
   const [activeTab, setActiveTab] = useState<string | null>(
-    selectedCompanyPage.activeTab ?? "interactions"
+    selectedCompanyPage.activeTab ?? "notes"
   );
-  
 
   const handleBack = () => {
     dispatch(setSelectedCompanyPage({ type: "all" }));
@@ -113,12 +110,11 @@ function CompaniesDetails() {
   };
 
   useEffect(() => {
-    if(companyId){
+    if (companyId) {
       //@ts-ignore
-      dispatch(initCompanyData({companyId}))
+      dispatch(initCompanyData({ companyId }));
     }
   }, []);
-
 
   useEffect(() => {
     const url = new URL(window.location.href);
@@ -151,11 +147,10 @@ function CompaniesDetails() {
 
   useEffect(() => {
     //@ts-ignore
-    dispatch(initCompanyData({companyId}));
-  },[])
+    dispatch(initCompanyData({ companyId }));
+  }, []);
 
-  return (
-    !isEmpty(selectedCompany) ?
+  return !isEmpty(selectedCompany) ? (
     <Container>
       <LeftContainer>
         <Group my="lg" position="apart">
@@ -307,7 +302,7 @@ function CompaniesDetails() {
 
       <MiddleContainer>
         <Group pt={20} position="left">
-          <Button
+          {/* <Button
             style={{
               borderRadius: "8px",
               paddingTop: "8px",
@@ -330,7 +325,7 @@ function CompaniesDetails() {
             variant="outline"
           >
             Add an Interaction
-          </Button>
+          </Button> */}
 
           <Button
             style={{
@@ -389,15 +384,15 @@ function CompaniesDetails() {
           onTabChange={(tab) => setActiveTab(tab)}
         >
           <Tabs.List>
-            <Tabs.Tab value="interactions" h="28px">
+            {/* <Tabs.Tab value="interactions" h="28px">
               Interactions
-            </Tabs.Tab>
+            </Tabs.Tab> */}
             <Tabs.Tab value="notes" h="28px">
               Notes
             </Tabs.Tab>
-            <Tabs.Tab value="associated_lists" h="28px">
+            {/* <Tabs.Tab value="associated_lists" h="28px">
               Associated Lists
-            </Tabs.Tab>
+            </Tabs.Tab> */}
           </Tabs.List>
 
           <Tabs.Panel sx={PanelStyle} value="interactions">
@@ -410,7 +405,11 @@ function CompaniesDetails() {
                 paddingTop: "16px",
               }}
             >
-              <Note notes={selectedCompany?.notes || []} />
+              <Note
+                resourceId={selectedCompany.companyId}
+                resourceType={CRMResourceType.COMPANY}
+                notes={selectedCompany?.notes || []}
+              />
             </div>
           </Tabs.Panel>
 
@@ -429,7 +428,6 @@ function CompaniesDetails() {
         </Tabs>
       </MiddleContainer>
 
-
       <RightContainer>
         <AdditonalData
           resourceId={selectedCompany?.id || selectedCompany?.companyId}
@@ -445,10 +443,9 @@ function CompaniesDetails() {
         />
       )}
     </Container>
-    : (
-      <div>Loading...</div>
-    )
+  ) : (
+    <div>Loading...</div>
   );
-} 
+}
 
 export default CompaniesDetails;

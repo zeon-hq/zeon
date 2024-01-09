@@ -72,7 +72,7 @@ export const AdditonalData = ({ resourceId, type,additionalValue }: AdditionalDa
         iconOnClick={() => setShowModal(true)}
         isButton={true}
         buttonDisabled={Object.keys(textInputValues).length === 0}
-        buttonLabel="save"
+        buttonLabel="Save"
         onButtonClick={handleSaveButtonClick}
       />
 

@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig } from "axios";
 import { getConfig as Config } from "config/Config";
 import { IInbox } from "reducer/slice";
 import { getAuthToken } from "util/dashboardUtils";
-import { ICreateContactDTO, ICreateNoteDTO } from "./type"
+import { ICreateContactDTO, ICreateNoteDTO, IDeleteNoteDTO } from "./type"
 
 
 let axiosInstance = axios.create({
@@ -28,6 +28,17 @@ const ticketDomainUrl = Config('TICKET_SERVICE');
 export const createNote = async (data: ICreateNoteDTO) => {
     try {
         const res = await axiosInstance.post(`${crmAPIDomain}/notes`, data);
+        return res.data;
+    } catch (error) {
+        return {};
+    }
+}
+
+export const deleteNote = async (data: IDeleteNoteDTO) => {
+    try {
+        const res = await axiosInstance.delete(`${crmAPIDomain}/notes/${data.noteId}`,{
+          data
+        });
         return res.data;
     } catch (error) {
         return {};

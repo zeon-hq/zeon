@@ -1,7 +1,12 @@
 import { Space } from "@mantine/core"
+import { showNotification } from "@mantine/notifications"
 import { getReadableDateWithTime } from "components/utils/utilFunctions"
-import { INote } from "crm/type"
+import { deleteNote } from "crm/CRMService"
+import { CRMResourceType, INote } from "crm/type"
 import React from "react"
+import { AiFillDelete } from "react-icons/ai"
+import { useDispatch } from "react-redux"
+import { initContactData } from "reducer/crmSlice"
 import styled from "styled-components"
 
 const NoteWrapper = styled.div`
@@ -28,10 +33,40 @@ const ColorText = styled.span<{ color: string }>`
 `
 
 type Props = {
-  notes: INote[]
+  notes: INote[],
+  resourceId: string,
+  resourceType: CRMResourceType,
 }
 
-const Note = ({ notes }: Props) => {
+const Note = ({ notes,resourceId,resourceType }: Props) => {
+  const dispatch = useDispatch()
+  const handleDelete = async (noteId:any) => {
+    try {
+      const res = await deleteNote(
+        {
+          noteId: noteId,
+          resourceType: resourceType,
+          resourceId: resourceId
+        }
+      )
+      showNotification({
+        title: "Success",
+        message: "Note deleted successfully",
+        color: "blue",
+      })
+      //@ts-ignore
+      dispatch(initContactData({contactId: resourceId})        
+      )
+    } catch (error: any) {
+      console.log(error)
+      showNotification({
+        title: "Error",
+        message: "Note deletion failed",
+        color: "red",
+      })
+    }
+  }
+
   return (
     <div>
       {notes.length === 0 ? (
@@ -51,6 +86,7 @@ const Note = ({ notes }: Props) => {
             <Space h="md" />
             <div>
               <ColorText color="#101828">{note.content}</ColorText>{" "}
+              <AiFillDelete onClick={() => handleDelete(note.noteId)} />
             </div>
           </NoteWrapper>
         ))

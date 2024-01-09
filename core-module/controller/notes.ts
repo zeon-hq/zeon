@@ -58,7 +58,8 @@ export const updateNoteController = async (req: Request, res: Response) => {
 
 export const deleteNoteController = async (req: Request, res: Response) => {
   try {
-    const { noteId, resourceId, resourceType } = req.body;
+    const {noteId} = req.params;
+    const {  resourceId, resourceType } = req.body;
     const user = req.user as any;
 
     const updatedNote = await deleteNote({

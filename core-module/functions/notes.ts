@@ -111,7 +111,9 @@ export const updateNote = async (param: IUpdateNoteDTO) => {
       if (noteIndex === -1) throw new Error("Note not found");
       contact.notes[noteIndex].content = content;
       // save contact
-      await contact.save();
+      await ContactsModel.findOneAndUpdate({ contactId: resourceId }, contact, {
+        new: true,
+      })
       return contact.notes[noteIndex];
     }
 
@@ -127,7 +129,9 @@ export const updateNote = async (param: IUpdateNoteDTO) => {
       if (noteIndex === -1) throw new Error("Note not found");
       company.notes[noteIndex].content = content;
       // save company
-      await company.save();
+      await CompanyModel.findOneAndUpdate({ companyId: resourceId }, company, {
+        new: true,
+      })
       return company.notes[noteIndex];
     }
   } catch (error) {
@@ -167,7 +171,9 @@ export const deleteNote = async (param: IDeleteNoteDTO) => {
       // remove the note completely
       contact.notes.splice(noteIndex, 1);
       // save contact
-      await contact.save();
+      await ContactsModel.findOneAndUpdate({ contactId: resourceId }, contact, {
+        new: true,
+      })
 
       return contact.notes[noteIndex];
     }
@@ -185,7 +191,9 @@ export const deleteNote = async (param: IDeleteNoteDTO) => {
       // remove the note completely
       company.notes.splice(noteIndex, 1);
       // save company
-      await company.save();
+      await CompanyModel.findOneAndUpdate({ companyId: resourceId }, company, {
+        new: true,
+      })
       return company.notes[noteIndex];
     }
   } catch (error) {

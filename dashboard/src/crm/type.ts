@@ -122,3 +122,10 @@ export interface UserInterface {
 
   profilePic?: string
 }
+
+export interface IDeleteNoteDTO {
+  noteId: string;
+  resourceId: string;
+  resourceType: CRMResourceType;
+  
+}
