@@ -72,7 +72,7 @@ const getUserWorkspaces = async () => {
       <TopBarWrapper>
           <TopBarDivWrapper>
               <TopBarWorkSpaceLeftSelect workspaceId={workspaceId || ""} />
-              <Pill label="Chat" onClick={() => {
+              <Pill selected={window.location.href.includes('dashboard')} label="Chat" onClick={() => {
                     navigate(`/dashboard/${workspaceId}`)
                       dispatch(setShowSidebar(true));
                       dispatch(
@@ -84,10 +84,10 @@ const getUserWorkspaces = async () => {
                           })
                       );
                   }} />
-                  <Pill label="Finance" onClick={() => { 
+                  <Pill selected={window.location.href.includes('finance')} label="Finance" onClick={() => { 
                       navigate(`/finance/${workspaceId}`)
                   }} />
-                  <Pill label="CRM" onClick={() => {
+                  <Pill selected={window.location.href.includes('crm')} label="CRM" onClick={() => {
                         navigate(`/crm/${workspaceId}`)
                     }
                     } />
