@@ -50,6 +50,14 @@ function App() {
                 </ProtectedRoute>
               }
             />
+               <Route
+                path="/:workspaceId/chat"
+                element={
+                  <Layout >
+                    <Details/>
+                  </Layout>
+                }
+              />
             <Route
               path="/dashboard/:workspaceId"
               element={
@@ -82,6 +90,14 @@ function App() {
                 </ProtectedRoute>
               }
             />
+              <Route
+                path="/workspaces/chat"
+                element={
+                  <ProtectedRoute>
+                   <Workspaces/>
+                  </ProtectedRoute>
+                }
+              />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route
               path="/finance/:workspaceId"
