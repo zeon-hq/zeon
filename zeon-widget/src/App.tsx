@@ -15,7 +15,7 @@ function App({ widgetId }: any) {
 
   const getChannel = async () => {
     try {
-      const res = await getChannelById(widgetId || isEmbeddable.channelId);
+      const res = await getChannelById('mR3D18' || isEmbeddable.channelId);
       dispatch(setWidgetDetails(res.data.channel));
     } catch (error) {
       console.log(error);
