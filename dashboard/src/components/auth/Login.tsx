@@ -1,4 +1,6 @@
 import { Box, Flex, Space, Text, TextInput } from "@mantine/core"
+import { Alert } from "@mantine/core"
+import { IconAlertCircle } from "@tabler/icons-react";
 import { showNotification } from "@mantine/notifications"
 import AuthHero from "assets/login-header.svg"
 import { jwtDecode } from "jwt-decode"
@@ -114,8 +116,16 @@ const Login = () => {
             <AuthHeading> Welcome back </AuthHeading>
             <AuthSubHeading>
               {" "}
-              Welcome back! Please enter your details to continue.{" "}
+              Please enter your details to continue.{" "}
             </AuthSubHeading>
+            <Space h={20} />
+            <Alert
+              icon={<IconAlertCircle size="1rem" />}
+              title="In Open Beta"
+              color="red"
+            >
+              Zeon is currently in open beta. Expect bugs and missing features. Our first stable release is slated for 15 January 2024. We do not expect any data loss in the migration from closed beta to v1 stable release.
+            </Alert>
           </AuthFormHeader>
 
           <TextInput
@@ -133,7 +143,12 @@ const Login = () => {
             type="password"
           />
           {/* @ts-ignore */}
-          <AuthButton loading={loading} disabled={loading} fullWidth type="submit">
+          <AuthButton
+            loading={loading}
+            disabled={loading}
+            fullWidth
+            type="submit"
+          >
             {" "}
             Log In{" "}
           </AuthButton>
@@ -159,7 +174,7 @@ const Login = () => {
         <img style={{ height: "100%", width: "100%" }} src={AuthHero} />
       </Box>
     </AuthWrapper>
-  )
+  );
 }
 
 export default Login
