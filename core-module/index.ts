@@ -6,6 +6,7 @@ import userRoutes from "./routes/user";
 import workspaceRoutes from "./routes/workspace";
 import companyRoutes from "./routes/company";
 import contactRoutes from "./routes/contact";
+import dataModelRoutes from "./routes/dataModel";
 import cors from "cors";
 import {
   verifyIdentity
@@ -55,6 +56,7 @@ app.use("/workspaces", verifyIdentity,workspaceRoutes);
 app.use("/companies",verifyIdentity, companyRoutes);
 app.use("/contacts",verifyIdentity, contactRoutes);
 app.use("/notes",verifyIdentity, notesRoutes);
+app.use("/datamodel", verifyIdentity,dataModelRoutes );
 
 app.post("/internal/communication/send-email", CommunicationController.sendEmail);
 

@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
-import { FormattedPhoneNumber } from "./Contact";
-import { INote } from "../types/types";
+import { ContactPhoneNumbers } from "./Contact";
+import { IAdditionalDatafields, INote } from "../types/types";
 
 export const DOCUMENT_NAME = "Company";
 export const COLLECTION_NAME = "company";
@@ -53,7 +53,7 @@ export default interface Company {
   linkedInUrl?: string;
   location?: string;
   companySize?: CompanySize;
-  phoneNumber?: FormattedPhoneNumber[];
+  phoneNumber?: ContactPhoneNumbers[];
   companyWorth?: CompanyWorth;
   dealValue?: number;
   products?: string[];
@@ -65,6 +65,7 @@ export default interface Company {
   workspaceId: string;
   isDeleted: boolean;
   notes?: INote[];
+  additionalDatafields?: IAdditionalDatafields;
 }
 
 const schema = new Schema<Company>(
@@ -111,7 +112,47 @@ const schema = new Schema<Company>(
       maxlength: 256,
     },
     phoneNumber: {
-      type: [{ type: Schema.Types.String }],
+      type: [
+        {
+          pn_id: {
+            type: Schema.Types.Number,
+            required: true,
+          },
+          phone_number: {
+            type: {
+              e164: {
+                type: Schema.Types.String,
+                required: true,
+              },
+              national: {
+                type: Schema.Types.String,
+                required: true,
+              },
+              international: {
+                type: Schema.Types.String,
+                required: true,
+              },
+              country: {
+                type: Schema.Types.String,
+                required: true,
+              },
+              countryCode: {
+                type: Schema.Types.String,
+                required: true,
+              },
+              phone: {
+                type: Schema.Types.String,
+                required: true,
+              },
+            },
+            required: true,
+          },
+          is_primary: {
+            type: Schema.Types.Boolean,
+            required: true,
+          },
+        },
+      ],
       required: false,
     },
     companyWorth: {
@@ -159,6 +200,11 @@ const schema = new Schema<Company>(
       required: false,
       default: false,
     },
+    additionalDatafields: {
+      type: Schema.Types.Mixed,
+      required: false,
+      default: {},
+    }
   },
   {
     versionKey: false,
@@ -166,6 +212,19 @@ const schema = new Schema<Company>(
     timestamps: true,
   },
 );
+
+// when fetching companies (find, findOne), sort the notes by descending order of createdAt
+schema.pre("find", function (next) {
+  
+
+  next();
+});
+
+schema.pre("findOne", function (next) {
+  this.populate("notes");
+  next();
+});
+
 
 export const CompanyModel = model<Company>(
   DOCUMENT_NAME,

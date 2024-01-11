@@ -4,17 +4,17 @@ import { ICreateNoteDTO } from "../types/types";
 
 export const addNoteController = async (req: Request, res: Response) => {
   try {
-    const { note, noteType, source, resourceType, resourceId } =
+    const { content, noteType, source, resourceType, resourceId } =
       req.body as any;
     const user = req.user as any;
 
     // add note
     const payload: ICreateNoteDTO = {
-      content: note,
+      content,
       resourceId,
       resourceType,
       noteType,
-      userId: user.userId,
+      user: user,
       source,
     };
     const createdNote = await createNote(payload);
@@ -58,7 +58,8 @@ export const updateNoteController = async (req: Request, res: Response) => {
 
 export const deleteNoteController = async (req: Request, res: Response) => {
   try {
-    const { noteId, resourceId, resourceType } = req.body;
+    const {noteId} = req.params;
+    const {  resourceId, resourceType } = req.body;
     const user = req.user as any;
 
     const updatedNote = await deleteNote({

@@ -44,7 +44,7 @@ export const createCompany = async (params: Company) => {
   }
 }
 
-export const getAllCompanies = async (workspaceId: string) => {
+export const getAllCompanies = async (workspaceId: string, limit: string, offset: string) => {
   try {
     if (!workspaceId)
       throw {
@@ -53,8 +53,42 @@ export const getAllCompanies = async (workspaceId: string) => {
         error: "Invalid workspaceId",
       }
 
+    if(!limit || parseInt(limit) > 100) limit = "100";
+    if(!offset) offset = "0";
+
     const companies = await CompanyModel.find({ workspaceId, isDeleted: false })
-    return companies
+      .limit(parseInt(limit))
+      .skip(parseInt(offset))
+      .sort({ created_at: -1 })
+
+    // total number of companies
+    const total = await CompanyModel.countDocuments({ workspaceId, isDeleted: false });
+
+    return {
+      companies,
+      total
+    }
+  } catch (error) {
+    console.log(error)
+    throw {
+      code: 500,
+      message: error,
+      error,
+    }
+  }
+}
+
+export const getAllCompaniesByPair = async (workspaceId: string) => {
+  try {
+    if (!workspaceId)
+      throw {
+        code: 500,
+        message: "Invalid workspaceId",
+        error: "Invalid workspaceId",
+      }
+
+    const companies = CompanyModel.find({ workspaceId, isDeleted: false }, { companyId: 1, name: 1 })
+    return companies;
   } catch (error) {
     console.log(error)
     throw {

@@ -189,7 +189,7 @@ export interface ICreateNoteDTO {
   resourceType: CRMResourceType;
   resourceId: string;
   noteType: NoteType;
-  userId: string;
+  user: UserInterface;
   source: string;
 }
 
@@ -232,10 +232,28 @@ export interface INote {
   content: string;
   createdAt: Date;
   source: string;
-  createdBy: string;
+  createdBy: UserInterface;
   noteId: string;
   isDeleted: boolean;
   noteType: NoteType;
+}
+
+export interface IAdditionalDatafields {
+    name : string;
+    label: string;
+    type: IDatafieldType
+}
+
+export enum IDatafieldType  {
+  TEXT = "TEXT",
+  NUMBER = "NUMBER",
+  DATE = "DATE",
+  BOOLEAN = "BOOLEAN",
+  SINGLE_SELECT = "SINGLE_SELECT",
+  MULTI_SELECT = "MULTI_SELECT",
+  CURRENCY = "CURRENCY",
+  EMAIL = "EMAIL",
+  USER = "USER",
 }
 
 export interface IInviteUserBody {

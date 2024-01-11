@@ -1,8 +1,8 @@
-import { Schema, model } from 'mongoose';
-import { INote } from '../types/types';
+import { Schema, model } from "mongoose";
+import { IAdditionalDatafields, INote } from "../types/types";
 
-export const DOCUMENT_NAME = 'Contacts';
-export const COLLECTION_NAME = 'contacts';
+export const DOCUMENT_NAME = "Contacts";
+export const COLLECTION_NAME = "contacts";
 
 export interface ContactEmail {
   em_id: number;
@@ -36,8 +36,10 @@ export default interface Contacts {
   updated_at: Date;
   workspaceId: string;
   contactId: string;
+  companyId: string;
   isDeleted: boolean;
   notes?: INote[];
+  additionalDatafields?: IAdditionalDatafields;
 }
 
 const schema = new Schema<Contacts>(
@@ -63,67 +65,67 @@ const schema = new Schema<Contacts>(
       maxlength: 256,
     },
     emailAddress: {
-        type: [
-            {
-                em_id: {
-                    type: Schema.Types.Number,
-                    required: true,
-                },
-                email_id: {
-                    type: Schema.Types.String,
-                    required: true,
-                },
-                is_primary: {
-                    type: Schema.Types.Boolean,
-                    required: true,
-                },
-            },
-        ],
-        required: false,
+      type: [
+        {
+          em_id: {
+            type: Schema.Types.Number,
+            required: true,
+          },
+          email_id: {
+            type: Schema.Types.String,
+            required: true,
+          },
+          is_primary: {
+            type: Schema.Types.Boolean,
+            required: true,
+          },
+        },
+      ],
+      required: false,
     },
     phoneNumber: {
-        type: [
-            {
-                pn_id: {
-                    type: Schema.Types.Number,
-                    required: true,
-                },
-                phone_number: {
-                    type: {
-                        e164: {
-                            type: Schema.Types.String,
-                            required: true,
-                        },
-                        national: {
-                            type: Schema.Types.String,
-                            required: true,
-                        },
-                        international: {
-                            type: Schema.Types.String,
-                            required: true,
-                        },
-                        country: {
-                            type: Schema.Types.String,
-                            required: true,
-                        },
-                        countryCode: {
-                            type: Schema.Types.String,
-                            required: true,
-                        },
-                        phone: {
-                            type: Schema.Types.String,
-                            required: true,
-                        },
-                    },
-                    required: true,
-                },
-                is_primary: {
-                    type: Schema.Types.Boolean,
-                    required: true,
-                },
+      type: [
+        {
+          pn_id: {
+            type: Schema.Types.Number,
+            required: true,
+          },
+          phone_number: {
+            type: {
+              e164: {
+                type: Schema.Types.String,
+                required: true,
+              },
+              national: {
+                type: Schema.Types.String,
+                required: true,
+              },
+              international: {
+                type: Schema.Types.String,
+                required: true,
+              },
+              country: {
+                type: Schema.Types.String,
+                required: true,
+              },
+              countryCode: {
+                type: Schema.Types.String,
+                required: true,
+              },
+              phone: {
+                type: Schema.Types.String,
+                required: true,
+              },
             },
-        ],
-        required: false,
+            required: true,
+          },
+          is_primary: {
+            type: Schema.Types.Boolean,
+            required: true,
+          },
+        },
+      ],
+      required: false,
     },
     created_at: {
       type: Schema.Types.Date,
@@ -136,33 +138,41 @@ const schema = new Schema<Contacts>(
       select: false,
     },
     contactId: {
-        type: Schema.Types.String,
-        required: true,
+      type: Schema.Types.String,
+      required: true,
+    },
+    companyId: {
+      type: Schema.Types.String,
+      required: true,
     },
     workspaceId: {
-        type: Schema.Types.String,
-        required: true,
+      type: Schema.Types.String,
+      required: true,
     },
     isDeleted: {
-        type: Schema.Types.Boolean,
-        required: false,
-        default: false,
+      type: Schema.Types.Boolean,
+      required: false,
+      default: false,
     },
     notes: {
-        type: Schema.Types.Mixed,
-        required: false,
-        default: [],
+      type: Schema.Types.Mixed,
+      required: false,
+      default: [],
     },
-
+    additionalDatafields: {
+      type: Schema.Types.Mixed,
+      required: false,
+      default: {},
+    },
   },
   {
     versionKey: false,
     timestamps: true,
-  },
+  }
 );
 
 export const ContactsModel = model<Contacts>(
   DOCUMENT_NAME,
   schema,
-  COLLECTION_NAME,
+  COLLECTION_NAME
 );
