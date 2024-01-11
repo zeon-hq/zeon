@@ -1,4 +1,4 @@
-import { Box, Flex, Space, Text, TextInput } from "@mantine/core"
+import { Box, Flex, Space, Text, TextInput, Image } from "@mantine/core"
 import { Alert } from "@mantine/core"
 import { IconAlertCircle } from "@tabler/icons-react";
 import { showNotification } from "@mantine/notifications"
@@ -113,6 +113,13 @@ const Login = () => {
       <AuthContainer>
         <AuthForm onSubmit={handleSubmit(onSubmit)}>
           <AuthFormHeader>
+            <Image
+              maw={100}
+              mx="left"
+              src="https://framerusercontent.com/images/oZHYGFoJF8rwIgs3MTgCCfA.svg"
+              alt="Zeon Logo"
+            />
+            <Space h={32} />
             <AuthHeading> Welcome back </AuthHeading>
             <AuthSubHeading>
               {" "}
@@ -124,7 +131,10 @@ const Login = () => {
               title="In Open Beta"
               color="red"
             >
-              Zeon is currently in open beta. Expect bugs and missing features. Our first stable release is slated for 15 January 2024. We do not expect any data loss in the migration from closed beta to v1 stable release.
+              Zeon is currently in open beta. Expect bugs and missing features.
+              Our first stable release is slated for 15 January 2024. We do not
+              expect any data loss in the migration from closed beta to v1
+              stable release.
             </Alert>
           </AuthFormHeader>
 

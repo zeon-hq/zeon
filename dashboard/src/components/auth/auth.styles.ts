@@ -7,6 +7,7 @@ export const AuthWrapper = styled(Box)`
   grid-template-columns: 60% 40%;
   height: 100vh;
   padding: 24px;
+  padding-top: 64px;
 `
 
 export const AuthHeading = styled.p`
