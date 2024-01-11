@@ -172,9 +172,9 @@ const ZeonWidgetModal = () => {
               <Header isForm={step === "form"} />
               <Info>
                 {step === "initial" ? (
-                  <ZeonWidgetForm />
+                  <ZeonWidgetCard />
                   ) : step === "form" ? (
-                    <ZeonWidgetCard />
+                    <ZeonWidgetForm />
                     ) : (
                   <p> {step} </p>
                 )}

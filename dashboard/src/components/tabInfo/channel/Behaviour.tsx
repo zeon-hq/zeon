@@ -27,6 +27,7 @@ import { updateChannel } from "service/DashboardService";
 import styled from "styled-components";
 import { inputWrapperData } from "util/Constant";
 import { InfoContainer } from "../tabInfo.styles";
+import { useState } from "react";
 
 export const MainDiv = styled.div`
   width: 100%;
@@ -46,6 +47,8 @@ export const Wrapper = styled.div`
   overflow: none;
 `;
 const Behavior = () => {
+  const [fromTime, setFromTime] = useState<Date>();
+  const [toTime, setToTime] = useState<Date>();
   const { channelsInfo, selectedPage } = useDashboard();
   const dispatch = useDispatch();
   const behaviourDetails = channelsInfo[selectedPage.name]?.behavior;
@@ -98,7 +101,7 @@ const Behavior = () => {
         <InfoContainer>
           <MainDiv>
             <Box mb={24} fw={500}>
-              <SwitchWithLabel
+              {/* <SwitchWithLabel
                 onClick={(e) => {
                   handleChange({
                     subType: "widgetBehavior",
@@ -112,7 +115,7 @@ const Behavior = () => {
                 }
                 heading="Collect User E-Mail"
                 description="E-Mail will be collect before a conversation is created."
-              />
+              /> */}
 
               <Label text={"E-Mail Input Label"} />
               <Grid>
@@ -194,7 +197,7 @@ const Behavior = () => {
                     subType: "widgetBehavior",
                     type: "behavior",
                     value: e.currentTarget.checked,
-                    key: "collectUserEmail",
+                    key: "autoReply",
                   });
                 }}
                 value={!!behaviourDetails.widgetBehavior.autoReply || false}
@@ -297,9 +300,41 @@ const Behavior = () => {
                         <TimeInput
                           w={"48%"}
                           label="Enter Operating Hours"
+                          onChange={(e) =>{
+                            console.log('From e',e)
+                            setFromTime(new Date(e?.target?.value))
+                            handleChange({
+                              subType: "operatingHours",
+                              type: "behavior",
+                              value: {
+                                to: toTime as Date,
+                                from: new Date(e?.target?.value),
+                              },
+                              key: "operatingHours",
+                            })
+
+
+                          }}
                           placeholder="Input placeholder"
                         />
-                        <TimeInput w={"48%"} />
+                        <TimeInput 
+                            onChange={(value) =>{
+                              console.log('to value',value)
+                              setToTime(new Date(value?.target?.value))
+
+                              handleChange({
+                                subType: "operatingHours",
+                                type: "behavior",
+                                value: {
+                                  to: new Date(value?.target?.value),
+                                  from: fromTime as Date,
+                                },
+                                key: "operatingHours",
+                              })
+
+                            }}
+                        w={"48%"}
+                         />
                       </Flex>
                     </Grid.Col>
                   </Grid>
