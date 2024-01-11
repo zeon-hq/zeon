@@ -17,8 +17,8 @@ axiosInstance.interceptors.request.use(function (
   return config;
 });
 
-// const apiDomainUrl = Config('CORE_API_DOMAIN');
-const apiDomainUrl = "http://localhost:3005";
+const apiDomainUrl = Config('CORE_API_DOMAIN');
+// const apiDomainUrl = C
 
 export async function fetchCompany(companyId: string) {
   try {
