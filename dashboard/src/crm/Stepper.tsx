@@ -72,13 +72,13 @@ const NameColor = styled.span`
 `;
 
 interface StepperProps {
-  steps: StepData[];
+  steps?: StepData[];
 }
 
 const Stepper: React.FC<StepperProps> = ({ steps }) => {
   return (
     <StepperContainer>
-      {steps.map((step, index) => (
+      {steps && steps.map((step, index) => (
         <Step key={index}>
           {index < steps.length - 1 && <StepLine />}
           <StepIcon src={step.type === 'email' ? mailIcon : phoneIcon} alt={step.type} />
