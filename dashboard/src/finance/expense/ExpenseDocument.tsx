@@ -121,7 +121,7 @@ const ExpenseDocument = (props: Props) => {
       key: data.key,
       description: data.key,
     };
-    if (isEmpty(selectedExpense)) {
+    if (selectedExpense && isEmpty(selectedExpense)) {
       dispatch(
         setCreateMode({
           attachedDocuments: [obj],
@@ -136,7 +136,7 @@ const ExpenseDocument = (props: Props) => {
 
   const currAttachedDocuments:any = isEmpty(selectedExpense) ? expenseCreateMode?.attachedDocuments : selectedExpense?.attachedDocuments;
 
-  let docs = currAttachedDocuments?.attachedDocuments?.map((doc:any) => {
+  let docs = currAttachedDocuments?.map((doc:any) => {
     return {
       uri: doc.url,
     };
