@@ -74,6 +74,7 @@
     "start:prod": "cross-env PORT=80 && REACT_APP_ENVIRONMENT=prod react-scripts start",
     "start": "cross-env PORT=80 && REACT_APP_ENVIRONMENT=prod react-scripts start",
     "start:dev": "cross-env PORT=80 && REACT_APP_ENVIRONMENT=dev react-scripts start",
+    "start:docker": "cross-env PORT=80 && REACT_APP_ENVIRONMENT=docker react-scripts start",
     "build:local": "REACT_APP_ENVIRONMENT=local react-scripts build",
     "build:dev": "REACT_APP_ENVIRONMENT=dev react-scripts build",
     "build:prod": "REACT_APP_ENVIRONMENT=prod react-scripts build",
