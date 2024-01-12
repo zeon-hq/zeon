@@ -28,7 +28,7 @@ const port = process.env.FINANCE_BACKEND_PORT
 
 // setup cors to allow all origins
 app.use(cors({
-  origin: ["http://localhost:3000", "http://localhost:3001","https://dev.zeonhq.com"],
+  origin: ["http://localhost:3000", "http://localhost:3001","https://dev.zeonhq.com", "https:app.zeonhq.com"],
   // ALLOW ALL METHODs
   methods: "*",
   // ALLOW ALL HEADERS
