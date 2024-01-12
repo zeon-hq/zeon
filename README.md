@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://www.twenty.com">
+  <a href="https://zeonhq.com/">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="https://zeonhq.b-cdn.net/headerimage.png">
       <source media="(prefers-color-scheme: light)" srcset="https://zeonhq.b-cdn.net/headerimage.png">
