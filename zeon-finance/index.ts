@@ -30,7 +30,7 @@ app.use(
       "http://localhost:3000",
       "http://localhost:3001",
       "https://dev.zeonhq.com",
-      "https:app.zeonhq.com",
+      "https://app.zeonhq.com",
     ],
     // ALLOW ALL METHODs
     methods: "*",
