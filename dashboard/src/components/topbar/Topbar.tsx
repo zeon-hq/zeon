@@ -69,60 +69,71 @@ const getUserWorkspaces = async () => {
 
 
   return (
-      <TopBarWrapper>
-          <TopBarDivWrapper>
-              <TopBarWorkSpaceLeftSelect workspaceId={workspaceId || ""} />
-              <Pill selected={window.location.href.includes('dashboard')} label="Chat" onClick={() => {
-                    navigate(`/dashboard/${workspaceId}`)
-                      dispatch(setShowSidebar(true));
-                      dispatch(
-                          setSelectedPage({
-                              type: "detail",
-                              name: "inbox",
-                              //@ts-ignore
-                              channelId: channelsInfo?.channels[0].channelId,
-                          })
-                      );
-                  }} />
-                  <Pill selected={window.location.href.includes('finance')} label="Finance" onClick={() => { 
-                      navigate(`/finance/${workspaceId}`)
-                  }} />
-                  <Pill selected={window.location.href.includes('crm')} label="CRM" onClick={() => {
-                        navigate(`/crm/${workspaceId}`)
-                    }
-                    } />
-          </TopBarDivWrapper>
-          <InnerDivWrapper>
-          <Text
-                  className="ducalis-changelog-widget pointer"
-                  fw={"500"}
-                  fz="14px"
-                  style={{
-                    borderRadius: "6px",
-                  }}
-                  color="#101828"
-                pl={'12px'}
-                pr={'12px'}
-                pt={'4px'}
-                pb={'4px'}
-                  // bg={'#f2f4f7'}
-                  onClick={() => {
-                      dispatch(setShowSidebar(true));
-                      dispatch(
-                          setSelectedPage({
-                              type: "detail",
-                              name: "inbox",
-                              //@ts-ignore
-                              channelId: channelsInfo?.channels[0].channelId,
-                          })
-                      );
-                  }}
-              >
-                  Updates & Requests
-              </Text>
-              <TopBarWorkSpaceRightSelect workspaceId={workspaceId || ""} />
-          </InnerDivWrapper>
-      </TopBarWrapper>
+    <TopBarWrapper>
+      <TopBarDivWrapper>
+        <TopBarWorkSpaceLeftSelect workspaceId={workspaceId || ""} />
+        <Pill
+          selected={window.location.href.includes("dashboard")}
+          label="Front Desk"
+          onClick={() => {
+            navigate(`/dashboard/${workspaceId}`);
+            dispatch(setShowSidebar(true));
+            dispatch(
+              setSelectedPage({
+                type: "detail",
+                name: "inbox",
+                //@ts-ignore
+                channelId: channelsInfo?.channels[0].channelId,
+              })
+            );
+          }}
+        />
+        <Pill
+          selected={window.location.href.includes("crm")}
+          label="Relations"
+          onClick={() => {
+            navigate(`/crm/${workspaceId}`);
+          }}
+        />
+        <Pill
+          selected={window.location.href.includes("finance")}
+          label="Finance"
+          onClick={() => {
+            navigate(`/finance/${workspaceId}`);
+          }}
+        />
+      </TopBarDivWrapper>
+      <InnerDivWrapper>
+        <Text
+          className="ducalis-changelog-widget pointer"
+          fw={"500"}
+          fz="14px"
+          style={{
+            borderRadius: "6px",
+          }}
+          color="#101828"
+          pl={"12px"}
+          pr={"12px"}
+          pt={"4px"}
+          pb={"4px"}
+          // bg={'#f2f4f7'}
+          onClick={() => {
+            dispatch(setShowSidebar(true));
+            dispatch(
+              setSelectedPage({
+                type: "detail",
+                name: "inbox",
+                //@ts-ignore
+                channelId: channelsInfo?.channels[0].channelId,
+              })
+            );
+          }}
+        >
+          Updates & Requests
+        </Text>
+        <TopBarWorkSpaceRightSelect workspaceId={workspaceId || ""} />
+      </InnerDivWrapper>
+    </TopBarWrapper>
   );
 };
 
