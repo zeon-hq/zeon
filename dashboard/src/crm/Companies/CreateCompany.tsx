@@ -25,11 +25,13 @@ import { createCompany, editCompany } from "service/CRMService";
 import { showNotification } from "@mantine/notifications";
 import useDashboard from "hooks/useDashboard";
 import useCrm from "hooks/useCrm";
+import { useState } from "react"
 
 function CreateCompanies() {
   const dispatch = useDispatch();
   const { workspaceInfo } = useDashboard();
   const { selectedCompanyPage } = useCrm();
+  const [loading, setLoading] = useState(false);
 
   const editValues = selectedCompanyPage?.companyData;
 
@@ -94,6 +96,7 @@ function CreateCompanies() {
 
   const handleSubmit = async (data: any) => {
     try {
+      setLoading(true);
       data.workspaceId = workspaceInfo.workspaceId;
       data.phoneNumber = [data?.phoneNumber];
       
@@ -111,8 +114,17 @@ function CreateCompanies() {
         autoClose: 5000,
       });
       dispatch(setSelectedCompanyPage({ type: "all" }));
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      showNotification({
+        title: "Error",
+        message: `Company ${editValues?.companyId ? "update" : "creation"} failed`,
+        color: "red",
+        icon: null,
+        autoClose: 5000,
+      });
+      setLoading(false);
     }
   };
 
@@ -158,6 +170,7 @@ function CreateCompanies() {
             background: "#3C69E7",
           }}
           radius="xs"
+          loading={loading}
           size="xs"
           fw={600}
           fs={{

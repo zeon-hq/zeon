@@ -112,7 +112,7 @@ const getUserWorkspaces = async () => {
           selected={isRelationsSelected}
           label="Relations"
           onClick={() => {
-            navigate(`/relation/${workspaceId}`);
+            navigate(`/crm/${workspaceId}/contacts`);
           }}
         />
         <Pill

@@ -6,7 +6,7 @@ import { FinanceContainer } from 'finance/styles'
 import useFinance from 'finance/useFinance'
 import { useDispatch } from 'react-redux'
 import { initFinance } from 'reducer/financeSlice'
-import { useParams } from 'react-router'
+import { useLocation, useNavigate, useParams } from 'react-router'
 import { AsyncThunkAction } from '@reduxjs/toolkit'
 import useQuery from 'hooks/useQuery'
 
@@ -19,6 +19,23 @@ const Finance = (props: Props) => {
     const { workspaceId } = useParams<{ workspaceId?: string }>() // Make workspaceId optional
     const query = useQuery()
     const expenseId = query.get("expenseId")
+    const navigate = useNavigate()
+    const location = useLocation()
+
+    useEffect(() => {
+      // if url has no searchParams filter, set filter to all
+      if(!query.get("filter")) {
+        query.set("filter", "all")
+      }
+
+       // Navigate to the new URL with the updated query parameters
+        navigate({
+          pathname: location.pathname,
+          search: '?' + query.toString()
+        });
+      
+    },[])
+
     useEffect(() => {
       if (workspaceId) {
         if(expenseId) {

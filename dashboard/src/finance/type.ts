@@ -8,6 +8,7 @@ export interface IExpense {
   expenseList: IExpenseDTO[];
   selectedExpense: IExpenseDTO | null;
   createMode: ICreateModeExpense | null;
+  inCreateMode: boolean;
 }
 
 export interface ICreateModeExpense {

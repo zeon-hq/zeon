@@ -9,12 +9,14 @@ type Props = {
   name: string;
   rules?: any;
   setValue: UseFormSetValue<any>;
+  setError: any;
   label: string;
   error ?: string | undefined;
   defaultValue?: {
     value: string;
     currency: string;
   };
+  clearError: any;
 };
 
 const ZCurrency = ({
@@ -24,6 +26,8 @@ const ZCurrency = ({
   defaultValue,
   setValue,
   label,
+  setError,
+  clearError,
   error
 }: Props) => {
   const [commaSeparatedValue, setCommaSeparatedValue] = useState("");
@@ -57,6 +61,8 @@ const ZCurrency = ({
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const cursorPosition = event.target.selectionStart;
     const { value } = event.target;
+    if(error)
+    clearError(`${name}.value`);
     setValue(`${name}.value`, parseFloat(value.replace(/[^0-9.]/g, "")));
     const numericValue = parseFloat(value.replace(/[^0-9.]/g, "")).toFixed(2);
     const formattedValue = numericValue.replace(

@@ -31,6 +31,7 @@ function CreateContact() {
   const editValues = selectedContactPage?.contactData;
 
   const [companyOptions, setCompanyOptions] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const form = useForm({
     initialValues: {
@@ -78,6 +79,7 @@ function CreateContact() {
 
   const handleSubmit = async (data: any) => {
     try {
+      setLoading(true);
       data.workspaceId = workspaceInfo.workspaceId;
       data.emailAddress = [data?.emailAddress];
       data.phoneNumber = [data?.phoneNumber];
@@ -95,10 +97,18 @@ function CreateContact() {
         icon: null,
         autoClose: 5000,
       });
-
       dispatch(setSelectedContactPage({ type: "all" }));
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      showNotification({
+        title: "Error",
+        message: "Contact creation failed",
+        color: "red",
+        icon: null,
+        autoClose: 5000,
+      });
+      setLoading(false);
     }
   };
 
@@ -146,6 +156,7 @@ function CreateContact() {
           radius="xs"
           size="xs"
           fw={600}
+          loading={loading}
           fs={{
             fontSize: "14px",
           }}

@@ -6,6 +6,7 @@ import { setOptions } from "react-chartjs-2/dist/utils";
 import { getCRMDetailsMinimal } from "service/CoreService";
 import styled from "styled-components";
 import debounce from "lodash/debounce";
+import Loader from "components/ui-components/Loader"
 
 type Props = {
   opened: boolean;
@@ -48,16 +49,19 @@ const styles = {
     padding: 0,
   },
   content: {
-    height: "400px",
+    height: "500px !important",
+    overflow: "auto",
   },
 };
 
 const AddVendorModal = ({ opened, close, workspaceId, callback }: Props) => {
   const [options, setOptions] = React.useState<any>(null);
+  const [loading, setLoading] = React.useState(false);
   const [selectedVendor, setSelectedVendor] = React.useState<any>(null); // [contactId, companyId
   const fetchCRMDetails = async () => {
     try {
       if (!workspaceId) return;
+      setLoading(true);
       const res = await getCRMDetailsMinimal(workspaceId);
       const { data } = res;
       const contactOptions = data?.contacts?.map((contact: any) => ({
@@ -74,6 +78,7 @@ const AddVendorModal = ({ opened, close, workspaceId, callback }: Props) => {
       };
       // const computedOptions = [...contactOptions, ...companyOptions];
       setOptions(computedOptions);
+      setLoading(false);
     } catch (error) {
       showNotification({
         title: "Error",
@@ -81,6 +86,7 @@ const AddVendorModal = ({ opened, close, workspaceId, callback }: Props) => {
         color: "red",
       });
       setOptions([]);
+      setLoading(false);
     }
   };
 
@@ -99,6 +105,7 @@ const AddVendorModal = ({ opened, close, workspaceId, callback }: Props) => {
   }, []);
 
   const handleSearch = (e: any) => {
+    setLoading(true);
     const value = e.target.value;
     /**
      * options : {
@@ -116,6 +123,7 @@ const AddVendorModal = ({ opened, close, workspaceId, callback }: Props) => {
         companies: filteredCompanies,
         };
     setOptions(computedOptions);
+    setLoading(false);
   }
 
   const handleSearchDebounced = debounce(handleSearch, 800);
@@ -135,32 +143,39 @@ const AddVendorModal = ({ opened, close, workspaceId, callback }: Props) => {
             mb={12}
             onChange={handleSearchDebounced}
         />
-      {options?.contacts.map((contact: any) => {
-        return (
-          <Container
-            selected={selectedVendor === contact.value}
-            onClick={() => {
-              handleVendorClick(contact);
-            }}
-          >
-            {" "}
-            <VendorName>{contact.label}</VendorName>{" "}
-          </Container>
-        );
-      })}
-      {options?.companies.map((company: any) => {
-        return (
-          <Container
-            selected={selectedVendor === company.value}
-            onClick={() => {
-              handleVendorClick(company);
-            }}
-          >
-            <VendorName>{company.label}</VendorName>
-          </Container>
-        );
-      })}
-    </Modal>
+        {
+          loading ? <Loader/> : (
+            <>
+              {options?.contacts.map((contact: any) => {
+                return (
+                  <Container
+                    selected={selectedVendor === contact.value}
+                    onClick={() => {
+                      handleVendorClick(contact);
+                    }}
+                  >
+                    {" "}
+                    <VendorName>{contact.label}</VendorName>{" "}
+                  </Container>
+                );
+              })}
+              {options?.companies.map((company: any) => {
+                return (
+                  <Container
+                    selected={selectedVendor === company.value}
+                    onClick={() => {
+                      handleVendorClick(company);
+                    }}
+                  >
+                    <VendorName>{company.label}</VendorName>
+                  </Container>
+                );
+              })}
+            </>
+          )
+        }
+      
+    </Modal> 
   );
 };
 

@@ -30,7 +30,7 @@ export const createNote = async (data: ICreateNoteDTO) => {
         const res = await axiosInstance.post(`${crmAPIDomain}/notes`, data);
         return res.data;
     } catch (error) {
-        return {};
+        throw error;
     }
 }
 
@@ -41,6 +41,6 @@ export const deleteNote = async (data: IDeleteNoteDTO) => {
         });
         return res.data;
     } catch (error) {
-        return {};
+        throw error;
     }
 }

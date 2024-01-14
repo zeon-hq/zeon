@@ -8,7 +8,8 @@ const initialState:IFinance = {
     expense: {
         expenseList: [],
         selectedExpense: null,
-        createMode: null
+        createMode: null,
+        inCreateMode: false
     },
     categories: [],
     tags: []
@@ -63,6 +64,7 @@ export const financeSlice = createSlice({
         },
         setCreateMode: (state, action: PayloadAction<ICreateModeExpense>) => {
             state.expense.createMode = action.payload;
+            state.expense.inCreateMode = true;
         },
         updatedSelectedExpense: (state, action: PayloadAction<{
             key: string;
@@ -82,6 +84,11 @@ export const financeSlice = createSlice({
                 // get the selected expense
                 const selectedExpenseDetails = action.payload.expenses.find((expense: IExpenseDTO) => expense.expenseId === action.payload.selectedExpense);
                 state.expense.selectedExpense = selectedExpenseDetails || null;
+            } else {
+                state.expense.createMode = {
+                    attachedDocuments: []
+                }
+                state.expense.inCreateMode = true;
             }
         })
         .addCase(initFinance.rejected, (state, action) => {

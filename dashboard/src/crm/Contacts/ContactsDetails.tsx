@@ -51,6 +51,7 @@ const MiddleContainer = styled.div`
   width: 45%;
   border-left: 1px solid #e1e1e1;
   padding-left: 2%;
+  padding-right: 2%;
 `;
 
 const RightContainer = styled.div`
@@ -84,7 +85,8 @@ function ContactsDetails() {
     selectedContact,
     selectedCompany,
   } = useCrm();
-  const { contactId } = useParams();
+  const { contactId , workspaceId} = useParams();
+
 
   const [activeTab, setActiveTab] = useState<string | null>(
     selectedContactPage.activeTab ?? "notes"
@@ -94,11 +96,13 @@ function ContactsDetails() {
   const navigate = useNavigate();
 
   const handleBack = () => {
-    dispatch(setSelectedContactPage({ type: "all" }));
-    const pathName = location.pathname.split("/");
-    pathName.pop();
-    navigate(pathName.join("/"));
+    // dispatch(setSelectedContactPage({ type: "all" }));
+    // const pathName = location.pathname.split("/");
+    // pathName.pop();
+    // navigate(pathName.join("/"));
+    navigate(`/crm/${workspaceId}/contacts`);
   };
+
 
   useEffect(() => {
     if (contactId) {
@@ -366,6 +370,8 @@ function ContactsDetails() {
               <div
                 style={{
                   paddingTop: "16px",
+                  overflow: "auto",
+                  height: "calc(100vh - 139px)"
                 }}
               >
                 <Note resourceId={selectedContact.contactId} resourceType={CRMResourceType.CONTACT} notes={selectedContact?.notes || []} />

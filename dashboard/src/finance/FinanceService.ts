@@ -28,7 +28,7 @@ export async function getAllCategories() {
     const res = await axiosInstance.get(`${financeApiDomain}/category`);
     return res.data;
   } catch (error) {
-    return {};
+    throw error;
   }
 }
 
@@ -37,7 +37,7 @@ export async function createExpense(data: IExpenseDTO) {
     const res = await axiosInstance.post(`${financeApiDomain}/expense`, data);
     return res.data;
   } catch (error) {
-    return {};
+    throw error;
   }
 }
 
@@ -46,7 +46,7 @@ export async function updateExpense({data, expenseId}:{data: IExpenseDTO, expens
     const res = await axiosInstance.put(`${financeApiDomain}/expense/${expenseId}`, data);
     return res.data;
   } catch (error) {
-    return {};
+    throw error;
   }
 }
 
@@ -55,7 +55,7 @@ export const getAllExpenses = async (workspaceId: string) => {
     const res = await axiosInstance.get(`${financeApiDomain}/expense/${workspaceId}`);
     return res.data;
   } catch (error) {
-    return {};
+    throw error;
   }
 }
 
@@ -64,7 +64,7 @@ export const deleteExpense = async (expenseId: string) => {
     const res = await axiosInstance.delete(`${financeApiDomain}/expense/${expenseId}`);
     return res.data;
   } catch (error) {
-    return {};
+    throw error;
   }
 }
 
@@ -73,6 +73,6 @@ export const getWorkspaceFinanceInfo = async (workspaceId: string) => {
     const res = await axiosInstance.get(`${financeApiDomain}/${workspaceId}`);
     return res.data;
   } catch (error) {
-    return {};
+    throw error;
   }
 }
