@@ -28,6 +28,7 @@ import styled from "styled-components";
 import { inputWrapperData } from "util/Constant";
 import { InfoContainer } from "../tabInfo.styles";
 import { useState } from "react";
+import { createDateWithTime, getOperatinHourTime } from "util/dashboardUtils";
 
 export const MainDiv = styled.div`
   width: 100%;
@@ -47,11 +48,11 @@ export const Wrapper = styled.div`
   overflow: none;
 `;
 const Behavior = () => {
-  const [fromTime, setFromTime] = useState<Date>();
-  const [toTime, setToTime] = useState<Date>();
   const { channelsInfo, selectedPage } = useDashboard();
   const dispatch = useDispatch();
   const behaviourDetails = channelsInfo[selectedPage.name]?.behavior;
+  const [fromTime, setFromTime] = useState<string>(getOperatinHourTime(new Date(channelsInfo?.[selectedPage.name]?.behavior?.operatingHours?.operatingHours?.from) || new Date()));
+  const [toTime, setToTime] = useState<string>(getOperatinHourTime(new Date(channelsInfo?.[selectedPage.name]?.behavior?.operatingHours?.operatingHours?.to) || new Date()));
 
   const handleChange = ({
     subType,
@@ -299,16 +300,17 @@ const Behavior = () => {
                       >
                         <TimeInput
                           w={"48%"}
+                          value={fromTime}
                           label="Enter Operating Hours"
                           onChange={(e) =>{
-                            console.log('From e',e)
-                            setFromTime(new Date(e?.target?.value))
+                            const fromValue = e?.target?.value;
+                            setFromTime(e?.target?.value)
                             handleChange({
                               subType: "operatingHours",
                               type: "behavior",
                               value: {
-                                to: toTime as Date,
-                                from: new Date(e?.target?.value),
+                                to: createDateWithTime(parseInt(e?.target?.value.split(":")[0]), parseInt(e?.target?.value.split(":")[1])),
+                                from: createDateWithTime(parseInt(fromTime.split(":")[0]), parseInt(fromTime.split(":")[1])),
                               },
                               key: "operatingHours",
                             })
@@ -318,16 +320,17 @@ const Behavior = () => {
                           placeholder="Input placeholder"
                         />
                         <TimeInput 
-                            onChange={(value) =>{
-                              console.log('to value',value)
-                              setToTime(new Date(value?.target?.value))
+                        value={toTime}
+                            onChange={(e) =>{
+                              const toValue = e?.target?.value;
+                              setToTime(toValue)
 
                               handleChange({
                                 subType: "operatingHours",
                                 type: "behavior",
                                 value: {
-                                  to: new Date(value?.target?.value),
-                                  from: fromTime as Date,
+                                  to: createDateWithTime(parseInt(toTime.split(":")[0]), parseInt(toTime.split(":")[1])),
+                                  from: createDateWithTime(parseInt(e?.target?.value.split(":")[0]), parseInt(e?.target?.value.split(":")[1])),
                                 },
                                 key: "operatingHours",
                               })
