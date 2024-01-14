@@ -1,13 +1,13 @@
-import { Box, Flex, Space, Text, TextInput } from "@mantine/core"
-import { showNotification } from "@mantine/notifications"
-import AuthHero from "assets/authHero2.png"
-import { useEffect, useState } from "react"
-import { Controller, useForm } from "react-hook-form"
-import PhoneInput, { CountryData } from "react-phone-input-2"
-import "react-phone-input-2/lib/style.css"
-import { useNavigate } from "react-router"
-import { Link } from "react-router-dom"
-import { signup } from "service/CoreService"
+import { Box, Flex, Space, Text, TextInput, Image } from "@mantine/core";
+import { showNotification } from "@mantine/notifications";
+import AuthHero from "assets/authHero2.png";
+import { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import PhoneInput, { CountryData } from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
+import { signup } from "service/CoreService";
 import {
   AuthButton,
   AuthContainer,
@@ -17,65 +17,71 @@ import {
   AuthLabel,
   AuthSubHeading,
   AuthWrapper,
-} from "./auth.styles"
-
-
+} from "./auth.styles";
 
 const Signup = () => {
-  const { register, handleSubmit, control } = useForm()
-  const [loading, setLoading] = useState(false)
-  const navigate = useNavigate()
+  const { register, handleSubmit, control } = useForm();
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const onSubmit = async (data: any) => {
     try {
-      setLoading(true)
+      setLoading(true);
       const phoneNumber: any = {
         //@ts-ignore
         countryCode: phoneData?.dialCode,
         num: data.phone,
-      }
+      };
       const res = await signup(
         data.name,
         data.email,
         data.password,
         phoneNumber
-      ).then((res) => {
-        setLoading(false)
-        navigate("/workspace-creation")
-      }).catch((err) => {
-        console.log(err)
-        setLoading(false)
-        showNotification({
-          title: "Error",
-          message: err,
-          color: "red",
+      )
+        .then((res) => {
+          setLoading(false);
+          navigate("/workspace-creation");
         })
-      })
-      
-      
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+          showNotification({
+            title: "Error",
+            message: err,
+            color: "red",
+          });
+        });
     } catch (error: any) {
-      console.log(error)
-      setLoading(false)
+      console.log(error);
+      setLoading(false);
       showNotification({
         title: "Error",
         message: error,
         color: "red",
-      })
+      });
     }
-  }
+  };
 
   useEffect(() => {
     // if at is present, redirect to workspaces
-    const at = localStorage.getItem("at")
+    const at = localStorage.getItem("at");
     if (at) {
-      navigate("/workspaces/chat")
+      navigate("/workspaces/chat");
     }
-  }, [])
+  }, []);
 
-  const [phoneData, setPhoneData] = useState<CountryData | {}>({})
+  const [phoneData, setPhoneData] = useState<CountryData | {}>({});
 
   return (
-    <AuthWrapper>
+    <div>
+      <Space h={64} />
+      <Image
+        maw={100}
+        mx="auto"
+        src="https://framerusercontent.com/images/oZHYGFoJF8rwIgs3MTgCCfA.svg"
+        alt="Zeon Logo"
+      />
+      <Space h={32} />
       <AuthContainer>
         <AuthForm onSubmit={handleSubmit(onSubmit)}>
           <AuthFormHeader>
@@ -118,8 +124,8 @@ const Signup = () => {
                 country={"in"}
                 value={value}
                 onChange={(value, data) => {
-                  setPhoneData(data)
-                  onChange(value)
+                  setPhoneData(data);
+                  onChange(value);
                 }}
               />
             )}
@@ -143,32 +149,40 @@ const Signup = () => {
             type="password"
           />
           {/* @ts-ignore */}
-          <AuthButton loading={loading} disable={!loading}  fullWidth type="submit"> Get Started </AuthButton>
+          <AuthButton
+            loading={loading}
+            disable={!loading}
+            fullWidth
+            type="submit"
+          >
+            {" "}
+            Get Started{" "}
+          </AuthButton>
           <Space h={20} />
 
           <Flex justify="center">
             {/* add space at the end */}
-            <AuthSubHeading> Already have an account?  </AuthSubHeading>
+            <AuthSubHeading> Already have an account? </AuthSubHeading>
             <Text>
               <Link
                 style={{
                   textDecoration: "none",
-                  color:"#3054B9",
-                  fontWeight:"600"
+                  color: "#3054B9",
+                  fontWeight: "600",
                 }}
                 to={"/login"}
               >
-                <p> {"\u00A0"}Log in{" "}  </p>
+                <p> {"\u00A0"}Log in </p>
               </Link>
             </Text>
           </Flex>
         </AuthForm>
       </AuthContainer>
-      <Box>
+      {/* <Box>
         <img style={{ height: "100%", width: "100%" }} src={AuthHero} />
-      </Box>
-    </AuthWrapper>
-  )
-}
+      </Box> */}
+    </div>
+  );
+};
 
-export default Signup
+export default Signup;

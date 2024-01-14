@@ -40,6 +40,7 @@ export async function updateChannel(channelId: string, updatedData: any) {
       `${apiDomainUrl}/channel/${channelId}`,
       { updatedData }
     );
+    return res;
   } catch (error) {
     console.log(error);
   }

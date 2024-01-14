@@ -28,6 +28,14 @@ export const getReadableDate = (date: string) => {
   return newDate;
 
 }
+/**
+ * input : 2023-12-09T18:30:00.000Z
+ * output : 22 January 2023 9:30 pm
+ */
+export const getReadableDateWithTime = (date: string) => {
+  const newDate = moment(date).format("DD MMMM YYYY h:mm a");
+  return newDate;
+}
 
 /**
  * function takes in string and makes first char uppercase

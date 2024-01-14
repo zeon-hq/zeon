@@ -17,10 +17,10 @@ const FinanceTopbar = (props: Props) => {
     <TopBarWrapper>
     <TopBarDivWrapper>
         
-        <Pill label="Analytics" onClick={() => {
+        <Pill selected label="Analytics" onClick={() => {
                 
             }} />
-            <Pill label="Expenses" onClick={() => { 
+            <Pill selected label="Expenses" onClick={() => { 
                
             }} />
     </TopBarDivWrapper>

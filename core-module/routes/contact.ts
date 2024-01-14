@@ -3,7 +3,8 @@ import {
     createContactController,
     getContactController,
     updateContactController,
-    deleteContactController
+    deleteContactController,
+    updateAdditionalDatafieldController
 } from "../controller/contact"
 
 
@@ -16,11 +17,16 @@ router.get("/:contactId", getContactController)
 router.post("/", createContactController)
 
 // edit company by companyId
-router.put("/", updateContactController)
+router.put("/:contactId", updateContactController)
 
 // delete company by companyId
 router.delete("/:contactId", deleteContactController)
 
+//update additionalDatafields
+router.put("/:contactId/additionalDatafields", updateContactController)
+
+// additionalData
+router.put("/:contactId/fields", updateAdditionalDatafieldController)
 
 
 

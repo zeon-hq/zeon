@@ -1,11 +1,13 @@
 import { Button, Space } from "@mantine/core";
 import { notifications, showNotification } from "@mantine/notifications";
+import { Label } from "components/ui-components";
 import ZActionText from "components/ui-components/Button/ZActionText";
 import ZCurrency from "components/ui-components/common/ZCurrency";
 import ZDate from "components/ui-components/common/ZDate";
 import ZSelect from "components/ui-components/common/ZSelect";
 import ZTextInput from "components/ui-components/common/ZTextInput";
 import ZInput from "components/ui-components/common/ZTextInput";
+import { set } from "dot-prop";
 import {
   createExpense,
   deleteExpense,
@@ -16,16 +18,21 @@ import { ICategory, ITag } from "finance/type";
 import useFinance from "finance/useFinance";
 import { isEmpty } from "lodash";
 import moment from "moment";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import { initFinance, setSelectedExpense } from "reducer/financeSlice";
+import { getCRMDetailsMinimal } from "service/CoreService";
 import { Trash } from "tabler-icons-react";
+import AddVendorModal from "./component/AddVendorModal";
 
 type Props = {};
 
 const ExpenseDetails = (props: Props) => {
+  const [options, setOptions] = useState<any>([]);
+  const [showAddVendorModal, setShowAddVendorModal] = useState(false);
+
   const {
     selectedExpense,
     tags,
@@ -41,6 +48,7 @@ const ExpenseDetails = (props: Props) => {
     setError,
     reset,
     formState: { errors },
+    getValues
   } = useForm();
   const navigate = useNavigate();
 
@@ -102,6 +110,7 @@ const ExpenseDetails = (props: Props) => {
   }, [selectedExpense, reset]);
 
   const { workspaceId } = useParams<{ workspaceId: string }>();
+  const [selectedVendor, setSelectedVendor] = useState<any>(); // [contactId, companyId
 
   const onSubmit = async (data: any) => {
     console.log(data);
@@ -110,7 +119,7 @@ const ExpenseDetails = (props: Props) => {
     // gwt value of tags
     const tags = data?.tags?.map((tag: any) => tag.value) || [];
     // get vendor
-    const vendor = data?.vendor?.value || "";
+    const vendor = data?.vendor || "";
     const status = data?.status?.value || "unpaid";
     delete data.category;
     const attachedDocuments = isEmpty(selectedExpense)
@@ -161,6 +170,7 @@ const ExpenseDetails = (props: Props) => {
           color: "green",
         });
       }
+      setSelectedVendor(null);
     } catch (error) {
       console.log(error);
     }
@@ -222,24 +232,38 @@ const ExpenseDetails = (props: Props) => {
     }
   }, [selectedExpense, setValue]);
 
+  const onVendorChange = (option: any) => {
+    console.log(option);
+    setValue("vendor", option.value);
+    setSelectedVendor(option);
+  }
+  
+
   return (
     <ExpenseDetailsContainer as="form">
       {/* create a vendor select component using ZSelect */}
-      <ZSelect
+      {/* <ZSelect
         label={"Vendor"}
         inputProps={{
           placeholder: "Vendor",
           required: true,
-          options: [
-            { label: "Vendor 1", value: "vendor1" },
-            { label: "Vendor 2", value: "vendor2" },
-          ],
+          options: options,
+          defaultValue: {
+            label: selectedExpense?.vendor,
+            value: selectedExpense?.vendor,
+          }
         }}
         formProps={{
           name: "vendor",
           control,
         }}
-      />
+      /> */}
+      <Label text="Vendor" />
+      <Button className="secondary" onClick={() => setShowAddVendorModal(true)} variant="contained" fullWidth>
+        {
+          selectedVendor?.label || getValues()?.vendor || "Add Vendor"
+        }
+      </Button>
       <Space h="sm" />
       <ZTextInput
         inputProps={{
@@ -389,6 +413,14 @@ const ExpenseDetails = (props: Props) => {
           label="Delete Expense"
           color="#d92d20"
           leftIcon={<Trash size="14px" />}
+        />
+      )}
+      {showAddVendorModal && (
+        <AddVendorModal
+          opened={showAddVendorModal}
+          close={() => setShowAddVendorModal(false)}
+          workspaceId={workspaceId}
+          callback={onVendorChange}
         />
       )}
     </ExpenseDetailsContainer>

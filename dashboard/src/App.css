@@ -85,3 +85,24 @@ p {
 .mantine-Modal-content {
   border: 1px solid #d0d5dd;
 }
+
+.pill {
+  border-radius: 6px;
+  color: #101828;
+  padding: 4px 12px;
+  transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+.pill-bg {
+  background-color: #f2f4f7; /* Set your desired background color */
+}
+
+.pill:hover {
+  background-color: #f2f4f7; /* Change this color to your desired hover color */
+}
+
+.secondary {
+  border-radius: 8px;
+border: 1px solid var(--Gray-300, #D0D5DD);
+background: var(--Gray-50, #F9FAFB);
+}

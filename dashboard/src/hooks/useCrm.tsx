@@ -18,6 +18,14 @@ const useCrm = () => {
     (item: RootState) => item.crm.selectedResource
   );
 
+  const selectedContact = useSelector(
+    (item: RootState) => item.crm.selectedContact
+  );
+
+  const selectedCompany = useSelector(
+    (item: RootState) => item.crm.selectedCompany
+  );
+
   return {
     selectedPage,
     selectedContactPage,
@@ -26,6 +34,8 @@ const useCrm = () => {
     showNoteCreateModal,
     selectedNote,
     selectedResource,
+    selectedContact,
+    selectedCompany,
   };
 };
 

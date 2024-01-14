@@ -1,21 +1,26 @@
-import { Text, Button, Divider, Flex, Box, Space } from "@mantine/core";
-import { BrandSlack, Plus } from "tabler-icons-react";
-import useDashboard from "hooks/useDashboard";
-import Heading from "components/details/inbox/component/Heading";
-import { getConfig as Config } from "config/Config"
-import SlackIntegrationSVG from "assets/slack_integration_svg.svg";
-import SlackDisableIntegration from "assets/slack_disable_icon.svg";
-import SlackIntegrationEnable from "assets/slack_svg_enable.svg";
+import { Box, Button, Flex, Space, Text } from "@mantine/core";
+import { showNotification } from "@mantine/notifications";
 import EmailNewTicket from "assets/email_new_ticket.svg";
-import { showNotification } from "@mantine/notifications"
+import SlackDisableIntegration from "assets/slack_disable_icon.svg";
+import SlackIntegrationSVG from "assets/slack_integration_svg.svg";
+import SlackIntegrationEnable from "assets/slack_svg_enable.svg";
+import Heading from "components/details/inbox/component/Heading";
+import { getConfig as Config } from "config/Config";
+import { is } from "date-fns/locale";
+import useDashboard from "hooks/useDashboard";
 import { useDispatch } from "react-redux";
-import { updateChannel, uploadFile } from "service/DashboardService";
-import { updateEmailTicketCreateNotification } from "reducer/slice";
+import { updateEmailTicketCreateNotification, updateSlackTicketNotification } from "reducer/slice";
+import { updateChannel } from "service/DashboardService";
 const Integrations = () => {
   const dispatch = useDispatch();
   const { workspaceInfo } = useDashboard();
   const { selectedPage, channelsInfo } = useDashboard();
-  const handleIntegrateSlack = () => {
+  const isSlackNewTicketNotificationEnabled = channelsInfo[selectedPage.name]?.slackChannelId;
+  const isEmailNewTicketNotificationEnabled = channelsInfo[selectedPage.name]?.emailNewTicketNotification;
+
+  const handleIntegrateSlack = async () => {
+    if (!isSlackNewTicketNotificationEnabled){    
+      // Enable Slack Integration for New Ticket Notification
     const slackRedirectionUrl = Config("API_DOMAIN") + "/oauth/slack/authorize";
     const currentUrl = window.location.href;
     // Construct the state object with accountId and currentUrl
@@ -41,21 +46,53 @@ const Integrations = () => {
       url,
       "_blank"
     );
+  } else {
+    const slackUpdatePayload = {accessToken:'', slackChannelId:''};
 
+    
+
+    const updateNotificatonMessage = await updateChannel(
+      channelsInfo[selectedPage.name].channelId,
+      {...channelsInfo[selectedPage.name],...slackUpdatePayload}
+    );
+    if (updateNotificatonMessage?.status === 200){
+      await dispatch(updateSlackTicketNotification(slackUpdatePayload));
+      showNotification({
+        title: "Notification",
+        message: "Slack Settings Saved",
+      });
+    } else {
+      showNotification({
+        title: "Notification",
+        message: "Something went wrong",
+        color: "red"
+      });
+    }
+    
+  }
   };
 
   const handleEmailTicketIntegration = async () => {
     const emailUpdatePayload = {emailNewTicketNotification:channelsInfo[selectedPage.name]?.emailNewTicketNotification ? false: true};
-    await dispatch(updateEmailTicketCreateNotification(emailUpdatePayload));
-    await updateChannel(
+    
+    const updateNotificatonMessage = await updateChannel(
       channelsInfo[selectedPage.name].channelId,
       {...channelsInfo[selectedPage.name],...emailUpdatePayload}
     );
-    showNotification({
-      title: "Notification",
-      message: "Saved Successfully",
-    });
-  }
+    if (updateNotificatonMessage?.status === 200){
+      await dispatch(updateEmailTicketCreateNotification(emailUpdatePayload));
+      showNotification({
+        title: "Notification",
+        message: "Email Settings Saved",
+      });
+    } else {
+      showNotification({
+        title: "Notification",
+        message: "Something went wrong",
+        color: "red"
+      });
+    }
+    }
 
   return (
     <div>
@@ -87,18 +124,16 @@ const Integrations = () => {
               style={{
                 borderColor: "white",
                 backgroundColor: "white",
-                color: channelsInfo[selectedPage.name]?.emailNewTicketNotification ? "#B42318":"#3054B9",
+                color: isEmailNewTicketNotificationEnabled ? "#B42318":"#3054B9",
                 fontSize: "12px",
                 fontStyle: "normal",
               }}
               onClick={async()=>{
                 await handleEmailTicketIntegration()
               }}
-              leftIcon={channelsInfo[selectedPage.name]?.emailNewTicketNotification ? <img src={SlackDisableIntegration} />: <img src={SlackIntegrationEnable} />}
+              leftIcon={isEmailNewTicketNotificationEnabled ? <img src={SlackDisableIntegration} />: <img src={SlackIntegrationEnable} />}
             >
-              {" "}
-              {channelsInfo[selectedPage.name]?.emailNewTicketNotification
-                ? "Disable":'Enable'}
+              {isEmailNewTicketNotificationEnabled ? "Disable":'Enable'}
             </Button>
           </Flex>
 
@@ -124,16 +159,17 @@ const Integrations = () => {
               style={{
                 borderColor: "white",
                 backgroundColor: "white",
-                color: channelsInfo[selectedPage.name]?.slackChannelId ? "#B42318":"#3054B9",
+                color: isSlackNewTicketNotificationEnabled ? "#B42318":"#3054B9",
                 fontSize: "12px",
                 fontStyle: "normal",
               }}
-              onClick={handleIntegrateSlack}
-              leftIcon={channelsInfo[selectedPage.name]?.slackChannelId ? <img src={SlackDisableIntegration} />: <img src={SlackIntegrationEnable} />}
+              onClick={async ()=>{
+                await handleIntegrateSlack();
+              }}
+              leftIcon={isSlackNewTicketNotificationEnabled ? <img src={SlackDisableIntegration} /> : <img src={SlackIntegrationEnable} />}
             >
               {" "}
-              {channelsInfo[selectedPage.name]?.slackChannelId
-                ? "Disable":'Enable'}
+              {isSlackNewTicketNotificationEnabled ? "Disable":'Enable'}
             </Button>
           </Flex>
 

@@ -9,5 +9,4 @@ const router = express.Router();
 // Get all category
 router.get('/:workspaceId', getFinanceWorkspaceInfo);
 
-
 export default router;

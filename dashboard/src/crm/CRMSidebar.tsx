@@ -17,6 +17,7 @@ import companyIcon from "assets/bank.svg"
 import dashboardIcon from "assets/dashboard.svg"
 import { setSelectedPage } from "reducer/crmSlice"
 import useCrm from "hooks/useCrm"
+import { useNavigate } from "react-router"
 
 const MainWrapper = styled.div`
   height: calc(100vh - 62px);
@@ -27,12 +28,13 @@ const MainWrapper = styled.div`
 
 const CRMSidebar = ({ workspaceId }: { workspaceId: string }) => {
   const { loading, workspaceInfo } = useDashboard()
-  const dispatch = useDispatch()
 
   const { selectedPage } = useCrm();
 
+  const navigate = useNavigate();
+
   const handleSidebarOptionClick = (name: string) => {
-    dispatch(setSelectedPage({ type: name }));
+    navigate(`/relation/${workspaceInfo.workspaceId}/${name}`)
   }
 
   const navItems = [

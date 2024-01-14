@@ -8,7 +8,7 @@ router.post("/", addNoteController)
 // edit note
 router.put("/", updateNoteController)
 // delete note
-router.delete("/", deleteNoteController)
+router.delete("/:noteId", deleteNoteController)
 // get notes
 router.get("/", getNotesController)
 
