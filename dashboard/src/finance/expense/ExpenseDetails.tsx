@@ -47,6 +47,7 @@ const ExpenseDetails = (props: Props) => {
     handleSubmit,
     setError,
     reset,
+    clearErrors,
     formState: { errors },
     getValues
   } = useForm();
@@ -127,11 +128,35 @@ const ExpenseDetails = (props: Props) => {
       : selectedExpense?.attachedDocuments || [];
     delete data.totalAmount;
 
+    if(data.vendor === "") {
+      setError("vendor", {
+        type: "manual",
+        message: "Vendor is required",
+      });
+      return;
+    }
+
     // check if amount.currency and tax.currency are same
     if (data.amount.currency !== data.tax.currency) {
       setError("tax", {
         type: "manual",
         message: "Currency of amount and tax should be same",
+      });
+      return;
+    }
+
+    if(!data.amount.value) {
+      setError("amount", {
+        type: "manual",
+        message: "Amount is required",
+      });
+      return;
+    }
+
+    if(!data.tax.value) {
+      setError("tax", {
+        type: "manual",
+        message: "Tax is required",
       });
       return;
     }
@@ -328,7 +353,10 @@ const ExpenseDetails = (props: Props) => {
           currency: selectedExpense?.totalAmount?.currency || "USD",
         }}
         setValue={setValue}
+        setError={setError}
+        clearError={clearErrors}
         label="Amount"
+        error={(errors?.amount?.message as string) || ""}
       />
       <Space h="sm" />
       <ZCurrency
@@ -341,6 +369,8 @@ const ExpenseDetails = (props: Props) => {
           currency: selectedExpense?.tax?.currency || "USD",
         }}
         setValue={setValue}
+        clearError={clearErrors}
+        setError={setError}
         label="Tax"
         error={(errors?.tax?.message as string) || ""}
       />

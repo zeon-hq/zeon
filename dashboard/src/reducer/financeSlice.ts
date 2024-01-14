@@ -82,6 +82,10 @@ export const financeSlice = createSlice({
                 // get the selected expense
                 const selectedExpenseDetails = action.payload.expenses.find((expense: IExpenseDTO) => expense.expenseId === action.payload.selectedExpense);
                 state.expense.selectedExpense = selectedExpenseDetails || null;
+            } else {
+                state.expense.createMode = {
+                    attachedDocuments: []
+                }
             }
         })
         .addCase(initFinance.rejected, (state, action) => {

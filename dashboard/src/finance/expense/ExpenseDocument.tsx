@@ -3,7 +3,7 @@ import AddInvoice from "assets/Illustration.svg";
 import { Button } from "@mantine/core";
 import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 
-import React, { ReactNode, useCallback } from "react";
+import React, { ReactNode, useCallback, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import useFinance from "finance/useFinance";
 import { isEmpty } from "lodash";
@@ -57,8 +57,9 @@ function MyDropzone({
   component?: ReactNode;
 }) {
   const [loading, setLoading] = React.useState(false);
-
-  const uploadFile = async (files: any[]) => {
+  const { selectedExpense, expenseCreateMode } = useFinance();
+  const dispatch = useDispatch();
+  const uploadFile = async (files: any[], selectedExpense:any, expenseCreateMode:any) => {
     setLoading(true);
     files.forEach(async (file) => {
       let formData = new FormData();
@@ -79,7 +80,23 @@ function MyDropzone({
 
         const data = response.data;
         setLoading(false);
-        callback(data.s3Url);
+        // callback({...data.s3Url});
+        const obj = {
+          url: data.s3Url.s3Url,
+          key: data.s3Url.key,
+          description: data.key,
+        };
+        if (!selectedExpense || isEmpty(selectedExpense)) {
+          dispatch(
+            setCreateMode({
+              attachedDocuments: [obj],
+            })
+          );
+        } else {
+          dispatch(
+            updatedSelectedExpense({ key: "attachedDocuments", value: [obj] })
+          );
+        }
       } catch (e) {
         console.error(e);
         showNotification({
@@ -93,8 +110,8 @@ function MyDropzone({
   };
 
   const onDropAccepted = useCallback((acceptedFiles: any) => {
-    uploadFile(acceptedFiles);
-  }, []);
+    uploadFile(acceptedFiles, selectedExpense, expenseCreateMode);
+  }, [selectedExpense, expenseCreateMode]);
 
   const onDropRejected = useCallback((rejectedFile: any) => {
     rejectedFile.forEach((file: any) => {
@@ -128,6 +145,10 @@ function MyDropzone({
     maxSize: 5242880,
   });
 
+  useEffect(() => {
+    console.log("selectedExpense", selectedExpense);
+  },[selectedExpense, expenseCreateMode])
+
   return loading ? (
     <Loader />
   ) : (
@@ -151,13 +172,13 @@ const ExpenseDocument = (props: Props) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = React.useState(false);
 
-  const callBack = (data: { s3Url: string; key: string }) => {
+  const callBack = (data: { s3Url: string; key: string}) => {
     const obj = {
       url: data.s3Url,
       key: data.key,
       description: data.key,
     };
-    if (selectedExpense && isEmpty(selectedExpense)) {
+    if (!selectedExpense || isEmpty(selectedExpense) || expenseCreateMode) {
       dispatch(
         setCreateMode({
           attachedDocuments: [obj],
@@ -179,6 +200,10 @@ const ExpenseDocument = (props: Props) => {
       uri: doc.url,
     };
   });
+
+  useEffect(() => {
+    console.log("selectedExpense", selectedExpense);
+  },[selectedExpense, expenseCreateMode])
 
   return (
     <>

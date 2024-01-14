@@ -23,7 +23,7 @@ import expenseIcon from "assets/line-chart-down-03.svg";
 import incomeIcon from "assets/file-x-02.svg"
 import contactIcon from "assets/user-square.svg"
 import companyIcon from "assets/bank.svg"
-import { setSelectedExpense } from "reducer/financeSlice"
+import { setCreateMode, setSelectedExpense } from "reducer/financeSlice"
 import { useNavigate } from "react-router"
 const MainWrapper = styled.div`
   height: calc(100vh - 62px);
@@ -128,6 +128,9 @@ const FinanceSidebar = ({ workspaceId }: { workspaceId: string }) => {
               icon={channelCreate}
               iconOnClick={() => {
                 dispatch(setSelectedExpense(null))
+                dispatch(setCreateMode({
+                  attachedDocuments: []
+                  }))
                 navigate(`/finance/${workspaceId}`)
               }}
             />

@@ -21,7 +21,7 @@ import React, { useEffect } from "react";
 import { FiDelete } from "react-icons/fi";
 import { useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router";
-import { setSelectedExpense } from "reducer/financeSlice";
+import { setCreateMode, setSelectedExpense } from "reducer/financeSlice";
 import { Settings, SignLeft } from "tabler-icons-react";
 import channelCreate from "assets/channelCreate.svg";
 import { IoIosArrowDown } from "react-icons/io";
@@ -41,6 +41,9 @@ const ExpenseListing = (props: Props) => {
 
   const onExpenseItemClick = (expense: IExpenseDTO) => {
     dispatch(setSelectedExpense(expense));
+    dispatch(setCreateMode({
+      attachedDocuments: [],
+    }));
     navigate(`/finance/${workspaceId}?expenseId=${expense.expenseId}`);
   };
 
