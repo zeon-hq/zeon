@@ -1,4 +1,4 @@
-import { Button, Modal, Select, TextInput } from "@mantine/core"
+import { Button, Modal, Select, Space, TextInput } from "@mantine/core"
 import React from "react"
 import { useDispatch } from "react-redux"
 import { initCompanyData, initContactData, setShowNoteCreateModal } from "reducer/crmSlice"
@@ -8,6 +8,7 @@ import { createNote } from "./CRMService"
 import useCrm from "hooks/useCrm"
 import { CRMResourceType, NoteType } from "./type"
 import { showNotification } from "@mantine/notifications"
+
 
 type Props = {
   showNoteCreateModal: boolean
@@ -103,7 +104,7 @@ const CreateNoteModal = ({
           />
         )}
       />
-
+      <Space h="md" />
       <Button className="primary" fullWidth onClick={handleSubmit(onSubmit)}>
         Create
       </Button>

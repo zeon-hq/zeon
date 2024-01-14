@@ -100,3 +100,9 @@ p {
 .pill:hover {
   background-color: #f2f4f7; /* Change this color to your desired hover color */
 }
+
+.secondary {
+  border-radius: 8px;
+border: 1px solid var(--Gray-300, #D0D5DD);
+background: var(--Gray-50, #F9FAFB);
+}

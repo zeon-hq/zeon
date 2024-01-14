@@ -1,5 +1,5 @@
 import { ExpenseDocumentContainer, FlexBox } from "finance/styles";
-import AddInvoice from "assets/addInvoice.svg";
+import AddInvoice from "assets/Illustration.svg";
 import { Button } from "@mantine/core";
 import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 
@@ -18,8 +18,36 @@ import {
 } from "reducer/financeSlice";
 import { set } from "dot-prop";
 import { getConfig as Config } from "config/Config";
+import styled from "styled-components";
+import Loader from "components/ui-components/Loader";
 
-const FINACE_API = Config("FINANCE_API_DOMAIN")
+const MyDocViewer = styled(DocViewer)`
+  height: 90%;
+  & #pdf-controls {
+    box-shadow: none;
+  }
+
+  &  #pdf-download {
+    box-shadow: none; 
+  }
+
+  & #pdf-zoom-out {
+    box-shadow: none; 
+  } & #pdf-zoom-in {
+    box-shadow: none; 
+  } &  #pdf-zoom-reset {54   
+    box-shadow: none; 
+  }
+`;
+
+const Text = styled.p`
+  font-size: 14px;
+  font-weight: 400;
+  text-align: center;
+  margin-top: 12px;
+`;
+
+const FINACE_API = Config("FINANCE_API_DOMAIN");
 
 function MyDropzone({
   callback,
@@ -28,7 +56,10 @@ function MyDropzone({
   callback: (data: any) => void;
   component?: ReactNode;
 }) {
+  const [loading, setLoading] = React.useState(false);
+
   const uploadFile = async (files: any[]) => {
+    setLoading(true);
     files.forEach(async (file) => {
       let formData = new FormData();
       formData.append("image", file);
@@ -47,6 +78,7 @@ function MyDropzone({
         );
 
         const data = response.data;
+        setLoading(false);
         callback(data.s3Url);
       } catch (e) {
         console.error(e);
@@ -55,6 +87,7 @@ function MyDropzone({
           message: "Please upload a valid file",
           color: "red",
         });
+        setLoading(false);
       }
     });
   };
@@ -95,15 +128,17 @@ function MyDropzone({
     maxSize: 5242880,
   });
 
-  return (
+  return loading ? (
+    <Loader />
+  ) : (
     <div {...getRootProps()}>
       <input {...getInputProps()} />
       {isDragActive ? (
-        <p>Drop the files here ...</p>
+        <Text>Drop the files here ...</Text>
       ) : component ? (
         component
       ) : (
-        <p>Drag 'n' drop some files here, or click to select files</p>
+        <Text>Drag 'n' drop some files here, or click to select files</Text>
       )}
     </div>
   );
@@ -114,6 +149,7 @@ type Props = {};
 const ExpenseDocument = (props: Props) => {
   const { selectedExpense, expenseCreateMode } = useFinance();
   const dispatch = useDispatch();
+  const [loading, setLoading] = React.useState(false);
 
   const callBack = (data: { s3Url: string; key: string }) => {
     const obj = {
@@ -134,9 +170,11 @@ const ExpenseDocument = (props: Props) => {
     }
   };
 
-  const currAttachedDocuments:any = isEmpty(selectedExpense) ? expenseCreateMode?.attachedDocuments : selectedExpense?.attachedDocuments;
+  const currAttachedDocuments: any = isEmpty(selectedExpense)
+    ? expenseCreateMode?.attachedDocuments
+    : selectedExpense?.attachedDocuments;
 
-  let docs = currAttachedDocuments?.map((doc:any) => {
+  let docs = currAttachedDocuments?.map((doc: any) => {
     return {
       uri: doc.url,
     };
@@ -145,23 +183,38 @@ const ExpenseDocument = (props: Props) => {
   return (
     <>
       <div>
-        {isEmpty(docs) ? (
+        {loading ? (
+          <Loader />
+        ) : isEmpty(docs) ? (
           <>
-            <FlexBox>
-              <img src={AddInvoice} alt="Add Invoice" />
+            <FlexBox style={{marginTop:"50%"}}>
+              <img
+                style={{
+                  margin: "auto",
+                }}
+                src={AddInvoice}
+                alt="Add Invoice"
+              />
             </FlexBox>
             <MyDropzone callback={callBack} />
           </>
         ) : (
           <>
-            <DocViewer
+            <MyDocViewer
               config={{ header: { disableHeader: true } }}
               documents={docs || []}
               pluginRenderers={DocViewerRenderers}
+              style={{ height: "90%" }}
+              
             />
             <MyDropzone
               callback={callBack}
-              component={<Button fullWidth> Upload another document</Button>}
+              component={
+                <Button variant="subtle" fullWidth>
+                  {" "}
+                  Upload another document
+                </Button>
+              }
             />
           </>
         )}

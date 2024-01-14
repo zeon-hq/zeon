@@ -33,6 +33,7 @@ import { AdditonalData } from "crm/AdditonalData/index";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Note from "crm/Notes/Note";
 import { isEmpty } from "lodash";
+import Loader from "components/ui-components/Loader";
 
 const Container = styled.div`
   display: flex;
@@ -402,7 +403,7 @@ function ContactsDetails() {
         )}
       </Container>
     ) : (
-      <p> Loading </p>
+      <Loader />
     )
   );
 }

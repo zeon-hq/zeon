@@ -47,11 +47,12 @@ app.use(express.urlencoded({ extended: true }));
 // set up routes
 app.use("/expense", expenseRoutes);
 app.use("/category", categoryRoutes);
-app.use("/", rootRoutes);
 app.get("/health", (req: Request, res: Response) => {
   console.log("finance service health check");
   res.send("all ok from zeon finance service");
 });
+app.use("/", rootRoutes);
+
 
 // run server at port 6000
 app.listen(port, () => {

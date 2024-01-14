@@ -11,6 +11,7 @@ import { formatPhoneNumber } from "../utils/formatter"
 import { verifyDataAgainstDataModel } from "../functions/dataModel"
 import { CRMResourceType } from "../types/types"
 import { ContactsModel } from "../schema/Contact"
+import { CompanyModel } from "../schema/Company"
 
 export const createContactController = async (req: Request, res: Response) => {
   try {
@@ -183,4 +184,26 @@ export const updateAdditionalDatafieldController = async (
       message: error.message || error
     })
   }
+}
+
+export const getCRMDetailsController = async (req: Request, res: Response) => {
+  const { workspaceId } = req.params
+  // fetch all contacts
+  const contacts = await ContactsModel.find({ workspaceId }).select(
+    "firstName lastName contactId"
+  )
+  // fetch all companies
+  const companies = await   CompanyModel.find({ workspaceId }).select(
+    "name companyId"
+  )
+
+  return res.status(200).json({
+    success: true,
+    data: {
+      contacts: contacts || [],
+      companies: companies || []
+    }
+  })
+
+
 }

@@ -262,3 +262,12 @@ export const fetchAllInviteUsers = async (workspaceId:string) =>{
     return Promise.reject(error?.response?.data?.error)
   }
 }
+
+export const getCRMDetailsMinimal = async (workspaceId: string) => {
+  try {
+    const res = await axiosInstance.get(`${coreAPIDomain}/workspaces/${workspaceId}/minimal/crmDetails`);
+    return res.data;
+  } catch (error) {
+    return {};
+  }
+}

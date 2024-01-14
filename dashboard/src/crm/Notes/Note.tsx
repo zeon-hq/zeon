@@ -8,6 +8,7 @@ import { AiFillDelete } from "react-icons/ai"
 import { useDispatch } from "react-redux"
 import { initContactData } from "reducer/crmSlice"
 import styled from "styled-components"
+import { RiDeleteBin5Line } from "react-icons/ri";
 
 const NoteWrapper = styled.div`
   border-radius: var(--radius-xs, 4px);
@@ -30,6 +31,12 @@ const NotePill = styled.div`
 
 const ColorText = styled.span<{ color: string }>`
   color: ${(props) => props.color};
+`
+
+const NoteContent = styled.div`
+display: grid;
+grid-template-columns: 95% 5%;
+align-items: center;
 `
 
 type Props = {
@@ -84,10 +91,10 @@ const Note = ({ notes,resourceId,resourceType }: Props) => {
               </ColorText>
             </div>
             <Space h="md" />
-            <div>
+            <NoteContent>
               <ColorText color="#101828">{note.content}</ColorText>{" "}
-              <AiFillDelete onClick={() => handleDelete(note.noteId)} />
-            </div>
+              <RiDeleteBin5Line onClick={() => handleDelete(note.noteId)} />
+            </NoteContent>
           </NoteWrapper>
         ))
       )}
