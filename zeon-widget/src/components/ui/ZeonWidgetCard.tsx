@@ -109,7 +109,7 @@ const ZeonWidgetCard = () => {
   const operatingHoursFromTime = widgetDetails?.behavior?.operatingHours?.operatingHours.from;
   const operatingHoursTimeZone = widgetDetails?.behavior?.operatingHours?.timezone;
 
-  const hideNewConversationButtonWhenOfflineAndOutOfOperatingHours = enableDuringOperatingHours && hideNewConversationButtonWhenOffline && isOutOfOperatingHours(operatingHoursToTime, operatingHoursFromTime, operatingHoursTimeZone);
+  const hideNewConversationButtonWhenOfflineAndOutOfOperatingHours = enableDuringOperatingHours && hideNewConversationButtonWhenOffline && isOutOfOperatingHours(operatingHoursFromTime,operatingHoursToTime, operatingHoursTimeZone);
   return (
     <>
     <WholeWrapper>

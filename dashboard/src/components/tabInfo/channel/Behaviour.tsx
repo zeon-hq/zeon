@@ -309,8 +309,8 @@ const Behavior = () => {
                               subType: "operatingHours",
                               type: "behavior",
                               value: {
-                                to: createDateWithTime(parseInt(e?.target?.value.split(":")[0]), parseInt(e?.target?.value.split(":")[1])),
-                                from: createDateWithTime(parseInt(fromTime.split(":")[0]), parseInt(fromTime.split(":")[1])),
+                                from: createDateWithTime(parseInt(e?.target?.value.split(":")[0]), parseInt(e?.target?.value.split(":")[1])),
+                                to: createDateWithTime(parseInt(toTime.split(":")[0]), parseInt(toTime.split(":")[1])),
                               },
                               key: "operatingHours",
                             })
@@ -329,8 +329,8 @@ const Behavior = () => {
                                 subType: "operatingHours",
                                 type: "behavior",
                                 value: {
-                                  to: createDateWithTime(parseInt(toTime.split(":")[0]), parseInt(toTime.split(":")[1])),
-                                  from: createDateWithTime(parseInt(e?.target?.value.split(":")[0]), parseInt(e?.target?.value.split(":")[1])),
+                                  from: createDateWithTime(parseInt(fromTime.split(":")[0]), parseInt(fromTime.split(":")[1])),
+                                  to: createDateWithTime(parseInt(e?.target?.value.split(":")[0]), parseInt(e?.target?.value.split(":")[1]))
                                 },
                                 key: "operatingHours",
                               })

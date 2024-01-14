@@ -88,7 +88,7 @@ const ZeonWidgetForm = () => {
       dispatch(setActiveConversation(uniqueId));
       dispatch(setStep("chat"));
         
-      const checkIsOutOfOperatingHours = isOutOfOperatingHours(widgetDetails?.behavior.operatingHours.operatingHours.to,widgetDetails?.behavior.operatingHours.operatingHours.from,widgetDetails?.behavior.operatingHours.timezone)
+      const checkIsOutOfOperatingHours = isOutOfOperatingHours(widgetDetails?.behavior.operatingHours.operatingHours.from, widgetDetails?.behavior.operatingHours.operatingHours.to, widgetDetails?.behavior.operatingHours.timezone)
 
       const sendAutoReplyMessageWhenOffline = widgetDetails?.behavior.operatingHours.enableOperatingHours && checkIsOutOfOperatingHours
       if (sendAutoReplyMessageWhenOffline) {
