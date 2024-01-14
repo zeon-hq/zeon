@@ -34,7 +34,7 @@ const CRMSidebar = ({ workspaceId }: { workspaceId: string }) => {
   const navigate = useNavigate();
 
   const handleSidebarOptionClick = (name: string) => {
-    navigate(`/crm/${workspaceInfo.workspaceId}/${name}`)
+    navigate(`/relation/${workspaceInfo.workspaceId}/${name}`)
   }
 
   const navItems = [

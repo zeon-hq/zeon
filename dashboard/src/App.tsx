@@ -107,7 +107,7 @@ function App() {
                 </Layout>
               }
             />
-            <Route path="/crm/:workspaceId/*">
+            <Route path="/relation/:workspaceId/*">
               <Route
                 index
                 element={
