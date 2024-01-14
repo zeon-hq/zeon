@@ -21,8 +21,7 @@ import CRMSidebar from "crm/CRMSidebar"
 
 const ChildWrapper = styled.div<{ isFinance: boolean, isCRM: boolean }>`
   height: ${(props) =>
-      props.isFinance ? "calc(100vh - 100px)" : "calc(100vh - 53px)"}
-    calc(100vh - 100px);
+      props.isFinance ? "calc(100vh - 93px)" : "calc(100vh - 53px)"};
   overflow: hidden;
 `
 

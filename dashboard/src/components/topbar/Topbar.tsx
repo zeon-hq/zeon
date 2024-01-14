@@ -92,7 +92,7 @@ const getUserWorkspaces = async () => {
           selected={window.location.href.includes("crm")}
           label="Relations"
           onClick={() => {
-            navigate(`/crm/${workspaceId}`);
+            navigate(`/crm/${workspaceId}/contacts`);
           }}
         />
         <Pill

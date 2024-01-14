@@ -28,7 +28,7 @@ export async function fetchCompany(companyId: string) {
     return res.data;
   } catch (error) {
     console.log(`[fetchCompany] error: ${error}`);
-    return {};
+    throw error
   }
 }
 
@@ -47,7 +47,7 @@ export async function fetchCompanies(
     return res.data;
   } catch (error) {
     console.log(`[fetchCompanies] error: ${error}`);
-    return {};
+    throw error
   }
 }
 
@@ -59,7 +59,7 @@ export async function deleteCompany(companyId: string) {
     return res.data;
   } catch (error) {
     console.log(`[deleteCompany] error: ${error}`);
-    return {};
+    throw error
   }
 }
 
@@ -69,7 +69,7 @@ export async function createCompany(data: any) {
     return res.data;
   } catch (error) {
     console.log(`[createCompany] error: ${error}`);
-    return {};
+    throw error
   }
 }
 
@@ -82,7 +82,7 @@ export async function editCompany(companyId: string, data: any) {
     return res.data;
   } catch (error) {
     console.log(`[editCompany] error: ${error}`);
-    return {};
+    throw error
   }
 }
 
@@ -94,7 +94,7 @@ export async function fetchAllCompaniesPair(workspaceId: string) {
     return res.data;
   } catch (error) {
     console.log(`[fetchAllCompaniesPair] error: ${error}`);
-    return {};
+    throw error
   }
 }
 
@@ -106,7 +106,7 @@ export async function fetchContact(contactId: string) {
     return res.data;
   } catch (error) {
     console.log(`[fetchContact] error: ${error}`);
-    return {};
+    throw error
   }
 }
 
@@ -125,7 +125,7 @@ export async function fetchContacts(
     return res.data;
   } catch (error) {
     console.log(`[fetchContacts] error: ${error}`);
-    return {};
+    throw error
   }
 }
 
@@ -135,7 +135,7 @@ export async function createContact(data: any) {
     return res.data;
   } catch (error) {
     console.log(`[createContact] error: ${error}`);
-    return {};
+    throw error
   }
 }
 
@@ -148,7 +148,7 @@ export async function editContact(contactId: string, data: any) {
     return res.data;
   } catch (error) {
     console.log(`[editContact] error: ${error}`);
-    return {};
+    throw error
   }
 }
 
@@ -160,7 +160,7 @@ export async function deleteContact(contactId: string) {
     return res.data;
   } catch (error) {
     console.log(`[deleteContact] error: ${error}`);
-    return {};
+    throw error
   }
 }
 
@@ -176,7 +176,7 @@ export async function fetchDataModel(resourceId: string, resourceType: string) {
     return res.data;
   } catch (error) {
     console.log(`[fetchDataModel] error: ${error}`);
-    return {};
+    throw error
   }
 }
 
@@ -189,7 +189,7 @@ export async function addAdditionalFields(resourceId: string, resourceType: "con
     return res.data;
   } catch (error) {
     console.log(`[addAdditionalFields] error: ${error}`);
-    return {};
+    throw error
   }
 }
 
@@ -206,6 +206,6 @@ export async function createAdditionalFields(resourceId: string, resourceType: C
     return res.data;
   } catch (error) {
     console.log(`[createAdditionalFields] error: ${error}`);
-    return {};
+    throw error
   }
 };

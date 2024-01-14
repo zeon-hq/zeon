@@ -15,7 +15,7 @@ import NavItem from "components/ui-components/NavItem"
 import contactIcon from "assets/user-square.svg"
 import companyIcon from "assets/bank.svg"
 import dashboardIcon from "assets/dashboard.svg"
-import { setSelectedPage } from "reducer/crmSlice"
+import { setSelectedCompanyPage, setSelectedContactPage, setSelectedPage } from "reducer/crmSlice"
 import useCrm from "hooks/useCrm"
 import { useNavigate } from "react-router"
 
@@ -30,19 +30,25 @@ const CRMSidebar = ({ workspaceId }: { workspaceId: string }) => {
   const { loading, workspaceInfo } = useDashboard()
 
   const { selectedPage } = useCrm();
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
   const handleSidebarOptionClick = (name: string) => {
+    if(name === "contacts") {
+      dispatch(setSelectedCompanyPage({
+        type:"all"
+      }))
+    }
+    if(name === "companies") {
+      dispatch(setSelectedContactPage({
+        type:"all"
+      }))
+    }
     navigate(`/crm/${workspaceInfo.workspaceId}/${name}`)
   }
 
   const navItems = [
-    {
-      label: "Dashboard",
-      icon: dashboardIcon,
-      onClick: () => {handleSidebarOptionClick("dashboard")},
-    },
     {
       label: "Contacts",
       icon: contactIcon,

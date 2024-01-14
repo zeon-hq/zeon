@@ -1,37 +1,38 @@
-import { Button, Space } from "@mantine/core";
-import { notifications, showNotification } from "@mantine/notifications";
-import { Label } from "components/ui-components";
-import ZActionText from "components/ui-components/Button/ZActionText";
-import ZCurrency from "components/ui-components/common/ZCurrency";
-import ZDate from "components/ui-components/common/ZDate";
-import ZSelect from "components/ui-components/common/ZSelect";
-import ZTextInput from "components/ui-components/common/ZTextInput";
-import ZInput from "components/ui-components/common/ZTextInput";
-import { set } from "dot-prop";
+import { Button, Space } from "@mantine/core"
+import { notifications, showNotification } from "@mantine/notifications"
+import { Label } from "components/ui-components"
+import ZActionText from "components/ui-components/Button/ZActionText"
+import ZCurrency from "components/ui-components/common/ZCurrency"
+import ZDate from "components/ui-components/common/ZDate"
+import ZSelect from "components/ui-components/common/ZSelect"
+import ZTextInput from "components/ui-components/common/ZTextInput"
+import ZInput from "components/ui-components/common/ZTextInput"
+import { set } from "dot-prop"
 import {
   createExpense,
   deleteExpense,
   updateExpense,
-} from "finance/FinanceService";
-import { ExpenseDetailsContainer } from "finance/styles";
-import { ICategory, ITag } from "finance/type";
-import useFinance from "finance/useFinance";
-import { isEmpty } from "lodash";
-import moment from "moment";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
-import { useNavigate, useParams } from "react-router";
-import { initFinance, setSelectedExpense } from "reducer/financeSlice";
-import { getCRMDetailsMinimal } from "service/CoreService";
-import { Trash } from "tabler-icons-react";
-import AddVendorModal from "./component/AddVendorModal";
+} from "finance/FinanceService"
+import { ExpenseDetailsContainer } from "finance/styles"
+import { ICategory, ITag } from "finance/type"
+import useFinance from "finance/useFinance"
+import { isEmpty } from "lodash"
+import moment from "moment"
+import { useEffect, useState } from "react"
+import { useForm } from "react-hook-form"
+import { useDispatch } from "react-redux"
+import { useNavigate, useParams } from "react-router"
+import { initFinance, setSelectedExpense } from "reducer/financeSlice"
+import { getCRMDetailsMinimal } from "service/CoreService"
+import { Trash } from "tabler-icons-react"
+import AddVendorModal from "./component/AddVendorModal"
+import ErrorMessage from "components/ui-components/common/ErrorMessage"
 
-type Props = {};
+type Props = {}
 
 const ExpenseDetails = (props: Props) => {
-  const [options, setOptions] = useState<any>([]);
-  const [showAddVendorModal, setShowAddVendorModal] = useState(false);
+  const [options, setOptions] = useState<any>([])
+  const [showAddVendorModal, setShowAddVendorModal] = useState(false)
 
   const {
     selectedExpense,
@@ -39,8 +40,9 @@ const ExpenseDetails = (props: Props) => {
     categories,
     getFlatCategories,
     expenseCreateMode,
-  } = useFinance();
-  const dispatch = useDispatch();
+    inCreateMode,
+  } = useFinance()
+  const dispatch = useDispatch()
   const {
     control,
     setValue,
@@ -49,16 +51,16 @@ const ExpenseDetails = (props: Props) => {
     reset,
     clearErrors,
     formState: { errors },
-    getValues
-  } = useForm();
-  const navigate = useNavigate();
+    getValues,
+  } = useForm()
+  const navigate = useNavigate()
 
-  const categoryOptions = getFlatCategories(categories || []);
+  const categoryOptions = getFlatCategories(categories || [])
   useEffect(() => {
     if (selectedExpense) {
       const categoryDefaultValue = categoryOptions.find(
         (option: any) => option.value === selectedExpense?.categoryId
-      );
+      )
       reset({
         ...selectedExpense,
         invoiceNumber: selectedExpense.invoiceNumber || "",
@@ -85,7 +87,7 @@ const ExpenseDetails = (props: Props) => {
             value: tag,
           })) || [],
         vendor: selectedExpense.vendor || "",
-      });
+      })
     } else {
       reset({
         invoiceNumber: "",
@@ -106,34 +108,34 @@ const ExpenseDetails = (props: Props) => {
         category: "",
         tags: [],
         vendor: "",
-      });
+      })
     }
-  }, [selectedExpense, reset]);
+  }, [selectedExpense, reset])
 
-  const { workspaceId } = useParams<{ workspaceId: string }>();
-  const [selectedVendor, setSelectedVendor] = useState<any>(); // [contactId, companyId
+  const { workspaceId } = useParams<{ workspaceId: string }>()
+  const [selectedVendor, setSelectedVendor] = useState<any>() // [contactId, companyId
 
   const onSubmit = async (data: any) => {
-    console.log(data);
+    console.log(data)
     // get value of category
-    const category = data?.category?.value || "";
+    const category = data?.category?.value || ""
     // gwt value of tags
-    const tags = data?.tags?.map((tag: any) => tag.value) || [];
+    const tags = data?.tags?.map((tag: any) => tag.value) || []
     // get vendor
-    const vendor = data?.vendor || "";
-    const status = data?.status?.value || "unpaid";
-    delete data.category;
+    const vendor = data?.vendor || ""
+    const status = data?.status?.value || "unpaid"
+    delete data.category
     const attachedDocuments = isEmpty(selectedExpense)
       ? expenseCreateMode?.attachedDocuments || []
-      : selectedExpense?.attachedDocuments || [];
-    delete data.totalAmount;
+      : selectedExpense?.attachedDocuments || []
+    delete data.totalAmount
 
-    if(data.vendor === "") {
+    if (!data.vendor) {
       setError("vendor", {
         type: "manual",
         message: "Vendor is required",
-      });
-      return;
+      })
+      return
     }
 
     // check if amount.currency and tax.currency are same
@@ -141,24 +143,24 @@ const ExpenseDetails = (props: Props) => {
       setError("tax", {
         type: "manual",
         message: "Currency of amount and tax should be same",
-      });
-      return;
+      })
+      return
     }
 
-    if(!data.amount.value) {
+    if (!data.amount.value) {
       setError("amount", {
         type: "manual",
         message: "Amount is required",
-      });
-      return;
+      })
+      return
     }
 
-    if(!data.tax.value) {
+    if (!data.tax.value) {
       setError("tax", {
         type: "manual",
         message: "Tax is required",
-      });
-      return;
+      })
+      return
     }
 
     const expenseData = {
@@ -169,81 +171,81 @@ const ExpenseDetails = (props: Props) => {
       workspaceId,
       status,
       attachedDocuments,
-    };
+    }
 
     try {
       if (!selectedExpense) {
-        const res = await createExpense(expenseData);
+        const res = await createExpense(expenseData)
         showNotification({
           title: "Success",
           message: "Expense created successfully",
           color: "green",
-        });
+        })
         //@ts-ignore
-        dispatch(initFinance({ workspaceId }));
+        dispatch(initFinance({ workspaceId }))
       } else {
         //@ts-ignore
         const res = await updateExpense({
           data: expenseData,
           expenseId: selectedExpense?.expenseId,
-        });
+        })
         //@ts-ignore
-        dispatch(initFinance({ workspaceId }));
+        dispatch(initFinance({ workspaceId }))
         showNotification({
           title: "Success",
           message: "Expense updated successfully",
           color: "green",
-        });
+        })
       }
-      setSelectedVendor(null);
+      setSelectedVendor(null)
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
-  };
+  }
 
   const onDelete = async () => {
-    console.log("delete");
+    console.log("delete")
     if (!selectedExpense?.expenseId) {
       showNotification({
         title: "Error",
         message: "Expense not selected",
         color: "red",
-      });
+      })
 
-      return;
+      return
     }
     try {
-      const res = await deleteExpense(selectedExpense?.expenseId);
-      dispatch(setSelectedExpense(null));
-      navigate(`/finance/${workspaceId}`);
+      const res = await deleteExpense(selectedExpense?.expenseId)
+      dispatch(setSelectedExpense(null))
+      navigate(`/finance/${workspaceId}`)
       //@ts-ignore
-      dispatch(initFinance({ workspaceId }));
+      dispatch(initFinance({ workspaceId }))
       showNotification({
         title: "Success",
         message: "Expense deleted successfully",
         color: "green",
-      });
+      })
     } catch (error) {
-      console.log(error);
+      console.log(error)
       showNotification({
         title: "Error",
         message: "Something went wrong",
         color: "red",
-      });
+      })
     }
-  };
+  }
 
   const tagOptions = tags.map((tag: ITag) => ({
     label: tag.name,
     value: tag.name,
-  }));
+  }))
   const tagDefaultValue =
     selectedExpense?.tags?.map((tag: any) => ({
       label: tag,
       value: tag,
-    })) || [];
+    })) || []
 
-  useEffect(() => {}, [selectedExpense]);
+  useEffect(() => {}, [selectedExpense])
 
   useEffect(() => {
     if (selectedExpense) {
@@ -253,16 +255,16 @@ const ExpenseDetails = (props: Props) => {
           label: tag,
           value: tag,
         })) || []
-      );
+      )
     }
-  }, [selectedExpense, setValue]);
+  }, [selectedExpense, setValue])
 
   const onVendorChange = (option: any) => {
-    console.log(option);
-    setValue("vendor", option.value);
-    setSelectedVendor(option);
+    clearErrors("vendor")
+    console.log(option)
+    setValue("vendor", option.value)
+    setSelectedVendor(option)
   }
-  
 
   return (
     <ExpenseDetailsContainer as="form">
@@ -284,11 +286,15 @@ const ExpenseDetails = (props: Props) => {
         }}
       /> */}
       <Label text="Vendor" />
-      <Button className="secondary" onClick={() => setShowAddVendorModal(true)} variant="contained" fullWidth>
-        {
-          selectedVendor?.label || getValues()?.vendor || "Add Vendor"
-        }
+      <Button
+        className="secondary"
+        onClick={() => setShowAddVendorModal(true)}
+        variant="contained"
+        fullWidth
+      >
+        {selectedVendor?.label || getValues()?.vendor || "Add Vendor"}
       </Button>
+      <ErrorMessage message={(errors?.vendor?.message as string) || ""} />
       <Space h="sm" />
       <ZTextInput
         inputProps={{
@@ -432,6 +438,9 @@ const ExpenseDetails = (props: Props) => {
         onClick={handleSubmit(onSubmit)}
         className="primary"
         fullWidth
+        disabled={
+          inCreateMode ? false : selectedExpense === null ? true : false
+        }
       >
         Submit
       </Button>
@@ -454,7 +463,7 @@ const ExpenseDetails = (props: Props) => {
         />
       )}
     </ExpenseDetailsContainer>
-  );
-};
+  )
+}
 
-export default ExpenseDetails;
+export default ExpenseDetails

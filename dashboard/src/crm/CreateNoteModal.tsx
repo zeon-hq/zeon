@@ -8,6 +8,7 @@ import { createNote } from "./CRMService"
 import useCrm from "hooks/useCrm"
 import { CRMResourceType, NoteType } from "./type"
 import { showNotification } from "@mantine/notifications"
+import ErrorMessage from "components/ui-components/common/ErrorMessage"
 
 
 type Props = {
@@ -21,6 +22,7 @@ const CreateNoteModal = ({
   resourceId,
   resourceType
 }: Props) => {
+  const [loading, setLoading] = React.useState(false)
   const dispatch = useDispatch()
   const {} = useCrm()
   const {
@@ -37,6 +39,7 @@ const CreateNoteModal = ({
 
   const onSubmit = async (data: any) => {
     try {
+      setLoading(true)
       const res = await createNote({
         content: data.content,
         noteType: data.noteType,
@@ -58,6 +61,7 @@ const CreateNoteModal = ({
         //@ts-ignore
         dispatch(initCompanyData({companyId:resourceId}))
       }
+      setLoading(false)
       
     } catch (error) {
       console.log(error)
@@ -67,8 +71,11 @@ const CreateNoteModal = ({
         color: "red",
       })
       dispatch(setShowNoteCreateModal(false))
+      setLoading(false)
     }
   }
+
+  
 
   return (
     <Modal
@@ -84,8 +91,10 @@ const CreateNoteModal = ({
         placeholder="Add Note..."
         radius="md"
         labelProps={{ style: labelStyles }}
-        {...register("content", { required: true })}
+        {...register("content", { required: "Note is required" })}
       />
+      {errors?.content?.message && <ErrorMessage message={(errors.content?.message as string)} />}
+      <Space h="md" />
       <Controller
         name="noteType"
         control={control}
@@ -105,7 +114,7 @@ const CreateNoteModal = ({
         )}
       />
       <Space h="md" />
-      <Button className="primary" fullWidth onClick={handleSubmit(onSubmit)}>
+      <Button loading={loading} className="primary" fullWidth onClick={handleSubmit(onSubmit)}>
         Create
       </Button>
     </Modal>
