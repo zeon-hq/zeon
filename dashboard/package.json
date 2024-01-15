@@ -19,6 +19,7 @@
     "@mantine/prism": "^6.0.19",
     "@mantine/spotlight": "^6.0.19",
     "@mantine/tiptap": "^6.0.19",
+    "@openchatai/copilot-widget": "^2.2.1",
     "@reduxjs/toolkit": "^1.8.3",
     "@tabler/icons-react": "^2.31.0",
     "@testing-library/jest-dom": "^5.16.4",

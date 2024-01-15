@@ -13,6 +13,7 @@ import styled from "styled-components";
 import Pill from "./Pill";
 import { InnerDivWrapper, TopBarDivWrapper, TopBarWrapper } from "./topbar.styles";
 import { is } from "date-fns/locale";
+import Widget from "./Widget";
 
 
 const Topbar = ({ workspaceId }: { workspaceId: string }) => {
@@ -122,6 +123,7 @@ const getUserWorkspaces = async () => {
             navigate(`/finance/${workspaceId}`);
           }}
         />
+        <Widget/>
       </TopBarDivWrapper>
       <InnerDivWrapper>
         <Text
