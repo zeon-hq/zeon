@@ -8,16 +8,18 @@ const initialState:IFinance = {
     expense: {
         expenseList: [],
         selectedExpense: null,
-        createMode: null
+        createMode: null,
+        inCreateMode: false,
+        
     },
     categories: [],
-    tags: []
+    tags: [],
+    vendorInfo: null
 }
 
 const getFirstLoadInfo = async (workspaceId: string) => {
     try {
         const expenseResponse = await getWorkspaceFinanceInfo(workspaceId);
-        console.log(expenseResponse); 
         return expenseResponse;
     } catch (error) {
         
@@ -26,21 +28,24 @@ const getFirstLoadInfo = async (workspaceId: string) => {
 
 export const initFinance = createAsyncThunk(
     "finance/init",
-    async ({workspaceId, selectedExpense=""}:{
+    async ({workspaceId, selectedExpense="",inCreateMode=true}:{
         workspaceId: string;
         selectedExpense?: string;
+        inCreateMode?: boolean;
     }) => {
       try {
         const response = await getFirstLoadInfo(workspaceId);
         if(selectedExpense) {
             return {
                 ...response,
-                selectedExpense
+                selectedExpense,
+                inCreateMode
             }
         }
         return {
             ...response,
-            selectedExpense: response[0]?.expenseId
+            selectedExpense: response[0]?.expenseId,
+            inCreateMode
         }
       } catch (error) {
         return await new Promise<any>((resolve, reject) => {
@@ -63,6 +68,7 @@ export const financeSlice = createSlice({
         },
         setCreateMode: (state, action: PayloadAction<ICreateModeExpense>) => {
             state.expense.createMode = action.payload;
+            state.expense.inCreateMode = true;
         },
         updatedSelectedExpense: (state, action: PayloadAction<{
             key: string;
@@ -78,10 +84,16 @@ export const financeSlice = createSlice({
             state.expense.expenseList = action.payload.expenses;
             state.categories = action.payload.categories;
             state.tags = action.payload.tags;
+            state.vendorInfo = action.payload.vendorInfo
             if(action.payload.selectedExpense) {
                 // get the selected expense
                 const selectedExpenseDetails = action.payload.expenses.find((expense: IExpenseDTO) => expense.expenseId === action.payload.selectedExpense);
                 state.expense.selectedExpense = selectedExpenseDetails || null;
+            } else {
+                state.expense.createMode = {
+                    attachedDocuments: []
+                }
+                state.expense.inCreateMode = action.payload.inCreateMode;
             }
         })
         .addCase(initFinance.rejected, (state, action) => {

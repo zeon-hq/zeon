@@ -13,17 +13,16 @@ const useWidget = () => {
    * @param timezone 
    * @returns takes operating hours and returns true if the current time is within the operating hours
    */
-  const isOutOfOperatingHours = (to:Date,from:Date,timezone:string) => {
+  const isOutOfOperatingHours = (from:Date,to:Date,timezone:string) => {
   
-    var tmz = timezone;
     var fmt = 'HH:mm:ss';
-    var time = moment.tz(tmz);
+    var time = moment.tz(timezone);
 
-    const beforeTime = moment(to).format(fmt);
-    const afterTime = moment(from).format(fmt);
+    const beforeTime = moment(from).format(fmt);
+    const afterTime = moment(to).format(fmt);
 
-    var start = moment.tz(beforeTime, fmt, tmz);
-    var end = moment.tz(afterTime, fmt, tmz);
+    var start = moment.tz(beforeTime, fmt, timezone);
+    var end = moment.tz(afterTime, fmt, timezone);
     
     const check = time.isBetween(start, end)
     return !check

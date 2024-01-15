@@ -22,6 +22,7 @@ import {
   fetchContacts,
 } from "service/CRMService";
 import {useLocation, useNavigate } from "react-router-dom";
+import Loader from "components/ui-components/Loader"
 
 const ContactsTable = () => {
   const [maxAvailableWidth, setMaxAvailableWidth] = useState(0);
@@ -170,12 +171,12 @@ const ContactsTable = () => {
               alt="edit"
               onClick={(e) => handleEdit(e, row)}
             />
-            <Image
+            {/* <Image
               maw={15}
               src={mailIcon}
               alt="mail"
               onClick={(e) => handleEmail(e, row)}
-            />
+            /> */}
           </Flex>
         ),
       },
@@ -266,6 +267,21 @@ const ContactsTable = () => {
         boxShadow: "none",
       },
     },
+    mantineTableHeadRowProps:{
+      sx: {
+        borderTop:"1px solid #D0D5DD !important",
+      }
+    },
+    mantineTableHeadCellProps: {
+      sx: {
+        padding:"4px 12px !important"
+      }
+    },
+    mantineTableBodyCellProps: {
+      sx: {
+        padding:"4px 12px !important"
+      }
+    },
     renderTopToolbar: ({ table }) => {
       const addContact = () => {
         dispatch(setSelectedContactPage({ type: "create" }));
@@ -310,15 +326,32 @@ const ContactsTable = () => {
 
   return (
     <Box className="ztable">
-      <MantineProvider
+      {
+        isLoading ? <Loader/> : (
+          <MantineProvider
         theme={{
           primaryColor: "blue",
           primaryShade: 8,
+          components: {
+            MantineReactTable: {
+              styles: {
+                row: {
+                  padding: '4px 12px !important', // Padding for row cells
+                },
+                head: {
+                  padding: '4px 12px !important', // Padding for header cells
+                },
+              },
+            },
+          },
         }}
       >
         {/* Your table component */}
-        <MantineReactTable table={table} />
+        <MantineReactTable  table={table} />
       </MantineProvider>
+        )
+      }
+      
     </Box>
   );
 };

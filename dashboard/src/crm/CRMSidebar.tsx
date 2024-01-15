@@ -1,4 +1,3 @@
-import { LoadingOverlay, Navbar } from "@mantine/core"
 import channelCreate from "assets/channelCreate.svg"
 import SubscribeModal from "components/Billing/SubscribeModal"
 import PanelLabel from "components/widget/PanelLabel"
@@ -14,8 +13,10 @@ import {
 import NavItem from "components/ui-components/NavItem"
 import contactIcon from "assets/user-square.svg"
 import companyIcon from "assets/bank.svg"
-import dashboardIcon from "assets/dashboard.svg"
-import { setSelectedPage } from "reducer/crmSlice"
+import {
+  setSelectedCompanyPage,
+  setSelectedContactPage,
+} from "reducer/crmSlice"
 import useCrm from "hooks/useCrm"
 import { useNavigate } from "react-router"
 
@@ -29,29 +30,43 @@ const MainWrapper = styled.div`
 const CRMSidebar = ({ workspaceId }: { workspaceId: string }) => {
   const { loading, workspaceInfo } = useDashboard()
 
-  const { selectedPage } = useCrm();
+  const { selectedPage } = useCrm()
+  const dispatch = useDispatch()
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleSidebarOptionClick = (name: string) => {
+    if (name === "contacts") {
+      dispatch(
+        setSelectedCompanyPage({
+          type: "all",
+        })
+      )
+    }
+    if (name === "companies") {
+      dispatch(
+        setSelectedContactPage({
+          type: "all",
+        })
+      )
+    }
     navigate(`/relation/${workspaceInfo.workspaceId}/${name}`)
   }
 
   const navItems = [
     {
-      label: "Dashboard",
-      icon: dashboardIcon,
-      onClick: () => {handleSidebarOptionClick("dashboard")},
-    },
-    {
       label: "Contacts",
       icon: contactIcon,
-      onClick: () => {handleSidebarOptionClick("contacts")},
+      onClick: () => {
+        handleSidebarOptionClick("contacts")
+      },
     },
     {
       label: "Companies",
       icon: companyIcon,
-      onClick: () => {handleSidebarOptionClick("companies")},
+      onClick: () => {
+        handleSidebarOptionClick("companies")
+      },
     },
   ]
 
@@ -82,8 +97,7 @@ const CRMSidebar = ({ workspaceId }: { workspaceId: string }) => {
             <PanelLabel
               labelTitle="General"
               icon={channelCreate}
-              iconOnClick={() => {
-              }}
+              iconOnClick={() => {}}
             />
           </SideBarInnerWrapper>
           {navItems.map((item, index) => {
@@ -97,11 +111,6 @@ const CRMSidebar = ({ workspaceId }: { workspaceId: string }) => {
               />
             )
           })}
-          <Navbar.Section>
-            <div style={{ height: "43vh", overflow: "auto" }}>
-              <LoadingOverlay visible={loading} />
-            </div>
-          </Navbar.Section>
         </SideBarTopWrapper>
       </MainWrapper>
       {isWorkSpaceEmpty && <SubscribeModal openModal={open} />}

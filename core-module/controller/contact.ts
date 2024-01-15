@@ -189,11 +189,11 @@ export const updateAdditionalDatafieldController = async (
 export const getCRMDetailsController = async (req: Request, res: Response) => {
   const { workspaceId } = req.params
   // fetch all contacts
-  const contacts = await ContactsModel.find({ workspaceId }).select(
+  const contacts = await ContactsModel.find({ workspaceId, isDeleted: false }).select(
     "firstName lastName contactId"
   )
   // fetch all companies
-  const companies = await   CompanyModel.find({ workspaceId }).select(
+  const companies = await   CompanyModel.find({ workspaceId, isDeleted: false }).select(
     "name companyId"
   )
 

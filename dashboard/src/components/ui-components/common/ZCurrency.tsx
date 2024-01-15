@@ -9,12 +9,14 @@ type Props = {
   name: string;
   rules?: any;
   setValue: UseFormSetValue<any>;
+  setError: any;
   label: string;
   error ?: string | undefined;
   defaultValue?: {
     value: string;
     currency: string;
   };
+  clearError: any;
 };
 
 const ZCurrency = ({
@@ -24,6 +26,8 @@ const ZCurrency = ({
   defaultValue,
   setValue,
   label,
+  setError,
+  clearError,
   error
 }: Props) => {
   const [commaSeparatedValue, setCommaSeparatedValue] = useState("");
@@ -59,11 +63,11 @@ const ZCurrency = ({
     const { value } = event.target;
     setValue(`${name}.value`, parseFloat(value.replace(/[^0-9.]/g, "")));
     const numericValue = parseFloat(value.replace(/[^0-9.]/g, "")).toFixed(2);
-    const formattedValue = numericValue.replace(
-      new RegExp(`\\B(?=(\\d{${decimalDigits}})+(?!\\d))`, "g"),
-      ","
-    );
-    setCommaSeparatedValue(formattedValue);
+    // const formattedValue = numericValue.replace(
+    //   new RegExp(`\\B(?=(\\d{${decimalDigits}})+(?!\\d))`, "g"),
+    //   ","
+    // );
+    setCommaSeparatedValue(numericValue);
     if (inputRef.current) {
       inputRef.current.selectionStart = cursorPosition;
       inputRef.current.selectionEnd = cursorPosition;
@@ -81,7 +85,7 @@ const ZCurrency = ({
       );
       setValue(`${name}.currency`, defaultValue.currency);
     }
-  }, [defaultValue, name, setValue]);
+  }, [defaultValue, name]);
 
   const handleCurrencyChange = (value: string) => setCurrency(value);
  console.log(error)

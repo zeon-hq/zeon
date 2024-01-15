@@ -27,6 +27,8 @@ import { updateChannel } from "service/DashboardService";
 import styled from "styled-components";
 import { inputWrapperData } from "util/Constant";
 import { InfoContainer } from "../tabInfo.styles";
+import { useState } from "react";
+import { createDateWithTime, getOperatinHourTime } from "util/dashboardUtils";
 
 export const MainDiv = styled.div`
   width: 100%;
@@ -49,6 +51,8 @@ const Behavior = () => {
   const { channelsInfo, selectedPage } = useDashboard();
   const dispatch = useDispatch();
   const behaviourDetails = channelsInfo[selectedPage.name]?.behavior;
+  const [fromTime, setFromTime] = useState<string>(getOperatinHourTime(new Date(channelsInfo?.[selectedPage.name]?.behavior?.operatingHours?.operatingHours?.from) || new Date()));
+  const [toTime, setToTime] = useState<string>(getOperatinHourTime(new Date(channelsInfo?.[selectedPage.name]?.behavior?.operatingHours?.operatingHours?.to) || new Date()));
 
   const handleChange = ({
     subType,
@@ -98,7 +102,7 @@ const Behavior = () => {
         <InfoContainer>
           <MainDiv>
             <Box mb={24} fw={500}>
-              <SwitchWithLabel
+              {/* <SwitchWithLabel
                 onClick={(e) => {
                   handleChange({
                     subType: "widgetBehavior",
@@ -112,7 +116,7 @@ const Behavior = () => {
                 }
                 heading="Collect User E-Mail"
                 description="E-Mail will be collect before a conversation is created."
-              />
+              /> */}
 
               <Label text={"E-Mail Input Label"} />
               <Grid>
@@ -194,7 +198,7 @@ const Behavior = () => {
                     subType: "widgetBehavior",
                     type: "behavior",
                     value: e.currentTarget.checked,
-                    key: "collectUserEmail",
+                    key: "autoReply",
                   });
                 }}
                 value={!!behaviourDetails.widgetBehavior.autoReply || false}
@@ -296,10 +300,44 @@ const Behavior = () => {
                       >
                         <TimeInput
                           w={"48%"}
+                          value={fromTime}
                           label="Enter Operating Hours"
+                          onChange={(e) =>{
+                            const fromValue = e?.target?.value;
+                            setFromTime(e?.target?.value)
+                            handleChange({
+                              subType: "operatingHours",
+                              type: "behavior",
+                              value: {
+                                from: createDateWithTime(parseInt(e?.target?.value.split(":")[0]), parseInt(e?.target?.value.split(":")[1])),
+                                to: createDateWithTime(parseInt(toTime.split(":")[0]), parseInt(toTime.split(":")[1])),
+                              },
+                              key: "operatingHours",
+                            })
+
+
+                          }}
                           placeholder="Input placeholder"
                         />
-                        <TimeInput w={"48%"} />
+                        <TimeInput 
+                        value={toTime}
+                            onChange={(e) =>{
+                              const toValue = e?.target?.value;
+                              setToTime(toValue)
+
+                              handleChange({
+                                subType: "operatingHours",
+                                type: "behavior",
+                                value: {
+                                  from: createDateWithTime(parseInt(fromTime.split(":")[0]), parseInt(fromTime.split(":")[1])),
+                                  to: createDateWithTime(parseInt(e?.target?.value.split(":")[0]), parseInt(e?.target?.value.split(":")[1]))
+                                },
+                                key: "operatingHours",
+                              })
+
+                            }}
+                        w={"48%"}
+                         />
                       </Flex>
                     </Grid.Col>
                   </Grid>

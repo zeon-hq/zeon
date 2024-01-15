@@ -18,9 +18,10 @@ import {
   AuthSubHeading,
   AuthWrapper,
 } from "./auth.styles";
+import ErrorMessage from "components/ui-components/common/ErrorMessage"
 
 const Signup = () => {
-  const { register, handleSubmit, control } = useForm();
+  const { register, handleSubmit, control, formState:{errors} } = useForm();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -92,28 +93,34 @@ const Signup = () => {
           </AuthFormHeader>
 
           <TextInput
-            {...register("name", { required: true })}
+            {...register("name", { required: "Name is required", minLength: { value: 3, message: "Name should be atleast 3 characters long" } })}
             name="name"
-            mb={20}
+            
             type="text"
             label={<AuthLabel> Name </AuthLabel>}
           />
-
+          {
+            errors?.name?.message && <ErrorMessage message={(errors.name?.message as string)} />
+          }
+          <Space h={20} />
           <TextInput
-            {...register("email", { required: true })}
+            {...register("email", { required: "Email is required", pattern: { value: /\S+@\S+\.\S+/, message: "Please enter a valid email" } })}
             name="email"
-            mb={20}
+            
             type="email"
             label={<AuthLabel> Email </AuthLabel>}
           />
+          {
+            errors?.email?.message && <ErrorMessage message={(errors.email?.message as string)} />
+          }
           {/* Wrap PhoneInput inside react hook forms controller */}
-
-          <AuthLabel> Phone </AuthLabel>
+          <Space h={20} />
+          <AuthLabel> Phone  </AuthLabel>
           <Controller
             control={control}
             name="phone"
             rules={{
-              required: true,
+              required: "Phone number is required",
             }}
             defaultValue=""
             render={({ field: { onChange, value } }) => (
@@ -130,24 +137,33 @@ const Signup = () => {
               />
             )}
           />
-
+          {
+            errors?.phone?.message && <ErrorMessage message={(errors.phone?.message as string)} />
+          }
           <Space h={20} />
 
           <TextInput
-            {...register("password", { required: true })}
+            {...register("password", { required: "Password is required" })}
             name="password"
-            mb={20}
+            
             label={<AuthLabel> Password </AuthLabel>}
             type="password"
           />
-
+          {
+            errors?.password?.message && <ErrorMessage message={(errors.password?.message as string)} />
+          }
+          <Space h={20} />
           <TextInput
-            {...register("confirmPassword", { required: true })}
+            {...register("confirmPassword", { required: "This should be same as password" })}
             name="confirmPassword"
-            mb={20}
+            
             label={<AuthLabel> Confirm Password </AuthLabel>}
             type="password"
           />
+          {
+            errors?.confirmPassword?.message && <ErrorMessage message={(errors.confirmPassword?.message as string)} />
+          }
+          <Space h={20} />
           {/* @ts-ignore */}
           <AuthButton
             loading={loading}

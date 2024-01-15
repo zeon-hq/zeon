@@ -21,7 +21,6 @@ const SelectCannedResponse = ({ handleChange, setActiveTab, query }: Props) => {
   const getAllCannedResponses = async () => {
     try {
       const res = await getCannedResponseFromChannelId(activeChat?.channelId || "")
-      console.log(res)
       setAllCannedResponse(res.canned)
     } catch (error) {
       console.log(error);

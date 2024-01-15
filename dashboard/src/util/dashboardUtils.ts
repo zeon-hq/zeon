@@ -143,3 +143,25 @@ export const logOutUtils = () => {
   localStorage.removeItem('at');
   window.location.href = "/";
 }
+
+export const getOperatinHourTime = (currentDate:Date) => {
+  // Getting the current date and time
+  // const currentDate = new Date();
+
+  // Extracting hours and minutes and formatting them
+  const hours = currentDate.getHours().toString().padStart(2, '0');
+  const minutes = currentDate.getMinutes().toString().padStart(2, '0');
+  const formattedTime = `${hours}:${minutes}`;
+
+  return formattedTime;
+}
+
+export function createDateWithTime(hour:number, minute:number) {
+  const currentDate = new Date();
+  currentDate.setHours(hour);
+  currentDate.setMinutes(minute);
+  currentDate.setSeconds(0);
+  currentDate.setMilliseconds(0);
+  return currentDate;
+}
+
