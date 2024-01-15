@@ -35,7 +35,6 @@ const CreateDataFieldModal = ({
 
   const onSubmit = async (data: any) => {
     setLoading(true);
-    console.log(alreadyAddedFields)
     try {
       const res = await createAdditionalFields(resourceId, resourceType, [
         ...alreadyAddedFields,

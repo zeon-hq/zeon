@@ -1,4 +1,3 @@
-import { LoadingOverlay, Navbar } from "@mantine/core"
 import channelCreate from "assets/channelCreate.svg"
 import SubscribeModal from "components/Billing/SubscribeModal"
 import PanelLabel from "components/widget/PanelLabel"
@@ -14,11 +13,9 @@ import {
 import NavItem from "components/ui-components/NavItem"
 import contactIcon from "assets/user-square.svg"
 import companyIcon from "assets/bank.svg"
-import dashboardIcon from "assets/dashboard.svg"
 import {
   setSelectedCompanyPage,
   setSelectedContactPage,
-  setSelectedPage,
 } from "reducer/crmSlice"
 import useCrm from "hooks/useCrm"
 import { useNavigate } from "react-router"
@@ -114,11 +111,6 @@ const CRMSidebar = ({ workspaceId }: { workspaceId: string }) => {
               />
             )
           })}
-          <Navbar.Section>
-            <div style={{ height: "43vh", overflow: "auto" }}>
-              <LoadingOverlay visible={loading} />
-            </div>
-          </Navbar.Section>
         </SideBarTopWrapper>
       </MainWrapper>
       {isWorkSpaceEmpty && <SubscribeModal openModal={open} />}

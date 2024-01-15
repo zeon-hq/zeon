@@ -35,8 +35,6 @@ function CreateCompanies() {
 
   const editValues = selectedCompanyPage?.companyData;
 
-  console.log("<<<<<<<<<<<<<<<editValues>>>>>>>>>>>>>>>", selectedCompanyPage);
-
   const form = useForm({
     initialValues: {
       name: editValues?.name || "",

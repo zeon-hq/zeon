@@ -17,6 +17,7 @@ import { setSelectedCompanyPage } from "reducer/crmSlice"
 import { deleteCompany, fetchCompanies } from "service/CRMService"
 import { companySizeFormatter, companyWorthFormatter } from "crm/utils"
 import { useLocation, useNavigate } from "react-router-dom"
+import Loader from "components/ui-components/Loader"
 
 const CompaniesTable = () => {
   const [maxAvailableWidth, setMaxAvailableWidth] = useState(0)
@@ -231,11 +232,11 @@ const CompaniesTable = () => {
         padding: "4px 12px !important",
       },
     },
-    // head row 
+    // head row
     mantineTableHeadRowProps: {
-      sx:{
+      sx: {
         borderTop: "1px solid #D0D5DD",
-      }
+      },
     },
     mantineTableProps: {
       withColumnBorders: true,
@@ -288,26 +289,30 @@ const CompaniesTable = () => {
 
   return (
     <Box className="ztable">
-      <MantineProvider
-        theme={{
-          primaryColor: "blue",
-          primaryShade: 8,
-          components: {
-            MantineReactTable: {
-              styles: {
-                row: {
-                  padding: "4px 12px !important", // Padding for row cells
-                },
-                head: {
-                  padding: "4px 12px !important", // Padding for header cells
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <MantineProvider
+          theme={{
+            primaryColor: "blue",
+            primaryShade: 8,
+            components: {
+              MantineReactTable: {
+                styles: {
+                  row: {
+                    padding: "4px 12px !important", // Padding for row cells
+                  },
+                  head: {
+                    padding: "4px 12px !important", // Padding for header cells
+                  },
                 },
               },
             },
-          },
-        }}
-      >
-        <MantineReactTable table={table} />
-      </MantineProvider>
+          }}
+        >
+          <MantineReactTable table={table} />
+        </MantineProvider>
+      )}
     </Box>
   )
 }

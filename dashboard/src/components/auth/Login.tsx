@@ -35,7 +35,6 @@ const Login = () => {
 
   const onSubmit = async (data: any) => {
     try {
-      console.log(data)
       setLoading(true)
       const res = login(data.email, data.password).then((res) => {
         setLoading(false)

@@ -117,7 +117,6 @@ const ExpenseDetails = (props: Props) => {
   const [selectedVendor, setSelectedVendor] = useState<any>() // [contactId, companyId
 
   const onSubmit = async (data: any) => {
-    console.log(data)
     // get value of category
     const category = data?.category?.value || ""
     // gwt value of tags
@@ -264,7 +263,6 @@ const ExpenseDetails = (props: Props) => {
 
   const onVendorChange = (option: any) => {
     clearErrors("vendor")
-    console.log(option)
     setValue("vendor", option.value)
     setSelectedVendor(option)
   }

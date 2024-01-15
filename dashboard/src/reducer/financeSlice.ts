@@ -20,7 +20,6 @@ const initialState:IFinance = {
 const getFirstLoadInfo = async (workspaceId: string) => {
     try {
         const expenseResponse = await getWorkspaceFinanceInfo(workspaceId);
-        console.log(expenseResponse); 
         return expenseResponse;
     } catch (error) {
         

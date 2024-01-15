@@ -107,7 +107,6 @@ const DetailsInfo = () => {
                 <Text size="sm" weight="400"> Name </Text>
                 <Text size="sm" weight="400"> {activeChat?.} {activeChat?.assignedUser?.lastName} </Text>
             </InfoDiv> */}
-      {console.log(options, activeChat?.assignedUserInfo?.userId)}
       <DetailHeader text="Ticket details" Icon={Activity} />
       <InfoDiv>
         <Text size="sm" weight="400">

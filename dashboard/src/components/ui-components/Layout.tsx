@@ -38,7 +38,6 @@ const Layout = ({ children }: { children: any }) => {
     })
 
     socketInstance.off("message").on("message", (data: any) => {
-      console.log("message", data)
       dispatch(updateConversation({ data, type: MessageType.SENT }))
     })
 

@@ -47,7 +47,6 @@ const CreateNoteModal = ({
         resourceType: resourceType,
         resourceId: resourceId,
       })
-      console.log(res)
       showNotification({
         title: "Success",
         message: "Note created successfully",

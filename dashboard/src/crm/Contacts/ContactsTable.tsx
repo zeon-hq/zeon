@@ -22,6 +22,7 @@ import {
   fetchContacts,
 } from "service/CRMService";
 import {useLocation, useNavigate } from "react-router-dom";
+import Loader from "components/ui-components/Loader"
 
 const ContactsTable = () => {
   const [maxAvailableWidth, setMaxAvailableWidth] = useState(0);
@@ -325,7 +326,9 @@ const ContactsTable = () => {
 
   return (
     <Box className="ztable">
-      <MantineProvider
+      {
+        isLoading ? <Loader/> : (
+          <MantineProvider
         theme={{
           primaryColor: "blue",
           primaryShade: 8,
@@ -346,6 +349,9 @@ const ContactsTable = () => {
         {/* Your table component */}
         <MantineReactTable  table={table} />
       </MantineProvider>
+        )
+      }
+      
     </Box>
   );
 };
