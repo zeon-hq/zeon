@@ -4,5 +4,7 @@
   "widgetJSFile": "https://zeonhq.b-cdn.net/zeon-widget.js",
   "widgetCSSFile": "https://zeonhq.b-cdn.net/zeon-widget.css",
   "CORE_API_DOMAIN" : "https://core.zeonhq.com",
-  "FINANCE_API_DOMAIN" : "https://finance.zeonhq.com"
+  "FINANCE_API_DOMAIN" : "https://finance.zeonhq.com",
+  "API_URL": "https://cloud.opencopilot.so/backend",
+  "SOCKET_URL": "https://cloud.opencopilot.so"
 }

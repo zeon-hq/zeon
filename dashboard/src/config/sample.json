@@ -1,9 +1,11 @@
 {
-    "API_DOMAIN": "",
-    "TICKET_SERVICE": "",
-    "widgetJSFile":"",
-    "widgetCSSFile":"",
-    "CORE_API_DOMAIN" : "",
-    "CHAT_WIDGET_URL":"",
-    "FINANCE_API_DOMAIN" : ""
-  }
+  "API_DOMAIN": "",
+  "TICKET_SERVICE": "",
+  "widgetJSFile": "",
+  "widgetCSSFile": "",
+  "CORE_API_DOMAIN": "",
+  "CHAT_WIDGET_URL": "",
+  "FINANCE_API_DOMAIN": "",
+  "API_URL": "",
+  "SOCKET_URL": ""
+}
