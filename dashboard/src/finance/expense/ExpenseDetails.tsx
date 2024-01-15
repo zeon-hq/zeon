@@ -148,17 +148,27 @@ const ExpenseDetails = (props: Props) => {
     }
 
     if (!data.amount.value) {
-      setError("amount", {
-        type: "manual",
+      // setError("amount", {
+      //   type: "manual",
+      //   message: "Amount is required",
+      // })
+      showNotification({
+        title: "Error",
         message: "Amount is required",
+        color: "red",
       })
       return
     }
 
     if (!data.tax.value) {
-      setError("tax", {
-        type: "manual",
+      // setError("tax", {
+      //   type: "manual",
+      //   message: "Tax is required",
+      // })
+      showNotification({
+        title: "Error",
         message: "Tax is required",
+        color: "red",
       })
       return
     }
@@ -429,7 +439,7 @@ const ExpenseDetails = (props: Props) => {
         }}
       />
       <Space h="sm" />
-      <ZSelect
+      {/* <ZSelect
         label={"Tags"}
         inputProps={{
           placeholder: "Tags",
@@ -442,7 +452,7 @@ const ExpenseDetails = (props: Props) => {
           control,
         }}
       />
-      <Space h="sm" />
+      <Space h="sm" /> */}
       <Button
         type="submit"
         onClick={handleSubmit(onSubmit)}

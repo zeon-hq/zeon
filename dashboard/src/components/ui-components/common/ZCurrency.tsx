@@ -61,8 +61,6 @@ const ZCurrency = ({
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const cursorPosition = event.target.selectionStart;
     const { value } = event.target;
-    if(error)
-    clearError(`${name}.value`);
     setValue(`${name}.value`, parseFloat(value.replace(/[^0-9.]/g, "")));
     const numericValue = parseFloat(value.replace(/[^0-9.]/g, "")).toFixed(2);
     // const formattedValue = numericValue.replace(
@@ -87,7 +85,7 @@ const ZCurrency = ({
       );
       setValue(`${name}.currency`, defaultValue.currency);
     }
-  }, [defaultValue, name, setValue]);
+  }, [defaultValue, name]);
 
   const handleCurrencyChange = (value: string) => setCurrency(value);
  console.log(error)
