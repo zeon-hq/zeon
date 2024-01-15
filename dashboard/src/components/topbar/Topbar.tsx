@@ -121,7 +121,7 @@ const Topbar = ({ workspaceId }: { workspaceId: string }) => {
                 type: "detail",
                 name: "inbox",
                 //@ts-ignore
-                channelId: channelsInfo?.channels[0].channelId,
+                channelId: channelsInfo?.channels?.[0]?.channelId,
               })
             )
           }}
@@ -170,7 +170,7 @@ const Topbar = ({ workspaceId }: { workspaceId: string }) => {
                 type: "detail",
                 name: "inbox",
                 //@ts-ignore
-                channelId: channelsInfo?.channels[0].channelId,
+                channelId: channelsInfo?.channels?.[0]?.channelId,
               })
             )
           }}
