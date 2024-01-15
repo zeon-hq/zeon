@@ -41,6 +41,7 @@ const ExpenseDetails = (props: Props) => {
     getFlatCategories,
     expenseCreateMode,
     inCreateMode,
+    vendorInfo,
   } = useFinance()
   const dispatch = useDispatch()
   const {
@@ -292,7 +293,14 @@ const ExpenseDetails = (props: Props) => {
         variant="contained"
         fullWidth
       >
-        {selectedVendor?.label || getValues()?.vendor || "Add Vendor"}
+        {selectedVendor?.label || vendorInfo?.[getValues()?.vendor]
+          ? vendorInfo?.[getValues()?.vendor]?.name ||
+            `${vendorInfo?.[getValues()?.vendor]?.firstName} ${
+              vendorInfo?.[getValues()?.vendor]?.lastName
+            }`
+          : getValues()?.vendor
+          ? getValues()?.vendor
+          : "Add Vendor"}
       </Button>
       <ErrorMessage message={(errors?.vendor?.message as string) || ""} />
       <Space h="sm" />

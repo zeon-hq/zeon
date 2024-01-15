@@ -1,0 +1,77 @@
+[
+    {
+      "name": "Selling Expenses",
+      "description": "Expenses necessary for the company to directly interface with customers.",
+      "childCategories": [
+        {
+          "name": "Sales Expenses",
+          "description": "Salaries and wages of salespeople including commissions, payroll taxes, and benefits."
+        },
+        {
+          "name": "Marketing",
+          "description": "Expenses directly related to company's product line, assets, services, brand, or image."
+        },
+        {
+          "name": "Advertising",
+          "description": "Expenses related to advertising, including print, radio, television, and online."
+        }
+      ]
+    },
+    {
+      "name": "General Expenses",
+      "description": "Expenses necessary for the company to operate.",
+      "childCategories": [
+        {
+          "name": "Utilities",
+          "description": "Expenses related to the use of utilities, including electricity, water, and gas."
+        },
+        {
+          "name": "Rent",
+          "description": "Expenses related to the use of a building or other property."
+        },
+        {
+          "name": "Office Equipment",
+          "description": "Expenses related to the use of office equipment, including computers, printers, and fax machines."
+        },
+        {
+          "name": "Supplies",
+          "description": "Expenses related to the use of office supplies, including paper, pens, and staples."
+        },
+        {
+          "name": "Insurance",
+          "description": "Expenses related to insurance, including liability, property, and workers' compensation."
+        },
+        {
+          "name": "Travel & Accomodations",
+          "description": "Expenses related to travel and accomodations, including airfare, hotels, and meals."
+        },
+        {
+          "name": "Recreation & Entertainment",
+          "description": "Expenses related to recreation and entertainment, including tickets, meals, and events."
+        }
+      ]
+    },
+    {
+      "name": "Adminstrative Expenses",
+      "description": "Expenses necessary for the company to manage its operations.",
+      "childCategories": [
+        {
+          "name": "Accounting Payroll",
+          "description": "Expenses related to accounting and payroll services."
+        },
+        {
+          "name": "Human Resources",
+          "description": "Expenses related to human resources services."
+        },
+        {
+          "name": "Legal Council",
+          "description": "Expenses related to legal services."
+        },
+        {
+          "name": "Consulting Fees",
+          "description": "Expenses related to external consulting services for administrative purposes."
+        }
+      ]
+    }
+  ]
+  

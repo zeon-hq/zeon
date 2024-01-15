@@ -29,11 +29,12 @@ import { camelCase } from "lodash"
 import { LuArrowDownUp } from "react-icons/lu"
 import useQuery from "hooks/useQuery"
 import Loader from "components/ui-components/Loader"
+import NotFound from "components/ui-components/NotFound"
 
 type Props = {}
 
 const ExpenseListing = (props: Props) => {
-  const { expenseList, selectedExpense, paidAmount, unpaidAmount } =
+  const { expenseList, selectedExpense, paidAmount, unpaidAmount, vendorInfo } =
     useFinance()
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -165,7 +166,7 @@ const ExpenseListing = (props: Props) => {
       </ExpenseFilterContainer>
       <SingleExpenseContainer>
         {expenseList?.length === 0 ? (
-          <Loader />
+          <NotFound message="No expenses found" />
         ) : (
           <>
             {expenseList
@@ -203,7 +204,14 @@ const ExpenseListing = (props: Props) => {
                             width: "100%",
                           }}
                         >
-                          <p> {item.vendor} </p>
+                          {
+                            vendorInfo[item.vendor] ? (
+                              <p> {vendorInfo[item.vendor]?.name || `${vendorInfo[item.vendor]?.firstName} ${vendorInfo[item.vendor]?.lastName}`  || item.vendor} </p>
+                            ) : (
+                              <p> {item.vendor} </p>
+                            )
+                          }
+                          
                           <p>
                             {" "}
                             {item.totalAmount.currency} {item.totalAmount.value}

@@ -16,7 +16,7 @@ const useDashboard = () => {
     const showSidebar = useSelector((item:RootState) => item.dashboard.showSidebar);
     const defaultWorkSpaceSettingTab = useSelector((item:RootState) => item.dashboard.defaultWorkSpaceSettingTab);
     const isFinance = url.includes("finance");
-    const isCRM = url.includes("crm");
+    const isCRM = url.includes("relation");
     /**
      * Tells the active entity
      * chat, finance, crm

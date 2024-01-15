@@ -2,6 +2,7 @@ export interface IFinance {
   expense: IExpense;
   categories: ICategory[];
   tags: ITag[];
+  vendorInfo : any | null;
 }
 
 export interface IExpense {

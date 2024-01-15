@@ -4,6 +4,9 @@ import { CreateWorkspaceDTO } from "../types/types"
 import { generateId } from "../utils/utils"
 import { createRole } from "./role"
 import mongoose from "mongoose"
+import { createBulkCategory } from "../service/FinanceService"
+//@ts-ignore
+import categoriesJSON from "./category.json"
 
 export const createWorkspace = async (params: CreateWorkspaceDTO): Promise<WorkspaceInterface> => {
     try {
@@ -56,6 +59,12 @@ export const createWorkspace = async (params: CreateWorkspaceDTO): Promise<Works
           description: "Admin of the workspace",
           workspaceId: workspace.workspaceId,
           roleId: "admin"
+        })
+
+        // create cateogries
+        const res = await createBulkCategory({
+          workspaceId: workspace.workspaceId,
+          categories: categoriesJSON
         })
 
         // create workspace config

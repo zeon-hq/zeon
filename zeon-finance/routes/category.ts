@@ -1,4 +1,4 @@
-import { createCategory,getCategoryById,updateCategory, deletedCategory, getAllCategoriesController } from "../controller/category"
+import { createCategory,getCategoryById,updateCategory, deletedCategory, getAllCategoriesController, bulkUploadCategory } from "../controller/category"
 
 import express from "express"
 import { Request, Response } from "express";
@@ -15,6 +15,8 @@ router.get('/:categoryId', getCategoryById);
 
 // Create a new expense
 router.post('/', createCategory);
+
+router.post('/bulk', bulkUploadCategory);
 
 // Update an expense by ID
 router.put('/:categoryId', updateCategory);

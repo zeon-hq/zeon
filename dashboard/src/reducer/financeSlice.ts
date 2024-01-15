@@ -9,10 +9,12 @@ const initialState:IFinance = {
         expenseList: [],
         selectedExpense: null,
         createMode: null,
-        inCreateMode: false
+        inCreateMode: false,
+        
     },
     categories: [],
-    tags: []
+    tags: [],
+    vendorInfo: null
 }
 
 const getFirstLoadInfo = async (workspaceId: string) => {
@@ -80,6 +82,7 @@ export const financeSlice = createSlice({
             state.expense.expenseList = action.payload.expenses;
             state.categories = action.payload.categories;
             state.tags = action.payload.tags;
+            state.vendorInfo = action.payload.vendorInfo
             if(action.payload.selectedExpense) {
                 // get the selected expense
                 const selectedExpenseDetails = action.payload.expenses.find((expense: IExpenseDTO) => expense.expenseId === action.payload.selectedExpense);

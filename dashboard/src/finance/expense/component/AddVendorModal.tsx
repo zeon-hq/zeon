@@ -7,6 +7,7 @@ import { getCRMDetailsMinimal } from "service/CoreService";
 import styled from "styled-components";
 import debounce from "lodash/debounce";
 import Loader from "components/ui-components/Loader"
+import NotFound from "components/ui-components/NotFound"
 
 type Props = {
   opened: boolean;
@@ -144,6 +145,7 @@ const AddVendorModal = ({ opened, close, workspaceId, callback }: Props) => {
             onChange={handleSearchDebounced}
         />
         {
+          options?.contacts?.length === 0 && options?.companies?.length === 0 ? <NotFound message="Add Contact or Company"/> :
           loading ? <Loader/> : (
             <>
               {options?.contacts.map((contact: any) => {

@@ -280,7 +280,7 @@ function ContactsDetails() {
             Add Note
           </Button>
 
-          <Button
+          {/* <Button
             style={{
               borderRadius: "8px",
               paddingTop: "8px",
@@ -304,7 +304,7 @@ function ContactsDetails() {
             variant="outline"
           >
             Send E-Mail
-          </Button>
+          </Button> */}
         </Group>
 
         <Tabs

@@ -10,6 +10,7 @@ const useFinance = () => {
   const expenseList = finance.expense.expenseList;
   const categories = finance.categories;
   const tags = finance.tags;
+  const vendorInfo = finance.vendorInfo;
   // holds any info needed while creating an expense. generally the info that is not stored in react-hook-forms
   const expenseCreateMode = finance.expense.createMode;
   // tells the state of finance module. If the expense is being created or not
@@ -76,7 +77,8 @@ const useFinance = () => {
     unpaidAmount,
     rejectedAmount,
     expenseCreateMode,
-    inCreateMode
+    inCreateMode,
+    vendorInfo
   };
 };
 
