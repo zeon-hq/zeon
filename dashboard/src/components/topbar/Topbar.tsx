@@ -24,6 +24,12 @@ import {
 import { is } from "date-fns/locale";
 import Widget from "./Widget";
 
+const styles = {
+  dropdown: {
+    padding: "0px",
+  },
+};
+
 const Topbar = ({ workspaceId }: { workspaceId: string }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -136,7 +142,7 @@ const Topbar = ({ workspaceId }: { workspaceId: string }) => {
         />
       </TopBarDivWrapper>
       <InnerDivWrapper>
-        <Popover width={400} position="bottom" withArrow shadow="md">
+        <Popover styles={styles} width={400} position="bottom" withArrow shadow="md">
           <Popover.Target>
             <Button>Robyn</Button>
           </Popover.Target>

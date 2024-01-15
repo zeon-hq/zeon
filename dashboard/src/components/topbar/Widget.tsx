@@ -1,5 +1,10 @@
 import { CopilotWidget,Root } from "@openchatai/copilot-widget"; // import the component
 // import '@openchatai/copilot-widget/index.css' // the required styles
+const styles = {
+  dropdown: {
+    backgroundColor: "red",
+  },
+}
 const options = {
   apiUrl: "https://cloud.opencopilot.so/backend", // your base url where your are hosting OpenCopilot at (the API), usually it's http://localhost:5000/api
   socketUrl: "https://cloud.opencopilot.so", // the url of the socket url that will be used to send and receive messages
