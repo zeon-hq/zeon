@@ -176,7 +176,7 @@ function MyDropzone({
       ) : component ? (
         component
       ) : (
-        <Text>Drag 'n' drop some files here, or click to select files</Text>
+        <Text>Click Here to select files</Text>
       )}
     </div>
   )
