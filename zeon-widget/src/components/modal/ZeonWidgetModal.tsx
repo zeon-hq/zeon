@@ -132,14 +132,7 @@ const ZeonWidgetModal = () => {
     }
   };
 
-  useEffect(() => {
-    getOpenTicketData();
-  }, []);
 
-  useEffect(() => {
-    // get channelId from the invoke script of the widget
-    (isEmbeddable?.channelId) && getChannel(isEmbeddable?.channelId as string);
-  }, [isEmbeddable?.channelId]);
 
 
   const getOpenTicketData = async () => {
