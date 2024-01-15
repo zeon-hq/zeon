@@ -19,6 +19,7 @@ import {
   AuthSubHeading,
   AuthWrapper,
 } from "./auth.styles"
+import ErrorMessage from "components/ui-components/common/ErrorMessage"
 
 type UserDecodedData = {
   userId: string;
@@ -29,7 +30,7 @@ type UserDecodedData = {
 };
 
 const Login = () => {
-  const { register, handleSubmit } = useForm()
+  const { register, handleSubmit, formState:{errors} } = useForm()
   const [loading, setLoading] = React.useState(false)
   const navigate = useNavigate()
 
@@ -138,19 +139,26 @@ const Login = () => {
           </AuthFormHeader>
 
           <TextInput
-            {...register("email", { required: true })}
+            {...register("email", { required: "Email is required" })}
             name="email"
-            mb={20}
             type="email"
             label={<AuthLabel> E-Mail </AuthLabel>}
           />
+          {
+            errors?.email?.message && <ErrorMessage message={(errors.email?.message as string)} />
+          }
+          <Space h={20} />
           <TextInput
-            {...register("password", { required: true })}
+            {...register("password", { required: "Password is required" })}
             name="password"
-            mb={48}
+            
             label={<AuthLabel> Password </AuthLabel>}
             type="password"
           />
+          {
+            errors?.password?.message && <ErrorMessage message={(errors.password?.message as string)} />
+          }
+          <Space h={48} />
           {/* @ts-ignore */}
           <AuthButton
             loading={loading}
