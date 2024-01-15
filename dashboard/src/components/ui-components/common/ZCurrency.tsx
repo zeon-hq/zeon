@@ -65,11 +65,11 @@ const ZCurrency = ({
     clearError(`${name}.value`);
     setValue(`${name}.value`, parseFloat(value.replace(/[^0-9.]/g, "")));
     const numericValue = parseFloat(value.replace(/[^0-9.]/g, "")).toFixed(2);
-    const formattedValue = numericValue.replace(
-      new RegExp(`\\B(?=(\\d{${decimalDigits}})+(?!\\d))`, "g"),
-      ","
-    );
-    setCommaSeparatedValue(formattedValue);
+    // const formattedValue = numericValue.replace(
+    //   new RegExp(`\\B(?=(\\d{${decimalDigits}})+(?!\\d))`, "g"),
+    //   ","
+    // );
+    setCommaSeparatedValue(numericValue);
     if (inputRef.current) {
       inputRef.current.selectionStart = cursorPosition;
       inputRef.current.selectionEnd = cursorPosition;

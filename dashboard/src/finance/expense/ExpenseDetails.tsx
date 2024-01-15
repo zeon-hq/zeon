@@ -293,7 +293,9 @@ const ExpenseDetails = (props: Props) => {
         variant="contained"
         fullWidth
       >
-        {selectedVendor?.label || vendorInfo?.[getValues()?.vendor]
+        {selectedVendor?.label
+          ? selectedVendor?.label
+          : vendorInfo?.[getValues()?.vendor]
           ? vendorInfo?.[getValues()?.vendor]?.name ||
             `${vendorInfo?.[getValues()?.vendor]?.firstName} ${
               vendorInfo?.[getValues()?.vendor]?.lastName
