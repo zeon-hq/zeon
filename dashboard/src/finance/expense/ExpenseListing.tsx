@@ -232,6 +232,7 @@ const ExpenseListing = (props: Props) => {
           style={{
             borderRight: "1px solid #e0e0e0",
             flex: 1,
+            color: "green"
           }}
         >
           Paid: {paidAmount} <br />
@@ -239,6 +240,7 @@ const ExpenseListing = (props: Props) => {
         <ExpenseListFooterText
           style={{
             flex: 1,
+            color: "red"
           }}
         >
           Unpaid: {unpaidAmount} <br />
