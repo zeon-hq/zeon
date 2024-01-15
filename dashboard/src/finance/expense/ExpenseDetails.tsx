@@ -183,7 +183,9 @@ const ExpenseDetails = (props: Props) => {
           color: "green",
         })
         //@ts-ignore
-        dispatch(initFinance({ workspaceId }))
+        dispatch(initFinance({ workspaceId}))
+        reset()
+        setSelectedVendor(null)
       } else {
         //@ts-ignore
         const res = await updateExpense({

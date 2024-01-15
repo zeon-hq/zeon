@@ -29,21 +29,24 @@ const getFirstLoadInfo = async (workspaceId: string) => {
 
 export const initFinance = createAsyncThunk(
     "finance/init",
-    async ({workspaceId, selectedExpense=""}:{
+    async ({workspaceId, selectedExpense="",inCreateMode=true}:{
         workspaceId: string;
         selectedExpense?: string;
+        inCreateMode?: boolean;
     }) => {
       try {
         const response = await getFirstLoadInfo(workspaceId);
         if(selectedExpense) {
             return {
                 ...response,
-                selectedExpense
+                selectedExpense,
+                inCreateMode
             }
         }
         return {
             ...response,
-            selectedExpense: response[0]?.expenseId
+            selectedExpense: response[0]?.expenseId,
+            inCreateMode
         }
       } catch (error) {
         return await new Promise<any>((resolve, reject) => {
@@ -91,7 +94,7 @@ export const financeSlice = createSlice({
                 state.expense.createMode = {
                     attachedDocuments: []
                 }
-                state.expense.inCreateMode = true;
+                state.expense.inCreateMode = action.payload.inCreateMode;
             }
         })
         .addCase(initFinance.rejected, (state, action) => {
