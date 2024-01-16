@@ -5,6 +5,8 @@ import TopBarWorkSpaceLeftSelect from "components/ui-components/workspaces/TopBa
 import TopBarWorkSpaceRightSelect from "components/ui-components/workspaces/TopBarWorkSpaceRightSelect";
 import useDashboard from "hooks/useDashboard";
 import { useEffect, useState } from "react";
+import LoadingAnimation from "assets/robyn_btn.json";
+import Lottie from "react-lottie-player";
 import { useDispatch } from "react-redux";
 import {
   setLoading,
@@ -144,7 +146,17 @@ const Topbar = ({ workspaceId }: { workspaceId: string }) => {
       <InnerDivWrapper>
         <Popover styles={styles} width={400} position="bottom" withArrow shadow="md">
           <Popover.Target>
-            <Button>Robyn</Button>
+            <Button style={{
+              backgroundColor: "#ECF3FF",
+              color: "#023AB5",
+            }}>
+            <Lottie
+        loop
+        animationData={LoadingAnimation}
+        play
+        style={{ width: "20px", height: "20px" }}
+      />
+              Robyn</Button>
           </Popover.Target>
           <Popover.Dropdown>
             <Widget />
