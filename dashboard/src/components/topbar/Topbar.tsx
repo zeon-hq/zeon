@@ -154,7 +154,7 @@ const Topbar = ({ workspaceId }: { workspaceId: string }) => {
         loop
         animationData={LoadingAnimation}
         play
-        style={{ width: "20px", height: "20px" }}
+        style={{ width: "20px", height: "20px", marginRight: "2px" }}
       />
               Robyn</Button>
           </Popover.Target>
