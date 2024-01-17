@@ -156,7 +156,7 @@ const Topbar = ({ workspaceId }: { workspaceId: string }) => {
         play
         style={{ width: "20px", height: "20px", marginRight: "2px" }}
       />
-              Robyn</Button>
+                Ask Robyn</Button>
           </Popover.Target>
           <Popover.Dropdown>
             <Widget />
