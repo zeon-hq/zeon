@@ -144,7 +144,7 @@ const Topbar = ({ workspaceId }: { workspaceId: string }) => {
       <InnerDivWrapper>
         <Popover styles={styles} width={400} position="bottom" withArrow shadow="md">
           <Popover.Target>
-            <Button>Robyn</Button>
+            <Button>  Ask Robyn</Button>
           </Popover.Target>
           <Popover.Dropdown>
             <Widget />
