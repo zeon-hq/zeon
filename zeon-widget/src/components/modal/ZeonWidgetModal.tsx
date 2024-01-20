@@ -118,19 +118,6 @@ const ZeonWidgetModal = () => {
     dispatch(setShowWidget(false));
   });
 
-  const getChannel = async (channelId:string) => {
-    try {
-      const res = await getChannelById(channelId);
-      if (res.status != 200) {
-        dispatch(setWidgetDetails(res.data.channel));
-        getOpenTicketData();
-      } else {
-        // Handle Error here
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
 
 
