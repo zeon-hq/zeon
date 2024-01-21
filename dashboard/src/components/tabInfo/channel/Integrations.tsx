@@ -41,7 +41,7 @@ const Integrations = () => {
     );
 
     const slackClientId = process.env.REACT_APP_SLACK_CLIENT_ID;
-    const url = `https://slack.com/oauth/v2/authorize?state=${stateParameter}&redirect_uri=${slackRedirectionUrl}&client_id=${slackClientId}&scope=channels:read,chat:write,chat:write.customize,chat:write.public,groups:read,users:read,users:read.email,files:read,files:write,channels:history,channels:join,incoming-webhook,users.profile:read&user_scope=`;
+    const url = `https://slack.com/oauth/v2/authorize?state=${stateParameter}&redirect_uri=${slackRedirectionUrl}&client_id=${slackClientId}&scope=channels:read,chat:write,chat:write.customize,chat:write.public,groups:read,users:read,users:read.email,files:read,files:write,channels:history,channels:join,conversations:read,incoming-webhook,users.profile:read&user_scope=`;
     window.open(
       url,
       "_blank"

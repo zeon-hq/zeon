@@ -67,13 +67,6 @@ app.get("/health", (req: Request, res: Response)=>{
   res.send("all ok from zeon core service health |");
 });
 
-app.post('/slack/events', (req, res) => {
-  if (req.body.challenge) {
-    return res.send(req.body.challenge); // Used only for the Slack Event callback URL verification process
-  }
-});
-
-
 // run server at port 6000
 app.listen(port, () => {
   console.log(`Server running at port ${port}`);
