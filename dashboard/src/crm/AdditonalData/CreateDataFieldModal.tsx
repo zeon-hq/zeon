@@ -21,7 +21,7 @@ const CreateDataFieldModal = ({
   setAdditonalData,
   resourceId,
   resourceType,
-  alreadyAddedFields
+  alreadyAddedFields=[]
 }: Props) => {
   const { register, handleSubmit, formState:{errors} } = useForm({
     defaultValues: {
@@ -52,7 +52,7 @@ const CreateDataFieldModal = ({
       console.log(error);
       showNotification({
         title: "Error",
-        message: "Note creation failed",
+        message: "Additional Data creation failed",
         color: "red",
       });
       setShowModal(false);
