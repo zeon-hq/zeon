@@ -154,10 +154,10 @@ io.on("connection", (socket) => {
             }
           }
         ]
-        const sendSlackPayload :ISendSlackMessage= {
-          channelId: channel.slackChannelId, 
-          message: ticketOptions.message, 
-          token: channel.accessToken, 
+        const sendSlackPayload: ISendSlackMessage = {
+          channelId: channel.slackChannelId,
+          message: ticketOptions.message,
+          token: channel.accessToken,
           blocks
         }
 
@@ -183,7 +183,7 @@ io.on("connection", (socket) => {
       const getThread_rs = await TicketModel.findOne({ ticketId: messageOptions.ticketId });
       if (getThread_rs?.thread_ts) {
         console.log('getThread_rs not found')
-        const slackPayload:ISendSlackMessage = {
+        const slackPayload: ISendSlackMessage = {
           channelId: channel.slackChannelId,
           message: messageOptions.message,
           token: channel.accessToken,
@@ -240,8 +240,6 @@ io.on("connection", (socket) => {
       };
 
       await sendMessage(mqChannel, data);
-
-
     }
   );
   socket.on(
@@ -396,10 +394,41 @@ app.get("/channel/:channelId", async (req, res) => {
   }
 });
 
-app.post('/slack/events', (req, res) => {
+app.post('/slack/events', async (req, res) => {
   if (req.body.challenge) {
     return res.send(req.body.challenge); // Used only for the Slack Event callback URL verification process
   }
+
+  const { event } = req.body;
+
+  if (event.type === 'message') {
+    const { text, thread_ts, bot_profile, app_id } = event;
+    // send this message to the widget
+    // get channelId, ticketId using thread_ts
+    if (text && thread_ts && (!bot_profile || !app_id)) {
+      const getTicketInformation = await TicketModel.findOne({ thread_ts });
+      if (getTicketInformation.workspaceId && getTicketInformation.channelId && getTicketInformation.ticketId) {
+        
+        const messageOptions: MessageOptions = {
+          workspaceId: getTicketInformation.workspaceId,
+          channelId: getTicketInformation.channelId,
+          type: "received",
+          isRead: true,
+          message: text,
+          ticketId: getTicketInformation?.ticketId,
+        }
+
+        const data = {
+          source: "dashboard",
+          messageOptions
+        }
+
+        await sendMessage(mqChannel, data);
+      }
+    }
+    // send this message to the dashboard
+  }
+
 });
 
 
