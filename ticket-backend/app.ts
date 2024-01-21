@@ -396,6 +396,13 @@ app.get("/channel/:channelId", async (req, res) => {
   }
 });
 
+app.post('/slack/events', (req, res) => {
+  if (req.body.challenge) {
+    return res.send(req.body.challenge); // Used only for the Slack Event callback URL verification process
+  }
+});
+
+
 httpServer.on("listening", () => init());
 httpServer.listen(port, async () => console.log(`Listening on port ${port}`));
 
