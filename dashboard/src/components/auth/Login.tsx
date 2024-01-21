@@ -32,69 +32,71 @@ type UserDecodedData = {
 const Login = () => {
   const { register, handleSubmit, formState:{errors} } = useForm()
   const [loading, setLoading] = React.useState(false)
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
+
+  const ducalisScript = (token:string) =>{
+    const script = document.createElement('script');
+    const {email, userId, name}:UserDecodedData = jwtDecode(token);
+    script.innerHTML =      `
+    !(function (b, c, f, d, a, e) {
+        b.dclsPxl ||
+            ((((d = b.dclsPxl =
+                function () {
+                    d.callMethod
+                        ? d.callMethod.apply(d, arguments)
+                        : d.queue.push(arguments);
+                }).push = d).queue = []),
+            ((a = c.createElement("script")).async = !0),
+            (a.src = f),
+            (e = c.getElementsByTagName("script")[0]).parentNode.insertBefore(
+                a,
+                e
+            ));
+    })(window, document, "https://ducalis.io/js/widget.js");
+    dclsPxl("initWidget", {
+        appId: "e760d0ac71ed98e637dc9b3e2c69bedf5441be54", // Required
+        boardId: "e030a925513f5f875977c3ee49894126", // Required
+        user: {
+            // required
+            email: "${email}",
+            hash: "${token}",
+            // optional
+            userID: "${userId}",
+            name: "${name}",
+            avatar: "https://api.dicebear.com/7.x/fun-emoji/svg?seed=${name}",
+        },
+    });`;
+
+    
+
+  // Append the script to the document
+  document.body.appendChild(script);
+  }
+
 
   const onSubmit = async (data: any) => {
     try {
       setLoading(true)
-      const res = login(data.email, data.password).then((res) => {
+      const res = await login(data.email, data.password)
+      if(res.at){
         setLoading(false)
-
-        const script = document.createElement('script');
-        const decoded:UserDecodedData = jwtDecode(res.at);
-        script.innerHTML =      `
-        !(function (b, c, f, d, a, e) {
-            b.dclsPxl ||
-                ((((d = b.dclsPxl =
-                    function () {
-                        d.callMethod
-                            ? d.callMethod.apply(d, arguments)
-                            : d.queue.push(arguments);
-                    }).push = d).queue = []),
-                ((a = c.createElement("script")).async = !0),
-                (a.src = f),
-                (e = c.getElementsByTagName("script")[0]).parentNode.insertBefore(
-                    a,
-                    e
-                ));
-        })(window, document, "https://ducalis.io/js/widget.js");
-        dclsPxl("initWidget", {
-            appId: "e760d0ac71ed98e637dc9b3e2c69bedf5441be54", // Required
-            boardId: "e030a925513f5f875977c3ee49894126", // Required
-            user: {
-                // required
-                email: "${decoded.email}",
-                hash: "${res.at}",
-                // optional
-                userID: "${decoded.userId}",
-                name: "${decoded.name}",
-                avatar: "https://api.dicebear.com/7.x/fun-emoji/svg?seed=${decoded.name}",
-            },
-        });`;
-
-        
-
-      // Append the script to the document
-      document.body.appendChild(script);
-
-        if(res.at)
+        ducalisScript(res.at)
         navigate("/workspaces/chat")
-
-      }).catch((err) => {
+      } else {
         setLoading(false)
-        console.log(err)
         showNotification({
-          title: "Authentication Error. Password or Email is incorrect",
-          message: err,
+          title: "Error",
+          message: "Issue while login, contact support",
           color: "red",
         })
-      })
+      }
+
     } catch (error: any) {
       setLoading(false)
-      console.log(error)
       showNotification({
         title: "Error",
-        message: error,
+        message: error ?? error.message ?? "Something went wrong",
         color: "red",
       })
     }

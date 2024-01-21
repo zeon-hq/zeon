@@ -1,35 +1,44 @@
-import { Image, Text } from "@mantine/core"
-import { showNotification } from "@mantine/notifications"
-import topBarDocs from "assets/topBarDocs.svg"
-import TopBarWorkSpaceLeftSelect from "components/ui-components/workspaces/TopBarWorkSpaceLeftSelect"
-import TopBarWorkSpaceRightSelect from "components/ui-components/workspaces/TopBarWorkSpaceRightSelect"
-import useDashboard from "hooks/useDashboard"
-import { useEffect, useState } from "react"
-import { useDispatch } from "react-redux"
+import { Image, Text, Popover, Button } from "@mantine/core";
+import { showNotification } from "@mantine/notifications";
+import topBarDocs from "assets/topBarDocs.svg";
+import TopBarWorkSpaceLeftSelect from "components/ui-components/workspaces/TopBarWorkSpaceLeftSelect";
+import TopBarWorkSpaceRightSelect from "components/ui-components/workspaces/TopBarWorkSpaceRightSelect";
+import useDashboard from "hooks/useDashboard";
+import { useEffect, useState } from "react";
+import LoadingAnimation from "assets/robyn_btn.json";
+import Lottie from "react-lottie-player";
+import { useDispatch } from "react-redux";
 import {
   setLoading,
   setSelectedPage,
   setShowSidebar,
   setWorkspaces,
-} from "reducer/slice"
-import { getWorkspaces } from "service/CoreService"
-import { useNavigate } from "react-router"
-import styled from "styled-components"
-import Pill from "./Pill"
+} from "reducer/slice";
+import { getWorkspaces } from "service/CoreService";
+import { useNavigate } from "react-router";
+import styled from "styled-components";
+import Pill from "./Pill";
 import {
   InnerDivWrapper,
   TopBarDivWrapper,
   TopBarWrapper,
-} from "./topbar.styles"
-import { is } from "date-fns/locale"
+} from "./topbar.styles";
+import { is } from "date-fns/locale";
+import Widget from "./Widget";
+
+const styles = {
+  dropdown: {
+    padding: "0px",
+  },
+};
 
 const Topbar = ({ workspaceId }: { workspaceId: string }) => {
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
-  const [isFrontDeskSelected, setIsFrontDeskSelected] = useState(true)
-  const [isRelationsSelected, setIsRelationsSelected] = useState(false)
-  const [isFinanceSelected, setIsFinanceSelected] = useState(false)
-  const { channelsInfo } = useDashboard()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [isFrontDeskSelected, setIsFrontDeskSelected] = useState(true);
+  const [isRelationsSelected, setIsRelationsSelected] = useState(false);
+  const [isFinanceSelected, setIsFinanceSelected] = useState(false);
+  const { channelsInfo } = useDashboard();
   const TopBarWrapper = styled.div`
     width: 100%;
     height: 45px;
@@ -57,47 +66,47 @@ const Topbar = ({ workspaceId }: { workspaceId: string }) => {
   `
 
   useEffect(() => {
-    getUserWorkspaces()
-  }, [])
+    getUserWorkspaces();
+  }, []);
 
   useEffect(() => {
     if (window.location.href.includes("dashboard")) {
-      setIsFrontDeskSelected(true)
-      setIsRelationsSelected(false)
-      setIsFinanceSelected(false)
+      setIsFrontDeskSelected(true);
+      setIsRelationsSelected(false);
+      setIsFinanceSelected(false);
     } else if (window.location.href.includes("relation")) {
-      setIsFrontDeskSelected(false)
-      setIsRelationsSelected(true)
-      setIsFinanceSelected(false)
+      setIsFrontDeskSelected(false);
+      setIsRelationsSelected(true);
+      setIsFinanceSelected(false);
     } else if (window.location.href.includes("finance")) {
-      setIsFrontDeskSelected(false)
-      setIsRelationsSelected(false)
-      setIsFinanceSelected(true)
+      setIsFrontDeskSelected(false);
+      setIsRelationsSelected(false);
+      setIsFinanceSelected(true);
     }
   }, [
     window.location.href.includes("dashboard"),
     window.location.href.includes("relation"),
     window.location.href.includes("finance"),
-  ])
+  ]);
 
   const getUserWorkspaces = async () => {
-    dispatch(setLoading(true))
+    dispatch(setLoading(true));
     try {
-      const res = await getWorkspaces()
+      const res = await getWorkspaces();
       if (res?.workspaces?.length > 0) {
-        dispatch(setWorkspaces(res.workspaces))
-        dispatch(setLoading(false))
+        dispatch(setWorkspaces(res.workspaces));
+        dispatch(setLoading(false));
       } else {
         showNotification({
           title: "Workspace fetching failed",
           message: "Issue while fetching workspace",
           color: "red",
-        })
+        });
       }
     } catch (error) {
-      dispatch(setLoading(false))
+      dispatch(setLoading(false));
     }
-  }
+  };
 
   return (
     <TopBarWrapper>
@@ -114,7 +123,7 @@ const Topbar = ({ workspaceId }: { workspaceId: string }) => {
                 type: "detail",
                 name: "inbox",
                 //@ts-ignore
-                channelId: channelsInfo?.channels[0].channelId,
+                channelId: channelsInfo?.channels?.[0]?.channelId,
               })
             )
           }}
@@ -135,6 +144,24 @@ const Topbar = ({ workspaceId }: { workspaceId: string }) => {
         />
       </TopBarDivWrapper>
       <InnerDivWrapper>
+        <Popover styles={styles} width={400} position="bottom" withArrow shadow="md">
+          <Popover.Target>
+            <Button style={{
+              backgroundColor: "#ECF3FF",
+              color: "#023AB5",
+            }}>
+            <Lottie
+        loop
+        animationData={LoadingAnimation}
+        play
+        style={{ width: "20px", height: "20px", marginRight: "2px" }}
+      />
+                Ask Robyn</Button>
+          </Popover.Target>
+          <Popover.Dropdown>
+            <Widget />
+          </Popover.Dropdown>
+        </Popover>
         <Text
           className="ducalis-changelog-widget pointer"
           fw={"500"}
@@ -155,7 +182,7 @@ const Topbar = ({ workspaceId }: { workspaceId: string }) => {
                 type: "detail",
                 name: "inbox",
                 //@ts-ignore
-                channelId: channelsInfo?.channels[0].channelId,
+                channelId: channelsInfo?.channels?.[0]?.channelId,
               })
             )
           }}

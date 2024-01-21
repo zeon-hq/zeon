@@ -1,0 +1,30 @@
+name: Build & Upload the Embededable Script
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "copilot-widget/**"
+
+jobs:
+  build-and-upload-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8.12.1
+
+      - name: Install dependencies
+        run: cd copilot-widget/ && pnpm install
+
+      - name: Build copilot-widget
+        run: cd copilot-widget/ && pnpm build:embed
+
+      - name: Upload embed as artifact.
+        uses: actions/upload-artifact@v3
+        with:
+          name: copilot-widget@latest
+          path: copilot-widget/dist

@@ -67,7 +67,6 @@ app.get("/health", (req: Request, res: Response)=>{
   res.send("all ok from zeon core service health |");
 });
 
-
 // run server at port 6000
 app.listen(port, () => {
   console.log(`Server running at port ${port}`);

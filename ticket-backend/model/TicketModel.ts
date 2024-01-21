@@ -18,6 +18,7 @@ export interface TicketModel {
   messages?: any[];
   assignedUser?: string;
   assignedUserInfo?: any;
+  thread_ts?: string;
 }
 
 // Define the Mongoose schema
@@ -27,6 +28,7 @@ const ticketModelSchema = new Schema<TicketModel>({
   text: String,
   ticketId: String,
   customerEmail: String,
+  thread_ts: String,
   createdAt: Number,
   updatedAt: Number,
   isOpen: Boolean,

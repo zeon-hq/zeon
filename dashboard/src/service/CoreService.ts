@@ -48,16 +48,15 @@ export async function fetchUserInfo(workspaceId: string) {
 
 export const login = async (email: string, password: string) => {
   try {
-    const res:AxiosResponse = await axiosInstance.post(`${coreAPIDomain}/auth/login`, {
-      email,
-      password,
-    })
+    const loginPayload = {email,password}
+    const res:AxiosResponse = await axios.post(`${coreAPIDomain}/auth/login`, loginPayload);
+
     localStorage.setItem("at", res.data.at)
     //@ts-ignore
     axiosInstance.defaults.headers.Authorization = `Bearer ${res.data.at}`
     return res.data
   } catch (error:any) {
-    return Promise.reject(error?.response?.data?.error)
+    return Promise.reject(error?.response?.data?.error || error?.message)
   }
 }
 
