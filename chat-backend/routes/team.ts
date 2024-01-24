@@ -52,18 +52,25 @@ router.put(
   upload.single("file"),
   //@ts-ignore
   async (req: Request, res: Response) => {
+    console.log('--------------')
     try {
       const tempId = generateId(10)
       //@ts-ignore
       const fileName = `${req.file.originalname}-${tempId}`
-      const command = new PutObjectCommand({
+      const commandPayload = {
         Bucket: bucketName,
         Key: fileName,
         //@ts-ignore
         Body: req.file.buffer,
         //@ts-ignore
         ContentType: req.file.mimetype,
-      })
+      }
+      const command = new PutObjectCommand(commandPayload)
+      console.log('fileName',commandPayload);
+
+      console.log('command',command);
+      
+      
       const savedFile = await s3.send(command)
       const signedURL = await getSignedUrl(s3, command, { expiresIn: 3600 })
       const s3Url = `https://${bucketName}.s3.${region}.amazonaws.com/${fileName}`
@@ -72,10 +79,11 @@ router.put(
               message: "Logo uplodaded",
               uploadedUrl:s3Url
             })
-    } catch (error) {
+    } catch (error:any) {
+      console.log('error message',error?.message);
       //@ts-ignore
       return res.status(500).json({
-        message: "Something went wrong",
+        message: error?.message,
       })
     }
   }
