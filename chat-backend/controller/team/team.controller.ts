@@ -209,7 +209,6 @@ export const getTeam = async (req: Request, res: Response) => {
 
 export const getTeamData = async (req: SessionRequest, res: Response) => {
   const { workspaceId } = req.params
-  console.log("%%% workspaceId", workspaceId)
   try {
     const team = await getWorkspaceByWorkspaceId(workspaceId)
     if (!team) {
@@ -238,7 +237,6 @@ export const getTeamData = async (req: SessionRequest, res: Response) => {
     // add invoices
     data.invoices = []
 
-    console.log("%%%% test team data", team)
 
     let payload: any = {
       ...data,
