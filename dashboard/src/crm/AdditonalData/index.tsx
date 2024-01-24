@@ -117,7 +117,7 @@ export const AdditonalData = ({ resourceId, type,additionalValue }: AdditionalDa
           }
           setShowModal={setShowModal}
           setAdditonalData={setAdditonalData}
-          alreadyAddedFields={additonalData}
+          alreadyAddedFields={additonalData || []}
         />
       )}
     </Container>
