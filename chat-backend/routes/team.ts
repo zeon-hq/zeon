@@ -18,7 +18,7 @@ import multer from "multer"
 import { generateId } from "zeon-core/dist/utils/utils"
 
 const secretAccessKey = process.env.SECRET_ACCESS_KEY as string
-const accessKeyId = process.env.ACCESS_KEY_ID as string
+const accessKeyId = process.env.ACCESS_KEY as string
 const bucketName = process.env.BUCKET_NAME as string
 const region = process.env.REGION as string
 
