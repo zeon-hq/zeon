@@ -28,7 +28,7 @@ const Widget = () => {
     socketUrl: Config("SOCKET_URL"), // the url of the socket url that will be used to send and receive messages
     initialMessage:
       "Hey there! I'm Robyn, your AI co-pilot. I can walk you through Zeon or help you carry out tasks for you. Ask me anything.", // optional: you can pass an array of messages that will be sent to the copilot when it's initialized
-    token: "GiTH4rF0i4ETgpDh", // you can get your token from the dashboard
+    token: "vFZxSznoIzK5vQs6", // you can get your token from the dashboard
     defaultOpen: true,
     user: {
       name: `${userFullName}`,

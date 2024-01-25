@@ -1,11 +1,11 @@
 {
   "API_DOMAIN": "http://0.0.0.0:4000",
   "TICKET_SERVICE": "http://0.0.0.0:6000",
-  "CORE_API_DOMAIN" : "http://0.0.0.0:3005",
+  "CORE_API_DOMAIN": "http://0.0.0.0:3005",
   "widgetJSFile": "https://zeonhq.b-cdn.net/zeon-widget.js",
   "widgetCSSFile": "https://zeonhq.b-cdn.net/zeon-widget.css",
-  "CHAT_WIDGET_URL":"https://widget.zeonhq.com",
-  "FINANCE_API_DOMAIN" : "http://0.0.0.0:7000",
-  "API_URL": "https://cloud.opencopilot.so/backend",
-  "SOCKET_URL": "https://cloud.opencopilot.so"
+  "CHAT_WIDGET_URL": "https://widget.zeonhq.com",
+  "FINANCE_API_DOMAIN": "http://0.0.0.0:7000",
+  "API_URL": "https://robyn.zeonhq.com/backend",
+  "SOCKET_URL": "https://robyn.zeonhq.com"
 }

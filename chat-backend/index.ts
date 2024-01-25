@@ -7,7 +7,7 @@ import { initializeDB } from "zeon-core/dist/func";
 import { UserInterface } from "zeon-core/dist/types";
 import oauthController from "./controller/slack/oauthController";
 const app: Express = express();
-
+dotenv.config()
 
 
 declare global {
@@ -25,9 +25,6 @@ const userRouter = require("./routes/user")
 const teamRouter = require("./routes/team")
 const ticketRouter = require("./routes/ticket")
 
-
-
-dotenv.config();
 
 const port = process.env.CHAT_BACKEND_PORT as string;
 

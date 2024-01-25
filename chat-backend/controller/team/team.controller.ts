@@ -28,7 +28,7 @@ import multer from "multer"
 import { generateId } from "zeon-core/dist/utils/utils"
 
 const secretAccessKey = process.env.SECRET_ACCESS_KEY as string
-const accessKeyId = process.env.ACCESS_KEY_ID as string
+const accessKeyId = process.env.ACCESS_KEY as string
 
 const s3 = new S3Client({
   credentials: {
@@ -209,7 +209,6 @@ export const getTeam = async (req: Request, res: Response) => {
 
 export const getTeamData = async (req: SessionRequest, res: Response) => {
   const { workspaceId } = req.params
-  console.log("%%% workspaceId", workspaceId)
   try {
     const team = await getWorkspaceByWorkspaceId(workspaceId)
     if (!team) {
@@ -238,7 +237,6 @@ export const getTeamData = async (req: SessionRequest, res: Response) => {
     // add invoices
     data.invoices = []
 
-    console.log("%%%% test team data", team)
 
     let payload: any = {
       ...data,
@@ -324,7 +322,7 @@ export const uploadLogo = async (req: SessionRequest, res: Response) => {
       //@ts-ignore
       const fileName = `${req.file.originalname}-${tempId}`;
       const command = new PutObjectCommand({
-        Bucket: 'zeon-finance-docs',
+        Bucket: 'zeon-user-assets',
         Key: fileName,
         //@ts-ignore
         Body: req.file.buffer,
