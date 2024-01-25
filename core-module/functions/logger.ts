@@ -16,14 +16,14 @@ export default class Logger {
         input.type = "INFO";
         input.service = this.service;
         console.log(`[INFO]: ${JSON.stringify(input)}`);
-        this.sendToSlack(JSON.stringify(input));
+        this.sendToSlack(input);
     }
     
     warn(input:ZLoggerInput) {
         input.type = "WARN";
         input.service = this.service;
         console.log(`[WARN]: ${JSON.stringify(input)}`);
-        this.sendToSlack(JSON.stringify(input));
+        this.sendToSlack(input);
 
     }
     
@@ -31,10 +31,10 @@ export default class Logger {
         input.type = "ERROR";
         input.service = this.service;
         console.log(`[ERROR]: ${JSON.stringify(input)}`);
-        this.sendToSlack(JSON.stringify(input));
+        this.sendToSlack(input);
     }
 
-    private async sendToSlack(message: string) {
+    private async sendToSlack(message: any) {
         // send message to slack
         await axios.post(this.webhook, {
             message

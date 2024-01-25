@@ -31,7 +31,14 @@ export const createUser = async (
   params: CreateUserDTO
 ): Promise<UserInterface> => {
   try {
-    const { name, email,phone, password, roleId = "chatAgent", workspaceId } = params
+    const {
+      name,
+      email,
+      phone,
+      password,
+      roleId = "chatAgent",
+      workspaceId,
+    } = params
 
     // check if name, email and password are provided
     if (!name || !email || !password) {
@@ -72,7 +79,7 @@ export const createUser = async (
       email,
       password: hashedPassword,
       userId: userId,
-      phone
+      phone,
     })
 
     // create user workspace relation
@@ -88,7 +95,7 @@ export const createUser = async (
 
     logger.info({
       message: `[createUser] - User created with userId - ${userId}`,
-      payload: JSON.stringify(params),
+      payload: params,
     })
 
     // Save the user to the database
@@ -99,14 +106,13 @@ export const createUser = async (
     console.error(error)
     logger.error({
       message: `[createUser] - Error while creating user`,
-      error: JSON.stringify(error),
+      error: error,
     })
     throw {
       code: 500,
       message: error,
       error,
     }
-    
   }
 }
 
@@ -214,7 +220,7 @@ export const createInvite = async (params: CreateInviteDTO) => {
 
     logger.info({
       message: `[createInvite] - Invite created with inviteId - ${invite.inviteId}`,
-      payload: JSON.stringify(params),
+      payload:params,
     })
 
     // Save the invite to the database
@@ -225,7 +231,7 @@ export const createInvite = async (params: CreateInviteDTO) => {
     console.error(error)
     logger.error({
       message: `[createInvite] - Error while creating invite`,
-      error: JSON.stringify(error),
+      error: error,
     })
     throw {
       code: 500,
@@ -249,7 +255,10 @@ export const deleteInvite = async (params: { inviteId: string }) => {
     }
 
     // check if inviteId is valid
-    const invite = await Invite.findOne({ inviteId: inviteId, isDeleted: false })
+    const invite = await Invite.findOne({
+      inviteId: inviteId,
+      isDeleted: false,
+    })
 
     // If inviteId is invalid, return an error
     if (!invite) {
@@ -268,7 +277,7 @@ export const deleteInvite = async (params: { inviteId: string }) => {
     console.error(error)
     logger.error({
       message: `[deleteInvite] - Error while deleting invite`,
-      error: JSON.stringify(error),
+      error: error,
     })
     throw {
       code: 500,
@@ -293,7 +302,10 @@ export const acceptInvite = async (params: AcceptInviteDTO) => {
     }
 
     // check if inviteId is valid
-    const invite = await Invite.findOne({ inviteId: inviteId, isDeleted: false })
+    const invite = await Invite.findOne({
+      inviteId: inviteId,
+      isDeleted: false,
+    })
 
     // If inviteId is invalid, return an error
     if (!invite) {
@@ -356,7 +368,7 @@ export const acceptInvite = async (params: AcceptInviteDTO) => {
     console.error(error)
     logger.error({
       message: `[acceptInvite] - Error while accepting invite`,
-      error: JSON.stringify(error),
+      error: error,
     })
     throw {
       code: 500,
@@ -380,7 +392,10 @@ export const getInviteByInviteId = async (params: { inviteId: string }) => {
     }
 
     // check if inviteId is valid
-    const invite = await Invite.findOne({ inviteId: inviteId, isDeleted: false })
+    const invite = await Invite.findOne({
+      inviteId: inviteId,
+      isDeleted: false,
+    })
 
     // If inviteId is invalid, return an error
     if (!invite) {
@@ -396,7 +411,7 @@ export const getInviteByInviteId = async (params: { inviteId: string }) => {
     console.error(error)
     logger.error({
       message: `[getInviteByInviteId] - Error while getting invite`,
-      error: JSON.stringify(error),
+      error: error,
     })
     throw {
       code: 500,
@@ -459,7 +474,7 @@ export const deleteUser = async (params: {
     console.error(error)
     logger.error({
       message: `[deleteUser] - Error while deleting user`,
-      error: JSON.stringify(error),
+      error: error,
     })
     throw {
       code: 500,
@@ -502,19 +517,24 @@ export const getAllUsers = async (params: { workspaceId: string }) => {
     const userWorkspaceRelation = await UserWorkspace.find({
       workspaceId: workspaceId,
       isDeleted: false,
-      isActive: true
+      isActive: true,
     })
 
-    const userIds = userWorkspaceRelation.map((userWorkspaceRelation:any) => {
-      return {userId: userWorkspaceRelation.userId, roleId: userWorkspaceRelation.roleId}
+    const userIds = userWorkspaceRelation.map((userWorkspaceRelation: any) => {
+      return {
+        userId: userWorkspaceRelation.userId,
+        roleId: userWorkspaceRelation.roleId,
+      }
     })
 
     // fetch all users and add their roleIds
-    const promises = userIds.map(async (userId:any) => {
-      const userInfo = await User.findOne({ userId: userId.userId }).select("-password")
+    const promises = userIds.map(async (userId: any) => {
+      const userInfo = await User.findOne({ userId: userId.userId }).select(
+        "-password"
+      )
       return {
         ...userInfo.toObject(),
-        roleId: userId.roleId
+        roleId: userId.roleId,
       }
     })
 
@@ -525,7 +545,7 @@ export const getAllUsers = async (params: { workspaceId: string }) => {
     console.error(error)
     logger.error({
       message: `[getAllUsers] - Error while getting all users`,
-      error: JSON.stringify(error),
+      error: error,
     })
     throw {
       code: 500,
@@ -567,13 +587,12 @@ export const getUserByUserId = async (params: { userId: string }) => {
 
     // get all workspaceIds
     const workspaceIds = userWorkspace.map(
-      (userWorkspace:any) => userWorkspace.workspaceId
+      (userWorkspace: any) => userWorkspace.workspaceId
     )
 
     // get all workspaces
-    const promises = workspaceIds.map(async (workspaceId:any) => {
+    const promises = workspaceIds.map(async (workspaceId: any) => {
       return getWorkspaceByWorkspaceId(workspaceId)
-
     })
 
     const workspaces = await Promise.all(promises)
@@ -662,7 +681,7 @@ export const getUser = async (params: {
     console.error(error)
     logger.error({
       message: `[getUser] - Error while getting user`,
-      error: JSON.stringify(error),
+      error: error,
     })
     throw {
       code: 500,
@@ -739,7 +758,7 @@ export const createUserWithUserIdAndWorkspaceId = async (params: {
     console.error(error)
     logger.error({
       message: `[createUserWithUserIdAndWorkspaceId] - Error while creating user with userId and workspaceId`,
-      error: JSON.stringify(error),
+      error: error,
     })
     throw {
       code: 500,
@@ -816,7 +835,7 @@ export const createUserWorkspaceRelation = async (
     console.error(error)
     logger.error({
       message: `[createUserWorkspaceRelation] - Error while creating user workspace relation`,
-      error: JSON.stringify(error),
+      error: error,
     })
     throw {
       code: 500,

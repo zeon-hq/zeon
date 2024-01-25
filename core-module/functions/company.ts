@@ -39,15 +39,15 @@ export const createCompany = async (params: Company) => {
     const company = await CompanyModel.create(params)
     logger.info({
       message: `Company created`,
-      payload: JSON.stringify(company),
+      payload: company
     })
-    
+
     return company
   } catch (error) {
     console.log(error)
     logger.error({
       message: `Error creating company`,
-      error: JSON.stringify(error),
+      error: error,
     })
     throw {
       code: 500,
@@ -57,7 +57,11 @@ export const createCompany = async (params: Company) => {
   }
 }
 
-export const getAllCompanies = async (workspaceId: string, limit: string, offset: string) => {
+export const getAllCompanies = async (
+  workspaceId: string,
+  limit: string,
+  offset: string
+) => {
   try {
     if (!workspaceId)
       throw {
@@ -66,8 +70,8 @@ export const getAllCompanies = async (workspaceId: string, limit: string, offset
         error: "Invalid workspaceId",
       }
 
-    if(!limit || parseInt(limit) > 100) limit = "100";
-    if(!offset) offset = "0";
+    if (!limit || parseInt(limit) > 100) limit = "100"
+    if (!offset) offset = "0"
 
     const companies = await CompanyModel.find({ workspaceId, isDeleted: false })
       .limit(parseInt(limit))
@@ -75,11 +79,14 @@ export const getAllCompanies = async (workspaceId: string, limit: string, offset
       .sort({ created_at: -1 })
 
     // total number of companies
-    const total = await CompanyModel.countDocuments({ workspaceId, isDeleted: false });
+    const total = await CompanyModel.countDocuments({
+      workspaceId,
+      isDeleted: false,
+    })
 
     return {
       companies,
-      total
+      total,
     }
   } catch (error) {
     console.log(error)
@@ -100,8 +107,11 @@ export const getAllCompaniesByPair = async (workspaceId: string) => {
         error: "Invalid workspaceId",
       }
 
-    const companies = CompanyModel.find({ workspaceId, isDeleted: false }, { companyId: 1, name: 1 })
-    return companies;
+    const companies = CompanyModel.find(
+      { workspaceId, isDeleted: false },
+      { companyId: 1, name: 1 }
+    )
+    return companies
   } catch (error) {
     console.log(error)
     throw {
@@ -153,9 +163,13 @@ export const editCompany = async (companyId: string, params: Company) => {
 
     params.updated_at = updated_at
 
-    const company = await CompanyModel.findOneAndUpdate({ companyId, isDeleted: false }, params, {
-      new: true,
-    })
+    const company = await CompanyModel.findOneAndUpdate(
+      { companyId, isDeleted: false },
+      params,
+      {
+        new: true,
+      }
+    )
     return company
   } catch (error) {
     console.log(error)
@@ -204,4 +218,3 @@ export const deleteCompany = async (companyId: string) => {
     }
   }
 }
-

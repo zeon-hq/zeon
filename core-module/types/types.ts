@@ -285,8 +285,8 @@ export enum ZeonServices {
 export interface ZLoggerInput {
   service ?: ZeonServices;
   message: string;
-  error ?: string;
-  payload ?: string;
+  error ?: any;
+  payload ?: any;
   type ?: "INFO" | "WARN" | "ERROR";
   user ?: UserInterface;
 }

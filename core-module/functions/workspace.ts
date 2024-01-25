@@ -87,7 +87,7 @@ export const createWorkspace = async (params: CreateWorkspaceDTO): Promise<Works
 
         logger.info({
           message: "[createWorkspace] - Workspace created",
-          payload: JSON.stringify(data)
+          payload: data
         })
 
         return data
@@ -96,7 +96,7 @@ export const createWorkspace = async (params: CreateWorkspaceDTO): Promise<Works
         console.error(error)
         logger.error({
           message: "[createWorkspace] - Error creating workspace",
-          error: JSON.stringify(error)
+          error: error
         })
         throw {
             code: 500,
@@ -163,7 +163,7 @@ export const deleteWorkspaceByWorkspaceId = async (workspaceId: string): Promise
     workspace.isDeleted = true
     logger.info({
       message: "[deleteWorkspaceByWorkspaceId] - Workspace deleted",
-      payload: JSON.stringify(workspace)
+      payload:workspace
     })
     await workspace.save()
     return workspace
@@ -171,7 +171,7 @@ export const deleteWorkspaceByWorkspaceId = async (workspaceId: string): Promise
     console.error(error)
     logger.error({
       message: "[deleteWorkspaceByWorkspaceId] - Error deleting workspace",
-      error: JSON.stringify(error)
+      error: error
     })
     throw {
       code: 500,
