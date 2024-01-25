@@ -1,5 +1,9 @@
 import { generateId } from "../utils/utils"
 import Company, { CompanyModel } from "../schema/Company"
+import Logger from "./logger"
+import { ZeonServices } from "../types/types"
+
+const logger = new Logger(ZeonServices.CORE)
 
 export const createCompany = async (params: Company) => {
   try {
@@ -33,9 +37,18 @@ export const createCompany = async (params: Company) => {
     params.companyId = companyId
 
     const company = await CompanyModel.create(params)
+    logger.info({
+      message: `Company created`,
+      payload: JSON.stringify(company),
+    })
+    
     return company
   } catch (error) {
     console.log(error)
+    logger.error({
+      message: `Error creating company`,
+      error: JSON.stringify(error),
+    })
     throw {
       code: 500,
       message: error,

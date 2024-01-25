@@ -273,3 +273,20 @@ export interface UserWorkspaceRelationDTO {
   isActive: boolean;
   isDeleted: boolean;
 }
+
+export enum ZeonServices {
+  CORE = "CORE",
+  CRM = "CRM",
+  FINANCE = "FINANCE",
+  CHAT = "CHAT",
+  TICKET = "TICKET",
+}
+
+export interface ZLoggerInput {
+  service ?: ZeonServices;
+  message: string;
+  error ?: string;
+  payload ?: string;
+  type ?: "INFO" | "WARN" | "ERROR";
+  user ?: UserInterface;
+}

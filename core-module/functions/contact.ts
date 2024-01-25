@@ -1,6 +1,9 @@
 import { generateId } from "../utils/utils";
 import Contact, { ContactsModel } from "../schema/Contact";
+import Logger from "./logger"
+import { ZeonServices } from "../types/types"
 
+const logger = new Logger(ZeonServices.CORE);
 export const createContact = async (params: Contact) => {
   try {
     if (!params)
@@ -33,9 +36,17 @@ export const createContact = async (params: Contact) => {
     params.contactId = contactId;
 
     const contact = await ContactsModel.create(params);
+    logger.info({
+      message: `Contact created`,
+      payload: JSON.stringify(contact),
+    });
     return contact;
   } catch (error) {
     console.log(error);
+    logger.error({
+      message: `Error creating contact`,
+      error: JSON.stringify(error),
+    });
     throw {
       code: 500,
       message: error,

@@ -8,12 +8,14 @@ import {
   AcceptInviteDTO,
   CreateInviteDTO,
   UserWorkspaceRelationDTO,
+  ZeonServices,
 } from "../types/types"
 import { generateId } from "../utils/utils"
 import bcrypt from "bcryptjs"
 import { Request, Response, NextFunction } from "express"
 import jwt from "jsonwebtoken"
 import { getWorkspaceByWorkspaceId } from "./workspace"
+import Logger from "./logger"
 
 /**
  * The function `createUser` creates a new user with the provided parameters and saves it to the
@@ -22,6 +24,9 @@ import { getWorkspaceByWorkspaceId } from "./workspace"
  * properties:
  * @returns a Promise that resolves to a UserInterface object.
  */
+
+const logger = new Logger(ZeonServices.CORE)
+
 export const createUser = async (
   params: CreateUserDTO
 ): Promise<UserInterface> => {
@@ -81,17 +86,27 @@ export const createUser = async (
       })
     }
 
+    logger.info({
+      message: `[createUser] - User created with userId - ${userId}`,
+      payload: JSON.stringify(params),
+    })
+
     // Save the user to the database
     await user.save()
 
     return user
   } catch (error) {
     console.error(error)
+    logger.error({
+      message: `[createUser] - Error while creating user`,
+      error: JSON.stringify(error),
+    })
     throw {
       code: 500,
       message: error,
       error,
     }
+    
   }
 }
 
@@ -197,12 +212,21 @@ export const createInvite = async (params: CreateInviteDTO) => {
       inviteId: generateId(6),
     })
 
+    logger.info({
+      message: `[createInvite] - Invite created with inviteId - ${invite.inviteId}`,
+      payload: JSON.stringify(params),
+    })
+
     // Save the invite to the database
     await invite.save()
 
     return invite
   } catch (error) {
     console.error(error)
+    logger.error({
+      message: `[createInvite] - Error while creating invite`,
+      error: JSON.stringify(error),
+    })
     throw {
       code: 500,
       message: error,
@@ -242,6 +266,10 @@ export const deleteInvite = async (params: { inviteId: string }) => {
     return invite
   } catch (error) {
     console.error(error)
+    logger.error({
+      message: `[deleteInvite] - Error while deleting invite`,
+      error: JSON.stringify(error),
+    })
     throw {
       code: 500,
       message: error,
@@ -326,6 +354,10 @@ export const acceptInvite = async (params: AcceptInviteDTO) => {
     return invite
   } catch (error) {
     console.error(error)
+    logger.error({
+      message: `[acceptInvite] - Error while accepting invite`,
+      error: JSON.stringify(error),
+    })
     throw {
       code: 500,
       message: error,
@@ -362,6 +394,10 @@ export const getInviteByInviteId = async (params: { inviteId: string }) => {
     return invite
   } catch (error) {
     console.error(error)
+    logger.error({
+      message: `[getInviteByInviteId] - Error while getting invite`,
+      error: JSON.stringify(error),
+    })
     throw {
       code: 500,
       message: error,
@@ -421,6 +457,10 @@ export const deleteUser = async (params: {
     return user
   } catch (error) {
     console.error(error)
+    logger.error({
+      message: `[deleteUser] - Error while deleting user`,
+      error: JSON.stringify(error),
+    })
     throw {
       code: 500,
       message: error,
@@ -483,6 +523,10 @@ export const getAllUsers = async (params: { workspaceId: string }) => {
     return users
   } catch (error) {
     console.error(error)
+    logger.error({
+      message: `[getAllUsers] - Error while getting all users`,
+      error: JSON.stringify(error),
+    })
     throw {
       code: 500,
       message: error,
@@ -543,6 +587,11 @@ export const getUserByUserId = async (params: { userId: string }) => {
     return userInfo
   } catch (error) {
     console.error(error)
+    throw {
+      code: 500,
+      message: error,
+      error,
+    }
     throw {
       code: 500,
       message: error,
@@ -611,6 +660,10 @@ export const getUser = async (params: {
     return userInfo
   } catch (error) {
     console.error(error)
+    logger.error({
+      message: `[getUser] - Error while getting user`,
+      error: JSON.stringify(error),
+    })
     throw {
       code: 500,
       message: error,
@@ -684,6 +737,10 @@ export const createUserWithUserIdAndWorkspaceId = async (params: {
     await newUserWorkspace.save()
   } catch (error) {
     console.error(error)
+    logger.error({
+      message: `[createUserWithUserIdAndWorkspaceId] - Error while creating user with userId and workspaceId`,
+      error: JSON.stringify(error),
+    })
     throw {
       code: 500,
       message: error,
@@ -757,6 +814,10 @@ export const createUserWorkspaceRelation = async (
     return newUserWorkspace
   } catch (error) {
     console.error(error)
+    logger.error({
+      message: `[createUserWorkspaceRelation] - Error while creating user workspace relation`,
+      error: JSON.stringify(error),
+    })
     throw {
       code: 500,
       message: error,

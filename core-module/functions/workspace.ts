@@ -1,12 +1,15 @@
 import Workspace, { WorkspaceInterface } from "../schema/Workspace"
 import WorkspaceConfig from "../schema/WorkspaceConfig"
-import { CreateWorkspaceDTO } from "../types/types"
+import { CreateWorkspaceDTO, ZeonServices } from "../types/types"
 import { generateId } from "../utils/utils"
 import { createRole } from "./role"
 import mongoose from "mongoose"
 import { createBulkCategory } from "../service/FinanceService"
 //@ts-ignore
 import categoriesJSON from "./category.json"
+import Logger from "./logger"
+
+const logger = new Logger(ZeonServices.CORE)
 
 export const createWorkspace = async (params: CreateWorkspaceDTO): Promise<WorkspaceInterface> => {
     try {
@@ -82,10 +85,19 @@ export const createWorkspace = async (params: CreateWorkspaceDTO): Promise<Works
           }
         }
 
+        logger.info({
+          message: "[createWorkspace] - Workspace created",
+          payload: JSON.stringify(data)
+        })
+
         return data
     
       } catch (error) {
         console.error(error)
+        logger.error({
+          message: "[createWorkspace] - Error creating workspace",
+          error: JSON.stringify(error)
+        })
         throw {
             code: 500,
             message: error,
@@ -149,10 +161,18 @@ export const deleteWorkspaceByWorkspaceId = async (workspaceId: string): Promise
 
     // update isDeleted to true
     workspace.isDeleted = true
+    logger.info({
+      message: "[deleteWorkspaceByWorkspaceId] - Workspace deleted",
+      payload: JSON.stringify(workspace)
+    })
     await workspace.save()
     return workspace
   } catch (error) {
     console.error(error)
+    logger.error({
+      message: "[deleteWorkspaceByWorkspaceId] - Error deleting workspace",
+      error: JSON.stringify(error)
+    })
     throw {
       code: 500,
       message: error,
