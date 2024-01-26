@@ -436,7 +436,7 @@ httpServer.on("listening", () => init());
 httpServer.listen(port, async () => console.log(`Listening on port ${port}`));
 
 app.use("/health", (req: Request, res: Response) => {
-  res.send("all ok from ticket backend");
+  res.send("all ok from ticket backend | hello");
 });
 
 async function init() {
