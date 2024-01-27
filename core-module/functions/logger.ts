@@ -2,6 +2,7 @@
 // info, warn, error
 import axios from "axios";
 import { ZLoggerInput, ZeonError, ZeonServices } from "../types/types"
+import { json } from "express"
 
 export default class Logger {
     webhook: string
@@ -38,7 +39,7 @@ export default class Logger {
         // send message to slack
         try {
             await axios.post(this.webhook, {
-                message
+                text: JSON.stringify(message)
             })
         } catch (error) {
             console.log("Error sending to slack");
