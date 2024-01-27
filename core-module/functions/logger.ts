@@ -36,8 +36,14 @@ export default class Logger {
 
     private async sendToSlack(message: any) {
         // send message to slack
-        await axios.post(this.webhook, {
-            message
-        })
+        try {
+            await axios.post(this.webhook, {
+                message
+            })
+        } catch (error) {
+            console.log("Error sending to slack");
+            console.log(error);
+        }
+        
     }
 }
