@@ -46,7 +46,7 @@ function CreateContact() {
     validate: {
       firstName: (value) => (value ? null : "Please enter first name"),
       // companyId is required
-      companyId: (value) => (value ? null : "Please select a company"),
+      companyId: (value) => (value ? null : "Please select a contact"),
       emailAddress: (value) =>
         /^\S+@\S+$/.test(value) ? null : "Invalid email",
         phoneNumber: (value) =>
