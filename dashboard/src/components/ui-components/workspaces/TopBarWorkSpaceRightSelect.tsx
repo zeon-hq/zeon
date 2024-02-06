@@ -5,6 +5,7 @@ import ReadNewsSetting from "assets/read_news_setting_right.svg";
 import RoadMapSetting from "assets/roadmap_setting_right.svg";
 import SlackCommunity from "assets/slack_community_right.svg";
 import UserSetting from "assets/user_setting_right.svg";
+import { useNavigate } from "react-router"
 import workSpaceDropdown from "assets/workSpaceDropdown.svg";
 import WorkSpaceSetting from "assets/workspace_setting_right.svg";
 import {
@@ -34,6 +35,7 @@ const TopBarWorkSpaceRightSelect = ({
   workspaceId: string;
 }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { user } = useDashboard();
   const [open, setOpened] = useState(false);
   const userFullName = user.name
@@ -52,24 +54,38 @@ const TopBarWorkSpaceRightSelect = ({
   };
 
   const menuClick = async (data: RightPanelSettingName) => {
+    const url = window.location.href;
+    const checkModuleIsChat = url.includes('/dashboard') || url.includes('/chat');
     switch (data) {
       case RightPanelSettingName.LOGOUT:
         logOutUtils();
         break;
       case RightPanelSettingName.WORKSPACE_SETTING:
-        dispatch(setDefaultWorkSpaceSettingTab(IWorkSpaceSettings.ORGANIZATION));
-        handleClick("detail", "account");
-        dispatch(setShowSidebar(false));
+        if (checkModuleIsChat) {
+          dispatch(setDefaultWorkSpaceSettingTab(IWorkSpaceSettings.ORGANIZATION));
+          handleClick("detail", "account");
+          dispatch(setShowSidebar(false));
+        } else {
+          navigate(`/${workspaceId}/chat?pageName=Organization`)
+        }
         break;    
       case RightPanelSettingName.PROFILE_SETTINGS:
-        dispatch(setDefaultWorkSpaceSettingTab(IWorkSpaceSettings.PROFILE));
-        handleClick("detail", "account");
-        dispatch(setShowSidebar(false));
+        if (checkModuleIsChat) {
+          dispatch(setDefaultWorkSpaceSettingTab(IWorkSpaceSettings.PROFILE));
+          handleClick("detail", "account");
+          dispatch(setShowSidebar(false));
+        } else {  
+          navigate(`/${workspaceId}/chat?pageName=Profile`)
+        }
         break;      
       case RightPanelSettingName.INVITE_USER:
-        dispatch(setDefaultWorkSpaceSettingTab(IWorkSpaceSettings.USERS));
-        handleClick("detail", "account");
-        dispatch(setShowSidebar(false));
+        if (checkModuleIsChat) {
+          dispatch(setDefaultWorkSpaceSettingTab(IWorkSpaceSettings.USERS));
+          handleClick("detail", "account");
+          dispatch(setShowSidebar(false));
+        } else {
+          navigate(`/${workspaceId}/chat?pageName=Users`)
+        }
         break;
 
       default:
