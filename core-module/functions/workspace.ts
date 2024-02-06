@@ -190,5 +190,10 @@ export const initializeDB = async (): Promise<void> => {
   })
   .catch((e) => {
     console.log(e);
+    logger.error({
+      message: "[initializeDB] - Error connecting to DB. Exiting...",
+      error: e
+    })
+
   });
 }
