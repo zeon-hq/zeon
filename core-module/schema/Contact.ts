@@ -51,7 +51,7 @@ const schema = new Schema<Contacts>(
     },
     lastName: {
       type: Schema.Types.String,
-      required: true,
+      required: false,
       maxlength: 500,
     },
     jobPosition: {
