@@ -222,7 +222,7 @@ export async function createDashboardSocket(
     // Create a new document using the SocketModel
     await SocketModel.create({
       workspaceId: workspaceId,
-      socketId: socketId,
+      socketId: socketId
     });
 
     return true; // Return true to indicate success
@@ -237,7 +237,7 @@ export async function removeDashboardSocket(socketId: string): Promise<any> {
     // Assuming you have already connected to the MongoDB database elsewhere in your application
 
     // Find and delete the document using the SocketModel
-    const result = await SocketModel.findOneAndDelete({ socketId });
+    const result = await SocketModel.updateMany({ socketId },{$set:{isDeleted:true}});
 
     return result;
   } catch (error) {
@@ -253,7 +253,7 @@ export async function getConnectedDashboardSockets(
     // Assuming you have already connected to the MongoDB database elsewhere in your application
 
     // Use the SocketModel to find documents with the specified workspaceId
-    const docs = await SocketModel.find({ workspaceId: workspaceId });
+    const docs = await SocketModel.find({ workspaceId: workspaceId, isDeleted:false });
 
     // Extract socketIds from the documents
     const socketIds = docs.map((doc) => doc.socketId.toString());
