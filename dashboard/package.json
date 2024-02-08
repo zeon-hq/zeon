@@ -35,7 +35,7 @@
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
     "@types/react-router-dom": "^5.3.3",
-    "axios": "^0.27.2",
+    "axios": "^1.6.0",
     "chart.js": "^3.9.1",
     "date-fns": "^2.30.0",
     "dayjs": "^1.11.9",
