@@ -22,6 +22,7 @@ import { initializeDB } from "./functions/workspace"
 import CommunicationController from "./controller/CommunicationController";
 import oauthController from "./controller/oauthController";
 import notesRoutes from "./routes/notes";
+import AIController from "./controller/AIController";
 
 declare global {
   namespace Express {
@@ -61,6 +62,17 @@ app.use("/datamodel", verifyIdentity,dataModelRoutes );
 app.post("/internal/communication/send-email", CommunicationController.sendEmail);
 
 app.post('/internal/slack/message', oauthController.sendMessage);
+
+// AI related routes
+// upload pdf and injest the data to store in vector's db
+app.post('/ai/injest-file', verifyIdentity, AIController.injestPdf);
+
+// list of pdf files
+app.get('/ai/file-list', verifyIdentity, AIController.listfiles);
+
+// delete file
+app.delete('/ai/delete-file', verifyIdentity, AIController.deleteFile);
+
 
 app.get("/health", (req: Request, res: Response)=>{
   console.log('core service health check');
