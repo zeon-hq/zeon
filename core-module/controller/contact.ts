@@ -18,7 +18,7 @@ export const createContactController = async (req: Request, res: Response) => {
     const contact = await createContact({
       ...req.body,
       emailAddress: formatEmailAddress(req.body?.emailAddress),
-      phoneNumber: formatPhoneNumber(req.body?.phoneNumber),
+      phoneNumber: req.body?.phoneNumber ? formatPhoneNumber(req.body?.phoneNumber) : undefined,
     })
     return res.status(200).json({
       success: true,
@@ -103,7 +103,7 @@ export const updateContactController = async (req: Request, res: Response) => {
     const contact = await updateContact(contactId, {
       ...req.body,
       emailAddress: formatEmailAddress(req.body?.emailAddress),
-      phoneNumber: formatPhoneNumber(req.body?.phoneNumber),
+      phoneNumber: req.body?.phoneNumber ? formatPhoneNumber(req.body?.phoneNumber) : undefined,
     })
     return res.status(200).json({
       success: true,

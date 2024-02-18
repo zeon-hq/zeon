@@ -43,6 +43,7 @@ export function formatPhoneNumber(
 
     for (let i = 0; i < phoneNumbers.length; i++) {
       const phoneNumberStr = phoneNumbers[i];
+      if(!phoneNumberStr) continue;
       const phoneNumber = phoneUtil.parse(phoneNumberStr, 'US'); // You can specify the default country code
 
       if (!phoneUtil.isValidNumber(phoneNumber)) {
