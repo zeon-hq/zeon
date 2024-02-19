@@ -1,3 +1,4 @@
+import "web-streams-polyfill/dist/polyfill.es6.js";
 import dotenv from "dotenv";
 dotenv.config();
 import express, { Request, Response } from "express";

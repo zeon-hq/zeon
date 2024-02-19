@@ -110,6 +110,40 @@ const ZeonWidgetCard = () => {
   const operatingHoursTimeZone = widgetDetails?.behavior?.operatingHours?.timezone;
 
 
+  useEffect(() => {
+    getOpenTicketData();
+  }, []);
+
+
+  const getOpenTicketData = async () => {
+    const getWidgetId: any = localStorage.getItem("widgetId");
+    if (getWidgetId) {
+      const getData: any = await getOpenTicket(getWidgetId);
+      // dispatch(setMessage(getData.data.ticket))
+      dispatch(setAllOpenConversations(getData.data.ticket));
+    } else {
+      const widgetId = generateRandomString(6);
+      localStorage.setItem("widgetId", widgetId);
+    }
+  };
+  const getChannel = async (channelId:string) => {
+    try {
+      const res = await getChannelById(channelId);
+      if (res.status != 200) {
+        dispatch(setWidgetDetails(res.data.channel));
+        getOpenTicketData();
+      } else {
+        // Handle Error here
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    // get channelId from the invoke script of the widget
+    ('MzrhqX') && getChannel('MzrhqX' as string);
+  }, ['MzrhqX']);
   return (
     <>
     <WholeWrapper>
