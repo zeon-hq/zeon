@@ -2,12 +2,20 @@ import { Box, Button } from "@mantine/core"
 import styled from "styled-components"
 import { device } from "../../util/dashboardUtils"
 
+export const Container = styled(Box)`
+  display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    height: 100vh;
+`
+
 export const AuthWrapper = styled(Box)`
   display: grid;
-  grid-template-columns: 60% 40%;
-  height: 100vh;
-  padding: 24px;
-  padding-top: 64px;
+    grid-template-columns: 60% 40%;
+    width: 1000px;
+    height: 500px;
+    gap: 20px;
 `
 
 export const AuthHeading = styled.p`
