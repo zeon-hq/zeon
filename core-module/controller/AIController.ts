@@ -95,23 +95,4 @@ export default class AIController {
         // end
     }
 
-    public static async listfiles(req: Request, res: Response) {
-        // start
-
-        // get the list of files along with the vectoring status
-
-        // end
-    }
-
-    public static async deleteFile(req: Request, res: Response) {
-        // start
-
-        // delete the file from the vector db
-
-        // delete from the file storage system
-
-        // delete from the mongo
-
-        // end
-    }
 }

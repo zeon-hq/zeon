@@ -1,4 +1,4 @@
-import express, { Router } from "express"
+import express, { Router } from "express";
 import {
     createCompanyController,
     getCompanyController,
@@ -10,7 +10,7 @@ import {
 import { updateAdditionalDatafieldController } from "../controller/company"
 
 
-const router: Router = express.Router()
+const router: Router = express.Router();
 
 
 // get company by companyId

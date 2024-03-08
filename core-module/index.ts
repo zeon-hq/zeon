@@ -9,20 +9,16 @@ import companyRoutes from "./routes/company";
 import contactRoutes from "./routes/contact";
 import dataModelRoutes from "./routes/dataModel";
 import cors from "cors";
-import {
-  verifyIdentity
-} from "./functions/user"
-
-
-
-const app = express();
-const port = process.env.CORE_BACKEND_PORT
-
+import { verifyIdentity } from "./functions/user"
 import { UserInterface } from "./schema/User"
 import { initializeDB } from "./functions/workspace"
 import CommunicationController from "./controller/CommunicationController";
 import oauthController from "./controller/oauthController";
 import notesRoutes from "./routes/notes";
+import AIRoute from "./routes/AIRoute";
+
+const app = express();
+const port = process.env.CORE_BACKEND_PORT
 
 declare global {
   namespace Express {
@@ -32,9 +28,8 @@ declare global {
   }
 }
 
-
 // connect to mongodb
-initializeDB()
+initializeDB();
 
 // setup cors to allow all origins
 app.use(cors({
@@ -57,7 +52,8 @@ app.use("/workspaces", verifyIdentity,workspaceRoutes);
 app.use("/companies",verifyIdentity, companyRoutes);
 app.use("/contacts",verifyIdentity, contactRoutes);
 app.use("/notes",verifyIdentity, notesRoutes);
-app.use("/datamodel", verifyIdentity,dataModelRoutes );
+app.use("/datamodel", verifyIdentity,dataModelRoutes);
+app.use("/ai", verifyIdentity, AIRoute);
 
 app.post("/internal/communication/send-email", CommunicationController.sendEmail);
 
@@ -79,10 +75,3 @@ app.listen(port, () => {
 export {
   verifyIdentity
 }
-
-
-
-
-
-
-
