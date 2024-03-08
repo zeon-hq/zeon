@@ -50,6 +50,21 @@ export const AuthSubHeading = styled.p`
   line-height: 24px; /* 150% */
 `
 
+export const MainBackground = styled(Box)`
+  background-image: url('https://zeonhq.b-cdn.net/BG.svg');
+  background-size: cover;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+
+export const FormContainer = styled(Box)`
+  background: white;
+  padding: 16px 48px;
+  border-radius: 8px;
+`
+
 export const AuthContainer = styled(Box)`
   display: flex;
   justify-content: center;
@@ -78,5 +93,16 @@ export const AuthButton = styled(Button)`
     background: var(--primary-700, #3054B9);
     /* Shadows/shadow-xs */
     box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+`
+
+export const AuthSecondaryButton = styled(AuthButton)`
+  background: #fff;
+  border: 1px solid var(--gray-300, #D0D5DD);
+  color: #344054;
+
+  // on hover, change background to var(--gray-100, #F0F2F7)
+  &:hover {
+    background: var(--gray-100, #F0F2F7)
+  }
 
 `
