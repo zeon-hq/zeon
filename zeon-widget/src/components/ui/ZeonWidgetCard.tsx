@@ -1,14 +1,16 @@
 import { Card as MTCard, Space, Text } from "@mantine/core";
-import { MessageType } from "components/chat/Chat.types";
-import { preProcessText } from "components/hooks/commonUtils";
+import { IPropsType, MessageType } from "components/chat/Chat.types";
+import { generateRandomString, preProcessText } from "components/hooks/commonUtils";
 import useWidget from "components/hooks/useWidget";
 import { ReactNode } from "react";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 import { setEmail, setMessage, setStep } from "redux/slice";
 import styled from "styled-components";
-import { IPropsType } from "components/chat/Chat.types";
-
+import useEmbeddable, { IEmbeddableOutput } from "components/hooks/useEmbeddable";
+import { getChannelById, getOpenTicket } from "api/api";
+import { useEffect } from "react";
+import { setAllOpenConversations, setShowWidget, setWidgetDetails } from "redux/slice";
 const WholeWrapper = styled.div`
 ${(props: IPropsType) => props.theme.isEmbeddable ? 'height: 100%;' : ''}
 `;
@@ -102,13 +104,14 @@ export const SingleCard = ({
 const ZeonWidgetCard = () => {
   const dispatch = useDispatch();
   const { widgetDetails, isOutOfOperatingHours, allOpenConversations } = useWidget();
-
+  const isEmbeddable:IEmbeddableOutput = useEmbeddable();
   const enableDuringOperatingHours = widgetDetails?.behavior?.operatingHours?.enableOperatingHours;
   const hideNewConversationButtonWhenOffline = widgetDetails?.behavior?.operatingHours?.hideNewConversationButtonWhenOffline;
   const operatingHoursToTime = widgetDetails?.behavior?.operatingHours?.operatingHours.to;
   const operatingHoursFromTime = widgetDetails?.behavior?.operatingHours?.operatingHours.from;
   const operatingHoursTimeZone = widgetDetails?.behavior?.operatingHours?.timezone;
 
+  const hideNewConversationButtonWhenOfflineAndOutOfOperatingHours = enableDuringOperatingHours && hideNewConversationButtonWhenOffline && isOutOfOperatingHours(operatingHoursFromTime,operatingHoursToTime, operatingHoursTimeZone);
 
   useEffect(() => {
     getOpenTicketData();
@@ -142,12 +145,12 @@ const ZeonWidgetCard = () => {
 
   useEffect(() => {
     // get channelId from the invoke script of the widget
-    ('MzrhqX') && getChannel('MzrhqX' as string);
-  }, ['MzrhqX']);
+    (isEmbeddable?.channelId) && getChannel(isEmbeddable?.channelId as string);
+  }, [isEmbeddable?.channelId]);
   return (
     <>
     <WholeWrapper>
-      {enableDuringOperatingHours && hideNewConversationButtonWhenOffline && isOutOfOperatingHours(operatingHoursToTime, operatingHoursFromTime, operatingHoursTimeZone) 
+      {hideNewConversationButtonWhenOfflineAndOutOfOperatingHours
       ? (
         <></>
       ) : (

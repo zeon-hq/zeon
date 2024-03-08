@@ -24,6 +24,8 @@ import {
   getNotes,
 } from "./functions/notes"
 
+import Logger from "./functions/logger"
+
 
 import { createRole,getAllRolesForWorkspace} from "./functions/role"
 import { decodeJWTToken } from "./utils/utils"
@@ -51,4 +53,5 @@ export {
   updateNote,
   deleteNote,
   getNotes,
+  Logger
 }

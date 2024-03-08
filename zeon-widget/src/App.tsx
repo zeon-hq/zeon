@@ -13,9 +13,9 @@ function App({ widgetId }: any) {
   const dispatch = useDispatch();
   const isEmbeddable:IEmbeddableOutput = useEmbeddable();
 
-  const getChannel = async () => {
+  const getChannel = async (id:string) => {
     try {
-      const res = await getChannelById(widgetId || isEmbeddable.channelId);
+      const res = await getChannelById(id);
       dispatch(setWidgetDetails(res.data.channel));
     } catch (error) {
       console.log(error);
@@ -24,8 +24,8 @@ function App({ widgetId }: any) {
 
   useEffect(() => {
     // get channelId from the invoke script of the widget
-    getChannel();
-  }, []);
+    getChannel(widgetId || isEmbeddable.channelId);
+  }, [widgetId, isEmbeddable.channelId]);
 
   return (
     <>

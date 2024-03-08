@@ -5,12 +5,17 @@ export interface Socket extends Document{
   
   workspaceId: string;
   socketId: string;
+  isDeleted: boolean;
 }
 
 // Define the Mongoose schema
 const socketSchema = new Schema<Socket>({
   workspaceId: String,
   socketId: String,
+  isDeleted: {
+    type: Boolean,
+    default: false
+  }
 },{
   timestamps:true
 });

@@ -34,7 +34,6 @@ const Workspaces = () => {
     const getWorkspaceToWhichUserIsInvited = async () => {
         try {
             const res = await getUserInvites()
-            console.log(">>>", res)
             setInvites(res.invites)
         } catch (error) {
             console.log(">>>", error)

@@ -18,7 +18,7 @@ export const createContactController = async (req: Request, res: Response) => {
     const contact = await createContact({
       ...req.body,
       emailAddress: formatEmailAddress(req.body?.emailAddress),
-      phoneNumber: formatPhoneNumber(req.body?.phoneNumber),
+      phoneNumber: req.body?.phoneNumber ? formatPhoneNumber(req.body?.phoneNumber) : undefined,
     })
     return res.status(200).json({
       success: true,
@@ -103,7 +103,7 @@ export const updateContactController = async (req: Request, res: Response) => {
     const contact = await updateContact(contactId, {
       ...req.body,
       emailAddress: formatEmailAddress(req.body?.emailAddress),
-      phoneNumber: formatPhoneNumber(req.body?.phoneNumber),
+      phoneNumber: req.body?.phoneNumber ? formatPhoneNumber(req.body?.phoneNumber) : undefined,
     })
     return res.status(200).json({
       success: true,
@@ -189,11 +189,11 @@ export const updateAdditionalDatafieldController = async (
 export const getCRMDetailsController = async (req: Request, res: Response) => {
   const { workspaceId } = req.params
   // fetch all contacts
-  const contacts = await ContactsModel.find({ workspaceId }).select(
+  const contacts = await ContactsModel.find({ workspaceId, isDeleted: false }).select(
     "firstName lastName contactId"
   )
   // fetch all companies
-  const companies = await   CompanyModel.find({ workspaceId }).select(
+  const companies = await   CompanyModel.find({ workspaceId, isDeleted: false }).select(
     "name companyId"
   )
 

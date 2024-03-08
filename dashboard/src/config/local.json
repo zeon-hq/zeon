@@ -3,6 +3,8 @@
   "TICKET_SERVICE": "https://tickets.zeonhq.com",
   "widgetJSFile": "https://zeonhq.b-cdn.net/zeon-widget.js",
   "widgetCSSFile": "https://zeonhq.b-cdn.net/zeon-widget.css",
-  "CORE_API_DOMAIN" : "https://core.zeonhq.com",
-  "FINANCE_API_DOMAIN" : "https://finance.zeonhq.com"
+  "CORE_API_DOMAIN": "https://core.zeonhq.com",
+  "FINANCE_API_DOMAIN": "https://finance.zeonhq.com",
+  "API_URL": "https://robyn.zeonhq.com/backend",
+  "SOCKET_URL": "https://robyn.zeonhq.com"
 }

@@ -1,6 +1,6 @@
 {
   "name": "zeon-core",
-  "version": "1.0.26",
+  "version": "1.0.29",
   "description": "Core functionality for the Zeon project",
   "keywords": [
     "zeon",
@@ -18,7 +18,10 @@
     "start": "ts-node index.ts",
     "dev": "nodemon --exec ts-node index.ts",
     "build": "tsc",
-    "test": "vitest"
+    "test": "vitest",
+    "tag": "gh release create v$(node -p \"require('./package.json').version\")",
+    "publish": "npm publish",
+    "release": "npm run tag && npm run publish"
   },
   "dependencies": {
     "@langchain/openai": "^0.0.14",

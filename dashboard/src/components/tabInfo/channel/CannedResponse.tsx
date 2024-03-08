@@ -55,7 +55,6 @@ const CannedResponse = () => {
   const getAllCannedResponse = async () => {
     try {
       const res = await getCannedResponseFromChannelId(selectedPage.name);
-      console.log(res);
       setCannedResponse(res.canned);
     } catch (error) {
       console.log(error);

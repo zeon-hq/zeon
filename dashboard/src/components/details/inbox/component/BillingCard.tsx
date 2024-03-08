@@ -44,7 +44,6 @@ const BillingCard = ({
   const callSubscribe = async () => {
     try {
       const data = await subscribe(workspaceInfo.workspaceId, planCode)
-      console.log(data)
       window.open(data.sessionUrl, "_blank")
     } catch (error) {
       console.log(error)

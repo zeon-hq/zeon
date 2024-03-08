@@ -2,12 +2,14 @@ export interface IFinance {
   expense: IExpense;
   categories: ICategory[];
   tags: ITag[];
+  vendorInfo : any | null;
 }
 
 export interface IExpense {
   expenseList: IExpenseDTO[];
   selectedExpense: IExpenseDTO | null;
   createMode: ICreateModeExpense | null;
+  inCreateMode: boolean;
 }
 
 export interface ICreateModeExpense {

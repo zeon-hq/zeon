@@ -10,6 +10,7 @@ interface IPanelLabel {
   onButtonClick?: () => void;
   hideRightImage?: boolean;
   isButton?: boolean;
+  loading ?: boolean;
 }
 
 const PanelLabel = ({
@@ -22,6 +23,7 @@ const PanelLabel = ({
   onButtonClick,
   hideRightImage = false,
   isButton = false,
+  loading = false
 }: IPanelLabel) => {
   return (
     <Flex justify={"space-between"} align={"center"}>
@@ -71,6 +73,7 @@ const PanelLabel = ({
               paddingRight: "8px",
             }}
             radius="xs"
+            loading={loading}
             size="xs"
             fw={600}
             fs={{

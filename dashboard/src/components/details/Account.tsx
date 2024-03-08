@@ -150,7 +150,7 @@ const Account = () => {
                   type: "detail",
                   name: "inbox",
                   //@ts-ignore
-                  channelId: channelsInfo?.channels[0].channelId,
+                  channelId: channelsInfo?.channels?.[0]?.channelId,
                 })
               );
             }}

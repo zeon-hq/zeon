@@ -40,6 +40,7 @@ export async function updateChannel(channelId: string, updatedData: any) {
       `${apiDomainUrl}/channel/${channelId}`,
       { updatedData }
     );
+    return res;
   } catch (error) {
     console.log(error);
   }
@@ -286,7 +287,6 @@ export const getCannedResponseFromChannelId = async (channelId:string) => {
 
 export const addUsersToChannel = async (channelId:string, userIds:string[]) => {
   try {
-    console.log(">>>>",channelId,userIds)
     const res:any = await axiosInstance.post(`${apiDomainUrl}/channel/addUser`,{
       channelId,
       userIds

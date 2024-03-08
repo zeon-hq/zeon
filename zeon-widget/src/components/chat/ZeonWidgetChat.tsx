@@ -123,12 +123,12 @@ const ZeonWidgetChat = () => {
       overflow: "auto",
     }}>
       <ChatHeader />
-      <TopText>
+      {/* <TopText>
         <Text size="sm" weight={500}>
           {" "}
           A copy will be sent to: {email}{" "}
         </Text>
-      </TopText>
+      </TopText> */}
       <Wrapper as={"form"} onSubmit={handleSubmit(submitForm)}>
         <ChatContainer>
           {!isOnScreen && (

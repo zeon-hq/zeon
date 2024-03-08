@@ -118,28 +118,8 @@ const ZeonWidgetModal = () => {
     dispatch(setShowWidget(false));
   });
 
-  const getChannel = async (channelId:string) => {
-    try {
-      const res = await getChannelById(channelId);
-      if (res.status != 200) {
-        dispatch(setWidgetDetails(res.data.channel));
-        getOpenTicketData();
-      } else {
-        // Handle Error here
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
-  useEffect(() => {
-    getOpenTicketData();
-  }, []);
 
-  useEffect(() => {
-    // get channelId from the invoke script of the widget
-    (isEmbeddable?.channelId) && getChannel(isEmbeddable?.channelId as string);
-  }, [isEmbeddable?.channelId]);
 
 
   const getOpenTicketData = async () => {
@@ -172,9 +152,9 @@ const ZeonWidgetModal = () => {
               <Header isForm={step === "form"} />
               <Info>
                 {step === "initial" ? (
-                  <ZeonWidgetForm />
+                  <ZeonWidgetCard />
                   ) : step === "form" ? (
-                    <ZeonWidgetCard />
+                    <ZeonWidgetForm />
                     ) : (
                   <p> {step} </p>
                 )}

@@ -31,6 +31,7 @@ function CreateContact() {
   const editValues = selectedContactPage?.contactData;
 
   const [companyOptions, setCompanyOptions] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const form = useForm({
     initialValues: {
@@ -40,12 +41,16 @@ function CreateContact() {
       jobPosition: editValues?.jobPosition || "",
       emailAddress: findPrimaryEmail(editValues?.emailAddress) || "",
       phoneNumber: findPrimaryPhoneNumE164(editValues?.phoneNumber) || "",
-      linkedInUrl: editValues?.linkedInUrl || "",
+      linkedInUrl: editValues?.linkedInUrl || "https://www.linkedin.com/",
     },
     validate: {
+      firstName: (value) => (value ? null : "Please enter first name"),
+      // companyId is required
+      companyId: (value) => (value ? null : "Please select a contact"),
       emailAddress: (value) =>
         /^\S+@\S+$/.test(value) ? null : "Invalid email",
-      phoneNumber: (value) =>
+        phoneNumber: (value) =>
+        !value ? null :
         /^\+(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\d{1,14}$/.test(
           value
         )
@@ -78,6 +83,7 @@ function CreateContact() {
 
   const handleSubmit = async (data: any) => {
     try {
+      setLoading(true);
       data.workspaceId = workspaceInfo.workspaceId;
       data.emailAddress = [data?.emailAddress];
       data.phoneNumber = [data?.phoneNumber];
@@ -95,10 +101,18 @@ function CreateContact() {
         icon: null,
         autoClose: 5000,
       });
-
       dispatch(setSelectedContactPage({ type: "all" }));
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      showNotification({
+        title: "Error",
+        message: "Contact creation failed",
+        color: "red",
+        icon: null,
+        autoClose: 5000,
+      });
+      setLoading(false);
     }
   };
 
@@ -146,6 +160,7 @@ function CreateContact() {
           radius="xs"
           size="xs"
           fw={600}
+          loading={loading}
           fs={{
             fontSize: "14px",
           }}

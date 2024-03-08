@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux"
 import { initContactData } from "reducer/crmSlice"
 import styled from "styled-components"
 import { RiDeleteBin5Line } from "react-icons/ri";
+import NotFound from "components/ui-components/NotFound"
 
 const NoteWrapper = styled.div`
   border-radius: var(--radius-xs, 4px);
@@ -77,7 +78,7 @@ const Note = ({ notes,resourceId,resourceType }: Props) => {
   return (
     <div>
       {notes.length === 0 ? (
-        <div>No notes found</div>
+        <NotFound message="No notes found" />
       ) : (
         notes.map((note) => (
           <NoteWrapper>

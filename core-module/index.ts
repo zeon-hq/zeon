@@ -19,6 +19,7 @@ import AIRoute from "./routes/AIRoute";
 
 const app = express();
 const port = process.env.CORE_BACKEND_PORT
+import AIController from "./controller/AIController";
 
 declare global {
   namespace Express {
@@ -59,11 +60,15 @@ app.post("/internal/communication/send-email", CommunicationController.sendEmail
 
 app.post('/internal/slack/message', oauthController.sendMessage);
 
+// AI related routes
+// upload pdf and injest the data to store in vector's db
+app.post('/ai/injest-file', verifyIdentity, AIController.injestPdf);
+
+
 app.get("/health", (req: Request, res: Response)=>{
   console.log('core service health check');
   res.send("all ok from zeon core service health |");
 });
-
 
 // run server at port 6000
 app.listen(port, () => {

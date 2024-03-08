@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+      "resolveJsonModule": true,
       "module": "commonjs",
       "esModuleInterop": true,
       "allowSyntheticDefaultImports": true,
@@ -13,7 +14,6 @@
       "sourceMap": true,
       "outDir": "./dist",
       "baseUrl": ".",
-      
       "declaration": true,
       "types": ["node"],
       "paths": {

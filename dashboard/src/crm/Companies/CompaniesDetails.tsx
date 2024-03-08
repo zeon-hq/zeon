@@ -42,6 +42,7 @@ import { fetchCompany } from "service/CRMService";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { AdditonalData } from "crm/AdditonalData";
 import { isEmpty } from "lodash";
+import Loader from "components/ui-components/Loader"
 
 const Container = styled.div`
   display: flex;
@@ -65,6 +66,7 @@ const MiddleContainer = styled.div`
   width: 45%;
   border-left: 1px solid #e1e1e1;
   padding-left: 2%;
+  padding-right: 2%;
 `;
 
 const RightContainer = styled.div`
@@ -403,6 +405,8 @@ function CompaniesDetails() {
             <div
               style={{
                 paddingTop: "16px",
+                overflow: "auto",
+                height: "calc(100vh - 139px)"
               }}
             >
               <Note
@@ -444,7 +448,7 @@ function CompaniesDetails() {
       )}
     </Container>
   ) : (
-    <div>Loading...</div>
+    <Loader />
   );
 }
 

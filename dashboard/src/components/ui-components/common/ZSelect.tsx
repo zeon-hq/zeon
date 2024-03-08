@@ -31,7 +31,6 @@ const styles = {
 
 const ZSelect = (props: Props) => {
   const { formProps, inputProps, label } = props;
-  console.log(inputProps)
   return (
     <>
       <ZLabel label={label} />

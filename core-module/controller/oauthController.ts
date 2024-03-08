@@ -63,7 +63,7 @@ export default class oauthController {
 
     public static async sendMessage(req: Request, res: Response): Promise<any> {
         try {
-            const { channelId, message, token,blocks } = req.body;
+            const { channelId, message, token,blocks, thread_ts } = req.body;
 
             if (!channelId || !(message || blocks) || !token) {
                 return res.status(400).send({
@@ -90,16 +90,20 @@ export default class oauthController {
 
             for (const channelId of channelIdArray) {
                 // Post a message to a channel
-                const result = await web.chat.postMessage({
+                const postMessagePayload = {
                     channel: channelId,
                     text: message,
-                    blocks:blocks
-                });
+                    blocks,
+                    thread_ts // is the thread_ts in the body, then reply to the message in the thread, instead of the new message
+                }
+                
+                const result = await web.chat.postMessage(postMessagePayload);
 
                 results.push({
                     channelId,
                     code: "200",
                     message: `Successfully sent message in conversation ${channelId}`,
+                    result
                 });
 
             }

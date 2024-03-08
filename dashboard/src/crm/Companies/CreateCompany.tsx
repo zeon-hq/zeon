@@ -25,35 +25,56 @@ import { createCompany, editCompany } from "service/CRMService";
 import { showNotification } from "@mantine/notifications";
 import useDashboard from "hooks/useDashboard";
 import useCrm from "hooks/useCrm";
+import { useState } from "react"
 
 function CreateCompanies() {
   const dispatch = useDispatch();
   const { workspaceInfo } = useDashboard();
   const { selectedCompanyPage } = useCrm();
+  const [loading, setLoading] = useState(false);
 
   const editValues = selectedCompanyPage?.companyData;
-
-  console.log("<<<<<<<<<<<<<<<editValues>>>>>>>>>>>>>>>", selectedCompanyPage);
 
   const form = useForm({
     initialValues: {
       name: editValues?.name || "",
       url: editValues?.url || "",
       description: editValues?.description || "",
-      linkedInUrl: editValues?.linkedInUrl || "",
-      xUrl: editValues?.xUrl || "",
+      linkedInUrl: editValues?.linkedInUrl || "https://www.linkedin.com/",
+      xUrl: editValues?.xUrl || "https://twitter.com/",
       location: editValues?.location || "",
       phoneNumber: editValues?.phoneNumber || "",
       companySize: editValues?.companySize || "",
       companyWorth: editValues?.companyWorth || "",
     },
     validate: {
+      //name should not be empty
+      name: (value) => (value ? null : "Please enter company name"),
       phoneNumber: (value) =>
+        !value ? null :
         /^\+(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\d{1,14}$/.test(
           value
         )
           ? null
           : "Invalid phone number, Please use international format",
+      //linkedInUrl should be valid if entered else null
+      linkedInUrl: (value) =>
+        !value ? null :
+        /^https:\/\/www.linkedin.com\/.*/.test(value)
+          ? null
+          : "Invalid LinkedIn URL",
+        // xUrl should be valid if entered else null
+      xUrl: (value) =>
+        !value ? null :
+        /^https:\/\/twitter.com\/.*/.test(value)
+          ? null
+          : "Invalid Twitter URL",
+      // companySize should be valid
+      companySize: (value) => (value ? null : "Please select company size"),
+      // companyWorth should be valid
+      companyWorth: (value) => (value ? null : "Please select company worth"),
+          
+      
     },
   });
 
@@ -94,6 +115,7 @@ function CreateCompanies() {
 
   const handleSubmit = async (data: any) => {
     try {
+      setLoading(true);
       data.workspaceId = workspaceInfo.workspaceId;
       data.phoneNumber = [data?.phoneNumber];
       
@@ -111,8 +133,17 @@ function CreateCompanies() {
         autoClose: 5000,
       });
       dispatch(setSelectedCompanyPage({ type: "all" }));
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      showNotification({
+        title: "Error",
+        message: `Company ${editValues?.companyId ? "update" : "creation"} failed`,
+        color: "red",
+        icon: null,
+        autoClose: 5000,
+      });
+      setLoading(false);
     }
   };
 
@@ -158,6 +189,7 @@ function CreateCompanies() {
             background: "#3C69E7",
           }}
           radius="xs"
+          loading={loading}
           size="xs"
           fw={600}
           fs={{
@@ -215,7 +247,7 @@ function CreateCompanies() {
           labelProps={{ style: labelStyles }}
           {...form.getInputProps("linkedInUrl")}
         />
-
+      
         <TextInput
           label="Twitter"
           placeholder="Twitter URL"
@@ -226,7 +258,7 @@ function CreateCompanies() {
           labelProps={{ style: labelStyles }}
           {...form.getInputProps("xUrl")}
         />
-
+        
         <TextInput
           label="Location"
           placeholder="Company Location"
@@ -245,7 +277,7 @@ function CreateCompanies() {
 
         <TextInput
           label="Phone Number"
-          placeholder="Company Phone Number"
+          placeholder="Ex: +918987678789"
           icon={
             <Image
               src={phoneIcon}
@@ -258,7 +290,7 @@ function CreateCompanies() {
           labelProps={{ style: labelStyles }}
           {...form.getInputProps("phoneNumber")}
         />
-
+      
         <Select
           label="Employee Count"
           data={employeeCountOptions}

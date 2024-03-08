@@ -137,7 +137,7 @@ const ChannelDetail = () => {
         onTabChange={(value) => {
           setTabValue(value as TabsName);
           // @ts-ignore
-          navigate(`/${workspaceId}/chat?channelId=${channelsInfo?.channels[0].channelId}&pageName=${value}`);
+          navigate(`/${workspaceId}/chat?channelId=${channelsInfo?.channels?.[0]?.channelId}&pageName=${value}`);
         }}
         orientation="vertical"
         defaultValue={tabValue}
@@ -151,7 +151,7 @@ const ChannelDetail = () => {
                   type: "detail",
                   name: "inbox",
                   //@ts-ignore
-                  channelId: channelsInfo?.channels[0].channelId,
+                  channelId: channelsInfo?.channels?.[0]?.channelId,
                 })
               );
               // @ts-ignore

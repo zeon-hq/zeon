@@ -35,7 +35,7 @@ function App() {
     <>
       <MantineProvider withNormalizeCSS withGlobalStyles>
         <MyGlobalStyles />
-        <Notifications />
+        <Notifications position="top-center" />
 
         <BrowserRouter>
           <Routes>

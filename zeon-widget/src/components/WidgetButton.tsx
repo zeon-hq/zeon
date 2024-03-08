@@ -65,7 +65,7 @@ const WidgetButton = () => {
     });
 
     socketInstance.on("typing", (data) => {
-     
+     console.log('typing',data);
     });
 
     socketInstance.on("close-ticket", (data)=> {

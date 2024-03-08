@@ -107,6 +107,7 @@ export interface ChannelsInfo {
     name: string;
     channelId: string;
     slackChannelId?: string;
+    accessToken?: string;
     members: string[];
     emailNewTicketNotification?: boolean;
   };
@@ -451,8 +452,14 @@ export const dashboardSlice = createSlice({
       state,
       action: PayloadAction<{ emailNewTicketNotification: boolean }>
     ) => {
-      state.channelsInfo[state.selectedPage.name].emailNewTicketNotification =
-        action.payload.emailNewTicketNotification;
+      state.channelsInfo[state.selectedPage.name].emailNewTicketNotification = action.payload.emailNewTicketNotification;
+    },
+    updateSlackTicketNotification: (
+      state,
+      action: PayloadAction<{ slackChannelId: string, accessToken:string }>
+    ) => {
+      state.channelsInfo[state.selectedPage.name].slackChannelId = action.payload.slackChannelId;
+      state.channelsInfo[state.selectedPage.name].accessToken = action.payload.accessToken;
     },
     addInChatWidget: (state, action: PayloadAction<InChatWidgetInterface>) => {
       state.channelsInfo[state.selectedPage.name].inChatWidgets.push(
@@ -498,7 +505,7 @@ export const dashboardSlice = createSlice({
     setTicketFilterText: (state, action: PayloadAction<ChronologyName>) => {
       state.inbox.ticketFilterText = action.payload;
     },
-    setActiveChat: (state, action: PayloadAction<IInbox>) => {
+    setActiveChat: (state, action: PayloadAction<IInbox | null>) => {
       state.activeChat = action.payload;
     },
     setDefaultWorkSpaceSettingTab: (state, action:PayloadAction<IWorkSpaceSettings>) => {
@@ -586,7 +593,8 @@ export const {
   setTicketFilterText,
   setShowSidebar,
   updateEmailTicketCreateNotification,
-  setDefaultWorkSpaceSettingTab
+  setDefaultWorkSpaceSettingTab,
+  updateSlackTicketNotification
 } = dashboardSlice.actions;
 
 export default dashboardSlice.reducer;
