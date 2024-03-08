@@ -1,9 +1,10 @@
 import useDashboard from "hooks/useDashboard";
 import _ from "lodash";
+import styled from "styled-components";
+import ChatConfigRightSide from "./ChatConfigRightSide";
 import ChatArea from "./component/ChatArea";
 import ChatHeader from "./component/ChatHeader";
 import NoContentDialogue from "./component/NoContentDialogue";
-import styled from "styled-components";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -32,8 +33,20 @@ const Chat = () => {
         </div>
       ) : (
         <>
-          <ChatHeader />
-          <ChatArea />
+          <div style={{
+            display: 'flex',
+            width: '100%'
+          }}>
+            <div
+            style={{
+              width: '100%',
+            }}
+            >
+              <ChatHeader />
+              <ChatArea />
+            </div>
+            <ChatConfigRightSide/>
+          </div>
         </>
       )}
     </DivWrapper>
