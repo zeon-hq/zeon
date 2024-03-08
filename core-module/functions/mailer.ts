@@ -8,7 +8,7 @@ const transporter = createTransport({
   port: 587,
   auth: {
     "user" : "jay@neoimperium.com",
-    "pass":"xsmtpsib-ba8d5e3ae61198b7251e233cd5527dc6ba16c9963ba5024c4c83303a595bceda-8KMJaRHmgzbDPxBU"
+    "pass":process.env.SMTP
   }
 
 })
@@ -30,27 +30,20 @@ const url = "https://api.brevo.com/v3/smtp/email"
 
 export const sendMail = async  (body: any) => {
   // construct header
-  // const headers = {
-  //   "Content-Type": "application/json",
-  //   "api-Key": "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",
-  // }
+  const headers = {
+    "Content-Type": "application/json",
+    "api-Key": <api_key>
+  }
 
   // // construct body
-  // const data = {
-  //   ...body,
-  // }
+  const data = {
+    ...body,
+  }
 
   // send request
   try {
-    // const res = await axios.post(url, data, { headers })
-    // return res
-    transporter.sendMail(mailOptions, function(error, info){
-      if (error) {
-          console.log(error);
-      } else {
-          console.log('Email sent: ' + info.response);
-      }
-    });
+    const res = await axios.post(url, data, { headers })
+    return res
   } catch (err) {
     console.log(err)
     return err
