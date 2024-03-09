@@ -42,7 +42,7 @@ app.use(cors({
   credentials: true
 })); 
 
-  // set up router
+// set up router
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -59,10 +59,6 @@ app.use("/ai", verifyIdentity, AIRoute);
 app.post("/internal/communication/send-email", CommunicationController.sendEmail);
 
 app.post('/internal/slack/message', oauthController.sendMessage);
-
-// AI related routes
-// upload pdf and injest the data to store in vector's db
-app.post('/ai/injest-file', verifyIdentity, AIController.injestPdf);
 
 
 app.get("/health", (req: Request, res: Response)=>{
