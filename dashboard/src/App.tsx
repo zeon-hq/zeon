@@ -14,6 +14,9 @@ import InviteUsers from "components/core/InviteUsers";
 import Details from "components/details/Details";
 import Finance from "finance/expense/Finance";
 import CrmLayout from "crm/CrmLayout";
+import ForgetPassword from "components/auth/ForgetPassword";
+import SetNewPassword from "components/auth/SetNewPassword";
+import CheckEmail from "components/auth/CheckEmail";
 
 function MyGlobalStyles() {
   return (
@@ -50,14 +53,14 @@ function App() {
                 </ProtectedRoute>
               }
             />
-               <Route
-                path="/:workspaceId/chat"
-                element={
-                  <Layout >
-                    <Details/>
-                  </Layout>
-                }
-              />
+            <Route
+              path="/:workspaceId/chat"
+              element={
+                <Layout>
+                  <Details />
+                </Layout>
+              }
+            />
             <Route
               path="/dashboard/:workspaceId"
               element={
@@ -74,6 +77,9 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path="/forgot-password" element={<ForgetPassword />} />
+            <Route path="/reset-password" element={<SetNewPassword />} />
+            <Route path="/check-email" element={<CheckEmail />} />
             <Route
               path="/workspaces"
               element={
@@ -90,14 +96,14 @@ function App() {
                 </ProtectedRoute>
               }
             />
-              <Route
-                path="/workspaces/chat"
-                element={
-                  <ProtectedRoute>
-                   <Workspaces/>
-                  </ProtectedRoute>
-                }
-              />
+            <Route
+              path="/workspaces/chat"
+              element={
+                <ProtectedRoute>
+                  <Workspaces />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route
               path="/finance/:workspaceId"

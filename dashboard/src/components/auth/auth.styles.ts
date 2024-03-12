@@ -2,18 +2,25 @@ import { Box, Button } from "@mantine/core"
 import styled from "styled-components"
 import { device } from "../../util/dashboardUtils"
 
+export const Container = styled(Box)`
+  display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    height: 100vh;
+`
+
 export const AuthWrapper = styled(Box)`
-  display: grid;
-  grid-template-columns: 60% 40%;
-  height: 100vh;
-  padding: 24px;
-  padding-top: 64px;
+    height: 500px;
+    gap: 20px;
+    display: flex;
+    gap:30px;
 `
 
 export const AuthHeading = styled.p`
   color: var(--gray-900, #101828);
   /* Display sm/Semibold */
-
+  text-align: center;
   font-size: 30px;
   margin-bottom: 8px;
   font-style: normal;
@@ -35,11 +42,26 @@ export const AuthLabel = styled.p`
 export const AuthSubHeading = styled.p`
   color: var(--gray-600, #475467);
   /* Text md/Regular */
-  
+  text-align: center;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
   line-height: 24px; /* 150% */
+`
+
+export const MainBackground = styled(Box)`
+  background-image: url('https://zeonhq.b-cdn.net/BG.svg');
+  background-size: cover;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+
+export const FormContainer = styled(Box)`
+  background: white;
+  padding: 32px 48px;
+  border-radius: 8px;
 `
 
 export const AuthContainer = styled(Box)`
@@ -70,5 +92,16 @@ export const AuthButton = styled(Button)`
     background: var(--primary-700, #3054B9);
     /* Shadows/shadow-xs */
     box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+`
+
+export const AuthSecondaryButton = styled(AuthButton)`
+  background: #fff;
+  border: 1px solid var(--gray-300, #D0D5DD);
+  color: #344054;
+
+  // on hover, change background to var(--gray-100, #F0F2F7)
+  &:hover {
+    background: var(--gray-100, #F0F2F7)
+  }
 
 `
