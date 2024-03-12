@@ -1,5 +1,4 @@
 import { Box, Grid, Space, Text } from "@mantine/core";
-import { useInputState } from "@mantine/hooks";
 import { showNotification } from "@mantine/notifications";
 import WorkSpaceProfile from "assets/admin_table_question.svg";
 import { AxiosResponse } from "axios";
@@ -13,7 +12,6 @@ import {
   changeUserInvitedStatus,
   deleteWorkSpaceUser,
   fetchAllInviteUsers,
-  inviteUserToWorkspace,
 } from "service/CoreService";
 import { Lock } from "tabler-icons-react";
 import { getRank } from "util/dashboardUtils";
@@ -31,11 +29,11 @@ const Admin = () => {
   const [fullList, setFullList] = useState([]);
 
   const deleteUserFunc = async (item: IUser) => {
-    if (item.status == "Pending") {
+    if (item.status === "Pending") {
       const inviteUserRemove: AxiosResponse = await changeUserInvitedStatus(
         item.userId
       );
-      if (inviteUserRemove.status == 200) {
+      if (inviteUserRemove.status === 200) {
         await fetchAllInvitedUsers();
       }
     } else {
@@ -43,7 +41,7 @@ const Admin = () => {
         item.userId,
         workspaceInfo.workspaceId
       );
-      if (deleteResponse.status == 200) {
+      if (deleteResponse.status === 200) {
         await fetchAllInvitedUsers();
       }
     }
@@ -63,7 +61,7 @@ const Admin = () => {
 
   useEffect(() => {
     fetchAllInvitedUsers();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const data: any = invitesList.map((data: any) => {
@@ -91,7 +89,7 @@ const Admin = () => {
     });
 
     setFullList(data.concat(userData));
-  }, [invitesList?.length, workspaceInfo?.allUsers?.length]);
+  }, [invitesList?.length, workspaceInfo?.allUsers?.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const loggedInUserRank = getRank(workspaceInfo?.allUsers, user.userId);
 
@@ -187,7 +185,7 @@ const Admin = () => {
               {fullList?.map((item: IUser) => {
                 return (
                   <AdminDiv
-                    hideDeleteBtn={user.userId == item.userId}
+                    hideDeleteBtn={user.userId === item.userId}
                     onClick={async () => {
                       setOpened(true);
                       setUserItem(item);

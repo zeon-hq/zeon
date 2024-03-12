@@ -37,42 +37,42 @@ const ChannelDetail = () => {
   const channelSettingListArray: TabInfo[] = [
     {
       name: TabsName.Overview,
-      icon: <img src={OverviewDashboard} />,
+      icon: <img alt="dashboard" src={OverviewDashboard} />,
       active: false,
     },
     {
       name: TabsName.DEPLOYMENT,
-      icon: <img src={DeploymentDashboard} />,
+      icon: <img alt="deployement" src={DeploymentDashboard} />,
       active: true,
     },
     {
       name: TabsName.USER,
-      icon: <img src={UserDashboard} />,
+      icon: <img alt="user" src={UserDashboard} />,
       active: true,
     },
     {
       name: TabsName.CANNED_RESPONSES,
-      icon: <img src={CannedDashboard} />,
+      icon: <img alt="canned" src={CannedDashboard} />,
       active: true,
     },
     {
       name: TabsName.IN_CHAT_WIDGETS,
-      icon: <img src={InChatDashboard} />,
+      icon: <img alt="inchat" src={InChatDashboard} />,
       active: true,
     },
     {
       name: TabsName.APPEARENCE,
-      icon: <img src={AppearenceDashboard} />,
+      icon: <img alt="appearance" src={AppearenceDashboard} />,
       active: true,
     },
     {
       name: TabsName.INTEGRATIONS,
-      icon: <img src={IntegrationDashboard} />,
+      icon: <img alt="integrations" src={IntegrationDashboard} />,
       active: true,
     },
     {
       name: TabsName.BEHAVIORS,
-      icon: <img src={BehvaiourDashboard} />,
+      icon: <img alt="behaviour" src={BehvaiourDashboard} />,
       active: true,
     },
   
@@ -113,7 +113,7 @@ const ChannelDetail = () => {
     } else {
       setTabValue(TabsName.DEPLOYMENT as TabsName);
     }
-  }, []);
+  }, []); // eslint-disable-line
 
   return (
     // <Navbar width={{ base: 300 }} height={"100vh"} style={{backgroundColor:'white'}}>

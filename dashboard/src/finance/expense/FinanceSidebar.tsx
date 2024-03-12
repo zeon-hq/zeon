@@ -12,11 +12,10 @@ import {
   SideBarTopWrapper,
 } from "components/details/inbox/inbox.styles";
 import NavItem from "components/ui-components/NavItem";
-import hashIcon from "assets/hash-02.svg";
 import expenseIcon from "assets/line-chart-down-03.svg";
-import incomeIcon from "assets/file-x-02.svg"
-import { setCreateMode, setSelectedExpense } from "reducer/financeSlice"
-import { useLocation, useNavigate } from "react-router"
+import incomeIcon from "assets/file-x-02.svg";
+import { setCreateMode, setSelectedExpense } from "reducer/financeSlice";
+import { useLocation, useNavigate } from "react-router";
 const MainWrapper = styled.div`
   height: calc(100vh - 62px);
   overflow: auto;
@@ -24,41 +23,8 @@ const MainWrapper = styled.div`
   padding: 16px;
 `;
 
-const tags = [
-  {
-    label: "Expense",
-    icon: hashIcon,
-    onClick: () => {
-      console.log("expense");
-    },
-  },
-  {
-    label: "Not Paid",
-    icon: hashIcon,
-    onClick: () => {
-      console.log("income");
-    },
-  },
-  {
-    label: "Contact",
-    icon: hashIcon,
-    onClick: () => {
-      console.log("assets");
-    },
-  },
-  {
-    label: "Companies",
-    icon: hashIcon,
-    onClick: () => {
-      console.log("liabilities");
-    },
-  },
-];
-
-
-
 const FinanceSidebar = ({ workspaceId }: { workspaceId: string }) => {
-  const { channel, loading, workspaceInfo } = useDashboard();
+  const { workspaceInfo } = useDashboard();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

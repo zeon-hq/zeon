@@ -6,7 +6,6 @@ import { CRMResourceType } from "../type";
 import { showNotification } from "@mantine/notifications";
 import { createAdditionalFields } from "service/CRMService";
 import ErrorMessage from "components/ui-components/common/ErrorMessage"
-import { set } from "dot-prop"
 
 type Props = {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;

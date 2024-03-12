@@ -16,7 +16,7 @@ interface ISingleCardWrapper {
 
 const ChannelCardTitle = styled.p<ISingleCardWrapper>`
   color: ${(props: ISingleCardWrapper) =>
-    props.selected == true ? "#243f8b" : "#344054"};
+    props.selected === true ? "#243f8b" : "#344054"};
   /* Text sm/Medium */
 
   font-size: 12px;
@@ -27,7 +27,7 @@ const ChannelCardTitle = styled.p<ISingleCardWrapper>`
 
 const ChannelCardLable = styled.p<ISingleCardWrapper>`
   color: ${(props: ISingleCardWrapper) =>
-    props.selected == true ? "#243f8b" : "#344054"};
+    props.selected === true ? "#243f8b" : "#344054"};
   /* Text sm/Regular */
 
   font-size: 12px;
@@ -41,9 +41,9 @@ const SingleCardWrapper = styled.div<ISingleCardWrapper>`
   margin-top: 12px;
 
   border: ${(props: ISingleCardWrapper) =>
-    props.selected == true ? "2px solid #3C69E7" : "1px solid #EAECF0"};
+    props.selected === true ? "2px solid #3C69E7" : "1px solid #EAECF0"};
   background: ${(props: ISingleCardWrapper) =>
-    props.selected == true ? " #F5F8FF" : "#FFF"};
+    props.selected === true ? " #F5F8FF" : "#FFF"};
 
   display: flex;
   padding: 16px;
@@ -95,7 +95,7 @@ const SingleChannelCard = ({ title, label, selected }: ISingleChannelCard) => {
           </Container>
           <Container m={0} p={0}>
             {selected ? (
-              <img src={WorkSpaceProfile} />
+              <img alt="profile" src={WorkSpaceProfile} />
             ) : (
               <>
                 <ComingSoonCard />
@@ -116,7 +116,7 @@ const ChooseChannel = () => {
           return (
             <>
               <SingleChannelCard
-                selected={index == 0}
+                selected={index === 0}
                 title={channelData.title}
                 label={channelData.description}
               />

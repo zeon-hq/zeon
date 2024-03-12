@@ -8,7 +8,7 @@ const ReadDocsButton = ({hideDocIcon}:IShowDocs) => {
   return (
     <Button
     radius="md"
-    leftIcon={!hideDocIcon ? <img src={DocsIcon} /> : <></>}
+    leftIcon={!hideDocIcon ? <img alt="docs" src={DocsIcon} /> : <></>}
     style={{
       color: "black",
       backgroundColor: "white",

@@ -1,4 +1,4 @@
-import { Box, Button, Flex, TextInput, Text, Space } from "@mantine/core";
+import { Box, Flex, TextInput, Space } from "@mantine/core";
 import {
   AuthButton,
   AuthContainer,
@@ -7,7 +7,6 @@ import {
   AuthHeading,
   AuthLabel,
   AuthSubHeading,
-  AuthWrapper,
   FormContainer,
   MainBackground,
 } from "components/auth/auth.styles";
@@ -18,7 +17,6 @@ import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from "react-router";
 import Select from "react-select";
 import { createWorkspace } from "service/CoreService";
-import AuthHero from "assets/authHero2.png";
 import { Link } from "react-router-dom";
 
 type Props = {};

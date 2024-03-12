@@ -39,7 +39,7 @@ const Account = () => {
       setTabValue(pageName as IWorkSpaceSettings);
     }
 
-  }, []);
+  }, []); // eslint-disable-line
 
   
   const profileSetting: TabInfo[] = [

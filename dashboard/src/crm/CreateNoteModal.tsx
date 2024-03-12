@@ -5,8 +5,7 @@ import { initCompanyData, initContactData, setShowNoteCreateModal } from "reduce
 import { labelStyles } from "./styles"
 import { Controller, useForm } from "react-hook-form"
 import { createNote } from "./CRMService"
-import useCrm from "hooks/useCrm"
-import { CRMResourceType, NoteType } from "./type"
+import { CRMResourceType } from "./type"
 import { showNotification } from "@mantine/notifications"
 import ErrorMessage from "components/ui-components/common/ErrorMessage"
 
@@ -18,13 +17,11 @@ type Props = {
 }
 
 const CreateNoteModal = ({
-  showNoteCreateModal,
   resourceId,
   resourceType
 }: Props) => {
   const [loading, setLoading] = React.useState(false)
   const dispatch = useDispatch()
-  const {} = useCrm()
   const {
     register,
     handleSubmit,
@@ -40,7 +37,7 @@ const CreateNoteModal = ({
   const onSubmit = async (data: any) => {
     try {
       setLoading(true)
-      const res = await createNote({
+      await createNote({
         content: data.content,
         noteType: data.noteType,
         source: "DASHBOARD",

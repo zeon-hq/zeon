@@ -1,6 +1,3 @@
-import { AppShell } from "@mantine/core"
-import Details from "components/details/Details"
-import Sidebar from "components/details/sidebar/Sidebar"
 import Topbar from "components/topbar/Topbar"
 import { useEffect } from "react"
 import useDashboard from "hooks/useDashboard"
@@ -51,7 +48,7 @@ const Layout = ({ children }: { children: any }) => {
     })
 
     socketInstance.emit("dashboard-reconnect-event", workspaceId)
-  }, [socketInstance])
+  }, [socketInstance]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
@@ -66,7 +63,7 @@ const Layout = ({ children }: { children: any }) => {
           overflow: "hidden",
         }}
       >
-        {workspaceId && showSidebar == true ? (
+        {workspaceId && showSidebar === true ? (
           isFinance ? (
             <FinanceSidebar workspaceId={workspaceId} />
           ) : isChat ? (
@@ -82,13 +79,13 @@ const Layout = ({ children }: { children: any }) => {
     </>
     // <AppShell
     //   padding="0px"
-    //   navbar={workspaceId && showSidebar == true ? <Sidebar workspaceId={workspaceId} /> : <></>}
+    //   navbar={workspaceId && showSidebar === true ? <Sidebar workspaceId={workspaceId} /> : <></>}
     //   header={<Topbar workspaceId={workspaceId || ""}/>}
     //   styles={(theme) => ({
     //     main: {
     //       height:'100vh',
     //       overflowY: 'auto',
-    //       backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.white ,
+    //       backgroundColor: theme.colorScheme ==== 'dark' ? theme.colors.dark[8] : theme.colors.white ,
     //       marginTop:'0px',
     //     },
 

@@ -5,7 +5,7 @@ import useDashboard from "hooks/useDashboard";
 import { useEffect, useState } from "react";
 
 const Dashboard = () => {
-  const { workspaceInfo, showSidebar } = useDashboard();
+  const { workspaceInfo } = useDashboard();
 
   useEffect(() => {
     setUserData({

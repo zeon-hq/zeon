@@ -1,7 +1,6 @@
 import React, { ChangeEvent, useState, useEffect, useRef } from "react";
 import { TextInput, Select, Text } from "@mantine/core";
-import { Control, Controller, UseFormSetValue } from "react-hook-form";
-import { error } from "console";
+import { Control, UseFormSetValue } from "react-hook-form";
 import ErrorMessage from "./ErrorMessage";
 
 type Props = {
@@ -20,20 +19,16 @@ type Props = {
 };
 
 const ZCurrency = ({
-  control,
   name,
-  rules,
   defaultValue,
   setValue,
   label,
-  setError,
-  clearError,
   error
 }: Props) => {
   const [commaSeparatedValue, setCommaSeparatedValue] = useState("");
   const [currency, setCurrency] = useState("USD");
   const [symbol, setSymbol] = useState("$");
-  const [decimalDigits, setDecimalDigits] = useState(2);
+  const [decimalDigits, setDecimalDigits] = useState(2); // eslint-disable-line
   const inputRef = useRef<HTMLInputElement>(null);
 
   type CurrencyData = {
@@ -56,7 +51,7 @@ const ZCurrency = ({
       setDecimalDigits(currencyData[currency].decimal_digits);
     }
     setValue(`${name}.currency`, currency);
-  }, [currency]);
+  }, [currency]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const cursorPosition = event.target.selectionStart;
@@ -85,7 +80,7 @@ const ZCurrency = ({
       );
       setValue(`${name}.currency`, defaultValue.currency);
     }
-  }, [defaultValue, name]);
+  }, [defaultValue, name]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleCurrencyChange = (value: string) => setCurrency(value);
  console.log(error)

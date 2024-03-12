@@ -1,4 +1,4 @@
-import { Button, Menu, Select, rem } from "@mantine/core"
+import { Menu } from "@mantine/core"
 import {
   capitalizeFirstLetter,
   getReadableDate,
@@ -18,17 +18,12 @@ import {
 import { IExpenseDTO } from "finance/type"
 import useFinance from "finance/useFinance"
 import React, { useEffect, useState } from "react"
-import { FiDelete } from "react-icons/fi"
 import { useDispatch } from "react-redux"
 import { useParams, useNavigate, useLocation } from "react-router"
 import { setCreateMode, setSelectedExpense } from "reducer/financeSlice"
-import { Settings, SignLeft } from "tabler-icons-react"
 import channelCreate from "assets/channelCreate.svg"
 import { IoIosArrowDown } from "react-icons/io"
-import { camelCase } from "lodash"
 import { LuArrowDownUp } from "react-icons/lu"
-import useQuery from "hooks/useQuery"
-import Loader from "components/ui-components/Loader"
 import NotFound from "components/ui-components/NotFound"
 
 type Props = {}
@@ -101,14 +96,14 @@ const ExpenseListing = (props: Props) => {
   useEffect(() => {
     const query = new URLSearchParams(location.search)
     setFilter(query.get("filter") || "all")
-  }, [location.search])
+  }, [location.search]) //eslint-disable-line
 
   useEffect(() => {
     // if url has no searchParams filter, set filter to all
     if (!query.get("filter")) {
       navigate(`/finance/${workspaceId}?filter=all`, { replace: true })
     }
-  }, [])
+  }, []) //eslint-disable-line
 
   return (
     <ExpenseListingContainer>

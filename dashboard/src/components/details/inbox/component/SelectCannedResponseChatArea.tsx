@@ -34,7 +34,7 @@ const SelectCannedResponse = ({ handleChange, setActiveTab, query }: Props) => {
   // moved the above code to below, because in the above code while sending each message, get canned message in get triggered
   useEffect(() => {
     getAllCannedResponses();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div>

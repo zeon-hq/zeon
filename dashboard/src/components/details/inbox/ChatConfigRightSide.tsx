@@ -27,7 +27,7 @@ const ChatConfigRightSide = () => {
 
   const handleMarkAsResolved = async () => {
     try {
-      const res = await markAsResolved(
+      await markAsResolved(
         activeChat?.ticketId || "",
         activeChat?.isOpen ?? true
       )
@@ -70,7 +70,7 @@ const ChatConfigRightSide = () => {
     }
 
     setOptions(newOptions || [])
-  }, [workspaceInfo])
+  }, [workspaceInfo]) // eslint-disable-line
 
   const handleUnassign = async () => {
     try {

@@ -1,38 +1,30 @@
-import { Box, Flex, Space, Text, TextInput, Image, Grid } from "@mantine/core";
+import { Space, TextInput, Image } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
-import AuthHero from "assets/authHero2.png";
 import { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import PhoneInput, { CountryData } from "react-phone-input-2";
+import { useForm } from "react-hook-form";
 import "react-phone-input-2/lib/style.css";
 import { useLocation, useNavigate } from "react-router";
-import { Link } from "react-router-dom";
+
 import {
-  sendForgetPasswordEmail,
-  signup,
   updatePassword,
 } from "service/CoreService";
-import SectionImg from "assets/Section.png";
 import {
   AuthButton,
   AuthContainer,
   AuthForm,
   AuthFormHeader,
-  AuthHeading,
   AuthLabel,
   AuthSubHeading,
-  AuthWrapper,
   FormContainer,
   MainBackground,
 } from "./auth.styles";
 import ErrorMessage from "components/ui-components/common/ErrorMessage";
-import { useParams } from "react-router";
+
 
 const SetNewPassword = () => {
   const {
     register,
     handleSubmit,
-    control,
     formState: { errors },
   } = useForm();
   const [loading, setLoading] = useState(false);
@@ -48,12 +40,12 @@ const SetNewPassword = () => {
     try {
       setLoading(true);
 
-      const res = await updatePassword({
+      await updatePassword({
         email,
         token: token,
         password: data.password,
       })
-        .then((res) => {
+        .then(() => {
           setLoading(false);
           navigate("/workspace-creation");
         })
@@ -83,9 +75,7 @@ const SetNewPassword = () => {
     if (at) {
       navigate("/workspaces/chat");
     }
-  }, []);
-
-  const [phoneData, setPhoneData] = useState<CountryData | {}>({});
+  }, []); // eslint-disable-line
 
   return (
     <MainBackground>

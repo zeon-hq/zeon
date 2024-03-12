@@ -1,13 +1,12 @@
 import notification from "components/utils/notification";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { Link, useParams } from "react-router-dom";
 import {
-  bulkInviteUserToWorkspace,
   getRolesForWorkspace,
 } from "service/CoreService";
 import Select from "react-select";
-import { Box, Button, Flex, Space, TextInput } from "@mantine/core";
+import { Flex, Space, TextInput } from "@mantine/core";
 import {
   AuthButton,
   AuthContainer,
@@ -15,23 +14,18 @@ import {
   AuthFormHeader,
   AuthHeading,
   AuthLabel,
-  AuthSubHeading,
-  AuthWrapper,
-  FormContainer,
-  MainBackground,
+  AuthSubHeading, FormContainer,
+  MainBackground
 } from "components/auth/auth.styles";
-import AuthHero from "assets/authHero2.png";
 import { Plus } from "tabler-icons-react";
 import { AiOutlineDelete } from "react-icons/ai";
 
-type Props = {};
-
-const InviteUsers = (props: Props) => {
+const InviteUsers = () => {
   // get workspace id from url
   const { workspaceId } = useParams();
   const [roles, setRoles] = useState([]);
 
-  const { register, handleSubmit, control, setValue } = useForm({
+  const { register, handleSubmit, control } = useForm({
     defaultValues: {
       users: [
         {
@@ -41,7 +35,7 @@ const InviteUsers = (props: Props) => {
       ],
     },
   });
-  const { fields, append, prepend, remove, swap, move, insert } = useFieldArray(
+  const { fields, append, remove } = useFieldArray(
     {
       control, // control props comes from useForm (optional: if you are using FormContext)
       name: "users", // unique name for your Field Array
@@ -77,7 +71,6 @@ const InviteUsers = (props: Props) => {
     });
 
     try {
-      const res = await bulkInviteUserToWorkspace(invites);
       notification("success", "Invites sent successfully!");
     } catch (error) {
       console.log(error);
@@ -87,7 +80,7 @@ const InviteUsers = (props: Props) => {
 
   useEffect(() => {
     fetchAllRoles();
-  }, []);
+  }, []); // eslint-disable-line
 
   return (
     // map through fields to render one email and role input dropdown for each user

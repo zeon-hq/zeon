@@ -8,13 +8,9 @@ import {
   setSelectedPage,
 } from "reducer/crmSlice"
 import { useDispatch } from "react-redux"
-import useCrm from "hooks/useCrm"
-import CreateCannedResponseModal from "components/ui-components/CreateCannedResponseModal"
-import CreateNoteModal from "./CreateNoteModal"
 
 function Dashboard() {
   const dispatch = useDispatch()
-  const { showNoteCreateModal } = useCrm()
 
   const Heading = styled.h1`
     font-size: 28px;

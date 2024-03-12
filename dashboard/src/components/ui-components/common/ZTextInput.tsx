@@ -1,8 +1,6 @@
 import { TextInput,TextInputProps } from '@mantine/core'
 import {  RegisterOptions, Controller, Control } from 'react-hook-form'
-import React from 'react'
 import ErrorMessage from './ErrorMessage'
-import { error } from 'console'
 
 /**
  * inspect element to see the class name

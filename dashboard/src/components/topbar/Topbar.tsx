@@ -1,12 +1,9 @@
-import { Image, Text, Popover, Button } from "@mantine/core";
+import {  Text } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
-import topBarDocs from "assets/topBarDocs.svg";
 import TopBarWorkSpaceLeftSelect from "components/ui-components/workspaces/TopBarWorkSpaceLeftSelect";
 import TopBarWorkSpaceRightSelect from "components/ui-components/workspaces/TopBarWorkSpaceRightSelect";
 import useDashboard from "hooks/useDashboard";
 import { useEffect, useState } from "react";
-import LoadingAnimation from "assets/robyn_btn.json";
-import Lottie from "react-lottie-player";
 import { useDispatch } from "react-redux";
 import {
   setLoading,
@@ -18,19 +15,7 @@ import { getWorkspaces } from "service/CoreService";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
 import Pill from "./Pill";
-import {
-  InnerDivWrapper,
-  TopBarDivWrapper,
-  TopBarWrapper,
-} from "./topbar.styles";
-import { is } from "date-fns/locale";
-import Widget from "./Widget";
 
-const styles = {
-  dropdown: {
-    padding: "0px",
-  },
-};
 
 const Topbar = ({ workspaceId }: { workspaceId: string }) => {
   const navigate = useNavigate();
@@ -67,7 +52,7 @@ const Topbar = ({ workspaceId }: { workspaceId: string }) => {
 
   useEffect(() => {
     getUserWorkspaces();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (window.location.href.includes("dashboard")) {
@@ -84,10 +69,10 @@ const Topbar = ({ workspaceId }: { workspaceId: string }) => {
       setIsFinanceSelected(true);
     }
   }, [
-    window.location.href.includes("dashboard"),
-    window.location.href.includes("relation"),
-    window.location.href.includes("finance"),
-  ]);
+    window.location.href.includes("dashboard"), // eslint-disable-line react-hooks/exhaustive-deps
+    window.location.href.includes("relation"), // eslint-disable-line react-hooks/exhaustive-deps
+    window.location.href.includes("finance"), // eslint-disable-line react-hooks/exhaustive-deps
+  ]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const getUserWorkspaces = async () => {
     dispatch(setLoading(true));

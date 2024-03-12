@@ -1,7 +1,7 @@
 import { Badge, Flex, Image, Text, Tooltip } from "@mantine/core";
 import readChatProfileLogo from "assets/readChatProfileLogo.svg";
 import selectedChatProfileLogo from "assets/selectedChatProfileLogo.svg";
-import { ChronologyName, FilterName, IWorkSpaceSettings, RightPanelSettingName, SubFilterName } from "components/types";
+import { ChronologyName, FilterName, IWorkSpaceSettings, SubFilterName } from "components/types";
 import useDashboard from "hooks/useDashboard";
 import _ from "lodash";
 import { useEffect } from "react";
@@ -46,15 +46,6 @@ const DetailWrapper = styled.div`
   width: 100%;
 `;
 
-const SmallCircle = styled.span`
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  margin-right: 5px;
-  background-color: ${(props: { status: ITicketType }) =>
-    props.status === ITicketType.OPEN ? "red" : "green"};
-  border-radius: 50%;
-`;
 
 
 type ITicketStatusBadge = {
@@ -68,7 +59,7 @@ const TicketStatusBadge = ({ ticketType }: ITicketStatusBadge) => {
         size="sm"
         variant="filled"
         radius="sm"
-        color={ticketType == ITicketType.OPEN ? "red" : "green"}
+        color={ticketType === ITicketType.OPEN ? "red" : "green"}
       >
         {" "}
 
@@ -169,7 +160,7 @@ const MessageContainer = () => {
       //@ts-ignore
       dispatch(setSelectedPage({ type: "detail", name: "inbox", channelId: channelsInfo.channels[0].channelId }));
     }
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Wrapper>

@@ -4,7 +4,6 @@ import {
   Flex,
   Grid,
   Select,
-  Space,
   TextInput,
   Textarea,
 } from "@mantine/core";
@@ -303,7 +302,7 @@ const Behavior = () => {
                           value={fromTime}
                           label="Enter Operating Hours"
                           onChange={(e) =>{
-                            const fromValue = e?.target?.value;
+                           
                             setFromTime(e?.target?.value)
                             handleChange({
                               subType: "operatingHours",
@@ -374,7 +373,7 @@ const Behavior = () => {
           <Button
             radius="md"
             className="primary"
-            leftIcon={<img src={ProfileSave} />}
+            leftIcon={<img alt="profile" src={ProfileSave} />}
             color="indigo"
             onClick={() => {
               handleSave();

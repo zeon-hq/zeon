@@ -1,7 +1,6 @@
 import { Flex, Space, Text } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import "react-phone-input-2/lib/style.css";
 import { useLocation, useNavigate } from "react-router";
 import { sendForgetPasswordEmail } from "service/CoreService";
@@ -19,12 +18,6 @@ import { MdOutlineMail } from "react-icons/md";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 
 const CheckEmail = () => {
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -38,14 +31,14 @@ const CheckEmail = () => {
     if (at) {
       navigate("/workspaces/chat");
     }
-  }, []);
+  }, []); // eslint-disable-line
 
   const onSubmit = async () => {
     try {
       setLoading(true);
 
-      const res = await sendForgetPasswordEmail(email)
-        .then((res) => {
+      await sendForgetPasswordEmail(email)
+        .then(() => {
           setLoading(false);
           //   navigate(`/reset-password?email=${data.email}&token=${res.token}`);
           showNotification({

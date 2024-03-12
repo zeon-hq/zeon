@@ -1,8 +1,6 @@
 import { Flex } from "@mantine/core"
 import useDashboard from "hooks/useDashboard"
-import _ from "lodash"
 import { useState } from "react"
-import CreateChannelModal from "../sidebar/CreateChannelModal"
 import Chat from "./Chat"
 import Messages from "./Messages"
 import NoContentDialogue from "./component/NoContentDialogue"

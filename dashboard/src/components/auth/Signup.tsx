@@ -1,23 +1,19 @@
-import { Box, Flex, Space, Text, TextInput, Image, Grid } from "@mantine/core";
+import { Box, Flex, Space, Text, TextInput, Image } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
-import AuthHero from "assets/authHero2.png";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import PhoneInput, { CountryData } from "react-phone-input-2";
+import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
-import { signup } from "service/CoreService";
-import SectionImg from "assets/Section.png";
+
 import {
   AuthButton,
   AuthContainer,
   AuthForm,
   AuthFormHeader,
-  AuthHeading,
   AuthLabel,
   AuthSubHeading,
-  AuthWrapper,
   FormContainer,
   MainBackground,
 } from "./auth.styles";
@@ -36,26 +32,6 @@ const Signup = () => {
   const onSubmit = async (data: any) => {
     try {
       setLoading(true);
-      const phoneNumber: any = {
-        //@ts-ignore
-        countryCode: phoneData?.dialCode,
-        num: data.phone,
-      };
-      const name = data.firstName + " " + data.lastName;
-      const res = await signup(name, data.email, data.password, phoneNumber)
-        .then((res) => {
-          setLoading(false);
-          navigate("/workspace-creation");
-        })
-        .catch((err) => {
-          console.log(err);
-          setLoading(false);
-          showNotification({
-            title: "Error",
-            message: err,
-            color: "red",
-          });
-        });
     } catch (error: any) {
       console.log(error);
       setLoading(false);
@@ -73,12 +49,10 @@ const Signup = () => {
     if (at) {
       navigate("/workspaces/chat");
     }
-  }, []);
-
-  const [phoneData, setPhoneData] = useState<CountryData | {}>({});
+  }, []); // eslint-disable-line
 
   return (
-    <MainBackground >
+    <MainBackground>
       <FormContainer>
         <Space h={32} />
         <Image
@@ -178,7 +152,6 @@ const Signup = () => {
                   country={"in"}
                   value={value}
                   onChange={(value, data) => {
-                    setPhoneData(data);
                     onChange(value);
                   }}
                 />

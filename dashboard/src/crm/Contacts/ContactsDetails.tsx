@@ -11,14 +11,11 @@ import {
 import leftArrowIcon from "assets/leftArrow.svg"
 import linkedinIcon from "assets/linkedin.svg"
 import mailIcon from "assets/mail.svg"
-import mailWhiteIcon from "assets/mailWhite.svg"
 import noteIcon from "assets/note.svg"
 import phoneIcon from "assets/phoneCall.svg"
-import plusIcon from "assets/plus.svg"
 import { useDispatch } from "react-redux"
 import {
   initContactData,
-  setSelectedContactPage,
   setShowNoteCreateModal,
 } from "reducer/crmSlice"
 import styled from "styled-components"
@@ -28,9 +25,8 @@ import CreateNoteModal from "crm/CreateNoteModal"
 import { CRMResourceType } from "crm/type"
 import { findPrimaryEmail, findPrimaryPhoneNumIntl } from "crm/utils"
 import { useEffect, useState } from "react"
-import { fetchContact } from "service/CRMService"
 import { AdditonalData } from "crm/AdditonalData/index"
-import { useLocation, useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import Note from "crm/Notes/Note"
 import { isEmpty } from "lodash"
 import Loader from "components/ui-components/Loader"
@@ -83,15 +79,12 @@ function ContactsDetails() {
     showNoteCreateModal,
     selectedContactPage,
     selectedContact,
-    selectedCompany,
   } = useCrm()
   const { contactId, workspaceId } = useParams()
 
   const [activeTab, setActiveTab] = useState<string | null>(
     selectedContactPage.activeTab ?? "notes"
   )
-
-  const location = useLocation()
   const navigate = useNavigate()
 
   const handleBack = () => {
@@ -107,7 +100,7 @@ function ContactsDetails() {
       //@ts-ignore
       dispatch(initContactData({ contactId }))
     }
-  }, [])
+  }, []) // eslint-disable-line
 
   useEffect(() => {
     const url = new URL(window.location.href)
@@ -119,7 +112,7 @@ function ContactsDetails() {
       params.set("activeTab", activeTab ?? "interactions")
       navigate(`${url.pathname}?${params.toString()}`)
     }
-  }, [activeTab, navigate])
+  }, [activeTab, navigate]) // eslint-disable-line
 
   const stepsData = [
     {

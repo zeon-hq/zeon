@@ -1,6 +1,5 @@
 import { ColorPicker, Flex, Grid, Space, Text } from "@mantine/core";
 import paintColor from "assets/paintColor.svg";
-import { Label } from "components/ui-components";
 import { useState } from "react";
 import styled from "styled-components";
 interface ISelectColor {
@@ -90,7 +89,7 @@ const SelectColor = ({
             <StyledButton
               onClick={() => setShowTopBannerColorPicker((prev) => !prev)}
             >
-              <img src={paintColor} style={{ paddingRight: "5px" }} />
+              <img alt="paint" src={paintColor} style={{ paddingRight: "5px" }} />
               Select Color
             </StyledButton>
           </Flex>

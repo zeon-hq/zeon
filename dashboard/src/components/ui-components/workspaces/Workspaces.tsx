@@ -43,7 +43,7 @@ const Workspaces = () => {
     useEffect(() => {
         getUserWorkspaces()
         getWorkspaceToWhichUserIsInvited()
-    },[])
+    },[]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div>

@@ -1,15 +1,17 @@
+/* eslint-disable react/jsx-pascal-case */
 import { Box, Button, Flex, Image, MantineProvider } from "@mantine/core"
 import companyIcon from "assets/companies.svg"
 import editIcon from "assets/edit.svg"
 import trashIcon from "assets/trash.svg"
 import useDashboard from "hooks/useDashboard"
 import {
+  // eslint-disable-next-line react/jsx-pascal-case
   MRT_GlobalFilterTextInput,
-  MRT_Row,
+  MRT_Row, // eslint-disable-line react-hooks/exhaustive-deps
   MantineReactTable,
   useMantineReactTable,
-  type MRT_ColumnDef,
-  MRT_PaginationState,
+  type MRT_ColumnDef, // eslint-disable-line react-hooks/exhaustive-deps
+  MRT_PaginationState, // eslint-disable-line react-hooks/exhaustive-deps
 } from "mantine-react-table"
 import { useEffect, useMemo, useState } from "react"
 import { useDispatch } from "react-redux"
@@ -31,7 +33,7 @@ const CompaniesTable = () => {
       const containerWidth = container.clientWidth
       setMaxAvailableWidth(containerWidth - 50)
     }
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const ratios = [0.8, 3.0, 1.2, 1.2, 1.2, 1.2, 1.0]
 
@@ -88,7 +90,7 @@ const CompaniesTable = () => {
     pagination.pageIndex,
     pagination.pageSize,
     workspaceInfo.workspaceId,
-  ])
+  ]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const dateFormatter = (value?: string) => {
     if (!value) return ""
@@ -158,7 +160,7 @@ const CompaniesTable = () => {
         ),
       },
     ],
-    [columnSizes]
+    [columnSizes] // eslint-disable-line react-hooks/exhaustive-deps
   )
 
   const handleDelete = (

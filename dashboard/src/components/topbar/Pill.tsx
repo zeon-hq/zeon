@@ -1,5 +1,5 @@
 import React from 'react'
-import { Image, Text } from "@mantine/core";
+import { Text } from "@mantine/core";
 
 type Props = {
     label: string,

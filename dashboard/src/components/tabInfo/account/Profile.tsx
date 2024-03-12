@@ -94,7 +94,7 @@ const Profile = () => {
         <Button
           radius="md"
           className="primary"
-          leftIcon={<img src={ProfileSave} />}
+          leftIcon={<img alt="profile save" src={ProfileSave} />}
           color="indigo"
           onClick={async () => {
             await updateUserInformation();

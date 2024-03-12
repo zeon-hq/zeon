@@ -45,7 +45,7 @@ type Props = {
 
 const User = ({ channelId }: Props) => {
   const [options, setOptions] = useState<any>([]);
-  const { workspaceInfo, selectedPage, user } = useDashboard();
+  const { workspaceInfo, selectedPage } = useDashboard();
   const [value, setValue] = useState<any>(undefined);
   const [addedUsers, setAddedUsers] = useState<any>([]);
   const [opened, setOpened] = useState(false);
@@ -79,11 +79,11 @@ const User = ({ channelId }: Props) => {
 
     setOptions(newOptions || []);
     // getAllUsersForThisChannels();
-  }, [workspaceInfo, channelId, addedUsers.length]);
+  }, [workspaceInfo, channelId, addedUsers.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     getAllUsersForThisChannels();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleClick = async () => {
     try {
@@ -157,7 +157,7 @@ const User = ({ channelId }: Props) => {
         </Box>
         <Button
           radius="md"
-          disabled={value?.length == 0}
+          disabled={value?.length === 0}
           className="primary"
           leftIcon={<Plus />}
           color="indigo"

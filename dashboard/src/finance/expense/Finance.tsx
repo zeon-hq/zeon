@@ -1,19 +1,15 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import ExpenseListing from './ExpenseListing'
 import ExpenseDetails from './ExpenseDetails'
 import ExpenseDocument from './ExpenseDocument'
 import { FinanceContainer } from 'finance/styles'
-import useFinance from 'finance/useFinance'
 import { useDispatch } from 'react-redux'
 import { initFinance } from 'reducer/financeSlice'
 import { useLocation, useNavigate, useParams } from 'react-router'
-import { AsyncThunkAction } from '@reduxjs/toolkit'
 import useQuery from 'hooks/useQuery'
 
-type Props = {}
-
 //Entry component for finance module
-const Finance = (props: Props) => {
+const Finance = () => {
 
     const dispatch = useDispatch()// Provide the correct type for dispatch
     const { workspaceId } = useParams<{ workspaceId?: string }>() // Make workspaceId optional
@@ -34,7 +30,7 @@ const Finance = (props: Props) => {
           search: '?' + query.toString()
         });
       
-    },[])
+    },[]) //eslint-disable-line
 
     useEffect(() => {
       if (workspaceId) {
@@ -46,7 +42,7 @@ const Finance = (props: Props) => {
           dispatch(initFinance({workspaceId})) // Dispatch the initFinance action
         }
       }
-    }, [dispatch, workspaceId]) // Add dependencies to the useEffect hook
+    }, [dispatch, workspaceId]) //eslint-disable-line
 
 
 

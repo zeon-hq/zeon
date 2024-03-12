@@ -51,7 +51,7 @@ const ChatSidebar = ({ workspaceId }: { workspaceId: string }) => {
           ? false
           : true
       );
-  }, [workspaceInfo]);
+  }, [workspaceInfo]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (channel.length > 0) {
@@ -60,7 +60,7 @@ const ChatSidebar = ({ workspaceId }: { workspaceId: string }) => {
         channel[0].channelId
       );
     }
-  }, [channel.length > 0]);
+  }, [channel.length > 0]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
