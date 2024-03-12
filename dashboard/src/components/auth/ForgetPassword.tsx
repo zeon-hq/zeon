@@ -1,14 +1,9 @@
-import { Box, Flex, Space, Text, TextInput, Image, Grid } from "@mantine/core";
+import { Flex, Space, TextInput } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
-import AuthHero from "assets/authHero2.png";
 import { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import PhoneInput, { CountryData } from "react-phone-input-2";
+import { useForm } from "react-hook-form";
 import "react-phone-input-2/lib/style.css";
 import { useNavigate } from "react-router";
-import { Link } from "react-router-dom";
-import { sendForgetPasswordEmail, signup } from "service/CoreService";
-import SectionImg from "assets/Section.png";
 import {
   AuthButton,
   AuthContainer,
@@ -16,21 +11,17 @@ import {
   AuthFormHeader,
   AuthHeading,
   AuthLabel,
-  AuthSubHeading,
-  AuthWrapper,
-  FormContainer,
-  MainBackground,
+  AuthSubHeading, FormContainer,
+  MainBackground
 } from "./auth.styles";
 import ErrorMessage from "components/ui-components/common/ErrorMessage";
 import { LiaKeySolid } from "react-icons/lia";
 import { AiOutlineArrowLeft } from "react-icons/ai";
-import { da } from "date-fns/locale";
 
 const ForgetPassword = () => {
   const {
     register,
     handleSubmit,
-    control,
     formState: { errors },
   } = useForm();
   const [loading, setLoading] = useState(false);
@@ -40,20 +31,6 @@ const ForgetPassword = () => {
     try {
       setLoading(true);
 
-      const res = await sendForgetPasswordEmail(data.email)
-        .then((res) => {
-          setLoading(false);
-          navigate(`/check-email?email=${data.email}`);
-        })
-        .catch((err) => {
-          console.log(err);
-          setLoading(false);
-          showNotification({
-            title: "Error",
-            message: "Something went wrong. Check if the email is correct and there is an account with this email.",
-            color: "red",
-          });
-        });
     } catch (error: any) {
       console.log(error);
       setLoading(false);
@@ -71,9 +48,7 @@ const ForgetPassword = () => {
     if (at) {
       navigate("/workspaces/chat");
     }
-  }, []);
-
-  const [phoneData, setPhoneData] = useState<CountryData | {}>({});
+  }, [navigate]);
 
   return (
     <MainBackground>
