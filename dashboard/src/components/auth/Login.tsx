@@ -1,8 +1,5 @@
 import { Box, Flex, Space, Text, TextInput, Image } from "@mantine/core";
-import { Alert } from "@mantine/core";
-import { IconAlertCircle } from "@tabler/icons-react";
 import { showNotification } from "@mantine/notifications";
-import AuthHero from "assets/login-header.svg";
 import { jwtDecode } from "jwt-decode";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -14,18 +11,14 @@ import {
   AuthButton,
   AuthContainer,
   AuthForm,
-  AuthFormHeader,
-  AuthHeading,
-  AuthLabel,
+  AuthFormHeader, AuthLabel,
   AuthSecondaryButton,
   AuthSubHeading,
-  AuthWrapper,
-  Container,
-  FormContainer,
-  MainBackground,
+  AuthWrapper, FormContainer,
+  MainBackground
 } from "./auth.styles";
 import ErrorMessage from "components/ui-components/common/ErrorMessage";
-import { AiOutlineArrowRight, AiOutlineRight } from "react-icons/ai";
+import { AiOutlineArrowRight } from "react-icons/ai";
 
 type UserDecodedData = {
   userId: string;
@@ -113,7 +106,7 @@ const Login = () => {
     if (at) {
       navigate("/workspaces/chat");
     }
-  }, []);
+  }, [navigate]);
 
   return (
     <MainBackground>
@@ -210,6 +203,7 @@ const Login = () => {
               src="https://roadmap.zeonhq.com/ducalis-roadmap/changelog"
               height={"100%"}
               width={600}
+              title="Changelog"
             ></iframe>
           </Box>
         </AuthWrapper>
