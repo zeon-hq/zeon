@@ -32,6 +32,7 @@ const Signup = () => {
   const onSubmit = async (data: any) => {
     try {
       setLoading(true);
+      await 
     } catch (error: any) {
       console.log(error);
       setLoading(false);
@@ -99,7 +100,7 @@ const Signup = () => {
                     message: "Name should be atleast 3 characters long",
                   },
                 })}
-                name="name"
+                name="firstName"
                 type="text"
                 placeholder="Enter your first name"
                 label={<AuthLabel> First Name </AuthLabel>}

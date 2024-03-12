@@ -17,6 +17,7 @@ import {
 import ErrorMessage from "components/ui-components/common/ErrorMessage";
 import { LiaKeySolid } from "react-icons/lia";
 import { AiOutlineArrowLeft } from "react-icons/ai";
+import { sendForgetPasswordEmail } from "service/CoreService";
 
 const ForgetPassword = () => {
   const {
@@ -30,6 +31,20 @@ const ForgetPassword = () => {
   const onSubmit = async (data: any) => {
     try {
       setLoading(true);
+      await sendForgetPasswordEmail(data.email)
+      .then(() => {
+        setLoading(false);
+        navigate(`/check-email?email=${data.email}`);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+        showNotification({
+          title: "Error",
+          message: "Something went wrong. Check if the email is correct and there is an account with this email.",
+          color: "red",
+        });
+      });
 
     } catch (error: any) {
       console.log(error);
