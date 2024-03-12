@@ -36,7 +36,7 @@ const ChatConfigRightSide = () => {
         message: "Ticket has been marked as resolved",
         color: "green",
       })
-
+      //@ts-ignore
       dispatch(setActiveChat(null));
       // @ts-ignore
       dispatch(updateInbox(workspaceInfo?.workspaceId as string))

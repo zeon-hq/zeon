@@ -128,12 +128,12 @@ const Login = () => {
                   src="https://framerusercontent.com/images/oZHYGFoJF8rwIgs3MTgCCfA.svg"
                   alt="Zeon Logo"
                 />
-                <Space h={12} />
+                <Space h={8} />
                 <AuthSubHeading>
                   {" "}
                   Welcome back! Please enter your details to continue.{" "}
                 </AuthSubHeading>
-                <Space h={16} />
+                <Space h={8} />
               </AuthFormHeader>
 
               <TextInput
@@ -141,6 +141,7 @@ const Login = () => {
                 name="email"
                 type="email"
                 label={<AuthLabel> E-Mail </AuthLabel>}
+                px={11}
               />
               {errors?.email?.message && (
                 <ErrorMessage message={errors.email?.message as string} />
@@ -151,6 +152,7 @@ const Login = () => {
                 name="password"
                 label={<AuthLabel> Password </AuthLabel>}
                 type="password"
+                px={11}
               />
               {errors?.password?.message && (
                 <ErrorMessage message={errors.password?.message as string} />
@@ -161,6 +163,7 @@ const Login = () => {
                   display: "grid",
                   gridTemplateColumns: "1fr 1fr",
                   gap: "8px",
+                  padding: "0 11px",
                 }}
               >
                 {/* @ts-ignore */}
@@ -187,7 +190,6 @@ const Login = () => {
               </Box>
               <Space h={20} />
               <Flex justify="center">
-                <AuthSubHeading> Forgot Password? </AuthSubHeading>
                 <Text>
                   <Link
                     style={{
@@ -197,7 +199,7 @@ const Login = () => {
                     }}
                     to={"/forgot-password"}
                   >
-                    <Text> {"\u00A0"} Forgot Password </Text>
+                    <Text> {"\u00A0"} Forgot Password? </Text>
                   </Link>
                 </Text>
               </Flex>
@@ -207,7 +209,7 @@ const Login = () => {
             <iframe
               src="https://roadmap.zeonhq.com/ducalis-roadmap/changelog"
               height={"100%"}
-              width={400}
+              width={600}
             ></iframe>
           </Box>
         </AuthWrapper>
