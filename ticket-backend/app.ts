@@ -5,7 +5,7 @@ import cors from "cors";
 import express, { Request, Response } from "express";
 import { createServer } from "http";
 import mongoose from "mongoose";
-import { Server } from "socket.io";
+import { Server, Socket } from "socket.io";
 import MessageModel from "./model/MessageModel";
 import TicketModel from "./model/TicketModel";
 import { connectQueue } from "./mq/connect";
@@ -60,13 +60,14 @@ const port: string | number = process.env.TICKET_BACKEND_PORT || 8080;
 
 let mqChannel: Channel;
 let mqConnection: Connection;
-io.on("connection", (socket) => {
+io.on("connection", (socket:Socket) => {
 
   socket.on("open-ticket", async (ticketOptions: ITicketOptions) => {
 
     try {
 
       const openTicketData: any = await openTicket(ticketOptions, socket.id);
+      // check with kaush and remove this code
       socket.emit("open-ticket-complete", openTicketData);
 
       const socketIds = await getConnectedDashboardSockets(ticketOptions.workspaceId);

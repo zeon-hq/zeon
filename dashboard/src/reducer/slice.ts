@@ -505,7 +505,7 @@ export const dashboardSlice = createSlice({
     setTicketFilterText: (state, action: PayloadAction<ChronologyName>) => {
       state.inbox.ticketFilterText = action.payload;
     },
-    setActiveChat: (state, action: PayloadAction<IInbox>) => {
+    setActiveChat: (state, action: PayloadAction<IInbox | null>) => {
       state.activeChat = action.payload;
     },
     setDefaultWorkSpaceSettingTab: (state, action:PayloadAction<IWorkSpaceSettings>) => {

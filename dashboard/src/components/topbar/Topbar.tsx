@@ -144,24 +144,6 @@ const Topbar = ({ workspaceId }: { workspaceId: string }) => {
         />
       </TopBarDivWrapper>
       <InnerDivWrapper>
-        <Popover styles={styles} width={400} position="bottom" withArrow shadow="md">
-          <Popover.Target>
-            <Button style={{
-              backgroundColor: "#ECF3FF",
-              color: "#023AB5",
-            }}>
-            <Lottie
-        loop
-        animationData={LoadingAnimation}
-        play
-        style={{ width: "20px", height: "20px", marginRight: "2px" }}
-      />
-                Ask Robyn</Button>
-          </Popover.Target>
-          <Popover.Dropdown>
-            <Widget />
-          </Popover.Dropdown>
-        </Popover>
         <Text
           className="ducalis-changelog-widget pointer"
           fw={"500"}

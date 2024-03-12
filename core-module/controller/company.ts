@@ -17,7 +17,7 @@ export const createCompanyController = async (req: Request, res: Response) => {
   try {
     const company = await createCompany({
       ...req.body,
-      phoneNumber: formatPhoneNumber(req.body?.phoneNumber),
+      phoneNumber: req.body?.phoneNumber ? formatPhoneNumber(req.body?.phoneNumber) : undefined,
     })
     return res.status(200).json({
       success: true,
@@ -150,7 +150,7 @@ export const editCompanyController = async (req: Request, res: Response) => {
 
     const updatedCompany = await editCompany(companyId, {
       ...req.body,
-      phoneNumber: formatPhoneNumber(req.body?.phoneNumber),
+      phoneNumber: req.body?.phoneNumber ? formatPhoneNumber(req.body?.phoneNumber) : undefined,
     })
 
     return res.status(200).json({
