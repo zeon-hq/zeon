@@ -50,7 +50,7 @@ const ForgetPassword = () => {
           setLoading(false);
           showNotification({
             title: "Error",
-            message: err,
+            message: "Something went wrong. Check if the email is correct and there is an account with this email.",
             color: "red",
           });
         });

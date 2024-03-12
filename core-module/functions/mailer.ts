@@ -1,53 +1,30 @@
 import { ISignupBody } from "../types/types"
 import axios from "axios"
 import { IForgetPasswordBody } from "../types/types"
-import {createTransport} from "nodemailer"
+var SibApiV3Sdk = require('sib-api-v3-sdk');
+var defaultClient = SibApiV3Sdk.ApiClient.instance;
 
-const transporter = createTransport({
-  host: "smtp-relay.brevo.com",
-  port: 587,
-  auth: {
-    "user" : "jay@neoimperium.com",
-    "pass":process.env.SMTP
-  }
+// Configure API key authorization: api-key
+var apiKey = defaultClient.authentications['api-key'];
+apiKey.apiKey = process.env.BREVO_KEY;
 
-})
+// Uncomment below two lines to configure authorization using: partner-key
+// var partnerKey = defaultClient.authentications['partner-key'];
+// partnerKey.apiKey = 'YOUR API KEY';
 
-const mailOptions = {
-  from: 'jay@neoimperium.com',
-  to: 'kaush@zeonhq.com',
-  subject: `Your subject`,
-  text: `Your text content`
-};
+var apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 
-
-
-
-const mailerUrl = 'https://api.brevo.com/v3/contacts';
-
-const url = "https://api.brevo.com/v3/smtp/email"
+var sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
 
 
 export const sendMail = async  (body: any) => {
+  sendSmtpEmail = {...body}
   // construct header
-  const headers = {
-    "Content-Type": "application/json",
-    "api-Key": <api_key>
-  }
-
-  // // construct body
-  const data = {
-    ...body,
-  }
-
-  // send request
-  try {
-    const res = await axios.post(url, data, { headers })
-    return res
-  } catch (err) {
-    console.log(err)
-    return err
-  }
+  apiInstance.sendTransacEmail(sendSmtpEmail).then(function() {
+    console.log('API called successfully.');
+  }, function(error:any) {
+    console.error(error);
+  });
 }
 
 export const sendSignupEmail = (body: ISignupBody) => {
@@ -55,11 +32,11 @@ export const sendSignupEmail = (body: ISignupBody) => {
     headers: {
       accept: 'application/json',
       'Content-Type': 'application/json',
-      'api-key': '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'
+      'api-key': process.env.BREVO_KEY
     }
   };
 
-  axios.post(mailerUrl, body, options)
+  axios.post("mailerUrl", body, options)
     .then((response:any) => {
       console.log(response.data);
       // use sendMail function to send email

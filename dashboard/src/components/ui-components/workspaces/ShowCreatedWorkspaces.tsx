@@ -31,7 +31,7 @@ const SubWrapper = styled.div`
   flex-direction: column;
   width: 90%;
   max-width: 38rem;
-  height: 60vh;
+  height: 66vh;
   overflow-y: auto;
   justify-content: center;
   align-items: center;

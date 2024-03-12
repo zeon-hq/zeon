@@ -21,6 +21,7 @@ import {
   AuthSubHeading,
   AuthWrapper,
   Container,
+  FormContainer,
   MainBackground,
 } from "./auth.styles";
 import ErrorMessage from "components/ui-components/common/ErrorMessage";
@@ -116,95 +117,101 @@ const Login = () => {
 
   return (
     <MainBackground>
-      <AuthWrapper>
-        <AuthContainer>
-          <AuthForm onSubmit={handleSubmit(onSubmit)}>
-            <AuthFormHeader>
-              <Image
-                maw={150}
-                mx="left"
-                src="https://framerusercontent.com/images/oZHYGFoJF8rwIgs3MTgCCfA.svg"
-                alt="Zeon Logo"
-              />
-              <Space h={12} />
-              <AuthSubHeading>
-                {" "}
-                Welcome back! Please enter your details to continue.{" "}
-              </AuthSubHeading>
-              <Space h={16} />
-            </AuthFormHeader>
+      <FormContainer>
+        <AuthWrapper>
+          <AuthContainer>
+            <AuthForm onSubmit={handleSubmit(onSubmit)}>
+              <AuthFormHeader>
+                <Image
+                  maw={150}
+                  mx="left"
+                  src="https://framerusercontent.com/images/oZHYGFoJF8rwIgs3MTgCCfA.svg"
+                  alt="Zeon Logo"
+                />
+                <Space h={12} />
+                <AuthSubHeading>
+                  {" "}
+                  Welcome back! Please enter your details to continue.{" "}
+                </AuthSubHeading>
+                <Space h={16} />
+              </AuthFormHeader>
 
-            <TextInput
-              {...register("email", { required: "Email is required" })}
-              name="email"
-              type="email"
-              label={<AuthLabel> E-Mail </AuthLabel>}
-            />
-            {errors?.email?.message && (
-              <ErrorMessage message={errors.email?.message as string} />
-            )}
-            <Space h={20} />
-            <TextInput
-              {...register("password", { required: "Password is required" })}
-              name="password"
-              label={<AuthLabel> Password </AuthLabel>}
-              type="password"
-            />
-            {errors?.password?.message && (
-              <ErrorMessage message={errors.password?.message as string} />
-            )}
-            <Space h={48} />
-            <Box
-              sx={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: "8px",
-              }}
-            >
-              {/* @ts-ignore */}
-              <AuthSecondaryButton
-                type="button"
-                leftIcon={<TbUserPlus size="1.2rem" />}
-                loading={loading}
-                disabled={loading}
-                onClick={() => navigate("/signup?returnUrl=")}
+              <TextInput
+                {...register("email", { required: "Email is required" })}
+                name="email"
+                type="email"
+                label={<AuthLabel> E-Mail </AuthLabel>}
+              />
+              {errors?.email?.message && (
+                <ErrorMessage message={errors.email?.message as string} />
+              )}
+              <Space h={20} />
+              <TextInput
+                {...register("password", { required: "Password is required" })}
+                name="password"
+                label={<AuthLabel> Password </AuthLabel>}
+                type="password"
+              />
+              {errors?.password?.message && (
+                <ErrorMessage message={errors.password?.message as string} />
+              )}
+              <Space h={48} />
+              <Box
+                sx={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: "8px",
+                }}
               >
-                {" "}
-                Sign up{" "}
-              </AuthSecondaryButton>
-              {/* @ts-ignore */}
-              <AuthButton
-                rightIcon={<AiOutlineArrowRight />}
-                loading={loading}
-                disabled={loading}
-                type="submit"
-              >
-                {" "}
-                Sign in{" "}
-              </AuthButton>
-            </Box>
-            <Space h={20} />
-            <Flex justify="center">
-              <AuthSubHeading> Forgot Password? </AuthSubHeading>
-              <Text>
-                <Link
-                  style={{
-                    textDecoration: "none",
-                    fontWeight: "600",
-                    color: "#3054B9",
-                  }}
-                  to={"/forgot-password"}
+                {/* @ts-ignore */}
+                <AuthSecondaryButton
+                  type="button"
+                  leftIcon={<TbUserPlus size="1.2rem" />}
+                  loading={loading}
+                  disabled={loading}
+                  onClick={() => navigate("/signup?returnUrl=")}
                 >
-                  <Text> {"\u00A0"} Forgot Password </Text>
-                </Link>
-              </Text>
-            </Flex>
-          </AuthForm>
-        </AuthContainer>
-        <Box>
-          <img style={{ height: "100%", width: "100%" }} src={AuthHero} />
-        </Box>
-      </AuthWrapper>
+                  {" "}
+                  Sign up{" "}
+                </AuthSecondaryButton>
+                {/* @ts-ignore */}
+                <AuthButton
+                  rightIcon={<AiOutlineArrowRight />}
+                  loading={loading}
+                  disabled={loading}
+                  type="submit"
+                >
+                  {" "}
+                  Sign in{" "}
+                </AuthButton>
+              </Box>
+              <Space h={20} />
+              <Flex justify="center">
+                <AuthSubHeading> Forgot Password? </AuthSubHeading>
+                <Text>
+                  <Link
+                    style={{
+                      textDecoration: "none",
+                      fontWeight: "600",
+                      color: "#3054B9",
+                    }}
+                    to={"/forgot-password"}
+                  >
+                    <Text> {"\u00A0"} Forgot Password </Text>
+                  </Link>
+                </Text>
+              </Flex>
+            </AuthForm>
+          </AuthContainer>
+          <Box>
+            <iframe
+              src="https://roadmap.zeonhq.com/ducalis-roadmap/changelog"
+              height={"100%"}
+              width={400}
+            ></iframe>
+          </Box>
+        </AuthWrapper>
+      </FormContainer>
     </MainBackground>
   );
 };

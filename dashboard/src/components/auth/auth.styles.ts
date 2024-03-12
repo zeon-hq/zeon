@@ -11,17 +11,16 @@ export const Container = styled(Box)`
 `
 
 export const AuthWrapper = styled(Box)`
-  display: grid;
-    grid-template-columns: 60% 40%;
-    width: 1000px;
     height: 500px;
     gap: 20px;
+    display: flex;
+    gap:30px;
 `
 
 export const AuthHeading = styled.p`
   color: var(--gray-900, #101828);
   /* Display sm/Semibold */
-
+  text-align: center;
   font-size: 30px;
   margin-bottom: 8px;
   font-style: normal;
@@ -43,7 +42,7 @@ export const AuthLabel = styled.p`
 export const AuthSubHeading = styled.p`
   color: var(--gray-600, #475467);
   /* Text md/Regular */
-  
+  text-align: center;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
@@ -61,7 +60,7 @@ export const MainBackground = styled(Box)`
 
 export const FormContainer = styled(Box)`
   background: white;
-  padding: 16px 48px;
+  padding: 32px 48px;
   border-radius: 8px;
 `
 

@@ -582,7 +582,7 @@ export const forgetPasswordController = async (req: Request, res: Response) => {
         templateId: 23,
         params: {
           EMAIL: email,
-          resetlink: `http://localhost:3000/reset-password?token=${token}&email=${email}`,
+          resetlink: `https://app.zeonhq.com/reset-password?token=${token}&email=${email}`,
           firstname: "User",
         },
       };

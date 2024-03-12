@@ -45,6 +45,7 @@ export async function fetchUserInfo(workspaceId: string) {
     );
     return res.data;
   } catch (error: any) {
+    console.log(error);
     return Promise.reject(error?.response?.data?.error);
   }
 }
