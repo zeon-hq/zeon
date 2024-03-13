@@ -2,7 +2,7 @@ import { Box, Flex, Space, Text, TextInput, Image } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import PhoneInput from "react-phone-input-2";
+import PhoneInput, { CountryData } from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
@@ -18,6 +18,7 @@ import {
   MainBackground,
 } from "./auth.styles";
 import ErrorMessage from "components/ui-components/common/ErrorMessage";
+import { signup } from "service/CoreService";
 
 const Signup = () => {
   const {
@@ -28,11 +29,31 @@ const Signup = () => {
   } = useForm();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [phoneData, setPhoneData] = useState<CountryData | {}>({});
 
   const onSubmit = async (data: any) => {
     try {
       setLoading(true);
-      await 
+      const phoneNumber: any = {
+        //@ts-ignore
+        countryCode: phoneData?.dialCode,
+        num: data.phone,
+      };
+      const name = data.firstName + " " + data.lastName;
+      await signup(name, data.email, data.password, phoneNumber)
+        .then(() => {
+          setLoading(false);
+          navigate("/workspace-creation");
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+          showNotification({
+            title: "Error",
+            message: err,
+            color: "red",
+          });
+        });
     } catch (error: any) {
       console.log(error);
       setLoading(false);
@@ -153,6 +174,7 @@ const Signup = () => {
                   country={"in"}
                   value={value}
                   onChange={(value, data) => {
+                    setPhoneData(data);
                     onChange(value);
                   }}
                 />
