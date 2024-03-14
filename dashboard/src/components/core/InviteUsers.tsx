@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { Link, useParams } from "react-router-dom";
 import {
+  bulkInviteUserToWorkspace,
   getRolesForWorkspace,
 } from "service/CoreService";
 import Select from "react-select";
@@ -71,6 +72,7 @@ const InviteUsers = () => {
     });
 
     try {
+      await bulkInviteUserToWorkspace(invites);
       notification("success", "Invites sent successfully!");
     } catch (error) {
       console.log(error);
