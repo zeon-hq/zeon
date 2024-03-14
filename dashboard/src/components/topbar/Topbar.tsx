@@ -113,7 +113,7 @@ const Topbar = ({ workspaceId }: { workspaceId: string }) => {
             )
           }}
         />
-        <Pill
+        {/* <Pill
           selected={isRelationsSelected}
           label="Relations"
           onClick={() => {
@@ -126,7 +126,7 @@ const Topbar = ({ workspaceId }: { workspaceId: string }) => {
           onClick={() => {
             navigate(`/finance/${workspaceId}`)
           }}
-        />
+        /> */}
       </TopBarDivWrapper>
       <InnerDivWrapper>
         <Text
