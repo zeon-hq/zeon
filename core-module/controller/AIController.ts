@@ -7,19 +7,33 @@ import { generateId } from "../utils/utils";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { Pinecone } from "@pinecone-database/pinecone";
 import { PineconeStore } from "@langchain/pinecone";
+import { Chroma } from "langchain/vectorstores/chroma";
+import { OpenAI } from "langchain/llms/openai";
+import { ConversationalRetrievalQAChain } from "langchain/chains";
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { makeChain } from "../utils/AIUtils";
 import type { Document } from 'langchain/document';
+async function writeData(writer: any) {
+  try {
+    // Assuming 'data' needs to be written using 'writer'
+    // This is where you'd typically write data, e.g., writer.write(data);
+
+    await new Promise((resolve, reject) => {
+      writer.on("finish", resolve);
+      writer.on("error", reject);
+    });
+
+    console.log("Write finished successfully");
+  } catch (error) {
+    console.error("Error during write:", error);
+  }
+}
+
 export default class AIController {
 
   public static async injestPdf(req: Request, res: Response) {
     try {
       const { url, workspaceId, channelId } = req.body;
-
-      const pinecone = new Pinecone({
-        environment: process.env.PINECONE_ENVIRONMENT ?? "", //this is in the dashboard
-        apiKey: process.env.PINECONE_API_KEY ?? "",
-      });
 
       const fileName = `${workspaceId}_${channelId}_${generateId(6)}.pdf`;
 
@@ -34,25 +48,8 @@ export default class AIController {
       const writer = fs.createWriteStream(tempPdfPath);
       response.data.pipe(writer);
 
-      async function writeData(writer: any) {
-        try {
-          // Assuming 'data' needs to be written using 'writer'
-          // This is where you'd typically write data, e.g., writer.write(data);
-
-          await new Promise((resolve, reject) => {
-            writer.on("finish", resolve);
-            writer.on("error", reject);
-          });
-
-          console.log("Write finished successfully");
-        } catch (error) {
-          console.error("Error during write:", error);
-        }
-      }
-
+   
       await writeData(writer);
-      console.log("dsfd");
-
 
 
       const loader = new PDFLoader(tempPdfPath);
@@ -67,12 +64,10 @@ export default class AIController {
       const docs = await textSplitter.splitDocuments(rawDocs);
 
       const embeddings = new OpenAIEmbeddings();
-      const index = pinecone.Index(process.env.PINECONE_INDEX_NAME); //change to your own index name
 
-      const test = await PineconeStore.fromDocuments(docs, embeddings, {
-        pineconeIndex: index,
-        namespace: process.env.PINECONE_NAME_SPACE,
-        textKey: "text",
+      const vectorStore = await Chroma.fromDocuments(docs, embeddings, {
+        collectionName: "state_of_the_union",
+        url: "http://100.111.35.56:9876", // Optional, will default to this value
       });
 
       fs.unlinkSync(tempPdfPath);
@@ -114,63 +109,29 @@ export default class AIController {
   public static async getInjestPdf(req: Request, res: Response) {
     try {
       const { question, history } = req.body;
+      const model = new OpenAI();
+      
 
-      // OpenAI recommends replacing newlines with spaces for best results
-      const sanitizedQuestion = question.trim().replaceAll('\n', ' ');
-      const pinecone = new Pinecone({
-        environment: process.env.PINECONE_ENVIRONMENT ?? "", //this is in the dashboard
-        apiKey: process.env.PINECONE_API_KEY ?? "",
-      });
-
-
-      const index = pinecone.Index(process.env.PINECONE_INDEX_NAME);
-
-      /* create vectorstore*/
-      const vectorStore = await PineconeStore.fromExistingIndex(
-        new OpenAIEmbeddings({}),
-        {
-          pineconeIndex: index,
-          textKey: 'text',
-          namespace: process.env.PINECONE_NAME_SPACE, //namespace comes from your config folder
-        },
+      const vectorStore = await Chroma.fromExistingCollection(
+        new OpenAIEmbeddings(),
+        { 
+          collectionName: "state_of_the_union" ,
+          url: "http://100.111.35.56:9876", // Optional, will default to this value
+        }
       );
 
-      // Use a callback to get intermediate sources from the middle of the chain
-      let resolveWithDocuments: (value: Document[]) => void;
-      const documentPromise = new Promise<Document[]>((resolve) => {
-        resolveWithDocuments = resolve;
-      });
-      const retriever = vectorStore.asRetriever({
-        callbacks: [
-          {
-            // DocumentInterface[]
-            handleRetrieverEnd(documents:Document[]) {
-              resolveWithDocuments(documents);
-            },
-          },
-        ],
-      });
+      const chain = ConversationalRetrievalQAChain.fromLLM(
+        model,
+        vectorStore.asRetriever()
+      );
 
-      //create chain
-      const chain = makeChain(retriever);
+      /* Ask it a question */
+      // const question = "What is backend";
+      const res = await chain.call({ question, chat_history: [] });
+      console.log(res);
 
-      const pastMessages = history
-        .map((message: [string, string]) => {
-          return [`Human: ${message[0]}`, `Assistant: ${message[1]}`].join('\n');
-        })
-        .join('\n');
-      console.log(pastMessages);
 
-      //Ask a question using chat history
-      const response = await chain.invoke({
-        question: sanitizedQuestion,
-        chat_history: pastMessages,
-      });
-
-      const sourceDocuments = await documentPromise;
-
-      console.log('response', response);
-      res.status(200).json({ text: response, sourceDocuments });
+      res.status(200).json({ text: res });
     } catch (e) {
       if (e.response) {
         return res.status(e.response.status).json({
