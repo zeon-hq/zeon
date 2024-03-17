@@ -67,8 +67,9 @@ io.on("connection", (socket:Socket) => {
     try {
 
       const openTicketData: any = await openTicket(ticketOptions, socket.id);
-      // check with kaush and remove this code
-      socket.emit("open-ticket-complete", openTicketData);
+      
+      // code commented by sathithya yogi, we are not using the below emit event
+      // socket.emit("open-ticket-complete", openTicketData);
 
       const socketIds = await getConnectedDashboardSockets(ticketOptions.workspaceId);
 
@@ -86,15 +87,18 @@ io.on("connection", (socket:Socket) => {
 
 
       const channel = await ChannelModel.findOne({ channelId: ticketOptions.channelId });
+      const isEmailConfigured = channel?.emailNewTicketNotification;
+      const isSlackConfigured = channel?.slackChannelId;
+      const isAIEnabled = channel?.isAIEnabled;
 
-      if (channel?.emailNewTicketNotification) {
+      if (isEmailConfigured) {
         channel?.members.forEach(async (member: any) => {
           const user = await User.findOne({ userId: member })
           await CoreService.sendMail(ticketOptions.message, user?.email, ticketOptions.customerEmail, openTicketData.ticketId, ticketOptions.channelId, ticketOptions.workspaceId);
         })
       }
 
-      if (channel?.slackChannelId) {
+      if (isSlackConfigured) {
         const locationData = await ExternalService.getLocationFromIp(ticketOptions.ipAddress)
 
 
@@ -167,6 +171,32 @@ io.on("connection", (socket:Socket) => {
 
         await TicketModel.updateMany({ ticketId: openTicketData.ticketId }, { $set: { thread_ts: slackMessageResponse[0].result.ts } })
       }
+
+      // if AI Enabled
+      if (isAIEnabled || true) {
+        const aiMessagepayload = {
+          question: ticketOptions.message,
+          history: []
+        }
+        const aiResponse = await CoreService.getAIMessage(aiMessagepayload);
+        if (aiResponse) {
+          const messageOptions: MessageOptions = {
+            workspaceId: ticketOptions.workspaceId,
+            channelId: ticketOptions.channelId,
+            type: "received",
+            isRead: true,
+            message: aiResponse?.text,
+            ticketId: openTicketData.ticketId,
+          }
+
+          const data = {
+            source: "dashboard",
+            messageOptions
+          }
+
+          await sendMessage(mqChannel, data);
+        }
+      }
     } catch (error) {
       console.error(error);
     }
@@ -179,8 +209,10 @@ io.on("connection", (socket:Socket) => {
     };
 
     const channel = await ChannelModel.findOne({ channelId: messageOptions.channelId });
+    const isSlackConfigured = channel?.slackChannelId;
 
-    if (channel?.slackChannelId) {
+    // send message to slack when the slack in configured
+    if (isSlackConfigured) {
       const getThread_rs = await TicketModel.findOne({ ticketId: messageOptions.ticketId });
       if (getThread_rs?.thread_ts) {
         console.log('getThread_rs not found')
@@ -232,6 +264,7 @@ io.on("connection", (socket:Socket) => {
     }
   });
 
+  // this is the even we use to send message to the widget from the dashboard
   socket.on(
     "dashboard-message-event",
     async (messageOptions: MessageOptions) => {
@@ -280,8 +313,6 @@ io.on("socket-adapter-event", (data: any) => {
     io.to(data.socketId).emit("message", data.msgOptions);
   }
 });
-
-app.get("/", (req, res) => res.send("hello from ticket service"));
 
 app.post("/ticket/status", async (req, res) => {
   const { ticketId, isOpen } = req.body;

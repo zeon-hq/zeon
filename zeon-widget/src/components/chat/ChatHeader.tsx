@@ -1,13 +1,12 @@
-import styled from "styled-components";
-import { ActionIcon, Avatar, Box } from "@mantine/core";
+import { ActionIcon, Box } from "@mantine/core";
+import useWidget from "components/hooks/useWidget";
 import { AiOutlineArrowLeft } from "components/icons/icons";
 import { Text } from "components/ui-components/uStyleComponents";
-import {useDispatch} from "react-redux"
+import { useDispatch } from "react-redux";
 import { setActiveConversation, setMessage, setStep } from "redux/slice";
-import useWidget from "components/hooks/useWidget";
+import styled from "styled-components";
 import { Mail } from "tabler-icons-react";
 
- //@ts-ignore
 const Wrapper = styled.div`
   background-color: ${(props:{bg:string}) => props.bg};
   color: white;
@@ -28,18 +27,9 @@ const IconWrapper = styled.div`
   &:hover {
     cursor: pointer;
   }
-  
-`;
-
-const InfoWrapper = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    justify-content: flex-start;
 `;
 
 const ChatHeader = () => {
-
   const dispatch = useDispatch()
   const {widgetDetails} = useWidget()
   
@@ -56,7 +46,6 @@ const ChatHeader = () => {
   lastName = lastName === "undefined" || lastName === "null" ? "" : lastName
 
   return (
-    //@ts-ignore
     <Wrapper stroke={widgetDetails?.appearance.widgetHeaderSection.strokeColor}  bg={widgetDetails?.appearance?.widgetHeaderSection?.topBannerColor}>
       <IconWrapper>
         <ActionIcon size="lg" onClick={handleBackClick} radius="md" variant="outline">

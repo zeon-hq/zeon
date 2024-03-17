@@ -1,13 +1,11 @@
-import { Image, Text, Popover, Button } from "@mantine/core";
+import { Text } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
-import topBarDocs from "assets/topBarDocs.svg";
 import TopBarWorkSpaceLeftSelect from "components/ui-components/workspaces/TopBarWorkSpaceLeftSelect";
 import TopBarWorkSpaceRightSelect from "components/ui-components/workspaces/TopBarWorkSpaceRightSelect";
 import useDashboard from "hooks/useDashboard";
 import { useEffect, useState } from "react";
-import LoadingAnimation from "assets/robyn_btn.json";
-import Lottie from "react-lottie-player";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
 import {
   setLoading,
   setSelectedPage,
@@ -15,22 +13,8 @@ import {
   setWorkspaces,
 } from "reducer/slice";
 import { getWorkspaces } from "service/CoreService";
-import { useNavigate } from "react-router";
 import styled from "styled-components";
 import Pill from "./Pill";
-import {
-  InnerDivWrapper,
-  TopBarDivWrapper,
-  TopBarWrapper,
-} from "./topbar.styles";
-import { is } from "date-fns/locale";
-import Widget from "./Widget";
-
-const styles = {
-  dropdown: {
-    padding: "0px",
-  },
-};
 
 const Topbar = ({ workspaceId }: { workspaceId: string }) => {
   const navigate = useNavigate();

@@ -6,6 +6,6 @@ const router: Router = express.Router();
 // upload pdf and injest the data to store in vector's db
 router.post('/injest-file', AIController.injestPdf);
 
-router.post('/injest-text', AIController.getInjestPdf);
+router.post('/internal/injest-text', AIController.getInjestPdf);
 
 export default router;

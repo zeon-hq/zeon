@@ -53,10 +53,7 @@ export default class AIController {
       await writeData(writer);
       console.log("dsfd");
 
-      // new Promise((resolve, reject) => {
-      //     writer.on('finish', resolve);
-      //     writer.on('error', reject);
-      // });
+
 
       const loader = new PDFLoader(tempPdfPath);
       const rawDocs = await loader.load();

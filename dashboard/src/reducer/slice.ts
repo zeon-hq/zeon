@@ -107,6 +107,7 @@ export interface ChannelsInfo {
     name: string;
     channelId: string;
     slackChannelId?: string;
+    isAIEnabled?: boolean;
     accessToken?: string;
     members: string[];
     emailNewTicketNotification?: boolean;

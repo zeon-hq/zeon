@@ -54,7 +54,7 @@ app.use("/companies",verifyIdentity, companyRoutes);
 app.use("/contacts",verifyIdentity, contactRoutes);
 app.use("/notes",verifyIdentity, notesRoutes);
 app.use("/datamodel", verifyIdentity,dataModelRoutes);
-app.use("/ai", verifyIdentity, AIRoute);
+app.use("/ai", AIRoute);
 
 app.post("/internal/communication/send-email", CommunicationController.sendEmail);
 
