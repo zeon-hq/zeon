@@ -21,8 +21,8 @@ const Topbar = ({ workspaceId }: { workspaceId: string }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isFrontDeskSelected, setIsFrontDeskSelected] = useState(true);
-  const [isRelationsSelected, setIsRelationsSelected] = useState(false);
-  const [isFinanceSelected, setIsFinanceSelected] = useState(false);
+  // const [isRelationsSelected, setIsRelationsSelected] = useState(false);
+  // const [isFinanceSelected, setIsFinanceSelected] = useState(false);
   const { channelsInfo } = useDashboard();
   const TopBarWrapper = styled.div`
     width: 100%;
@@ -57,16 +57,16 @@ const Topbar = ({ workspaceId }: { workspaceId: string }) => {
   useEffect(() => {
     if (window.location.href.includes("dashboard")) {
       setIsFrontDeskSelected(true);
-      setIsRelationsSelected(false);
-      setIsFinanceSelected(false);
+      // setIsRelationsSelected(false);
+      // setIsFinanceSelected(false);
     } else if (window.location.href.includes("relation")) {
       setIsFrontDeskSelected(false);
-      setIsRelationsSelected(true);
-      setIsFinanceSelected(false);
+      // setIsRelationsSelected(true);
+      // setIsFinanceSelected(false);
     } else if (window.location.href.includes("finance")) {
       setIsFrontDeskSelected(false);
-      setIsRelationsSelected(false);
-      setIsFinanceSelected(true);
+      // setIsRelationsSelected(false);
+      // setIsFinanceSelected(true);
     }
   }, [
     window.location.href.includes("dashboard"), // eslint-disable-line react-hooks/exhaustive-deps
