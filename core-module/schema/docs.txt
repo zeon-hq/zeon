@@ -17,6 +17,3 @@ Role schema will contain all active role (as well as custom role, if possible). 
 Every workspace can have separate custom roles. So combination of workspaceId and roleId act as UID
 
 ACL schema holds all permission to user with role: <roleId> and workspace: <workspaceId>
-
-
-

@@ -24,6 +24,7 @@
     "release": "npm run tag && npm run publish"
   },
   "dependencies": {
+    "@langchain/community": "^0.0.41",
     "@langchain/openai": "^0.0.14",
     "@langchain/pinecone": "^0.0.3",
     "@pinecone-database/pinecone": "^1.1.0",

@@ -1,7 +1,7 @@
 import { ConversationalRetrievalQAChain } from 'langchain/chains';
 import type { Document } from 'langchain/document';
-import { OpenAI } from 'langchain/llms/openai';
-import { Chroma } from 'langchain/vectorstores/chroma';
+import { OpenAI } from '@langchain/openai';
+import { Chroma } from '@langchain/community/vectorstores/chroma';
 const CONDENSE_PROMPT = `Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question.
 
 Chat History:

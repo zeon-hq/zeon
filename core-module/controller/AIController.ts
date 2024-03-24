@@ -1,19 +1,15 @@
+import { OpenAIEmbeddings } from "@langchain/openai";
 import axios from "axios";
 import { Request, Response } from "express";
 import fs from "fs";
-import path from "path";
 import { PDFLoader } from "langchain/document_loaders/fs/pdf";
-import { generateId } from "../utils/utils";
+import { OpenAI } from "@langchain/openai";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
-import { Pinecone } from "@pinecone-database/pinecone";
-import { PineconeStore } from "@langchain/pinecone";
-import { Chroma } from "langchain/vectorstores/chroma";
-import { OpenAI } from "langchain/llms/openai";
-import { ConversationalRetrievalQAChain } from "langchain/chains";
-import { OpenAIEmbeddings } from "@langchain/openai";
-import { makeChain } from "../utils/AIUtils";
-import type { Document } from 'langchain/document';
+import { Chroma } from "@langchain/community/vectorstores/chroma";
+import path from "path";
 import KnowledgeBaseModel, { IKnowledgeBaseFileUploadProgress } from "../schema/KnowledgeBaseModel";
+import { makeChain } from "../utils/AIUtils";
+import { generateId } from "../utils/utils";
 async function writeData(writer: any) {
   try {
     // Assuming 'data' needs to be written using 'writer'
