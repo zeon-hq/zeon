@@ -6,7 +6,7 @@ export enum IKnowledgeBaseFileUploadProgress {
     INJECT_COMPLETED = 'INJECT_COMPLETED',
   }
 
-interface IForgotPassword extends Document {
+interface IKnowledgeBaseModel extends Document {
     fileId: string;
     workspaceId: string;
     channelId: string;
@@ -16,7 +16,7 @@ interface IForgotPassword extends Document {
     isDeleted: boolean;
 }
 
-const ForgotPasswordSchema: Schema = new Schema({
+const KnowledgeBaseModel: Schema = new Schema({
     fileId: {type: String, required: true},
     workspaceId: {type: String, required: true},
     channelId: {type: String, required: true},
@@ -28,4 +28,4 @@ const ForgotPasswordSchema: Schema = new Schema({
     timestamps: true
 });
 
-export default mongoose.model<IForgotPassword>('forgot_password', ForgotPasswordSchema);
+export default mongoose.model<IKnowledgeBaseModel>('knowledgebasemodel', KnowledgeBaseModel);
