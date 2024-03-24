@@ -123,11 +123,11 @@ const ChatArea = () => {
     // when tab change clear the query text and value
     setQuery("");
     // handleChange("");
-  },[activeTab])
+  },[activeTab]) // eslint-disable-line
 
   useEffect(()=>{
     scrollToBottom();
-  },[activeChat?.messages])
+  },[activeChat?.messages]) // eslint-disable-line
 
   return (
       <>

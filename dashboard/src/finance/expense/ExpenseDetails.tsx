@@ -1,45 +1,30 @@
 import { Button, Space } from "@mantine/core"
-import { notifications, showNotification } from "@mantine/notifications"
+import { showNotification } from "@mantine/notifications"
 import { Label } from "components/ui-components"
 import ZActionText from "components/ui-components/Button/ZActionText"
 import ZCurrency from "components/ui-components/common/ZCurrency"
 import ZDate from "components/ui-components/common/ZDate"
 import ZSelect from "components/ui-components/common/ZSelect"
 import ZTextInput from "components/ui-components/common/ZTextInput"
-import ZInput from "components/ui-components/common/ZTextInput"
-import { set } from "dot-prop"
-import {
-  createExpense,
-  deleteExpense,
-  updateExpense,
-} from "finance/FinanceService"
 import { ExpenseDetailsContainer } from "finance/styles"
-import { ICategory, ITag } from "finance/type"
 import useFinance from "finance/useFinance"
-import { isEmpty } from "lodash"
-import moment from "moment"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useDispatch } from "react-redux"
 import { useNavigate, useParams } from "react-router"
 import { initFinance, setSelectedExpense } from "reducer/financeSlice"
-import { getCRMDetailsMinimal } from "service/CoreService"
 import { Trash } from "tabler-icons-react"
 import AddVendorModal from "./component/AddVendorModal"
 import ErrorMessage from "components/ui-components/common/ErrorMessage"
 
-type Props = {}
 
-const ExpenseDetails = (props: Props) => {
-  const [options, setOptions] = useState<any>([])
+const ExpenseDetails = () => {
   const [showAddVendorModal, setShowAddVendorModal] = useState(false)
 
   const {
     selectedExpense,
-    tags,
     categories,
     getFlatCategories,
-    expenseCreateMode,
     inCreateMode,
     vendorInfo,
   } = useFinance()
@@ -111,23 +96,16 @@ const ExpenseDetails = (props: Props) => {
         vendor: "",
       })
     }
-  }, [selectedExpense, reset])
+  }, [selectedExpense, reset]) // eslint-disable-line
 
   const { workspaceId } = useParams<{ workspaceId: string }>()
   const [selectedVendor, setSelectedVendor] = useState<any>() // [contactId, companyId
 
   const onSubmit = async (data: any) => {
     // get value of category
-    const category = data?.category?.value || ""
     // gwt value of tags
-    const tags = data?.tags?.map((tag: any) => tag.value) || []
     // get vendor
-    const vendor = data?.vendor || ""
-    const status = data?.status?.value || "unpaid"
     delete data.category
-    const attachedDocuments = isEmpty(selectedExpense)
-      ? expenseCreateMode?.attachedDocuments || []
-      : selectedExpense?.attachedDocuments || []
     delete data.totalAmount
 
     if (!data.vendor) {
@@ -173,19 +151,9 @@ const ExpenseDetails = (props: Props) => {
       return
     }
 
-    const expenseData = {
-      ...data,
-      categoryId: category,
-      tags,
-      vendor,
-      workspaceId,
-      status,
-      attachedDocuments,
-    }
 
     try {
       if (!selectedExpense) {
-        const res = await createExpense(expenseData)
         showNotification({
           title: "Success",
           message: "Expense created successfully",
@@ -197,10 +165,6 @@ const ExpenseDetails = (props: Props) => {
         setSelectedVendor(null)
       } else {
         //@ts-ignore
-        const res = await updateExpense({
-          data: expenseData,
-          expenseId: selectedExpense?.expenseId,
-        })
         //@ts-ignore
         dispatch(initFinance({ workspaceId }))
         showNotification({
@@ -227,7 +191,6 @@ const ExpenseDetails = (props: Props) => {
       return
     }
     try {
-      const res = await deleteExpense(selectedExpense?.expenseId)
       dispatch(setSelectedExpense(null))
       navigate(`/finance/${workspaceId}`)
       //@ts-ignore
@@ -247,15 +210,6 @@ const ExpenseDetails = (props: Props) => {
     }
   }
 
-  const tagOptions = tags.map((tag: ITag) => ({
-    label: tag.name,
-    value: tag.name,
-  }))
-  const tagDefaultValue =
-    selectedExpense?.tags?.map((tag: any) => ({
-      label: tag,
-      value: tag,
-    })) || []
 
   useEffect(() => {}, [selectedExpense])
 

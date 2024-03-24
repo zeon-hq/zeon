@@ -13,7 +13,6 @@ import leftArrowIcon from "assets/leftArrow.svg";
 import linkedinIcon from "assets/linkedin.svg";
 import noteIcon from "assets/note.svg";
 import phoneIcon from "assets/phoneCall.svg";
-import plusIcon from "assets/plus.svg";
 import { useDispatch } from "react-redux";
 import {
   initCompanyData,
@@ -38,11 +37,10 @@ import {
   findPrimaryPhoneNumIntl,
 } from "crm/utils";
 import { useEffect, useState } from "react";
-import { fetchCompany } from "service/CRMService";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { AdditonalData } from "crm/AdditonalData";
 import { isEmpty } from "lodash";
-import Loader from "components/ui-components/Loader"
+import Loader from "components/ui-components/Loader";
 
 const Container = styled.div`
   display: flex;
@@ -116,7 +114,7 @@ function CompaniesDetails() {
       //@ts-ignore
       dispatch(initCompanyData({ companyId }));
     }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const url = new URL(window.location.href);
@@ -128,7 +126,7 @@ function CompaniesDetails() {
       params.set("activeTab", activeTab ?? "interactions");
       navigate(`${url.pathname}?${params.toString()}`);
     }
-  }, [activeTab, navigate]);
+  }, [activeTab, navigate]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // const stepsData = [
   //   {
@@ -150,7 +148,7 @@ function CompaniesDetails() {
   useEffect(() => {
     //@ts-ignore
     dispatch(initCompanyData({ companyId }));
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return !isEmpty(selectedCompany) ? (
     <Container>

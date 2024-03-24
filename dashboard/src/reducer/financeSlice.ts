@@ -1,7 +1,7 @@
 // create a finance slice using createSlice
 // create a finance reducer using createReducer
-import { getAllExpenses, getWorkspaceFinanceInfo } from "../finance/FinanceService";
-import {ICreateModeExpense, IExpense, IExpenseDTO, IFinance} from "../finance/type"
+import { getWorkspaceFinanceInfo } from "../finance/FinanceService";
+import {ICreateModeExpense, IExpenseDTO, IFinance} from "../finance/type"
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState:IFinance = {

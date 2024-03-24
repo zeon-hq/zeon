@@ -1,4 +1,4 @@
-import { Flex, Space, Text } from "@mantine/core";
+import { Flex, Text } from "@mantine/core";
 import { ICannedResponse } from "reducer/slice";
 
 interface IChatCannedResponsesList {

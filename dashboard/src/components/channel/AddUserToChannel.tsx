@@ -1,12 +1,8 @@
 import {
-  Box,
   Button,
-  Dialog,
   Flex,
   Loader,
-  MultiSelect,
-  Space,
-  Text,
+  MultiSelect
 } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { IWorkSpaceSettings } from "components/types";
@@ -110,7 +106,7 @@ const AddUserToChannel = ({ channelId }: IAddUserToChannel) => {
     try {
       let id = channelId ? channelId : selectedPage.name;
       const addUser = await addUsersToChannel(id || "", value);
-      if (addUser.status == 200) {
+      if (addUser.status === 200) {
         getAllUsersForThisChannels();
         setValue([]);
         //@ts-ignore
@@ -149,11 +145,11 @@ const AddUserToChannel = ({ channelId }: IAddUserToChannel) => {
 
     setOptions(newOptions || []);
     // getAllUsersForThisChannels();
-  }, [workspaceInfo, channelId, addedUsers.length]);
+  }, [workspaceInfo, channelId, addedUsers.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     getAllUsersForThisChannels();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
@@ -171,7 +167,7 @@ const AddUserToChannel = ({ channelId }: IAddUserToChannel) => {
           }}
         />
         <Button
-          disabled={value.length == 0}
+          disabled={value.length === 0}
           leftIcon={<AiOutlinePlus />}
           radius={"8px"}
           ml={"12px"}
@@ -188,17 +184,23 @@ const AddUserToChannel = ({ channelId }: IAddUserToChannel) => {
       </UserInviteInfoAddText>
       <UserInviteInfoAddInfo>
         {" "}
-        <a
+       
+        <p
           onClick={() => {
             dispatch(setDefaultWorkSpaceSettingTab(IWorkSpaceSettings.USERS));
             openWorkSpace("detail", "account");
             dispatch(setShowSidebar(false));
           }}
           className="underline pointer"
+          style={{
+            color: "var(--indigo-600, #3C69E7)",
+          
+          }}
+
         >
           {" "}
           Click here
-        </a>{" "}
+        </p>{" "}
         to add user to the workspace.
       </UserInviteInfoAddInfo>
 

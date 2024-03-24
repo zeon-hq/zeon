@@ -1,9 +1,6 @@
 import { useSelector } from "react-redux";
 import { RootState } from "store";
 import { ICategory } from "./type";
-import { ca } from "date-fns/locale";
-
-type Props = {};
 
 const useFinance = () => {
   const finance = useSelector((item: RootState) => item.finance);

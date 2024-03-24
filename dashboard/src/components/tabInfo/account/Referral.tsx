@@ -1,7 +1,6 @@
 import { Text } from '@mantine/core'
-import React, { ReactNode } from 'react'
+import { ReactNode } from 'react'
 import styled from "styled-components"
-import {Gift} from "tabler-icons-react"
 
 type Props = {
   text: string,

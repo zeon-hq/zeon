@@ -4,7 +4,6 @@ import {
 } from "@mantine/core";
 import { ISelectType } from "components/types";
 import { MdKeyboardArrowDown } from "react-icons/md";
-import { inputWrapperData } from "util/Constant";
 
 interface IAccountSelect {
   value: string;

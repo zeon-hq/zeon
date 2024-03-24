@@ -14,17 +14,9 @@ import styled from "styled-components";
 import { Plus } from "tabler-icons-react";
 import CannedResponseList from "./CannedResponseData";
 
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 0px;
-`;
-
 const Wrapper = styled.div`
 `;
 
-type Props = {};
 
 const CannedResponse = () => {
   const [open, setOpen] = React.useState(false);
@@ -63,7 +55,7 @@ const CannedResponse = () => {
 
   const onDelete = async (id: string) => {
     try {
-      const res = await deleteCannedResponse(id);
+      await deleteCannedResponse(id);
       showNotification({
         title: "Success",
         message: "Canned Response Deleted",
@@ -82,7 +74,7 @@ const CannedResponse = () => {
 
   useEffect(() => {
     getAllCannedResponse();
-  }, []);
+  }, []); // eslint-disable-line
 
   return (
     <Wrapper>

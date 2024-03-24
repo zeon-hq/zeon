@@ -1,4 +1,4 @@
-import { Box, Button, Code, Flex, Grid, Space } from "@mantine/core";
+import { Box, Button, Code, Grid, Space } from "@mantine/core";
 import { useClipboard } from "@mantine/hooks";
 import Heading from "components/details/inbox/component/Heading";
 import GuideCards from "components/ui-components/workspaces/GuideCards";
@@ -84,7 +84,7 @@ const Deployment = () => {
                 mt={20}
                 color="#3054B9"
                 variant="outline"
-                leftIcon={<img src={CopySVGIcon} />}
+                leftIcon={<img alt="copy" src={CopySVGIcon} />}
               >
                 {clipboardChatWidgetCopy.copied ? "Copied" : "Copy"}
               </Button>
@@ -132,7 +132,7 @@ const Deployment = () => {
                 onClick={() => clipboardEmbeddableTextCopy.copy(embeddSuportChatText)}
                 color="#3054B9"
                 variant="outline"
-                leftIcon={<img src={CopySVGIcon} />}
+                leftIcon={<img alt="copy" src={CopySVGIcon} />}
               >
                 {clipboardEmbeddableTextCopy.copied ? "Copied" : "Copy"}
               </Button>

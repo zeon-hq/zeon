@@ -9,7 +9,7 @@ import { showNotification } from "@mantine/notifications"
 import { createChannel } from "service/DashboardService"
 import useDashboard from "hooks/useDashboard";
 import { useDispatch } from "react-redux";
-import { IUser, initDashboard, setDefaultWorkSpaceSettingTab, setSelectedPage, setShowSidebar } from 'reducer/slice';
+import {  initDashboard } from 'reducer/slice';
 
 type ICreateChannelModalNew = {
   opened: boolean;
@@ -45,7 +45,7 @@ const CreateChannelModalNew = ({
       }
       setLoading(true)
       const createNewChannel = await createChannel(workspaceInfo.workspaceId, channelName)
-      if (createNewChannel.status == 200) {
+      if (createNewChannel.status === 200) {
       setChannelId(createNewChannel.data.id)
       setLoading(false)
       showNotification({
@@ -91,7 +91,7 @@ const CreateChannelModalNew = ({
                   onCloseClick={onModalClose}
               />
 
-              {step == 0 ? (
+              {step === 0 ? (
                   <TextInput
                       radius={"8px"}
                       mb={"300px"}
@@ -103,9 +103,9 @@ const CreateChannelModalNew = ({
                       value={channelName}
                       placeholder={"Enter Channel Name"}
                   />
-              ) : step == 1 ? (
+              ) : step === 1 ? (
                   <ChooseChannel />
-              ) : step == 2 ? (
+              ) : step === 2 ? (
                   <>
                   {
                    channelId && 
@@ -124,13 +124,13 @@ const CreateChannelModalNew = ({
                       setStep(0);
                   }}
                   onNextClick={() => {
-                      if (step == 0) {
+                      if (step === 0) {
                           setHeaderTitle("Select Channel Type");
                           setLabel(
                               "Choose the type of channel you want to create"
                           );
                           setStep(1);
-                      } else if (step == 1) {
+                      } else if (step === 1) {
                           setHeaderTitle("Invite users to channel");
                           setLabel(
                               "Invite users to your chat channel to collaborate together"
@@ -138,7 +138,7 @@ const CreateChannelModalNew = ({
                           setCTABtnTitle("Save");
                           createChannelFromName();
                           setStep(2);
-                      } else if (step == 2) {
+                      } else if (step === 2) {
                         //@ts-ignore
                         dispatch(initDashboard(workspaceInfo.workspaceId));
                         onModalClose();

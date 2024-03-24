@@ -1,8 +1,6 @@
 import { Grid, Space } from "@mantine/core";
 import ModuleCard from "components/Module/ModuleCard";
 import Heading from "components/details/inbox/component/Heading";
-import GuideCards from "components/ui-components/workspaces/GuideCards";
-import { docsArray } from "util/Constant";
 const Modules = () => {
   const modulesArrayData = [
     {

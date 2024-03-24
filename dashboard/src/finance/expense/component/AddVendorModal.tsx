@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
-import { Button, Modal, Space, Text, TextInput } from "@mantine/core";
-import { Label } from "components/ui-components";
+import { Modal, TextInput } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
-import { setOptions } from "react-chartjs-2/dist/utils";
 import { getCRMDetailsMinimal } from "service/CoreService";
 import styled from "styled-components";
 import debounce from "lodash/debounce";
@@ -103,7 +101,7 @@ const AddVendorModal = ({ opened, close, workspaceId, callback }: Props) => {
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  }, []); // eslint-disable-line
 
   const handleSearch = (e: any) => {
     setLoading(true);

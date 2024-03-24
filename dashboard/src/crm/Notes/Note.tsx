@@ -3,8 +3,6 @@ import { showNotification } from "@mantine/notifications"
 import { getReadableDateWithTime } from "components/utils/utilFunctions"
 import { deleteNote } from "crm/CRMService"
 import { CRMResourceType, INote } from "crm/type"
-import React from "react"
-import { AiFillDelete } from "react-icons/ai"
 import { useDispatch } from "react-redux"
 import { initContactData } from "reducer/crmSlice"
 import styled from "styled-components"
@@ -50,7 +48,7 @@ const Note = ({ notes,resourceId,resourceType }: Props) => {
   const dispatch = useDispatch()
   const handleDelete = async (noteId:any) => {
     try {
-      const res = await deleteNote(
+      await deleteNote(
         {
           noteId: noteId,
           resourceType: resourceType,

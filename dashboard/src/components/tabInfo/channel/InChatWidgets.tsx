@@ -3,7 +3,7 @@ import { showNotification } from "@mantine/notifications";
 import deleteBtn from "assets/deleteBtnAppear.svg";
 import ProfileSave from "assets/profile_save.png";
 import Heading from "components/details/inbox/component/Heading";
-import { HelperText, Label } from "components/ui-components";
+import { Label } from "components/ui-components";
 import Widget from "components/widget/Widget";
 import useDashboard from "hooks/useDashboard";
 import { useDispatch } from "react-redux";
@@ -89,7 +89,7 @@ const InChatWidgets = () => {
       <Heading
         heading="In Chat Widgets"
         showDivider
-        icon={<img src={ProfileSave} />}
+        icon={<img alt="profile" src={ProfileSave} />}
         subheading="Create widgets with content and give them a link. This is useful if you want to create a button for scheduling meetings, documentation and invites to your social channels."
         onSave={() => handleSave()}
         buttonText="Save"
@@ -157,7 +157,7 @@ const InChatWidgets = () => {
                   <Space h="md" />
                   <Button
                     radius="md"
-                    leftIcon={<img src={deleteBtn} />}
+                    leftIcon={<img alt="delete" src={deleteBtn} />}
                     style={{
                       color: "#B42318",
                     }}

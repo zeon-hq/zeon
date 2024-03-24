@@ -1,17 +1,17 @@
+/* eslint-disable react/jsx-pascal-case */
 import { Box, Button, Flex, Image, MantineProvider } from "@mantine/core";
 import editIcon from "assets/edit.svg";
-import mailIcon from "assets/mail.svg";
 import trashIcon from "assets/trash.svg";
 import userPlus from "assets/userPlus.svg";
 import { findPrimaryEmail } from "crm/utils";
 import useDashboard from "hooks/useDashboard";
 import {
-  MRT_GlobalFilterTextInput,
-  MRT_Row,
+  MRT_GlobalFilterTextInput, // eslint-disable-line react-hooks/exhaustive-deps
+  MRT_Row, // eslint-disable-line react-hooks/exhaustive-deps
   MantineReactTable,
   useMantineReactTable,
-  type MRT_ColumnDef,
-  MRT_PaginationState,
+  type MRT_ColumnDef, // eslint-disable-line react-hooks/exhaustive-deps
+  MRT_PaginationState, // eslint-disable-line react-hooks/exhaustive-deps
 } from "mantine-react-table";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -40,13 +40,13 @@ const ContactsTable = () => {
       const containerWidth = container.clientWidth;
       setMaxAvailableWidth(containerWidth - 50);
     }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     fetchAllCompaniesPair(workspaceInfo.workspaceId || "").then((res) => {
       setCompanyOptions(res.data);
     });
-  }, [workspaceInfo.workspaceId]);
+  }, [workspaceInfo.workspaceId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const [data, setData] = useState<any[]>([]);
   const [isError, setIsError] = useState(false);
@@ -88,7 +88,7 @@ const ContactsTable = () => {
       setIsRefetching(false);
     };
     fetchData();
-  }, [pagination.pageIndex, pagination.pageSize, workspaceInfo.workspaceId]);
+  }, [pagination.pageIndex, pagination.pageSize, workspaceInfo.workspaceId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const ratios = [0.8, 1.4, 4.0, 1.5, 2.0, 1.2];
 
@@ -181,7 +181,7 @@ const ContactsTable = () => {
         ),
       },
     ],
-    [columnSizes]
+    [columnSizes] // eslint-disable-line
   );
 
   const handleDelete = (
@@ -208,15 +208,6 @@ const ContactsTable = () => {
     dispatch(
       setSelectedContactPage({ type: "edit", contactData: data[row.index] })
     );
-  };
-
-  const handleEmail = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    row: MRT_Row<any>
-  ) => {
-    // Handle the email action here
-    event?.stopPropagation();
-    window.open(`mailto:${findPrimaryEmail(data[row.index].emailAddress)}`);
   };
 
   const table = useMantineReactTable({

@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { MessageListHeader } from "./MessageListHeader";
-import { TicketSearch } from "./TicketSearch";
 import MessageContainer from "./component/MessageContainer";
 
 const DivWrapper = styled.div`

@@ -32,14 +32,8 @@ const Appearance = () => {
 
   const appearenceDetails = channelsInfo[selectedPage.name]?.appearance;
 
-  const [showWidgetButtonColorPicker, setShowWidgetButtonColorPicker] =
-    useState(false);
-
   const [value, setValue] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
-
-  const [showTopBannerColorPicker, setShowTopBannerColorPicker] =
-    useState(false);
 
   const handleChange = ({
     subType,
@@ -110,14 +104,14 @@ const Appearance = () => {
 
   useEffect(() => {
     handleSubmit();
-  }, [value]);
+  }, [value]); // eslint-disable-line
 
   return (
     <>
       <div className="">
         <Box>
           <Heading
-            icon={<img src={ProfileSave} />}
+            icon={<img alt="profile save" src={ProfileSave} />}
             showDivider
             heading={"Appearance"}
             subheading="Configure how Zeon looks so it better suits your brand experience"

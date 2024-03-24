@@ -6,7 +6,6 @@ import SlackIntegrationSVG from "assets/slack_integration_svg.svg";
 import SlackIntegrationEnable from "assets/slack_svg_enable.svg";
 import Heading from "components/details/inbox/component/Heading";
 import { getConfig as Config } from "config/Config";
-import { is } from "date-fns/locale";
 import useDashboard from "hooks/useDashboard";
 import { useDispatch } from "react-redux";
 import { updateEmailTicketCreateNotification, updateSlackTicketNotification } from "reducer/slice";
@@ -108,7 +107,7 @@ const Integrations = () => {
             border: '1px solid #E5E5E5'
           }}>
             <Flex align="center">
-              <img src={EmailNewTicket} />
+              <img alt="email" src={EmailNewTicket} />
             </Flex>
 
             <Box>
@@ -142,7 +141,7 @@ const Integrations = () => {
             border: '1px solid #E5E5E5'
           }}>
             <Flex align="center">
-              <img src={SlackIntegrationSVG} />
+              <img alt="slack integrate" src={SlackIntegrationSVG} />
             </Flex>
 
             <Box>

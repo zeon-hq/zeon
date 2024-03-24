@@ -1,4 +1,4 @@
-import { Text } from "@mantine/core";
+import {  Text } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import TopBarWorkSpaceLeftSelect from "components/ui-components/workspaces/TopBarWorkSpaceLeftSelect";
 import TopBarWorkSpaceRightSelect from "components/ui-components/workspaces/TopBarWorkSpaceRightSelect";
@@ -20,8 +20,8 @@ const Topbar = ({ workspaceId }: { workspaceId: string }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isFrontDeskSelected, setIsFrontDeskSelected] = useState(true);
-  const [isRelationsSelected, setIsRelationsSelected] = useState(false);
-  const [isFinanceSelected, setIsFinanceSelected] = useState(false);
+  // const [isRelationsSelected, setIsRelationsSelected] = useState(false);
+  // const [isFinanceSelected, setIsFinanceSelected] = useState(false);
   const { channelsInfo } = useDashboard();
   const TopBarWrapper = styled.div`
     width: 100%;
@@ -51,27 +51,27 @@ const Topbar = ({ workspaceId }: { workspaceId: string }) => {
 
   useEffect(() => {
     getUserWorkspaces();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (window.location.href.includes("dashboard")) {
       setIsFrontDeskSelected(true);
-      setIsRelationsSelected(false);
-      setIsFinanceSelected(false);
+      // setIsRelationsSelected(false);
+      // setIsFinanceSelected(false);
     } else if (window.location.href.includes("relation")) {
       setIsFrontDeskSelected(false);
-      setIsRelationsSelected(true);
-      setIsFinanceSelected(false);
+      // setIsRelationsSelected(true);
+      // setIsFinanceSelected(false);
     } else if (window.location.href.includes("finance")) {
       setIsFrontDeskSelected(false);
-      setIsRelationsSelected(false);
-      setIsFinanceSelected(true);
+      // setIsRelationsSelected(false);
+      // setIsFinanceSelected(true);
     }
   }, [
-    window.location.href.includes("dashboard"),
-    window.location.href.includes("relation"),
-    window.location.href.includes("finance"),
-  ]);
+    window.location.href.includes("dashboard"), // eslint-disable-line react-hooks/exhaustive-deps
+    window.location.href.includes("relation"), // eslint-disable-line react-hooks/exhaustive-deps
+    window.location.href.includes("finance"), // eslint-disable-line react-hooks/exhaustive-deps
+  ]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const getUserWorkspaces = async () => {
     dispatch(setLoading(true));
@@ -112,7 +112,7 @@ const Topbar = ({ workspaceId }: { workspaceId: string }) => {
             )
           }}
         />
-        <Pill
+        {/* <Pill
           selected={isRelationsSelected}
           label="Relations"
           onClick={() => {
@@ -125,7 +125,7 @@ const Topbar = ({ workspaceId }: { workspaceId: string }) => {
           onClick={() => {
             navigate(`/finance/${workspaceId}`)
           }}
-        />
+        /> */}
       </TopBarDivWrapper>
       <InnerDivWrapper>
         <Text

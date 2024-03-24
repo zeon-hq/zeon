@@ -236,7 +236,7 @@ const Billing = () => {
 
           <PGWrapper>
             <div>
-              <img src={PGLogo} />
+              <img alt="logo" src={PGLogo} />
             </div>
             <div>
               <Text weight="bold" sx={{ fontSize: "18px" }}>

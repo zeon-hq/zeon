@@ -27,7 +27,7 @@ const ChatConfigRightSide = () => {
 
   const handleMarkAsResolved = async () => {
     try {
-      const res = await markAsResolved(
+      await markAsResolved(
         activeChat?.ticketId || "",
         activeChat?.isOpen ?? true
       )
@@ -36,7 +36,7 @@ const ChatConfigRightSide = () => {
         message: "Ticket has been marked as resolved",
         color: "green",
       })
-
+      //@ts-ignore
       dispatch(setActiveChat(null));
       // @ts-ignore
       dispatch(updateInbox(workspaceInfo?.workspaceId as string))
@@ -70,7 +70,7 @@ const ChatConfigRightSide = () => {
     }
 
     setOptions(newOptions || [])
-  }, [workspaceInfo])
+  }, [workspaceInfo]) // eslint-disable-line
 
   const handleUnassign = async () => {
     try {

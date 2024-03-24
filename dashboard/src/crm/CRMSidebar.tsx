@@ -28,7 +28,7 @@ const MainWrapper = styled.div`
 `
 
 const CRMSidebar = ({ workspaceId }: { workspaceId: string }) => {
-  const { loading, workspaceInfo } = useDashboard()
+  const {  workspaceInfo } = useDashboard()
 
   const { selectedPage } = useCrm()
   const dispatch = useDispatch()

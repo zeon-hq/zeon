@@ -74,7 +74,7 @@ const AddUserModal = ({ openModal, onClose }: IAddUserModal) => {
       setIsLoading(true);
       const res = await bulkInviteUserToWorkspace(invites)
       setIsLoading(false);
-      if (res.status == 200) {
+      if (res.status === 200) {
         setEmail('');
         setRoleId('');
         onClose();
@@ -91,7 +91,7 @@ const AddUserModal = ({ openModal, onClose }: IAddUserModal) => {
 
   useEffect(() => {
     fetchAllRoles()
-  }, [])
+  }, []) // eslint-disable-line
 
   return (
     <Modal

@@ -1,6 +1,5 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { getConfig as Config } from "config/Config";
-import { IInbox } from "reducer/slice";
 import { getAuthToken } from "util/dashboardUtils";
 import { IExpenseDTO } from "./type";
 
@@ -20,7 +19,6 @@ axiosInstance.interceptors.request.use(function (config: AxiosRequestConfig) : A
 
 
 const financeApiDomain = Config("FINANCE_API_DOMAIN")
-const ticketDomainUrl = Config('TICKET_SERVICE');
 
 
 export async function getAllCategories() {

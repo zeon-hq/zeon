@@ -1,7 +1,5 @@
 import { Box, Chip, Grid, Space, Text } from "@mantine/core";
 import UserDeleteIcon from "assets/user_remove_icon.svg";
-import useDashboard from "hooks/useDashboard";
-import { useDispatch } from "react-redux";
 type Props = {
   email: string;
   rank: string | undefined;
@@ -19,8 +17,6 @@ const AdminDiv = ({
   onClick,
   hideDeleteBtn
 }: Props) => {
-  const { workspaceInfo } = useDashboard();
-  const dispatch = useDispatch();
 
   return (
     <Box sx={{ borderBottom: "1px solid #EAECF0" }}>
@@ -62,6 +58,7 @@ const AdminDiv = ({
           <img
           src={UserDeleteIcon}
           width={"20px"}
+          alt="delete"
           onClick={onClick}
           style={{ margin: "10px", cursor: "pointer" }}
           />

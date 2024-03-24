@@ -56,7 +56,7 @@ export const AdditonalData = ({ resourceId, type,additionalValue }: AdditionalDa
   const handleSaveButtonClick = async () => {
     if (resourceId) {
       setLoading(true);
-      const res = await addAdditionalFields(
+      await addAdditionalFields(
         resourceId,
         type === "contact" ? "contacts" : "companies",
         { fields: textInputValues }

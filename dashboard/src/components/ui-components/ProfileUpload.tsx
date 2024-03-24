@@ -33,7 +33,7 @@ const ProfileUpload = ({ logoImage, setLogoImage, name, description  }: IProfile
       })
     })
     
-  },[]) 
+  },[]) // eslint-disable-line
 
   const uploadFileData = async (files: any[]) => {
     showNotification({
@@ -63,15 +63,13 @@ const ProfileUpload = ({ logoImage, setLogoImage, name, description  }: IProfile
 
  const onDropAccepted = useCallback((acceptedFiles:any) => {
   uploadFileData(acceptedFiles);
-      }, []);
+      }, []); // eslint-disable-line
 
       const {
         getRootProps,
-        getInputProps,
         isFocused,
         isDragAccept,
-        isDragReject,
-        isDragActive,
+        isDragReject
       } = useDropzone({
         onDropAccepted,
         onDropRejected,

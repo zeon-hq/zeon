@@ -1,9 +1,7 @@
-import { Divider, Space, Text, Box, Button, Flex } from "@mantine/core";
+import { Space, Text, Box, Button, Flex } from "@mantine/core";
 import styled from "styled-components";
 import { SaveButtonContainer } from "components/tabInfo/tabInfo.styles";
-import { DeviceFloppy } from "tabler-icons-react";
 import { ReactNode } from "react";
-import DocsIcon from "assets/docs_icon.svg";
 import { FiPlus } from "react-icons/fi";
 import ReadDocsButton from "components/ui-components/Button/ReadDocsButton";
 const Wrapper = styled.div`
