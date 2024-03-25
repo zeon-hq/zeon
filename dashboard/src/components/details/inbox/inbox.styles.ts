@@ -105,7 +105,7 @@ export const SideBarTopWrapper = styled.div`
 `;
 
 export const SideBarInnerWrapper = styled.div`
-padding`;
+`;
 
 export const Block = styled.div`
   display: flex;
@@ -113,10 +113,10 @@ export const Block = styled.div`
 `;
 
 export const DNDContainer = styled.div`
-  border: 1px dashed #eaecf0;
+  border: 1px solid #eaecf0;
   border-radius: 12px;
   padding: 16px 24px;
-  width: 428px;
+  width: 100%;
 `;
 
 export const HelperText = styled.p`

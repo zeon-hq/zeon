@@ -1,6 +1,10 @@
 import express, { Router } from "express"
 
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
+import multer from "multer"
 import { verifyIdentity } from "zeon-core/dist/func"
+import { generateId } from "zeon-core/dist/utils/utils"
 import {
   addAdmin,
   changeUserRole,
@@ -9,13 +13,8 @@ import {
   getTeamData,
   inviteTeamMember,
   removeAdmin,
-  removeTeamMember,
-  uploadLogo,
+  removeTeamMember
 } from "../controller/team/team.controller"
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3"
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
-import multer from "multer"
-import { generateId } from "zeon-core/dist/utils/utils"
 
 const secretAccessKey = process.env.SECRET_ACCESS_KEY as string
 const accessKeyId = process.env.ACCESS_KEY as string
@@ -71,8 +70,8 @@ router.put(
       console.log('command',command);
       
       
-      const savedFile = await s3.send(command)
-      const signedURL = await getSignedUrl(s3, command, { expiresIn: 3600 })
+      await s3.send(command)
+      await getSignedUrl(s3, command, { expiresIn: 3600 })
       const s3Url = `https://${bucketName}.s3.${region}.amazonaws.com/${fileName}`
       //@ts-ignore
       return res.status(200).json({

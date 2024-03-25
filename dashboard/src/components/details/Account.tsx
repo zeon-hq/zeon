@@ -10,7 +10,7 @@ import { Admin, Billing, Referral } from "components/tabInfo";
 import Modules from "components/tabInfo/account/Modules";
 import Organization from "components/tabInfo/account/Organization";
 import Profile from "components/tabInfo/account/Profile";
-import { IWorkSpaceSettings, TabInfo, TabsName } from "components/types";
+import { IWorkSpaceSettings, TabInfo, IChannelTabsName } from "components/types";
 import PanelLabel from "components/widget/PanelLabel";
 import useDashboard from "hooks/useDashboard";
 import { useDispatch } from "react-redux";
@@ -77,7 +77,7 @@ const Account = () => {
     switch (name) {
       case IWorkSpaceSettings.USERS:
         return <Admin />;
-      case TabsName.REFERRALS:
+      case IChannelTabsName.REFERRALS:
         return (
           <Referral
             text="You don't have permission"

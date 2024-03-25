@@ -6,7 +6,7 @@ export type ISelectType = {
     label: string;
   };
 
-export enum TabsName {
+export enum IChannelTabsName {
     APPEARENCE = "Appearance",
     INTEGRATIONS = "Integrations",
     BEHAVIORS = "Behaviour",
@@ -16,6 +16,7 @@ export enum TabsName {
     REFERRALS = "Referrals",
     CANNED_RESPONSES = "Canned Responses",
     USER = "Users",
+    KNOWLEDGE = "Knowledge",
     DEPLOYMENT = "Installation",
     Overview = "Overview",
 }
@@ -39,7 +40,7 @@ export enum RightPanelSettingName {
 }
 
 export type TabInfo = {
-    name: TabsName | IWorkSpaceSettings,
+    name: IChannelTabsName | IWorkSpaceSettings,
     icon: ReactNode,
     active:boolean
 }

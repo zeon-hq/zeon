@@ -1,22 +1,22 @@
-import "./App.css";
+import {  Global, MantineProvider, rem } from "@mantine/core";
+import { Notifications } from "@mantine/notifications";
+import CheckEmail from "components/auth/CheckEmail";
+import ForgetPassword from "components/auth/ForgetPassword";
+import Login from "components/auth/Login";
+import ProtectedRoute from "components/auth/ProtectedRoute";
+import SetNewPassword from "components/auth/SetNewPassword";
+import Signup from "components/auth/Signup";
+import InviteUsers from "components/core/InviteUsers";
+import WorkspaceCreation from "components/core/WorkspaceCreation";
+import Details from "components/details/Details";
+import ForgotPassword from "components/ui-components/ForgotPassword";
 import Layout from "components/ui-components/Layout";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { MantineProvider, Global } from "@mantine/core";
 import SlackOAuth from "components/ui-components/SlackOAuth";
 import Workspaces from "components/ui-components/workspaces/Workspaces";
-import ForgotPassword from "components/ui-components/ForgotPassword";
-import Login from "components/auth/Login";
-import Signup from "components/auth/Signup";
-import ProtectedRoute from "components/auth/ProtectedRoute";
-import { Notifications } from "@mantine/notifications";
-import WorkspaceCreation from "components/core/WorkspaceCreation";
-import InviteUsers from "components/core/InviteUsers";
-import Details from "components/details/Details";
-import Finance from "finance/expense/Finance";
 import CrmLayout from "crm/CrmLayout";
-import ForgetPassword from "components/auth/ForgetPassword";
-import SetNewPassword from "components/auth/SetNewPassword";
-import CheckEmail from "components/auth/CheckEmail";
+import Finance from "finance/expense/Finance";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "./App.css";
 
 function MyGlobalStyles() {
   return (
@@ -36,7 +36,14 @@ function MyGlobalStyles() {
 function App() {
   return (
     <>
-      <MantineProvider withNormalizeCSS withGlobalStyles>
+      <MantineProvider withNormalizeCSS withGlobalStyles 
+        theme={{
+          colorScheme: 'light',
+          colors: {
+            grey: ['#475467'],
+            blue: ['#3054B9']
+          }
+        }}>
         <MyGlobalStyles />
         <Notifications position="top-center" />
 

@@ -356,4 +356,15 @@ export const getCRMDetailsMinimal = async (workspaceId: string) => {
   } catch (error) {
     return {};
   }
-};
+}
+
+export const getKnowledgeBaseList = async (workspaceId: string, channelId:string) => {
+  try {
+    const res = await axiosInstance.get(
+      `${coreAPIDomain}/ai/get-uploaded-files/${channelId}/${workspaceId}`
+    );
+    return res.data;
+  } catch (error) {
+    return {};
+  }
+}

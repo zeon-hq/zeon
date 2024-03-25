@@ -74,8 +74,7 @@ const CreateCannedResponseModal = ({
          xOffset={0}
         opened={opened}
         onClose={() => onClose()}
-        title="Add Canned Response"
-      >
+        title="Add Canned Response">
         <Box>
           <Text style={{ fontSize: "14px", fontWeight: "600" }}>
             {" "}
