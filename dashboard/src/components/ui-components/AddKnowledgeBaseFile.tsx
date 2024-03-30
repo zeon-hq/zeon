@@ -20,10 +20,9 @@ interface IAddKnowledgeBaseFile {
 
 const AddKnowledgeBaseFile = ({ opened, onClose }: IAddKnowledgeBaseFile) => {
   const theme = useMantineTheme();
-  const apiDomainUrl = Config("API_DOMAIN");
+  const coreAPIDomainUrl = Config("CORE_API_DOMAIN");
   const [files, setFiles] = useState<any[]>([]);
   const [progress, setProgress] = useState(0);
-
   const onDropRejected = useCallback((rejectedFile: any) => {
     rejectedFile.forEach((file: any) => {
       file.errors.forEach((error: any) => {
@@ -43,12 +42,14 @@ const AddKnowledgeBaseFile = ({ opened, onClose }: IAddKnowledgeBaseFile) => {
       message: "Uploading logo...",
     });
     let formData = new FormData();
-    formData.append("file", files[0]);
+
+    files.forEach(file => {
+      formData.append('files', file);
+    });
 
     // multiple files, when the user clicks the 
-
     try {
-      axios.put(`${apiDomainUrl}/team/asset/upload-logo`, formData, {
+      axios.put(`${coreAPIDomainUrl}/ai/asset/upload-files`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${localStorage.getItem('at')}`
@@ -58,8 +59,16 @@ const AddKnowledgeBaseFile = ({ opened, onClose }: IAddKnowledgeBaseFile) => {
           setProgress(percentCompleted);
         }
       })
-        .then(response => {
+        .then((response:any) => {
           alert('File uploaded successfully');
+
+          const uploadedUrl = files.map((data:any)=>{
+            const fileName = data.name;
+            const s3Url = response.data.uploadedUrls.find((url: any) => url.fileName === fileName);
+            return {name:fileName, s3Url: s3Url.url, size: data.size, type: data.type};
+          })
+
+          setFiles(uploadedUrl || []);
         })
         .catch(error => {
           alert('Error uploading file');

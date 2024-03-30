@@ -66,7 +66,7 @@ export default class AIController {
               // start
       const response = await axios({
         method: "GET",
-        url: url,
+        url: url[0],
         responseType: "stream",
       });
 

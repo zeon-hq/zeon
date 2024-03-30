@@ -1,5 +1,4 @@
 import express, { Router } from "express"
-
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 import multer from "multer"
@@ -29,8 +28,7 @@ const s3 = new S3Client({
   region
 })
 
-const storage = multer.memoryStorage()
-const upload = multer({ storage: storage })
+
 
 const router: Router = express.Router()
 
@@ -45,13 +43,16 @@ router.put("/role", verifyIdentity, changeUserRole)
 
 router.get("/:workspaceId", getTeamData)
 // Team assets
+
+const storage = multer.memoryStorage()
+const upload = multer({ storage: storage })
+
 router.put(
   "/asset/upload-logo",
   verifyIdentity,
   upload.single("file"),
   //@ts-ignore
   async (req: Request, res: Response) => {
-    console.log('--------------')
     try {
       const tempId = generateId(10)
       //@ts-ignore
