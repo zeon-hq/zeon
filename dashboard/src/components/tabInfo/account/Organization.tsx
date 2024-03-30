@@ -50,7 +50,6 @@ const Organization = () => {
     <>
       <Space h={24} />
       <Heading
-        showDivider
         heading="Organization"
         subheading="Update your organization details here."
       />

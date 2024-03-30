@@ -13,7 +13,6 @@ const Knowledge = () => {
       <Heading
         heading="Memory Management"
         subheading="Give your co-pilot contextual information about anything"
-        showDivider
         onSave={() => {
           setOpenAddDataModal(true);
         }}

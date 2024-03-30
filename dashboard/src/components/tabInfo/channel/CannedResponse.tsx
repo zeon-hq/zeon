@@ -81,7 +81,6 @@ const CannedResponse = () => {
       <Heading
         heading="Canned Responses"
         subheading="Create a canned response to save time and reply faster."
-        showDivider
         onSave={() => setOpen(true)}
         buttonText="Create New"
         icon={<Plus />}

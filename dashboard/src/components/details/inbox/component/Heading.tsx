@@ -14,7 +14,6 @@ type Props = {
   heading: string;
   subheading: string;
   showDocsBtn?: boolean;
-  showDivider?: boolean;
   onSave?: () => void;
   buttonText?: string;
   icon?: ReactNode;
@@ -25,7 +24,6 @@ const Heading = ({
   subheading,
   onSave,
   showDocsBtn,
-  showDivider,
   buttonText = "Save",
   icon = <FiPlus />,
 }: Props) => {
