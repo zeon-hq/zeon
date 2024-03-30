@@ -43,9 +43,7 @@ const s3 = new S3Client({
 
 // AI related routes
 // upload pdf and injest the data to store in vector's db
-router.post('/injest-file', 
-// upload.single('pdfFile'), 
-AIController.injestPdf);
+router.post('/injest-file', AIController.injestPdf);
 
 router.post('/internal/injest-text', AIController.getInjestPdf);
 
