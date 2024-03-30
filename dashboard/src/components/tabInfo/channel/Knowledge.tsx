@@ -24,10 +24,14 @@ const Knowledge = () => {
 
       {
         openAddDataModal &&
+        <div style={{
+          fontFamily:'Inter !important'
+        }}>
         <AddKnowledgeBaseFile
           opened={openAddDataModal}
           onClose={() => setOpenAddDataModal(false)}
         />
+        </div>
       }
 
     </div>

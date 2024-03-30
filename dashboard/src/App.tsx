@@ -40,8 +40,8 @@ function App() {
         theme={{
           colorScheme: 'light',
           colors: {
-            grey: ['#475467'],
-            blue: ['#3054B9']
+            grey: ['#475467','#344054','#475467'],
+            blue: ['#3054B9','#3C69E7']
           }
         }}>
         <MyGlobalStyles />

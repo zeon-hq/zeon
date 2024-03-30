@@ -117,6 +117,7 @@ export const DNDContainer = styled.div`
   border-radius: 12px;
   padding: 16px 24px;
   width: 100%;
+  font-family: Inter;
 `;
 
 export const HelperText = styled.p`

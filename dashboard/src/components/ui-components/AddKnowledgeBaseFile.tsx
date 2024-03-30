@@ -9,7 +9,9 @@ import {
 import { getConfig as Config } from "config/Config";
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import userDeleteIcon from "assets/user_delete_icon.svg";
 import { AiOutlineCloudUpload } from "react-icons/ai";
+import { Progress } from '@mantine/core';
 
 interface IAddKnowledgeBaseFile {
   opened: boolean;
@@ -18,7 +20,8 @@ interface IAddKnowledgeBaseFile {
 
 const AddKnowledgeBaseFile = ({ opened, onClose }: IAddKnowledgeBaseFile) => {
   const theme = useMantineTheme();
-  const apiDomainUrl = Config("CORE_API_DOMAIN");
+  const apiDomainUrl = Config("API_DOMAIN");
+  const [files, setFiles] = useState<any[]>([]);
   const [progress, setProgress] = useState(0);
 
   const onDropRejected = useCallback((rejectedFile: any) => {
@@ -34,6 +37,7 @@ const AddKnowledgeBaseFile = ({ opened, onClose }: IAddKnowledgeBaseFile) => {
   }, []) // eslint-disable-line
 
   const uploadFileData = async (files: any[]) => {
+    setFiles(files)
     showNotification({
       title: "Error",
       message: "Uploading logo...",
@@ -44,24 +48,22 @@ const AddKnowledgeBaseFile = ({ opened, onClose }: IAddKnowledgeBaseFile) => {
     // multiple files, when the user clicks the 
 
     try {
-      axios.post(`${apiDomainUrl}/team/asset/upload-logo`, formData, {
+      axios.put(`${apiDomainUrl}/team/asset/upload-logo`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${localStorage.getItem('at')}`
         },
         onUploadProgress: (progressEvent) => {
           let percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
           setProgress(percentCompleted);
         }
       })
-      .then(response => {
-        alert('File uploaded successfully');
-      })
-      .catch(error => {
-        alert('Error uploading file');
-      });
-
-
-
+        .then(response => {
+          alert('File uploaded successfully');
+        })
+        .catch(error => {
+          alert('Error uploading file');
+        });
 
       showNotification({
         title: "Success",
@@ -107,7 +109,7 @@ const AddKnowledgeBaseFile = ({ opened, onClose }: IAddKnowledgeBaseFile) => {
       title={<p>Upload and attach files</p>}
     >
       <Box style={{
-        fontFamily: 'Inter'
+        fontFamily: 'Inter !important'
       }}>
 
         <Text mt={'0px'} pt={'0px'} color={"grey.1"}>Upload and attach files to your co-pilot</Text>
@@ -135,7 +137,44 @@ const AddKnowledgeBaseFile = ({ opened, onClose }: IAddKnowledgeBaseFile) => {
           </DNDContainer>
         </div>
 
-        <Text>{progress}</Text>
+        {
+  files.map((file, index) => (
+    <DNDContainer 
+    key={index}
+    style={{
+      fontSize:'14px',
+      marginTop:'12px'
+      // fontFamily: 'Inter',
+    }}
+
+    >
+
+      <Box display={'flex'} w={'100%'} style={{
+      justifyContent: 'space-between'
+      }}>
+      <Text color={theme.colors.grey[1]}>{file.name}</Text>
+
+      <img className="pointer" alt="inchat" src={userDeleteIcon} />
+      </Box>
+      <Text color={theme.colors.grey[2]}>{(file.size / (1024 * 1024)).toFixed(2)} MB</Text>
+
+      <Box display={'flex'} w={'100%'} style={{
+      justifyContent: 'space-between',
+      alignItems: 'center'
+      }}>
+
+      <Progress w={'80%'} color={theme.colors.blue[1]} radius="md" value={progress} />
+
+      <Text>{progress}%</Text>
+      </Box>
+
+    </DNDContainer>
+    ))
+}
+
+
+
+
       </Box>
     </Modal>
   )
