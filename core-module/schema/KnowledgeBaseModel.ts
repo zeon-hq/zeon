@@ -20,8 +20,8 @@ const KnowledgeBaseModel: Schema = new Schema({
     fileId: {type: String, required: true},
     workspaceId: {type: String, required: true},
     channelId: {type: String, required: true},
-    fileName: {type: String, required: true},
-    s3FileUrls: {type: String, required: true},
+    fileName: {type: String},
+    s3FileUrls: {type: String},
     progress: {type: String, required: true},
     isDeleted: {type: Boolean, default: false}
 },{
