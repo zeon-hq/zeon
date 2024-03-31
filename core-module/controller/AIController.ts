@@ -88,10 +88,10 @@ export default class AIController {
       const docs = await textSplitter.splitDocuments(rawDocs);
 
       const embeddings = new OpenAIEmbeddings();
-
+      const collectionName = `state_of_the_union_${workspaceId}_${channelId}`;
       const vectorStore = await Chroma.fromDocuments(docs, embeddings, {
-        collectionName: "state_of_the_union",
-        url: "http://100.111.35.56:9876", // Optional, will default to this value
+        collectionName,
+        url: "https://chroma.zeonhq.com", // Optional, will default to this value
       });
 
       await KnowledgeBaseModel.updateOne({fileId, channelId, workspaceId}, {progress: IKnowledgeBaseFileUploadProgress.INJECT_COMPLETED});
@@ -119,15 +119,16 @@ export default class AIController {
 
   public static async getInjestPdf(req: Request, res: Response) {
     try {
-      const { question, history } = req.body;
+      const { question, history, channelId, workspaceId } = req.body;
       const model = new OpenAI();
-      const sanitizedQuestion = question.trim().replaceAll('\n', ' ');
+      const trimmedQues = question.trim();
+      const sanitizedQuestion = trimmedQues.replaceAll('\n', ' ');
       /* create vectorstore*/
       const vectorStore = await Chroma.fromExistingCollection(
         new OpenAIEmbeddings({}),
         {
-          collectionName: "state_of_the_union",
-          url: "http://100.111.35.56:9876",
+          collectionName: `state_of_the_union_${workspaceId}_${channelId}`,
+          url: "https://chroma.zeonhq.com",
         },
       );
 
@@ -143,7 +144,7 @@ export default class AIController {
       console.log('response', response);
       res.status(200).json(response);
     } catch (e) {
-      if (e.response) {
+        if (e.response) {
         return res.status(e.response.status).json({
           code: e.response.data ? e.response.data.code : e.response.status,
           message: e.response.data ? e.response.data.message : e.message,
