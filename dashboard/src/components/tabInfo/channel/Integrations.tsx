@@ -130,7 +130,7 @@ const Integrations = () => {
               onClick={async()=>{
                 await handleEmailTicketIntegration()
               }}
-              leftIcon={isEmailConfigured ? <img src={SlackDisableIntegration} />: <img src={SlackIntegrationEnable} />}
+              leftIcon={isEmailConfigured ? <img alt="slack icon" src={SlackDisableIntegration} />: <img alt="slack icon" src={SlackIntegrationEnable} />}
             >
               {isEmailConfigured ? "Disable":'Enable'}
             </Button>
@@ -165,7 +165,7 @@ const Integrations = () => {
               onClick={async ()=>{
                 await handleIntegrateSlack();
               }}
-              leftIcon={isSlackConfigured ? <img src={SlackDisableIntegration} /> : <img src={SlackIntegrationEnable} />}
+              leftIcon={isSlackConfigured ? <img alt="slack icon" src={SlackDisableIntegration} /> : <img alt="slack icon" src={SlackIntegrationEnable} />}
             >
               {" "}
               {isSlackConfigured ? "Disable":'Enable'}

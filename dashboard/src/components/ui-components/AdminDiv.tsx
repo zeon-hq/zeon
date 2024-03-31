@@ -63,11 +63,6 @@ const AdminDiv = ({
           style={{ margin: "10px", cursor: "pointer" }}
           />
         }
-          {/* <img
-            src={UserEditIcon}
-            width={"20px"}
-            style={{ margin: "10px", cursor: "pointer" }}
-          /> */}
         </Grid.Col>
       </Grid>
     </Box>

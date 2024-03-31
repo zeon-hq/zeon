@@ -29,7 +29,7 @@ const Heading = ({
 }: Props) => {
   return (
     <>
-      <Wrapper>
+      <Wrapper style={{ padding: "32px 32px" }}>
         <Box>
           <Text color="#101828" weight="600" sx={{ fontSize: "30px" }}>
             {" "}

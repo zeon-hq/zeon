@@ -53,9 +53,7 @@ export async function fetchUserInfo(workspaceId: string) {
 export async function injestPdf(injestPdfPayload: any) {
   
   try {
-    const res: AxiosResponse = await axiosInstance.post(
-      `${coreAPIDomain}/ai/injest-file`
-    );
+    const res: AxiosResponse = await axiosInstance.post(`${coreAPIDomain}/ai/injest-file`,injestPdfPayload);
     return res.data;
   } catch (error: any) {
     console.log(error);

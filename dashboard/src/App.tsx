@@ -1,4 +1,4 @@
-import {  Global, MantineProvider, rem } from "@mantine/core";
+import { Global, MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import CheckEmail from "components/auth/CheckEmail";
 import ForgetPassword from "components/auth/ForgetPassword";

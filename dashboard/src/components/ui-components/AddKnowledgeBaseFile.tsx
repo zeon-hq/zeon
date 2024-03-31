@@ -19,9 +19,7 @@ import { getConfig as Config } from "config/Config";
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { AiOutlineCloudUpload } from "react-icons/ai";
-import {
-  injestPdf,
-} from "service/CoreService";
+import { injestPdf } from "service/CoreService";
 interface IAddKnowledgeBaseFile {
   opened: boolean;
   onClose: () => void;
@@ -34,7 +32,7 @@ export enum IInjectFileType {
 
 const AddKnowledgeBaseFile = ({ opened, onClose }: IAddKnowledgeBaseFile) => {
   const theme = useMantineTheme();
-  const { activeChat, workspaceInfo } = useDashboard();
+  const { workspaceInfo } = useDashboard();
   const channelId = localStorage.getItem("zeon-dashboard-channelId");
   const coreAPIDomainUrl = Config("CORE_API_DOMAIN");
   const [files, setFiles] = useState<any[]>([]);
@@ -52,10 +50,6 @@ const AddKnowledgeBaseFile = ({ opened, onClose }: IAddKnowledgeBaseFile) => {
 
   const uploadFileData = async (files: any[]) => {
     setFiles(files);
-    showNotification({
-      title: "Error",
-      message: "Uploading logo...",
-    });
     let formData = new FormData();
 
     files.forEach((file) => {
@@ -78,8 +72,6 @@ const AddKnowledgeBaseFile = ({ opened, onClose }: IAddKnowledgeBaseFile) => {
           },
         })
         .then((response: any) => {
-          alert("File uploaded successfully");
-
           const uploadedUrl = files.map((data: any) => {
             const fileName = data.name;
             const s3Url = response.data.uploadedUrls.find(
@@ -151,7 +143,6 @@ const AddKnowledgeBaseFile = ({ opened, onClose }: IAddKnowledgeBaseFile) => {
         message: "Error uploading file",
       });
     }
-
   } 
 
   return (
