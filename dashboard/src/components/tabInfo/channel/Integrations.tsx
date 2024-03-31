@@ -26,7 +26,7 @@ const Integrations = () => {
     const stateObject = {
       currentUrl: currentUrl,
       authToken: 'Bearer ' + localStorage.getItem('at'),
-      channelId:localStorage.getItem('userstak-dashboard-channelId')
+      channelId:localStorage.getItem('zeon-dashboard-channelId')
     };
 
     const stateParameter = encodeURIComponent(JSON.stringify(stateObject));

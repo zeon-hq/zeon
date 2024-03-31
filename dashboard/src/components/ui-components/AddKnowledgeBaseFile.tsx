@@ -14,18 +14,28 @@ import {
   HelperText,
   IconContainer
 } from "components/details/inbox/inbox.styles";
+import useDashboard from "hooks/useDashboard";
 import { getConfig as Config } from "config/Config";
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { AiOutlineCloudUpload } from "react-icons/ai";
-
+import {
+  injestPdf,
+} from "service/CoreService";
 interface IAddKnowledgeBaseFile {
   opened: boolean;
   onClose: () => void;
 }
 
+export enum IInjectFileType {
+  DIRECT_FILE_UPLOAD = "DIRECT_FILE_UPLOAD",
+  FILE_URL = "FILE_URL",
+}
+
 const AddKnowledgeBaseFile = ({ opened, onClose }: IAddKnowledgeBaseFile) => {
   const theme = useMantineTheme();
+  const { activeChat, workspaceInfo } = useDashboard();
+  const channelId = localStorage.getItem("zeon-dashboard-channelId");
   const coreAPIDomainUrl = Config("CORE_API_DOMAIN");
   const [files, setFiles] = useState<any[]>([]);
   const [progress, setProgress] = useState(0);
@@ -117,6 +127,32 @@ const AddKnowledgeBaseFile = ({ opened, onClose }: IAddKnowledgeBaseFile) => {
       "application/pdf": [".pdf"]
     }
   });
+
+  const injestPdfFunc = async () => { 
+    const fileUrlId = files.map((file: any) => file.s3Url);
+    const injestPdfPayload =  { 
+      url:fileUrlId, 
+      workspaceId:workspaceInfo?.workspaceId, 
+      channelId:channelId, 
+      uploadType:IInjectFileType.FILE_URL 
+    }
+
+    const res = await injestPdf(injestPdfPayload);
+
+    if (res) {
+      showNotification({
+        title: "Success",
+        message: "File uploaded successfully",
+      });
+      onClose();
+    } else {
+      showNotification({
+        title: "Error",
+        message: "Error uploading file",
+      });
+    }
+
+  } 
 
   return (
     <Modal
@@ -220,7 +256,7 @@ const AddKnowledgeBaseFile = ({ opened, onClose }: IAddKnowledgeBaseFile) => {
             {"Cancel"}
           </Button>
           <Button radius="md" className="primary" onClick={() => {
-            alert(1)
+            injestPdfFunc();
           }}>
             {"Attach Files"}
           </Button>

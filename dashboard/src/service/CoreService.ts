@@ -50,6 +50,19 @@ export async function fetchUserInfo(workspaceId: string) {
   }
 }
 
+export async function injestPdf(injestPdfPayload: any) {
+  
+  try {
+    const res: AxiosResponse = await axiosInstance.post(
+      `${coreAPIDomain}/ai/injest-file`
+    );
+    return res.data;
+  } catch (error: any) {
+    console.log(error);
+    return Promise.reject(error?.response?.data?.error);
+  }
+}
+
 export const login = async (email: string, password: string) => {
   try {
     const loginPayload = { email, password };

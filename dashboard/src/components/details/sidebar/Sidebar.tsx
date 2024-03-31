@@ -58,7 +58,7 @@ const Sidebar = ({ workspaceId }: { workspaceId: string }) => {
   // useEffect(() => {
   //   if (channel.length > 0) {
   //     localStorage.setItem(
-  //       "userstak-dashboard-channelId",
+  //       "zeon-dashboard-channelId",
   //       channel[0].channelId
   //     );
   //   }
@@ -75,7 +75,7 @@ const Sidebar = ({ workspaceId }: { workspaceId: string }) => {
     if (channelIdInUrl) {
 
     localStorage.setItem(
-      "userstak-dashboard-channelId",
+      "zeon-dashboard-channelId",
       channelIdInUrl
     );
     handleClick({
@@ -88,7 +88,7 @@ const Sidebar = ({ workspaceId }: { workspaceId: string }) => {
   } else {
     if (channel.length > 0) {
       localStorage.setItem(
-        "userstak-dashboard-channelId",
+        "zeon-dashboard-channelId",
         channel[0].channelId
       );
     }
@@ -113,7 +113,7 @@ const Sidebar = ({ workspaceId }: { workspaceId: string }) => {
             channelData={channel}
             onChannelClick={(singleChannel: IChannelData) => {
               localStorage.setItem(
-                "userstak-dashboard-channelId",
+                "zeon-dashboard-channelId",
                 singleChannel.channelId
               );
               handleClick({
