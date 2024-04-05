@@ -26,7 +26,7 @@ const SlackOAuth = () => {
       await integrateSlack(
         queryParams.code,
         localStorage.getItem("userstak-dashboard-workspaceId") || "",
-        localStorage.getItem("userstak-dashboard-channelId") || ""
+        localStorage.getItem("zeon-dashboard-channelId") || ""
       );
 
       setChannelCreateState("success");

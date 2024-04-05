@@ -107,7 +107,7 @@ const MessageContainer = () => {
 
     if (channelIdInUrl && ticketIdInUrl) {
       localStorage.setItem(
-        "userstak-dashboard-channelId",
+        "zeon-dashboard-channelId",
         channelIdInUrl
       );
       handleClick({

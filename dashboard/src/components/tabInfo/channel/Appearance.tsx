@@ -112,7 +112,6 @@ const Appearance = () => {
         <Box>
           <Heading
             icon={<img alt="profile save" src={ProfileSave} />}
-            showDivider
             heading={"Appearance"}
             subheading="Configure how Zeon looks so it better suits your brand experience"
             onSave={() => handleSave()}

@@ -14,7 +14,6 @@ type Props = {
   heading: string;
   subheading: string;
   showDocsBtn?: boolean;
-  showDivider?: boolean;
   onSave?: () => void;
   buttonText?: string;
   icon?: ReactNode;
@@ -25,13 +24,12 @@ const Heading = ({
   subheading,
   onSave,
   showDocsBtn,
-  showDivider,
   buttonText = "Save",
   icon = <FiPlus />,
 }: Props) => {
   return (
     <>
-      <Wrapper>
+      <Wrapper style={{ padding: "32px 32px" }}>
         <Box>
           <Text color="#101828" weight="600" sx={{ fontSize: "30px" }}>
             {" "}

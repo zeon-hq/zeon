@@ -52,7 +52,7 @@ export function MessageListHeader() {
   };
   const gotoSettingsPage = () => {
     dispatch(setShowSidebar(false));
-    const channelId: string | null = localStorage.getItem("userstak-dashboard-channelId");
+    const channelId: string | null = localStorage.getItem("zeon-dashboard-channelId");
     dispatch(setLoading(true));
     handleClick({ type: "loading", name: "Loading.." });
     setTimeout(() => {

@@ -1,20 +1,20 @@
+import ChatSidebar from "components/chat/ChatSidebar"
 import Topbar from "components/topbar/Topbar"
-import { useEffect } from "react"
+import CRMSidebar from "crm/CRMSidebar"
+import FinanceSidebar from "finance/expense/FinanceSidebar"
 import useDashboard from "hooks/useDashboard"
+import { useEffect } from "react"
 import { useDispatch } from "react-redux"
+import { useParams } from "react-router-dom"
 import {
   initDashboard,
   MessageType,
   updateConversation,
   updateInbox,
 } from "reducer/slice"
-import { useParams } from "react-router-dom"
 import socketInstance from "socket"
 import styled from "styled-components"
 import FinanceTopbar from "../../finance/expense/FinanceTopbar"
-import ChatSidebar from "components/chat/ChatSidebar"
-import FinanceSidebar from "finance/expense/FinanceSidebar"
-import CRMSidebar from "crm/CRMSidebar"
 
 const ChildWrapper = styled.div<{ isFinance: boolean, isCRM: boolean }>`
   height: ${(props) =>

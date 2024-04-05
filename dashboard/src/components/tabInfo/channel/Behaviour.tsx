@@ -93,7 +93,6 @@ const Behavior = () => {
   return (
     <>
       <Heading
-        showDivider
         heading={"Behaviour"}
         subheading="Configure what happens when users visit your website or open Zeon"
       />

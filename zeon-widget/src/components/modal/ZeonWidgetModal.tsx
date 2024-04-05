@@ -1,5 +1,5 @@
 import { Text } from "@mantine/core";
-import { getChannelById, getOpenTicket } from "api/api";
+import { getOpenTicket } from "api/api";
 import { IPropsType } from "components/chat/Chat.types";
 import ZeonWidgetChat from "components/chat/ZeonWidgetChat";
 import { generateRandomString } from "components/hooks/commonUtils";
@@ -10,9 +10,9 @@ import { BrandingWrapper } from "components/ui-components/uStyleComponents";
 import Header from "components/ui/Header";
 import ZeonWidgetCard from "components/ui/ZeonWidgetCard";
 import ZeonWidgetForm from "components/ui/ZeonWidgetForm";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { useDispatch } from "react-redux";
-import { setAllOpenConversations, setShowWidget, setWidgetDetails } from "redux/slice";
+import { setAllOpenConversations, setShowWidget } from "redux/slice";
 import styled from "styled-components";
 const Wrapper = styled.div`
   background-color: white;

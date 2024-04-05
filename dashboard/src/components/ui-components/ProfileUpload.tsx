@@ -74,8 +74,11 @@ const ProfileUpload = ({ logoImage, setLogoImage, name, description  }: IProfile
         onDropAccepted,
         onDropRejected,
         multiple: false,
-        maxFiles: 1,
-        accept:{ "image/*": [".png", ".gif", ".jpeg", ".jpg"]}
+        maxFiles: 5,
+        accept:
+        { 
+          "image/*": [".png", ".gif", ".jpeg", ".jpg"]
+        }
       });
 
   return (

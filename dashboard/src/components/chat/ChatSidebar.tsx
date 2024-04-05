@@ -56,7 +56,7 @@ const ChatSidebar = ({ workspaceId }: { workspaceId: string }) => {
   useEffect(() => {
     if (channel.length > 0) {
       localStorage.setItem(
-        "userstak-dashboard-channelId",
+        "zeon-dashboard-channelId",
         channel[0].channelId
       );
     }
@@ -80,7 +80,7 @@ const ChatSidebar = ({ workspaceId }: { workspaceId: string }) => {
             channelData={channel}
             onChannelClick={(singleChannel: IChannelData) => {
               localStorage.setItem(
-                "userstak-dashboard-channelId",
+                "zeon-dashboard-channelId",
                 singleChannel.channelId
               );
               handleClick({

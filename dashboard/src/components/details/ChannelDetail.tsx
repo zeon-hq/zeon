@@ -7,6 +7,7 @@ import InChatDashboard from "assets/in_chat_dashboard.svg";
 import IntegrationDashboard from "assets/integration_dashboard.svg";
 import OverviewDashboard from "assets/overview_dashboard.svg";
 import UserDashboard from "assets/user_dashboard.svg";
+import KnowledgeBaseIcon from "assets/knowledge_base_icon.svg";
 import CannedResponse from "components/tabInfo/channel/CannedResponse";
 import OverView from "components/tabInfo/channel/OverView";
 import User from "components/tabInfo/channel/User";
@@ -18,7 +19,7 @@ import {
   InChatWidgets,
   Integrations,
 } from "components/tabInfo/index";
-import { TabInfo, TabsName } from "components/types";
+import { TabInfo, IChannelTabsName } from "components/types";
 import useDashboard from "hooks/useDashboard";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -26,6 +27,7 @@ import { useNavigate } from "react-router";
 import { useLocation, useParams } from "react-router-dom";
 import { setSelectedPage, setShowSidebar } from "reducer/slice";
 import SidebarBack from "./sidebar/SidebarBack";
+import Knowledge from "components/tabInfo/channel/Knowledge";
 
 const ChannelDetail = () => {
   const dispatch = useDispatch();
@@ -33,45 +35,49 @@ const ChannelDetail = () => {
   const navigate = useNavigate();
   const {workspaceId} = useParams();
   const { channelsInfo } = useDashboard();
-  const [tabValue, setTabValue] = useState(TabsName.DEPLOYMENT);
+  const [tabValue, setTabValue] = useState(IChannelTabsName.DEPLOYMENT);
   const channelSettingListArray: TabInfo[] = [
     {
-      name: TabsName.Overview,
+      name: IChannelTabsName.Overview,
       icon: <img alt="dashboard" src={OverviewDashboard} />,
       active: false,
     },
     {
-      name: TabsName.DEPLOYMENT,
+      name: IChannelTabsName.DEPLOYMENT,
       icon: <img alt="deployement" src={DeploymentDashboard} />,
       active: true,
     },
     {
-      name: TabsName.USER,
+      name: IChannelTabsName.USER,
       icon: <img alt="user" src={UserDashboard} />,
       active: true,
     },
     {
-      name: TabsName.CANNED_RESPONSES,
+      name: IChannelTabsName.CANNED_RESPONSES,
       icon: <img alt="canned" src={CannedDashboard} />,
       active: true,
     },
     {
-      name: TabsName.IN_CHAT_WIDGETS,
+      name: IChannelTabsName.IN_CHAT_WIDGETS,
       icon: <img alt="inchat" src={InChatDashboard} />,
       active: true,
     },
     {
-      name: TabsName.APPEARENCE,
+      name: IChannelTabsName.KNOWLEDGE,
+      icon: <img alt="knowledge" src={KnowledgeBaseIcon} />,
+      active: true,
+    },    {
+      name: IChannelTabsName.APPEARENCE,
       icon: <img alt="appearance" src={AppearenceDashboard} />,
       active: true,
     },
     {
-      name: TabsName.INTEGRATIONS,
+      name: IChannelTabsName.INTEGRATIONS,
       icon: <img alt="integrations" src={IntegrationDashboard} />,
       active: true,
     },
     {
-      name: TabsName.BEHAVIORS,
+      name: IChannelTabsName.BEHAVIORS,
       icon: <img alt="behaviour" src={BehvaiourDashboard} />,
       active: true,
     },
@@ -80,23 +86,25 @@ const ChannelDetail = () => {
 
   const getTabInfo = (name: string): any => {
     switch (name) {
-      case TabsName.DEPLOYMENT:
+      case IChannelTabsName.DEPLOYMENT:
         return <Deployment />;
-      case TabsName.BEHAVIORS:
+      case IChannelTabsName.BEHAVIORS:
         return <Behaviour />;
-      case TabsName.CHAT_LOGS:
+      case IChannelTabsName.CHAT_LOGS:
         return <ChatLogs />;
-      case TabsName.IN_CHAT_WIDGETS:
+      case IChannelTabsName.IN_CHAT_WIDGETS:
         return <InChatWidgets />;
-      case TabsName.APPEARENCE:
+      case IChannelTabsName.APPEARENCE:
         return <Appearance />;
-      case TabsName.CANNED_RESPONSES:
+      case IChannelTabsName.CANNED_RESPONSES:
         return <CannedResponse />;
-      case TabsName.USER:
+      case IChannelTabsName.KNOWLEDGE:
+        return <Knowledge />;
+      case IChannelTabsName.USER:
         return <User />;
-      case TabsName.INTEGRATIONS:
+      case IChannelTabsName.INTEGRATIONS:
         return <Integrations />;
-      case TabsName.Overview:
+      case IChannelTabsName.Overview:
         return <OverView />;
       default:
         return <p> Coming Soon </p>;
@@ -109,9 +117,9 @@ const ChannelDetail = () => {
     const channelIdInUrl:string | null = queryParameters.get("channelId");
 
     if (pageName && channelIdInUrl) {
-      setTabValue(pageName as TabsName);
+      setTabValue(pageName as IChannelTabsName);
     } else {
-      setTabValue(TabsName.DEPLOYMENT as TabsName);
+      setTabValue(IChannelTabsName.DEPLOYMENT as IChannelTabsName);
     }
   }, []); // eslint-disable-line
 
@@ -135,7 +143,7 @@ const ChannelDetail = () => {
         h="100%"
         value={tabValue}
         onTabChange={(value) => {
-          setTabValue(value as TabsName);
+          setTabValue(value as IChannelTabsName);
           // @ts-ignore
           navigate(`/${workspaceId}/chat?channelId=${channelsInfo?.channels?.[0]?.channelId}&pageName=${value}`);
         }}
@@ -183,7 +191,7 @@ const ChannelDetail = () => {
           .filter((tab) => tab.active) // Filter tabs where active is true
         .map((tab: TabInfo, index) => {
           return (
-            <Tabs.Panel style={{ padding: "32px 32px", overflow:'scroll' }} value={tab.name} key={index}>
+            <Tabs.Panel style={{ overflow:'scroll' }} value={tab.name} key={index}>
               {getTabInfo(tab.name)}
             </Tabs.Panel>
           );

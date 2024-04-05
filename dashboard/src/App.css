@@ -111,3 +111,8 @@ background: var(--Gray-50, #F9FAFB);
 .mantine-MantineReactTable-bodyCell {
   padding: 4px 12px !important;
 } */
+
+.add_knowledge_base_file_modal .mantine-Modal-header {
+  margin-bottom:0px;
+  padding-bottom:4px;
+}

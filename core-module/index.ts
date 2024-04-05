@@ -1,3 +1,4 @@
+import "web-streams-polyfill/dist/polyfill.es6.js";
 import dotenv from "dotenv";
 dotenv.config();
 import express, { Request, Response } from "express";
@@ -8,21 +9,16 @@ import companyRoutes from "./routes/company";
 import contactRoutes from "./routes/contact";
 import dataModelRoutes from "./routes/dataModel";
 import cors from "cors";
-import {
-  verifyIdentity
-} from "./functions/user"
-
-
-
-const app = express();
-const port = process.env.CORE_BACKEND_PORT
-
+import { verifyIdentity } from "./functions/user"
 import { UserInterface } from "./schema/User"
 import { initializeDB } from "./functions/workspace"
 import CommunicationController from "./controller/CommunicationController";
 import oauthController from "./controller/oauthController";
 import notesRoutes from "./routes/notes";
-import AIController from "./controller/AIController";
+import AIRoute from "./routes/AIRoute";
+
+const app = express();
+const port = process.env.CORE_BACKEND_PORT
 
 declare global {
   namespace Express {
@@ -32,9 +28,8 @@ declare global {
   }
 }
 
-
 // connect to mongodb
-initializeDB()
+initializeDB();
 
 // setup cors to allow all origins
 app.use(cors({
@@ -46,7 +41,7 @@ app.use(cors({
   credentials: true
 })); 
 
-  // set up router
+// set up router
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -57,21 +52,12 @@ app.use("/workspaces", verifyIdentity,workspaceRoutes);
 app.use("/companies",verifyIdentity, companyRoutes);
 app.use("/contacts",verifyIdentity, contactRoutes);
 app.use("/notes",verifyIdentity, notesRoutes);
-app.use("/datamodel", verifyIdentity,dataModelRoutes );
+app.use("/datamodel", verifyIdentity, dataModelRoutes);
+app.use("/ai", verifyIdentity, AIRoute);
 
 app.post("/internal/communication/send-email", CommunicationController.sendEmail);
 
 app.post('/internal/slack/message', oauthController.sendMessage);
-
-// AI related routes
-// upload pdf and injest the data to store in vector's db
-app.post('/ai/injest-file', verifyIdentity, AIController.injestPdf);
-
-// list of pdf files
-app.get('/ai/file-list', verifyIdentity, AIController.listfiles);
-
-// delete file
-app.delete('/ai/delete-file', verifyIdentity, AIController.deleteFile);
 
 
 app.get("/health", (req: Request, res: Response)=>{
@@ -89,10 +75,3 @@ app.listen(port, () => {
 export {
   verifyIdentity
 }
-
-
-
-
-
-
-

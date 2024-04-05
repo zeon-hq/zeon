@@ -50,6 +50,17 @@ export async function fetchUserInfo(workspaceId: string) {
   }
 }
 
+export async function injestPdf(injestPdfPayload: any) {
+  
+  try {
+    const res: AxiosResponse = await axiosInstance.post(`${coreAPIDomain}/ai/injest-file`,injestPdfPayload);
+    return res.data;
+  } catch (error: any) {
+    console.log(error);
+    return Promise.reject(error?.response?.data?.error);
+  }
+}
+
 export const login = async (email: string, password: string) => {
   try {
     const loginPayload = { email, password };
@@ -356,4 +367,15 @@ export const getCRMDetailsMinimal = async (workspaceId: string) => {
   } catch (error) {
     return {};
   }
-};
+}
+
+export const getKnowledgeBaseList = async (workspaceId: string, channelId:string) => {
+  try {
+    const res = await axiosInstance.get(
+      `${coreAPIDomain}/ai/get-uploaded-files/${channelId}/${workspaceId}`
+    );
+    return res.data;
+  } catch (error) {
+    return {};
+  }
+}

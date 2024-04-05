@@ -88,7 +88,6 @@ const InChatWidgets = () => {
     <>
       <Heading
         heading="In Chat Widgets"
-        showDivider
         icon={<img alt="profile" src={ProfileSave} />}
         subheading="Create widgets with content and give them a link. This is useful if you want to create a button for scheduling meetings, documentation and invites to your social channels."
         onSave={() => handleSave()}

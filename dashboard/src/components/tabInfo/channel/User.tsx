@@ -127,7 +127,6 @@ const User = ({ channelId }: Props) => {
   return (
     <>
       <Heading
-        showDivider
         heading="Users"
         subheading="Manage and add users to your chat channel."
       />

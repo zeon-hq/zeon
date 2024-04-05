@@ -14,11 +14,11 @@ const Integrations = () => {
   const dispatch = useDispatch();
   const { workspaceInfo } = useDashboard();
   const { selectedPage, channelsInfo } = useDashboard();
-  const isSlackNewTicketNotificationEnabled = channelsInfo[selectedPage.name]?.slackChannelId;
-  const isEmailNewTicketNotificationEnabled = channelsInfo[selectedPage.name]?.emailNewTicketNotification;
+  const isSlackConfigured = channelsInfo[selectedPage.name]?.slackChannelId;
+  const isEmailConfigured = channelsInfo[selectedPage.name]?.emailNewTicketNotification;
 
   const handleIntegrateSlack = async () => {
-    if (!isSlackNewTicketNotificationEnabled){    
+    if (!isSlackConfigured){    
       // Enable Slack Integration for New Ticket Notification
     const slackRedirectionUrl = Config("API_DOMAIN") + "/oauth/slack/authorize";
     const currentUrl = window.location.href;
@@ -26,7 +26,7 @@ const Integrations = () => {
     const stateObject = {
       currentUrl: currentUrl,
       authToken: 'Bearer ' + localStorage.getItem('at'),
-      channelId:localStorage.getItem('userstak-dashboard-channelId')
+      channelId:localStorage.getItem('zeon-dashboard-channelId')
     };
 
     const stateParameter = encodeURIComponent(JSON.stringify(stateObject));
@@ -123,16 +123,16 @@ const Integrations = () => {
               style={{
                 borderColor: "white",
                 backgroundColor: "white",
-                color: isEmailNewTicketNotificationEnabled ? "#B42318":"#3054B9",
+                color: isEmailConfigured ? "#B42318":"#3054B9",
                 fontSize: "12px",
                 fontStyle: "normal",
               }}
               onClick={async()=>{
                 await handleEmailTicketIntegration()
               }}
-              leftIcon={isEmailNewTicketNotificationEnabled ? <img alt="slack" src={SlackDisableIntegration} />: <img alt="slack enable" src={SlackIntegrationEnable} />}
+              leftIcon={isEmailConfigured ? <img alt="slack icon" src={SlackDisableIntegration} />: <img alt="slack icon" src={SlackIntegrationEnable} />}
             >
-              {isEmailNewTicketNotificationEnabled ? "Disable":'Enable'}
+              {isEmailConfigured ? "Disable":'Enable'}
             </Button>
           </Flex>
 
@@ -158,17 +158,17 @@ const Integrations = () => {
               style={{
                 borderColor: "white",
                 backgroundColor: "white",
-                color: isSlackNewTicketNotificationEnabled ? "#B42318":"#3054B9",
+                color: isSlackConfigured ? "#B42318":"#3054B9",
                 fontSize: "12px",
                 fontStyle: "normal",
               }}
               onClick={async ()=>{
                 await handleIntegrateSlack();
               }}
-              leftIcon={isSlackNewTicketNotificationEnabled ? <img alt="slack disable" src={SlackDisableIntegration} /> : <img alt="slack enable" src={SlackIntegrationEnable} />}
+              leftIcon={isSlackConfigured ? <img alt="slack icon" src={SlackDisableIntegration} /> : <img alt="slack icon" src={SlackIntegrationEnable} />}
             >
               {" "}
-              {isSlackNewTicketNotificationEnabled ? "Disable":'Enable'}
+              {isSlackConfigured ? "Disable":'Enable'}
             </Button>
           </Flex>
 

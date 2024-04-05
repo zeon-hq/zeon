@@ -37,7 +37,6 @@ const Profile = () => {
     <>
       <Space h={24} />
       <Heading
-        showDivider
         heading="Personal info"
         subheading="Update your photo and personal details here."
       />
