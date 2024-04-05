@@ -3,13 +3,27 @@ import axios from "axios";
 import { Request, Response } from "express";
 import fs from "fs";
 import { PDFLoader } from "langchain/document_loaders/fs/pdf";
-import { OpenAI } from "@langchain/openai";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { Chroma } from "@langchain/community/vectorstores/chroma";
 import path from "path";
 import KnowledgeBaseModel, { IKnowledgeBaseFileUploadStatus } from "../schema/KnowledgeBaseModel";
 import { makeChain } from "../utils/AIUtils";
 import { generateId } from "../utils/utils";
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
+
+const secretAccessKey = process.env.SECRET_ACCESS_KEY as string
+const accessKeyId = process.env.ACCESS_KEY as string
+const bucketName = process.env.BUCKET_NAME as string
+const region = process.env.REGION as string
+
+const s3 = new S3Client({
+  credentials: {
+    secretAccessKey,
+    accessKeyId,
+  },
+  region
+})
+
 async function writeData(writer: any) {
   try {
     // Assuming 'data' needs to be written using 'writer'
@@ -32,6 +46,7 @@ export enum IInjectFileType {
   FILE_URL = "FILE_URL",
 }
 
+const embeddings = new OpenAIEmbeddings();
 export default class AIController {
 
   public static async injestPdf(req: Request, res: Response) {
@@ -82,8 +97,6 @@ export default class AIController {
 
       const docs = await textSplitter.splitDocuments(rawDocs);
 
-      const embeddings = new OpenAIEmbeddings();
-
       const vectorStore = await Chroma.fromExistingCollection(
         embeddings,
         { 
@@ -120,11 +133,12 @@ export default class AIController {
   public static async getInjestPdf(req: Request, res: Response) {
     try {
       const { question, history } = req.body;
-      const model = new OpenAI();
+
+      
       const sanitizedQuestion = question.trim().replaceAll('\n', ' ');
       /* create vectorstore*/
       const vectorStore = await Chroma.fromExistingCollection(
-        new OpenAIEmbeddings({}),
+        embeddings,
         {
           collectionName: "state_of_the_union",
           url: "http://100.111.35.56:9876",
@@ -140,7 +154,6 @@ export default class AIController {
         chat_history: history || [],
       });
 
-      console.log('response', response);
       res.status(200).json(response);
     } catch (e) {
       if (e.response) {
@@ -254,5 +267,39 @@ export default class AIController {
         });
       }
     }
+}
+
+public static async uploadFiles (req: Request, res: Response) {
+  try {
+    const uploadedUrls = await Promise.all(((req.files || []) as Express.Multer.File[])?.map(async (file: Express.Multer.File) => {
+      const tempId = generateId(6);
+      const fileName = `${file.originalname}-${tempId}`;
+      
+      const commandPayload = {
+        Bucket: bucketName,
+        Key: fileName,
+        Body: file.buffer,
+        ContentType: file.mimetype,
+      }
+
+      const command = new PutObjectCommand(commandPayload);
+      await s3.send(command);
+      return { url:`https://${bucketName}.s3.${region}.amazonaws.com/${fileName}`,
+     fileName: file.originalname,
+     mimeType: file.mimetype
+    };
+    }));
+
+    return res.status(200).json({
+      message: "Logos uploaded",
+      uploadedUrls: uploadedUrls // This is an array of URLs
+    })
+
+  } catch (error) {
+    console.log('error message', error?.message);
+    return res.status(500).json({
+      message: error?.message,
+    })
+  }
 }
 }

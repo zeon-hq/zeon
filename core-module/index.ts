@@ -19,7 +19,6 @@ import AIRoute from "./routes/AIRoute";
 
 const app = express();
 const port = process.env.CORE_BACKEND_PORT
-import AIController from "./controller/AIController";
 
 declare global {
   namespace Express {
@@ -53,8 +52,8 @@ app.use("/workspaces", verifyIdentity,workspaceRoutes);
 app.use("/companies",verifyIdentity, companyRoutes);
 app.use("/contacts",verifyIdentity, contactRoutes);
 app.use("/notes",verifyIdentity, notesRoutes);
-app.use("/datamodel", verifyIdentity,dataModelRoutes);
-app.use("/ai", AIRoute);
+app.use("/datamodel", verifyIdentity, dataModelRoutes);
+app.use("/ai", verifyIdentity, AIRoute);
 
 app.post("/internal/communication/send-email", CommunicationController.sendEmail);
 
