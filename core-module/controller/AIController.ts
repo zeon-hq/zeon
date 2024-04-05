@@ -201,8 +201,8 @@ export default class AIController {
 
   public static async deleteFile(req: Request, res: Response) {
     try {
-      const { fileId } = req.params;
-      const {channelId, workspaceId} = req.body;
+      const { fileId, channelId, workspaceId } = req.params;
+      // const {channelId, workspaceId} = req.body;
 
       const file = await KnowledgeBaseModel.findOneAndDelete({fileId, channelId, workspaceId});
 

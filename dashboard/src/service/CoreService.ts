@@ -379,3 +379,14 @@ export const getKnowledgeBaseList = async (workspaceId: string, channelId:string
     return {};
   }
 }
+
+export const deleteKnowledgeBaseFile = async (fileId: string, workspaceId:string, channelId:string) => {
+  try {
+    const res = await axiosInstance.delete(
+      `${coreAPIDomain}/ai/delete-file/${fileId}/${channelId}/${workspaceId}`
+    );
+    return res.data;
+  } catch (error) {
+    return {};
+  }
+}

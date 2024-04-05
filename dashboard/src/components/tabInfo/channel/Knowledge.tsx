@@ -8,7 +8,7 @@ import KBPdfIcon from "assets/kb_pdf.svg";
 import UserDeleteIcon from "assets/user_remove_icon.svg";
 import EditIcon from "assets/kb_edit.svg";
 import useDashboard from "hooks/useDashboard";
-import {getKnowledgeBaseList} from "service/CoreService";
+import {deleteKnowledgeBaseFile, getKnowledgeBaseList} from "service/CoreService";
 
 const useStyles = createStyles((theme) => ({
   text: {
@@ -67,6 +67,14 @@ const Knowledge = () => {
     
   }
 
+  const deleteFile = async (fileId: string) => {
+    const response = await deleteKnowledgeBaseFile(fileId, workspaceInfo.workspaceId, channelId as string);
+    if (response.code == '200'){
+      await fetchKnowledgeBaseFiles();
+    }
+  }
+
+
   return (
     <div>
       <Heading
@@ -101,11 +109,11 @@ const Knowledge = () => {
           <Text className={classes.text}>Status</Text>
         </Box>
 
-        <Box className={classes.boxWrapper} w={'15%'}>
+        {/* <Box className={classes.boxWrapper} w={'15%'}>
           <Text className={classes.text}></Text>
-        </Box>
+        </Box> */}
 
-        <Box className={classes.boxWrapper} w={'9%'}>
+        <Box className={classes.boxWrapper} w={'24%'}>
           <Text className={classes.text}></Text>
         </Box>
       </MFlex>
@@ -129,13 +137,20 @@ const Knowledge = () => {
                   <Text className={classes.text}>{item.status}</Text>
                 </Box>
 
-                <Box className={classes.tableWrapper} w={'15%'}>
+                {/* <Box className={classes.tableWrapper} w={'15%'}>
                   <Text className={classes.text}>dfsdf</Text>
-                </Box>
+                </Box> */}
 
-                <Box className={classes.tableWrapper} w={'9%'}>
-                  <img style={{padding:'10px'}} alt="delete icon"src={UserDeleteIcon} />
-                  <img style={{padding:'10px'}} alt="edit icon"src={EditIcon} />
+                <Box display={'flex'} className={classes.tableWrapper} w={'24%'} style={{
+                  justifyContent: 'center'
+                }}>
+                  <img 
+                  className="pointer"
+                  onClick={async()=>{
+                    await deleteFile(item.fileId);
+                  }}
+                  style={{padding:'10px'}} alt="delete icon"src={UserDeleteIcon} />
+                  {/* <img style={{padding:'10px'}} alt="edit icon"src={EditIcon} /> */}
                 </Box>
               </MFlex>
             </>

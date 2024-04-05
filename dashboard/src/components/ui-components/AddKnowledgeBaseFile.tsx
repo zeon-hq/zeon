@@ -87,16 +87,16 @@ const AddKnowledgeBaseFile = ({ opened, onClose }: IAddKnowledgeBaseFile) => {
           });
           setFileProgressCompleted(true)
           setFiles(uploadedUrl || []);
+          showNotification({
+            title: "Success",
+            message:
+              "Files Uploaded successfully. Click on Attach Files to attach the files to the Knowledge Base.",
+          });
         })
         .catch((error) => {
           alert("Error uploading file");
         });
 
-      showNotification({
-        title: "Success",
-        message:
-          "Logo uploaded successfully. Click on save and refresh the page to see the changes",
-      });
     } catch (e) {
       showNotification({
         title: "Success",
@@ -127,9 +127,9 @@ const AddKnowledgeBaseFile = ({ opened, onClose }: IAddKnowledgeBaseFile) => {
       uploadType:IInjectFileType.FILE_URL 
     }
 
-    const res = await injestPdf(injestPdfPayload);
+    const injestPdfCall = await injestPdf(injestPdfPayload);
 
-    if (res) {
+    if (injestPdfCall) {
       showNotification({
         title: "Success",
         message: "File uploaded successfully",
@@ -246,8 +246,8 @@ const AddKnowledgeBaseFile = ({ opened, onClose }: IAddKnowledgeBaseFile) => {
           </Button>
           <Button 
           disabled={!fileProgressCompleted}
-          radius="md" className="primary" onClick={() => {
-            injestPdfFunc();
+          radius="md" className="primary" onClick={async () => {
+            await injestPdfFunc();
           }}>
             {"Attach Files"}
           </Button>

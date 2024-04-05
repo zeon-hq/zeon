@@ -16,7 +16,7 @@ router.post('/internal/injest-text', AIController.getInjestPdf);
 router.get('/get-uploaded-files/:channelId/:workspaceId', AIController.getUploadedFileList);
 
 // delete the file
-router.delete('/delete-file/:fileId', AIController.deleteFile);
+router.delete('/delete-file/:fileId/:channelId/:workspaceId', AIController.deleteFile);
 
 // download uploaded file
 router.get('/download-file/:fileId', AIController.downloadFile);
