@@ -1,12 +1,14 @@
 import { Box, Flex as MFlex, Space, Text } from "@mantine/core";
 import Heading from "components/details/inbox/component/Heading";
 import AddKnowledgeBaseFile from "components/ui-components/AddKnowledgeBaseFile";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Plus } from "tabler-icons-react";
 import { createStyles } from '@mantine/core';
 import KBPdfIcon from "assets/kb_pdf.svg";
 import UserDeleteIcon from "assets/user_remove_icon.svg";
 import EditIcon from "assets/kb_edit.svg";
+import useDashboard from "hooks/useDashboard";
+import {getKnowledgeBaseList} from "service/CoreService";
 
 const useStyles = createStyles((theme) => ({
   text: {
@@ -28,9 +30,43 @@ const useStyles = createStyles((theme) => ({
   }
 }));
 
+type IKnowledgeBase = {
+  _id: string;
+  fileId: string;
+  workspaceId: string;
+  channelId: string;
+  s3FileUrls: string;
+  status: string;
+  fileName: string;
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+};
+
 const Knowledge = () => {
   const [openAddDataModal, setOpenAddDataModal] = useState(false);
   const { classes } = useStyles();
+  const { workspaceInfo } = useDashboard();
+  const [knowledgeFileList, setKnowledgeFileList] = useState<IKnowledgeBase[]>([]);
+  const channelId = localStorage.getItem("zeon-dashboard-channelId");
+  
+  useEffect(() => {
+    fetchKnowledgeBaseFiles();
+  }, []);
+
+  const fetchKnowledgeBaseFiles = async () => {
+    const fileList = await getKnowledgeBaseList(workspaceInfo.workspaceId, channelId as string);
+    console.log('fileList', fileList);
+
+    if (fileList.code == '200'){
+      setKnowledgeFileList(fileList.data);
+    } else {
+      setKnowledgeFileList([]);
+    }
+    
+  }
+
   return (
     <div>
       <Heading
@@ -75,12 +111,11 @@ const Knowledge = () => {
       </MFlex>
 
       {
-        [{fileName:"sample.pdf", status:'Completed', createdAt:'27/05/2023 01:25 PM' }]
-        
+        knowledgeFileList
         .map((item, index) => {
           return (
             <>
-              <MFlex>
+              <MFlex key={index}>
                 <Box className={classes.tableWrapper} pl='24px' w={'43%'}>
                 <img alt="test"src={KBPdfIcon} />
                   <Text className={classes.text}>{item.fileName}</Text>

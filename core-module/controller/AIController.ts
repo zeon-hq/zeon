@@ -7,7 +7,7 @@ import { OpenAI } from "@langchain/openai";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { Chroma } from "@langchain/community/vectorstores/chroma";
 import path from "path";
-import KnowledgeBaseModel, { IKnowledgeBaseFileUploadProgress } from "../schema/KnowledgeBaseModel";
+import KnowledgeBaseModel, { IKnowledgeBaseFileUploadStatus } from "../schema/KnowledgeBaseModel";
 import { makeChain } from "../utils/AIUtils";
 import { generateId } from "../utils/utils";
 async function writeData(writer: any) {
@@ -50,17 +50,13 @@ export default class AIController {
       let tempPdfPath;
       let fileName;
 
-      // upload to s3
 
 
       // s3 file upload
-      await KnowledgeBaseModel.create({fileId, workspaceId, channelId,fileName, s3FileUrls: '', progress: IKnowledgeBaseFileUploadProgress.UPLOADED_TO_S3});
+      await KnowledgeBaseModel.create({fileId, workspaceId, channelId,fileName, s3FileUrls: url[0], status: IKnowledgeBaseFileUploadStatus.INJECT_STARTED});
 
       
-      if (uploadType === IInjectFileType.DIRECT_FILE_UPLOAD) {
-        fileName = req.file.filename;
-        tempPdfPath = path.join(__dirname, fileName);
-      } else if (uploadType === IInjectFileType.FILE_URL) {
+     if (uploadType === IInjectFileType.FILE_URL) {
         fileName = `${workspaceId}_${channelId}_${generateId(6)}.pdf`;
         tempPdfPath = path.join(__dirname, fileName);
               // start
@@ -78,7 +74,6 @@ export default class AIController {
       loader = new PDFLoader(tempPdfPath);
 
       const rawDocs = await loader.load();
-      await KnowledgeBaseModel.updateOne({fileId, channelId, workspaceId}, {progress: IKnowledgeBaseFileUploadProgress.INJECT_STARTED});
       /* Split text into chunks */
       const textSplitter = new RecursiveCharacterTextSplitter({
         chunkSize: 1000,
@@ -89,12 +84,17 @@ export default class AIController {
 
       const embeddings = new OpenAIEmbeddings();
 
-      const vectorStore = await Chroma.fromDocuments(docs, embeddings, {
-        collectionName: "state_of_the_union",
-        url: "http://100.111.35.56:9876", // Optional, will default to this value
-      });
+      const vectorStore = await Chroma.fromExistingCollection(
+        embeddings,
+        { 
+          collectionName: "state_of_the_union", 
+          url: "http://100.111.35.56:9876" 
+        }
+      );
 
-      await KnowledgeBaseModel.updateOne({fileId, channelId, workspaceId}, {progress: IKnowledgeBaseFileUploadProgress.INJECT_COMPLETED});
+      await vectorStore.addDocuments(docs);
+
+      await KnowledgeBaseModel.updateOne({fileId, channelId, workspaceId}, {status: IKnowledgeBaseFileUploadStatus.INJECT_COMPLETED});
       fs.unlinkSync(tempPdfPath);
 
       return res.status(200).json({

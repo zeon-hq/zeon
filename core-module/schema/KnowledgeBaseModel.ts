@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
-export enum IKnowledgeBaseFileUploadProgress {
+export enum IKnowledgeBaseFileUploadStatus {
     UPLOADED_TO_S3 = 'UPLOADED_TO_S3',
     INJECT_STARTED = 'INJECT_STARTED',
     INJECT_COMPLETED = 'INJECT_COMPLETED',
@@ -12,7 +12,7 @@ interface IKnowledgeBaseModel extends Document {
     channelId: string;
     fileName: string;
     s3FileUrls: string;
-    progress: IKnowledgeBaseFileUploadProgress;
+    status: IKnowledgeBaseFileUploadStatus;
     isDeleted: boolean;
 }
 
@@ -22,7 +22,7 @@ const KnowledgeBaseModel: Schema = new Schema({
     channelId: {type: String, required: true},
     fileName: {type: String},
     s3FileUrls: {type: String},
-    progress: {type: String, required: true},
+    status: {type: String, required: true},
     isDeleted: {type: Boolean, default: false}
 },{
     timestamps: true
