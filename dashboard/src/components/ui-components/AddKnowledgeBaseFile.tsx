@@ -37,6 +37,7 @@ const AddKnowledgeBaseFile = ({ opened, onClose }: IAddKnowledgeBaseFile) => {
   const coreAPIDomainUrl = Config("CORE_API_DOMAIN");
   const [files, setFiles] = useState<any[]>([]);
   const [progress, setProgress] = useState(0);
+  const [fileProgressCompleted, setFileProgressCompleted] = useState(false);
   const onDropRejected = useCallback((rejectedFile: any) => {
     rejectedFile.forEach((file: any) => {
       file.errors.forEach((error: any) => {
@@ -84,7 +85,7 @@ const AddKnowledgeBaseFile = ({ opened, onClose }: IAddKnowledgeBaseFile) => {
               type: data.type,
             };
           });
-
+          setFileProgressCompleted(true)
           setFiles(uploadedUrl || []);
         })
         .catch((error) => {
@@ -101,8 +102,6 @@ const AddKnowledgeBaseFile = ({ opened, onClose }: IAddKnowledgeBaseFile) => {
         title: "Success",
         message: "Cannot upload image. Something went wrong",
       });
-
-      console.error(e);
     }
   };
 
@@ -121,9 +120,8 @@ const AddKnowledgeBaseFile = ({ opened, onClose }: IAddKnowledgeBaseFile) => {
   });
 
   const injestPdfFunc = async () => { 
-    const fileUrlId = files.map((file: any) => file.s3Url);
     const injestPdfPayload =  { 
-      url:fileUrlId, 
+      url:files, 
       workspaceId:workspaceInfo?.workspaceId, 
       channelId:channelId, 
       uploadType:IInjectFileType.FILE_URL 
@@ -246,7 +244,9 @@ const AddKnowledgeBaseFile = ({ opened, onClose }: IAddKnowledgeBaseFile) => {
           <Button variant="default" radius="md" onClick={() => {}}>
             {"Cancel"}
           </Button>
-          <Button radius="md" className="primary" onClick={() => {
+          <Button 
+          disabled={!fileProgressCompleted}
+          radius="md" className="primary" onClick={() => {
             injestPdfFunc();
           }}>
             {"Attach Files"}

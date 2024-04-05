@@ -11,10 +11,12 @@ import { makeChain } from "../utils/AIUtils";
 import { generateId } from "../utils/utils";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
 
-const secretAccessKey = process.env.SECRET_ACCESS_KEY as string
-const accessKeyId = process.env.ACCESS_KEY as string
-const bucketName = process.env.BUCKET_NAME as string
-const region = process.env.REGION as string
+const secretAccessKey = process.env.SECRET_ACCESS_KEY as string;
+const accessKeyId = process.env.ACCESS_KEY as string;
+const bucketName = process.env.BUCKET_NAME as string;
+const region = process.env.REGION as string;
+
+const chromaDbUrl = "http://100.111.35.56:9876";
 
 const s3 = new S3Client({
   credentials: {
@@ -58,33 +60,32 @@ export default class AIController {
       // website url 
 
       // things convered -> upload pdf file, pass the file url
-      const { url, workspaceId, channelId, uploadType } = req.body;
+      const { url, workspaceId, channelId } = req.body;
+      // collection name is the channelId-workspaceId
+      const collectionName = `${workspaceId}-${channelId}`;
       const fileId = generateId(6);
 
       let loader;
       let tempPdfPath;
       let fileName;
 
-
+      const fileUrl = url[0]?.url
+      fileName = url[0]?.name;
 
       // s3 file upload
-      await KnowledgeBaseModel.create({fileId, workspaceId, channelId,fileName, s3FileUrls: url[0], status: IKnowledgeBaseFileUploadStatus.INJECT_STARTED});
-
+      await KnowledgeBaseModel.create({fileId, workspaceId, channelId, fileName, s3FileUrls: fileUrl, status: IKnowledgeBaseFileUploadStatus.INJECT_STARTED});
       
-     if (uploadType === IInjectFileType.FILE_URL) {
-        fileName = `${workspaceId}_${channelId}_${generateId(6)}.pdf`;
         tempPdfPath = path.join(__dirname, fileName);
               // start
       const response = await axios({
         method: "GET",
-        url: url[0],
+        url: fileUrl,
         responseType: "stream",
       });
 
       const writer = fs.createWriteStream(tempPdfPath);
       response.data.pipe(writer);
       await writeData(writer);
-      }
 
       loader = new PDFLoader(tempPdfPath);
 
@@ -100,10 +101,10 @@ export default class AIController {
       const vectorStore = await Chroma.fromExistingCollection(
         embeddings,
         { 
-          collectionName: "state_of_the_union", 
-          url: "http://100.111.35.56:9876" 
+          collectionName, 
+          url: chromaDbUrl 
         }
-      );
+      )
 
       await vectorStore.addDocuments(docs);
 
@@ -132,16 +133,15 @@ export default class AIController {
 
   public static async getInjestPdf(req: Request, res: Response) {
     try {
-      const { question, history } = req.body;
-
-      
+      const { question, history, workspaceId, channelId} = req.body;
+      const collectionName = `${workspaceId}-${channelId}`;
       const sanitizedQuestion = question.trim().replaceAll('\n', ' ');
       /* create vectorstore*/
       const vectorStore = await Chroma.fromExistingCollection(
         embeddings,
         {
-          collectionName: "state_of_the_union",
-          url: "http://100.111.35.56:9876",
+          collectionName,
+          url: chromaDbUrl,
         },
       );
 
