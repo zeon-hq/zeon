@@ -271,7 +271,7 @@ export default class AIController {
 
 public static async uploadFiles (req: Request, res: Response) {
   try {
-    const uploadedUrls = await Promise.all(((req.files || []) as Express.Multer.File[])?.map(async (file: Express.Multer.File) => {
+    const uploadedUrls = await Promise.all(((req.files || []) as any[])?.map(async (file: any) => {
       const tempId = generateId(6);
       const fileName = `${file.originalname}-${tempId}`;
       
