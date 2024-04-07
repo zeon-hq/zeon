@@ -19,25 +19,45 @@ Question: {question}
 Helpful answer in markdown:`;
 
 const combineDocumentsFn = (docs: Document[], separator = '\n\n') => {
-    const serializedDocs = docs.map((doc) => doc.pageContent);
-    return serializedDocs.join(separator);
-  };
+  const serializedDocs = docs.map((doc) => doc.pageContent);
+  return serializedDocs.join(separator);
+};
 
-  export const makeChain = (vectorstore: Chroma) => {
-    const model = new OpenAI({
-      temperature: 0, // increase temepreature to get more creative answers
-      modelName: 'gpt-3.5-turbo', //change this to gpt-4 if you have access
+export const makeChain = (vectorstore: Chroma) => {
+  const model = new OpenAI({
+    temperature: 0, // increase temepreature to get more creative answers
+    modelName: 'gpt-3.5-turbo', //change this to gpt-4 if you have access
+  });
+
+  const chain = ConversationalRetrievalQAChain.fromLLM(
+    model,
+    vectorstore.asRetriever(),
+    {
+      qaTemplate: QA_PROMPT,
+      questionGeneratorTemplate: CONDENSE_PROMPT,
+      returnSourceDocuments: true, //The number of source documents returned is 4 by default
+    },
+  );
+  return chain;
+};
+
+
+export const writeData = async (writer: any) => {
+  try {
+    // Assuming 'data' needs to be written using 'writer'
+    // This is where you'd typically write data, e.g., writer.write(data);
+
+    await new Promise((resolve, reject) => {
+      writer.on("finish", resolve);
+      writer.on("error", reject);
     });
-  
-    const chain = ConversationalRetrievalQAChain.fromLLM(
-      model,
-      vectorstore.asRetriever(),
-      {
-        qaTemplate: QA_PROMPT,
-        questionGeneratorTemplate: CONDENSE_PROMPT,
-        returnSourceDocuments: true, //The number of source documents returned is 4 by default
-      },
-    );
-    return chain;
-  };
-  
+
+    console.log("Write finished successfully");
+  } catch (error) {
+    console.error("Error during write:", error);
+  }
+}
+
+export const getCollectionName = (workspaceId: string, channelId: string) => {
+  return `${workspaceId}-${channelId}`;
+}

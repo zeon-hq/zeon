@@ -1,22 +1,22 @@
-import { OpenAIEmbeddings } from "@langchain/openai";
-import axios from "axios";
-import { Request, Response } from "express";
-import fs from "fs";
-import { PDFLoader } from "langchain/document_loaders/fs/pdf";
-import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { Chroma } from "@langchain/community/vectorstores/chroma";
-import path from "path";
-import KnowledgeBaseModel, { IKnowledgeBaseFileUploadStatus } from "../schema/KnowledgeBaseModel";
+import { OpenAIEmbeddings } from "@langchain/openai";
+import { ChromaClient } from 'chromadb';
+import { Request, Response } from "express";
+import { chromaDbUrl } from "../constant/AIConstant";
+import KnowledgeBaseModel from "../schema/KnowledgeBaseModel";
+import AIService from "../service/AIService";
 import { makeChain } from "../utils/AIUtils";
 import { generateId } from "../utils/utils";
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
 
 const secretAccessKey = process.env.SECRET_ACCESS_KEY as string;
 const accessKeyId = process.env.ACCESS_KEY as string;
 const bucketName = process.env.BUCKET_NAME as string;
 const region = process.env.REGION as string;
 
-const chromaDbUrl = "http://100.111.35.56:9876";
+const chromaRawClient = new ChromaClient({
+  path:chromaDbUrl
+});
 
 const s3 = new S3Client({
   credentials: {
@@ -26,21 +26,7 @@ const s3 = new S3Client({
   region
 })
 
-async function writeData(writer: any) {
-  try {
-    // Assuming 'data' needs to be written using 'writer'
-    // This is where you'd typically write data, e.g., writer.write(data);
-
-    await new Promise((resolve, reject) => {
-      writer.on("finish", resolve);
-      writer.on("error", reject);
-    });
-
-    console.log("Write finished successfully");
-  } catch (error) {
-    console.error("Error during write:", error);
-  }
-}
+const embeddings = new OpenAIEmbeddings();
 
 
 export enum IInjectFileType {
@@ -48,69 +34,20 @@ export enum IInjectFileType {
   FILE_URL = "FILE_URL",
 }
 
-const embeddings = new OpenAIEmbeddings();
 export default class AIController {
 
   public static async injestPdf(req: Request, res: Response) {
     try {
-      // possible ways of injesting the content are
-      // uplaoding the file directly
-      // pdf, txt, docx
-      // uplading the pdf in the url
-      // website url 
 
       // things convered -> upload pdf file, pass the file url
       const { url, workspaceId, channelId } = req.body;
       // collection name is the channelId-workspaceId
       const collectionName = `${workspaceId}-${channelId}`;
-      const fileId = generateId(6);
 
-      let loader;
-      let tempPdfPath;
-      let fileName;
-
-      const fileUrl = url[0]?.url
-      fileName = url[0]?.name;
-
-      // s3 file upload
-      await KnowledgeBaseModel.create({fileId, workspaceId, channelId, fileName, s3FileUrls: fileUrl, status: IKnowledgeBaseFileUploadStatus.INJECT_STARTED});
+      await AIService.createCollectionIfNotExist(collectionName);
       
-        tempPdfPath = path.join(__dirname, fileName);
-              // start
-      const response = await axios({
-        method: "GET",
-        url: fileUrl,
-        responseType: "stream",
-      });
-
-      const writer = fs.createWriteStream(tempPdfPath);
-      response.data.pipe(writer);
-      await writeData(writer);
-
-      loader = new PDFLoader(tempPdfPath);
-
-      const rawDocs = await loader.load();
-      /* Split text into chunks */
-      const textSplitter = new RecursiveCharacterTextSplitter({
-        chunkSize: 1000,
-        chunkOverlap: 200,
-      });
-
-      const docs = await textSplitter.splitDocuments(rawDocs);
-
-      const vectorStore = await Chroma.fromExistingCollection(
-        embeddings,
-        { 
-          collectionName, 
-          url: chromaDbUrl 
-        }
-      )
-
-      await vectorStore.addDocuments(docs);
-
-      await KnowledgeBaseModel.updateOne({fileId, channelId, workspaceId}, {status: IKnowledgeBaseFileUploadStatus.INJECT_COMPLETED});
-      fs.unlinkSync(tempPdfPath);
-
+      await AIService.fileToVector(url, workspaceId, channelId);
+  
       return res.status(200).json({
         code: "200",
         message: `AI file injested`,
@@ -301,5 +238,19 @@ public static async uploadFiles (req: Request, res: Response) {
       message: error?.message,
     })
   }
+}
+
+public static async testFuns(req: Request, res: Response) {
+  try {
+    const test = await chromaRawClient.reset()
+    console.log('test', test);
+    
+} catch (error) {
+  console.log('error message', error?.message);
+}
+
+  return res.status(200).json({
+    message: "5"
+  })
 }
 }

@@ -1,0 +1,1 @@
+export const chromaDbUrl = "https://chroma.zeonhq.com";
