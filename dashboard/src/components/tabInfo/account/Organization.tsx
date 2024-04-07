@@ -1,4 +1,12 @@
-import { Button, Divider, Flex, Select, Space, Text } from "@mantine/core";
+import {
+  Button,
+  Divider,
+  Flex,
+  Modal,
+  Select,
+  Space,
+  Text,
+} from "@mantine/core";
 import ProfileSave from "assets/profile_save.png";
 import Heading from "components/details/inbox/component/Heading";
 import {
@@ -18,6 +26,10 @@ import { updateWorkSpaceInformation } from "service/CoreService";
 import { IWorkspaceInfoUpdatePayload } from "components/types";
 import { useDispatch } from "react-redux";
 import axios from "axios";
+import Billing from "./Billing";
+import SubscriptionCard from "./SubscriptionCard";
+import BillingModal from "./BillingModal";
+import { showNotification } from "@mantine/notifications";
 
 const showTimeZoneField = true;
 
@@ -33,6 +45,7 @@ const Organization = () => {
   const [organizationPic, setOrganizationPic] = useState<string | any>(
     workspaceInfo?.workspaceConfig?.logo
   );
+  const [showBillingModal, setShowBillingModal] = useState(false);
 
   const saveOrganizationInfo = async () => {
     const workSpaceId = workspaceInfo.workspaceId;
@@ -49,27 +62,38 @@ const Organization = () => {
 
   const createStripeCheckout = async () => {
     try {
-      const res = await axios.post("http://localhost:3005/create-checkout-session", {
-        priceId: "price_1M2LidB51Fz4VVlmCZS8TsUC",
-        workspaceId: workspaceInfo.workspaceId,
-        customerId: workspaceInfo.stripeCustomerId
-      });
+      const res = await axios.post(
+        "https://core.zeonhq.com/create-checkout-session",
+        {
+          priceId: "price_1P2GGbB51Fz4VVlmqkG42SVZ",
+          workspaceId: workspaceInfo.workspaceId,
+          customerId: workspaceInfo.stripeCustomerId,
+        }
+      );
       window.location.href = res.data.url;
-    } catch (error) {
+    } catch (error:any) {
       console.log(error);
+      showNotification({
+        title: "Error",
+        message: error?.response?.data?.error?.message ?? "Something went wrong",
+        color: "red",
+      });
     }
-  }
+  };
 
   const createManageBilling = async () => {
     try {
-      const res = await axios.post("http://localhost:3005/create-customer-portal-session", {
-        customerId: workspaceInfo.stripeCustomerId
-      });
+      const res = await axios.post(
+        "https://core.zeonhq.com/create-customer-portal-session",
+        {
+          customerId: workspaceInfo.stripeCustomerId,
+        }
+      );
       window.location.href = res.data.url;
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   return (
     <>
@@ -154,6 +178,13 @@ const Organization = () => {
           {" "}
           Save{" "}
         </Button>
+        <Button
+          radius="md"
+          className="primary"
+          onClick={() => setShowBillingModal(true)}
+        >
+          Billing
+        </Button>
       </Flex>
       <div>
         {/* @ts-ignore */}
@@ -161,7 +192,7 @@ const Organization = () => {
           pricing-table-id="prctbl_1P2GLpB51Fz4VVlmuZzNvSx8"
           publishable-key="pk_live_51M0LxIB51Fz4VVlmA7Hhplee3uZlYPhGUC86PsgSKbwFxvZ7hxtdvG1SS3XMApbHGCFFCiRs00yzYRx0Sy14quHN00FeVAAS9F"
         > */}
-          {/* @ts-ignore */}
+        {/* @ts-ignore */}
         {/* </stripe-pricing-table> */}
         <Button
           radius="md"
@@ -181,7 +212,29 @@ const Organization = () => {
         >
           Manage 
         </Button>
+        {/* <Billing  /> */}
+        {/* @ts-ignore */}
+
+        {/* <stripe-pricing-table
+          pricing-table-id="prctbl_1P2GLpB51Fz4VVlmuZzNvSx8"
+          publishable-key="pk_live_51M0LxIB51Fz4VVlmA7Hhplee3uZlYPhGUC86PsgSKbwFxvZ7hxtdvG1SS3XMApbHGCFFCiRs00yzYRx0Sy14quHN00FeVAAS9F"
+        ></stripe-pricing-table> */}
       </div>
+
+      {/* <Modal
+        title="Subscription"
+        size="xl"
+
+        opened={showBillingModal}
+        onClose={() => setShowBillingModal(false)}
+        styles={{
+          body: {
+            padding: 0,
+          },
+        }}
+      >
+        <BillingModal />
+      </Modal> */}
     </>
   );
 };
