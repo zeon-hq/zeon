@@ -15,7 +15,7 @@
   "author": "zeon",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node index.ts",
+    "start": "nodemon --exec ts-node index.ts",
     "dev": "nodemon --exec ts-node index.ts",
     "build": "tsc",
     "test": "vitest",
@@ -49,6 +49,7 @@
     "nodemailer": "^6.9.12",
     "pdf-parse": "^1.1.1",
     "sib-api-v3-sdk": "^8.5.0",
+    "stripe": "^14.24.0",
     "typescript": "^5.2.2"
   },
   "devDependencies": {
