@@ -3,8 +3,8 @@ import { ConversationalRetrievalQAChain } from 'langchain/chains';
 import type { Document } from 'langchain/document';
 import { OpenAI } from '@langchain/openai';
 import { Chroma } from '@langchain/community/vectorstores/chroma';
-import { modelName } from "constant/AIConstant";
-import { temperature } from "constant/AIConstant";
+import { modelName } from "../constant/AIConstant";
+import { temperature } from "../constant/AIConstant";
 const CONDENSE_PROMPT = `Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question.
 
 Chat History:
