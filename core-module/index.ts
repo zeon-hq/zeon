@@ -17,6 +17,8 @@ import oauthController from "./controller/oauthController";
 import notesRoutes from "./routes/notes";
 import AIRoute from "./routes/AIRoute";
 import Workspace from "./schema/Workspace";
+//@ts-ignore
+import {SubcriptionPlan} from "./constants/constants.ts"
 
 const app = express();
 const port = process.env.CORE_BACKEND_PORT
@@ -46,7 +48,7 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const stripe = require('stripe')('sk_test_51M0LxIB51Fz4VVlmxAPwH9MPLd8YCl2oOJSeASkkpbK8A677KfaGtidZTzOAoVIesllCLLqoIx40kFqHeRlsro430079HPXs2H');
-
+const domainURL = process.env.DOMAIN;
 // set up routes
 app.use("/auth", authRoutes);
 app.use("/user", verifyIdentity, userRoutes);
@@ -74,9 +76,19 @@ app.get("/checkout-session", async (req, res) => {
   res.send(session);
 });
 
+app.post('/create-customer-portal-session', async (req, res) => {
+  const { customerId } = req.body;
+  const session = await stripe.billingPortal.sessions.create({
+    customer: customerId,
+    return_url: `${domainURL}`,
+    
+  });
+  res.json({ url: session.url });
+})
+
 app.post("/create-checkout-session", async (req, res) => {
-  const domainURL = process.env.DOMAIN;
-  const { priceId, workspaceId } = req.body;
+  
+  const { priceId, workspaceId,customerId } = req.body;
 
   // Create new Checkout Session for the order
   // Other optional params include:
@@ -97,6 +109,7 @@ app.post("/create-checkout-session", async (req, res) => {
       // ?session_id={CHECKOUT_SESSION_ID} means the redirect will have the session ID set as a query param
       success_url: `${domainURL}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${domainURL}/payment-failed`,
+      customer: customerId
       // automatic_tax: { enabled: true }
     });
     // save session id to workspace
@@ -119,8 +132,10 @@ app.post("/create-checkout-session", async (req, res) => {
 app.post('/payment-success', async (req, res) => {
   const { sessionId } = req.body;
   try {
-    const session = await stripe.checkout.sessions.retrieve(sessionId);
-    console.log('session', session);
+    const session = await stripe.checkout.sessions.retrieve(sessionId,{
+      expand: ['line_items'],
+    });
+    console.log('session', session.line_items.data[0].price.id);
     // get workspace by sessionId
     const workspace = await Workspace.findOne({ stripeSessionId: sessionId });
     if (!workspace) {
@@ -128,7 +143,10 @@ app.post('/payment-success', async (req, res) => {
     }
     // get current time
     const currentTime = new Date().getTime();
-    session.
+    session.subscriptionStartTime = currentTime;
+    session.subscriptionEndTime = currentTime + 30 * 24 * 60 * 60 * 1000;
+    session.subscribedPlan = session.line_items.data[0].price.lookup_key;
+    // session.subscribedPlan = SubscriptionPlan[]
     // update subscription info
     workspace.subscriptionInfo = session
     await workspace.save();
@@ -166,7 +184,7 @@ app.post('/customer-portal', async (req, res) => {
   res.redirect(303, portalSession.url);
 });
 
-app.post('/stripe_webhooks', express.json({type: 'application/json'}), (request, response) => {
+app.post('/stripe_webhooks', express.json({type: 'application/json'}), async (request, response) => {
   const event = request.body;
   console.log('>>>>>>>>>>>>', event.type,'event', event);
   // Handle the event
@@ -183,6 +201,26 @@ app.post('/stripe_webhooks', express.json({type: 'application/json'}), (request,
       // handlePaymentMethodAttached(paymentMethod);
       break;
     // ... handle other event types
+    case 'customer.subscription.updated':
+      const subscription = event.data.object;
+      console.log('subscription', subscription);
+      const price = await stripe.prices.retrieve(subscription.items.data[0].price.id);
+      const lookup = price.lookup_key;
+      const customer = subscription.customer;
+      const workspace = await Workspace.findOne({ stripeCustomerId: customer });
+      if (!workspace) {
+        return response.status(400).json({ message: 'Workspace not found' });
+      }
+      // get current time
+      const currentTime = new Date().getTime();
+      subscription.subscriptionStartTime = currentTime;
+      subscription.subscriptionEndTime = currentTime + 30 * 24 * 60 * 60 * 1000;
+      subscription.subscribedPlan = lookup;
+      // update subscription info
+      workspace.subscriptionInfo = subscription;
+      await workspace.save();
+      return response.status(200).json({ message: 'Subscription updated' });
+      break;
     default:
       console.log(`Unhandled event type ${event.type}`);
   }

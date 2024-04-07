@@ -8,6 +8,7 @@ import { createBulkCategory } from "../service/FinanceService"
 //@ts-ignore
 import categoriesJSON from "./category.json"
 import Logger from "./logger"
+const stripe = require('stripe')('sk_test_51M0LxIB51Fz4VVlmxAPwH9MPLd8YCl2oOJSeASkkpbK8A677KfaGtidZTzOAoVIesllCLLqoIx40kFqHeRlsro430079HPXs2H');
 
 const logger = new Logger(ZeonServices.CORE)
 
@@ -23,6 +24,14 @@ export const createWorkspace = async (params: CreateWorkspaceDTO): Promise<Works
                 error: "Missing parameters"
             }
         }
+
+        // create a customer in stripe
+        const stripeCustomer = await stripe.customers.create({
+          email: primaryContactEmail,
+          name: primaryContactName
+        })
+
+        const customerId = stripeCustomer.id
     
         // Generate a workspaceId
         const workspaceId = generateId(6)
@@ -34,7 +43,8 @@ export const createWorkspace = async (params: CreateWorkspaceDTO): Promise<Works
           primaryContactEmail,
           signupDetails,
           workspaceId: workspaceId,
-          modules
+          modules,
+          stripeCustomerId: customerId
         })
     
         // Save the workspace to the database

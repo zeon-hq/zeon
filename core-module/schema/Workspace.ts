@@ -14,7 +14,8 @@ export interface WorkspaceInterface {
     };
     modules: ZeonModulesArray,
     stripeSessionId: string;
-    subscriptionInfo: any
+    subscriptionInfo: any;
+    stripeCustomerId: string;
 }
 
 // Create a Schema corresponding to the document interface.
@@ -33,7 +34,8 @@ const WorkspaceSchema = new mongoose.Schema<WorkspaceInterface>({
     subscriptionInfo: {
         type: Object,
         required: false
-    }
+    },
+    stripeCustomerId: { type: String, required: false }
 },{
     timestamps: true
 });

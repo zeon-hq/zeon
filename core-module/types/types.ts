@@ -290,3 +290,10 @@ export interface ZLoggerInput {
   type ?: "INFO" | "WARN" | "ERROR";
   user ?: UserInterface;
 }
+
+export enum ZSubscriptionPlan {
+  ZEON_BASIC = "ZEON_BASIC",
+  ZEON_ENTERPRISE = "ZEON_ENTERPRISE",
+  ZEON_PROFESSIONAL = "ZEON_PROFESSIONAL",
+  ZEON_ADVANCED = "ZEON_ADVANCED"
+}

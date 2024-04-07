@@ -51,7 +51,19 @@ const Organization = () => {
     try {
       const res = await axios.post("http://localhost:3005/create-checkout-session", {
         priceId: "price_1M2LidB51Fz4VVlmCZS8TsUC",
-        workspaceId: workspaceInfo.workspaceId
+        workspaceId: workspaceInfo.workspaceId,
+        customerId: workspaceInfo.stripeCustomerId
+      });
+      window.location.href = res.data.url;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const createManageBilling = async () => {
+    try {
+      const res = await axios.post("http://localhost:3005/create-customer-portal-session", {
+        customerId: workspaceInfo.stripeCustomerId
       });
       window.location.href = res.data.url;
     } catch (error) {
@@ -159,6 +171,15 @@ const Organization = () => {
           onClick={createStripeCheckout}
         >
           Checkout 
+        </Button>
+        <Button
+          radius="md"
+          className="primary"
+          leftIcon={<img alt="profile" src={ProfileSave} />}
+          color="indigo"
+          onClick={createManageBilling}
+        >
+          Manage 
         </Button>
       </div>
     </>

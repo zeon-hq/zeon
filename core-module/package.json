@@ -33,6 +33,7 @@
     "@slack/web-api": "^6.8.0",
     "@types/dotenv": "^8.2.0",
     "@types/node-fetch": "^2.6.10",
+    "@types/stripe": "^8.0.417",
     "axios": "^1.5.1",
     "bcryptjs": "2.4.3 ",
     "chromadb": "^1.8.1",
