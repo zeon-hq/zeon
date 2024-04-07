@@ -1,3 +1,4 @@
+import "web-streams-polyfill/dist/polyfill.es6.js";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { Chroma } from "@langchain/community/vectorstores/chroma";
 import { OpenAIEmbeddings } from "@langchain/openai";
