@@ -67,7 +67,7 @@ app.get("/health", (req: Request, res: Response)=>{
 
 // run server at port 6000
 app.listen(port, () => {
-  console.log(`Server running at port ${port}`);
+  console.log(`Server running at port ${port}, Node version: ${process.version}`);
 });
 
 // export verifyIdentity so that it can be imported when this package is used as a dependency
