@@ -1,22 +1,25 @@
-import { OpenAIEmbeddings } from "@langchain/openai";
-import axios from "axios";
-import { Request, Response } from "express";
-import fs from "fs";
-import { PDFLoader } from "langchain/document_loaders/fs/pdf";
-import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { Chroma } from "@langchain/community/vectorstores/chroma";
-import path from "path";
-import KnowledgeBaseModel, { IKnowledgeBaseFileUploadStatus } from "../schema/KnowledgeBaseModel";
-import { makeChain } from "../utils/AIUtils";
+import { OpenAIEmbeddings } from "@langchain/openai";
+import { ChromaClient } from 'chromadb';
+import { Request, Response } from "express";
+import { chromaDbUrl } from "../constant/AIConstant";
+import KnowledgeBaseModel from "../schema/KnowledgeBaseModel";
+import AIService from "../service/AIService";
+import { getCollectionName, makeChain } from "../utils/AIUtils";
 import { generateId } from "../utils/utils";
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3"
+import { ZeonServices } from "../types/types";
+import Logger from "../functions/logger";
 
+const logger = new Logger(ZeonServices.CORE);
 const secretAccessKey = process.env.SECRET_ACCESS_KEY as string;
 const accessKeyId = process.env.ACCESS_KEY as string;
 const bucketName = process.env.BUCKET_NAME as string;
 const region = process.env.REGION as string;
 
-const chromaDbUrl = "http://100.111.35.56:9876";
+const chromaRawClient = new ChromaClient({
+  path:chromaDbUrl
+});
 
 const s3 = new S3Client({
   credentials: {
@@ -26,21 +29,7 @@ const s3 = new S3Client({
   region
 })
 
-async function writeData(writer: any) {
-  try {
-    // Assuming 'data' needs to be written using 'writer'
-    // This is where you'd typically write data, e.g., writer.write(data);
-
-    await new Promise((resolve, reject) => {
-      writer.on("finish", resolve);
-      writer.on("error", reject);
-    });
-
-    console.log("Write finished successfully");
-  } catch (error) {
-    console.error("Error during write:", error);
-  }
-}
+const embeddings = new OpenAIEmbeddings();
 
 
 export enum IInjectFileType {
@@ -48,69 +37,22 @@ export enum IInjectFileType {
   FILE_URL = "FILE_URL",
 }
 
-const embeddings = new OpenAIEmbeddings();
 export default class AIController {
 
-  public static async injestPdf(req: Request, res: Response) {
+  public static async injestFile(req: Request, res: Response) {
     try {
-      // possible ways of injesting the content are
-      // uplaoding the file directly
-      // pdf, txt, docx
-      // uplading the pdf in the url
-      // website url 
 
       // things convered -> upload pdf file, pass the file url
       const { url, workspaceId, channelId } = req.body;
       // collection name is the channelId-workspaceId
       const collectionName = `${workspaceId}-${channelId}`;
-      const fileId = generateId(6);
 
-      let loader;
-      let tempPdfPath;
-      let fileName;
-
-      const fileUrl = url[0]?.url
-      fileName = url[0]?.name;
-
-      // s3 file upload
-      await KnowledgeBaseModel.create({fileId, workspaceId, channelId, fileName, s3FileUrls: fileUrl, status: IKnowledgeBaseFileUploadStatus.INJECT_STARTED});
+      logger.info({message:`[AIController.injestFile] create collection workspaceId ${workspaceId}, channelId ${channelId}`})
+      await AIService.createCollectionIfNotExist(collectionName);
       
-        tempPdfPath = path.join(__dirname, fileName);
-              // start
-      const response = await axios({
-        method: "GET",
-        url: fileUrl,
-        responseType: "stream",
-      });
-
-      const writer = fs.createWriteStream(tempPdfPath);
-      response.data.pipe(writer);
-      await writeData(writer);
-
-      loader = new PDFLoader(tempPdfPath);
-
-      const rawDocs = await loader.load();
-      /* Split text into chunks */
-      const textSplitter = new RecursiveCharacterTextSplitter({
-        chunkSize: 1000,
-        chunkOverlap: 200,
-      });
-
-      const docs = await textSplitter.splitDocuments(rawDocs);
-
-      const vectorStore = await Chroma.fromExistingCollection(
-        embeddings,
-        { 
-          collectionName, 
-          url: chromaDbUrl 
-        }
-      )
-
-      await vectorStore.addDocuments(docs);
-
-      await KnowledgeBaseModel.updateOne({fileId, channelId, workspaceId}, {status: IKnowledgeBaseFileUploadStatus.INJECT_COMPLETED});
-      fs.unlinkSync(tempPdfPath);
-
+      logger.info({message:`[AIController.injestFile] invoking fileToVector workspaceId ${workspaceId}, channelId ${channelId}`})
+      await AIService.fileToVector(url, workspaceId, channelId);
+  
       return res.status(200).json({
         code: "200",
         message: `AI file injested`,
@@ -131,12 +73,16 @@ export default class AIController {
     }
   }
 
-  public static async getInjestPdf(req: Request, res: Response) {
+  public static async getInjestFile(req: Request, res: Response) {
     try {
       const { question, history, workspaceId, channelId} = req.body;
-      const collectionName = `${workspaceId}-${channelId}`;
+
+      logger.info({message:`[AIController.getInjestFile] gettingInjestedFile, question:${question}, workspaceId:${workspaceId}, channelId:${channelId}`})
+      const collectionName = getCollectionName(channelId, workspaceId);
       const sanitizedQuestion = question.trim().replaceAll('\n', ' ');
-      /* create vectorstore*/
+
+
+      logger.info({message:`[AIController.getInjestFile] invoking Chroma.fromExistingCollection, question:${question}, workspaceId:${workspaceId}, channelId:${channelId}`})
       const vectorStore = await Chroma.fromExistingCollection(
         embeddings,
         {
@@ -145,10 +91,10 @@ export default class AIController {
         },
       );
 
-      //create chain
-      const chain = makeChain(vectorStore);
-      //Ask a question using chat history
+      logger.info({message:`[AIController.getInjestFile] makechain, question:${question}, workspaceId:${workspaceId}, channelId:${channelId}`})
+      const chain = makeChain(vectorStore, workspaceId, channelId);
 
+      logger.info({message:`[AIController.getInjestFile] chain.call, question:${question}, workspaceId:${workspaceId}, channelId:${channelId}`})
       const response = await chain.call({
         question: sanitizedQuestion,
         chat_history: history || [],
@@ -202,17 +148,15 @@ export default class AIController {
   public static async deleteFile(req: Request, res: Response) {
     try {
       const { fileId, channelId, workspaceId } = req.params;
-      // const {channelId, workspaceId} = req.body;
 
-      const file = await KnowledgeBaseModel.findOneAndDelete({fileId, channelId, workspaceId});
+      await AIService.removeInjestedFile(fileId, channelId, workspaceId);
+
 
       // delete the file from s3
-      // TODO:
 
       return res.status(200).json({
         code: "200",
         message: `AI File deleted`,
-        data: file,
       });
     } catch (e) {
       if (e.response) {
@@ -269,37 +213,56 @@ export default class AIController {
     }
 }
 
-public static async uploadFiles (req: Request, res: Response) {
-  try {
-    const uploadedUrls = await Promise.all(((req.files || []) as any[])?.map(async (file: any) => {
-      const tempId = generateId(6);
-      const fileName = `${file.originalname}-${tempId}`;
-      
-      const commandPayload = {
-        Bucket: bucketName,
-        Key: fileName,
-        Body: file.buffer,
-        ContentType: file.mimetype,
-      }
+  public static async uploadFiles(req: Request, res: Response) {
+    try {
+      logger.info({message:`[AIController.uploadFiles] uploading files`});
+      const uploadedUrls = await Promise.all(((req.files || []) as any[])?.map(async (file: any) => {
+        const tempId = generateId(6);
+        const fileName = `${tempId}_${file.originalname}`;
 
-      const command = new PutObjectCommand(commandPayload);
-      await s3.send(command);
-      return { url:`https://${bucketName}.s3.${region}.amazonaws.com/${fileName}`,
-     fileName: file.originalname,
-     mimeType: file.mimetype
-    };
-    }));
+        logger.info({message:`[AIController.uploadFiles] uploading file ${fileName}`});
+        const commandPayload = {
+          Bucket: bucketName,
+          Key: fileName,
+          Body: file.buffer,
+          ContentType: file.mimetype,
+        }
 
-    return res.status(200).json({
-      message: "Logos uploaded",
-      uploadedUrls: uploadedUrls // This is an array of URLs
-    })
+        const command = new PutObjectCommand(commandPayload);
+        await s3.send(command);
+        const fileUrl = `https://${bucketName}.s3.${region}.amazonaws.com/${fileName}`;
+        logger.info({message:`[AIController.uploadFiles] file uploaded Url: ${fileUrl}`})
+        return {
+          url: fileUrl,
+          fileName: file.originalname,
+          mimeType: file.mimetype
+        }
+      }));
 
-  } catch (error) {
-    console.log('error message', error?.message);
-    return res.status(500).json({
-      message: error?.message,
-    })
+      return res.status(200).json({
+        message: "Logos uploaded",
+        uploadedUrls: uploadedUrls // This is an array of URLs
+      })
+
+    } catch (error) {
+      logger.error({message:`[AIController.uploadFiles] uploading files`});
+      return res.status(500).json({
+        message: error?.message,
+      })
+    }
   }
+
+public static async testFuns(req: Request, res: Response) {
+  try {
+    const test = await chromaRawClient.reset()
+    console.log('test', test);
+    
+} catch (error) {
+  console.log('error message', error?.message);
+}
+
+  return res.status(200).json({
+    message: "5"
+  })
 }
 }

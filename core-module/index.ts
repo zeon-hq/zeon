@@ -1,4 +1,3 @@
-import "web-streams-polyfill/dist/polyfill.es6.js";
 import dotenv from "dotenv";
 dotenv.config();
 import express, { Request, Response } from "express";
@@ -57,7 +56,7 @@ app.use("/companies",verifyIdentity, companyRoutes);
 app.use("/contacts",verifyIdentity, contactRoutes);
 app.use("/notes",verifyIdentity, notesRoutes);
 app.use("/datamodel", verifyIdentity, dataModelRoutes);
-app.use("/ai", verifyIdentity, AIRoute);
+app.use("/ai", AIRoute);
 
 app.post("/internal/communication/send-email", CommunicationController.sendEmail);
 
@@ -252,7 +251,7 @@ app.post('/stripe_webhooks', express.json({type: 'application/json'}), async (re
 
 // run server at port 6000
 app.listen(port, () => {
-  console.log(`Server running at port ${port}`);
+  console.log(`Server running at port ${port}, Node version: ${process.version}`);
 });
 
 // export verifyIdentity so that it can be imported when this package is used as a dependency

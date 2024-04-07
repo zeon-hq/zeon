@@ -2,6 +2,8 @@ import { ConversationalRetrievalQAChain } from 'langchain/chains';
 import type { Document } from 'langchain/document';
 import { OpenAI } from '@langchain/openai';
 import { Chroma } from '@langchain/community/vectorstores/chroma';
+import { modelName } from "../constant/AIConstant";
+import { temperature } from "../constant/AIConstant";
 const CONDENSE_PROMPT = `Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question.
 
 Chat History:
@@ -19,25 +21,44 @@ Question: {question}
 Helpful answer in markdown:`;
 
 const combineDocumentsFn = (docs: Document[], separator = '\n\n') => {
-    const serializedDocs = docs.map((doc) => doc.pageContent);
-    return serializedDocs.join(separator);
-  };
+  const serializedDocs = docs.map((doc) => doc.pageContent);
+  return serializedDocs.join(separator);
+};
 
-  export const makeChain = (vectorstore: Chroma) => {
-    const model = new OpenAI({
-      temperature: 0, // increase temepreature to get more creative answers
-      modelName: 'gpt-3.5-turbo', //change this to gpt-4 if you have access
+export const makeChain = (vectorstore: Chroma, workspaceId:string, channelId:string) => {
+  console.log(`[AIUtils.makeChain] invoking openAI, workspaceId:${workspaceId}, channalId:${channelId}`);
+
+  const model = new OpenAI({
+    temperature: temperature, // increase temepreature to get more creative answers
+    modelName: modelName, //change this to gpt-4 if you have access
+  });
+
+  console.log(`[AIUtils.makeChain] ConversationalRetrievalQAChain from LLM`)
+  const chain = ConversationalRetrievalQAChain.fromLLM(
+    model,
+    vectorstore.asRetriever(),
+    {
+      qaTemplate: QA_PROMPT,
+      questionGeneratorTemplate: CONDENSE_PROMPT,
+      returnSourceDocuments: true, //The number of source documents returned is 4 by default
+    },
+  );
+  return chain;
+};
+
+
+export const writeData = async (writer: any) => {
+  try {
+    await new Promise((resolve, reject) => {
+      writer.on("finish", resolve);
+      writer.on("error", reject);
     });
-  
-    const chain = ConversationalRetrievalQAChain.fromLLM(
-      model,
-      vectorstore.asRetriever(),
-      {
-        qaTemplate: QA_PROMPT,
-        questionGeneratorTemplate: CONDENSE_PROMPT,
-        returnSourceDocuments: true, //The number of source documents returned is 4 by default
-      },
-    );
-    return chain;
-  };
-  
+    console.log("Write finished successfully");
+  } catch (error) {
+    console.error("Error during write:", error);
+  }
+}
+
+export const getCollectionName = (workspaceId: string, channelId: string) => {
+  return `${workspaceId}-${channelId}`;
+}

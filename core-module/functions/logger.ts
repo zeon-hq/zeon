@@ -1,8 +1,7 @@
 // create a logger class such that it has three methods
 // info, warn, error
 import axios from "axios";
-import { ZLoggerInput, ZeonError, ZeonServices } from "../types/types"
-import { json } from "express"
+import { ZLoggerInput, ZeonServices } from "../types/types";
 
 export default class Logger {
     webhook: string
