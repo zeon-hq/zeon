@@ -139,17 +139,15 @@ export default class AIController {
   public static async deleteFile(req: Request, res: Response) {
     try {
       const { fileId, channelId, workspaceId } = req.params;
-      // const {channelId, workspaceId} = req.body;
 
-      const file = await KnowledgeBaseModel.findOneAndDelete({fileId, channelId, workspaceId});
+      await AIService.removeInjestedFile(fileId, channelId, workspaceId);
+
 
       // delete the file from s3
-      // TODO:
 
       return res.status(200).json({
         code: "200",
         message: `AI File deleted`,
-        data: file,
       });
     } catch (e) {
       if (e.response) {

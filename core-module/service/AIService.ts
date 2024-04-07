@@ -68,9 +68,9 @@ export default class AIService {
                     }
                 )
 
-                await vectorStore.addDocuments(docs);
+                const ids = await vectorStore.addDocuments(docs);
 
-                await KnowledgeBaseModel.updateOne({ fileId, channelId, workspaceId }, { status: IKnowledgeBaseFileUploadStatus.INJECT_COMPLETED });
+                await KnowledgeBaseModel.updateOne({ fileId, channelId, workspaceId }, { status: IKnowledgeBaseFileUploadStatus.INJECT_COMPLETED, chromaDocIds: ids});
                 fs.unlinkSync(tempPdfPath);
 
             } else {
@@ -92,6 +92,23 @@ export default class AIService {
             await chromaRawClient.createCollection({
                 name: collectionName
             });
+        }
+    }
+
+    public static removeInjestedFile = async (fileId: string, channelId: string, workspaceId: string) => {
+        const collectionName = getCollectionName(workspaceId, channelId);
+        const vectorStore = await Chroma.fromExistingCollection(
+            embeddings,
+            {
+                collectionName,
+                url: chromaDbUrl
+            }
+        )
+        const file = await KnowledgeBaseModel.findOneAndDelete({fileId, channelId, workspaceId});
+        //@ts-ignore
+        if (file?.chromaDocIds){
+            //@ts-ignore
+            await vectorStore.delete({ ids:file?.chromaDocIds || [] });
         }
     }
 }

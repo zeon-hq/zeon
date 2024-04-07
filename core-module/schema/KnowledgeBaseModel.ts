@@ -14,6 +14,7 @@ interface IKnowledgeBaseModel extends Document {
     s3FileUrls: string;
     status: IKnowledgeBaseFileUploadStatus;
     isDeleted: boolean;
+    chromaDocIds: string[];
 }
 
 const KnowledgeBaseModel: Schema = new Schema({
@@ -23,7 +24,8 @@ const KnowledgeBaseModel: Schema = new Schema({
     fileName: {type: String},
     s3FileUrls: {type: String},
     status: {type: String, required: true},
-    isDeleted: {type: Boolean, default: false}
+    isDeleted: {type: Boolean, default: false},
+    chromaDocIds: {type: [String]}
 },{
     timestamps: true
 });
