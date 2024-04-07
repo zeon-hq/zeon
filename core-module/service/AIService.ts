@@ -1,4 +1,3 @@
-import "web-streams-polyfill/dist/polyfill.es6.js";
 import { Chroma } from "@langchain/community/vectorstores/chroma";
 import { OpenAIEmbeddings } from "@langchain/openai";
 import axios from "axios";

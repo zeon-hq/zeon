@@ -1,4 +1,3 @@
-import "web-streams-polyfill/dist/polyfill.es6.js";
 import { ConversationalRetrievalQAChain } from 'langchain/chains';
 import type { Document } from 'langchain/document';
 import { OpenAI } from '@langchain/openai';
