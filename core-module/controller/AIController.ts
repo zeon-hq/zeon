@@ -37,7 +37,7 @@ export enum IInjectFileType {
 
 export default class AIController {
 
-  public static async injestPdf(req: Request, res: Response) {
+  public static async injestFile(req: Request, res: Response) {
     try {
 
       // things convered -> upload pdf file, pass the file url
@@ -45,8 +45,10 @@ export default class AIController {
       // collection name is the channelId-workspaceId
       const collectionName = `${workspaceId}-${channelId}`;
 
+      console.log(`[AIController.injestFile] create collection workspaceId ${workspaceId}, channelId ${channelId}`)
       await AIService.createCollectionIfNotExist(collectionName);
       
+      console.log(`[AIController.injestFile] invoking fileToVector workspaceId ${workspaceId}, channelId ${channelId}`)
       await AIService.fileToVector(url, workspaceId, channelId);
   
       return res.status(200).json({
@@ -69,12 +71,15 @@ export default class AIController {
     }
   }
 
-  public static async getInjestPdf(req: Request, res: Response) {
+  public static async getInjestFile(req: Request, res: Response) {
     try {
       const { question, history, workspaceId, channelId} = req.body;
+
+      console.log(`[AIController.getInjestFile] gettingInjestedFile, question:${question}, workspaceId:${workspaceId}, channelId:${channelId}`);
       const collectionName = getCollectionName(channelId, workspaceId);
       const sanitizedQuestion = question.trim().replaceAll('\n', ' ');
-      /* create vectorstore*/
+
+
       const vectorStore = await Chroma.fromExistingCollection(
         embeddings,
         {
@@ -83,9 +88,8 @@ export default class AIController {
         },
       );
 
-      //create chain
-      const chain = makeChain(vectorStore);
-      //Ask a question using chat history
+      console.log(`[AIController.getInjestFile] makechain, question:${question}, workspaceId:${workspaceId}, channelId:${channelId}`);
+      const chain = makeChain(vectorStore, workspaceId, channelId);
 
       const response = await chain.call({
         question: sanitizedQuestion,

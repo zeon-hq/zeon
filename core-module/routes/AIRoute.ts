@@ -8,9 +8,9 @@ const upload = multer({ storage })
 
 // AI related routes
 // upload pdf and injest the data to store in vector's db
-router.post('/injest-file',verifyIdentity, AIController.injestPdf);
+router.post('/injest-file',verifyIdentity, AIController.injestFile);
 
-router.post('/internal/injest-text',verifyIdentity, AIController.getInjestPdf);
+router.post('/internal/injest-text',verifyIdentity, AIController.getInjestFile);
 
 // get the list of uploaded file 
 router.get('/get-uploaded-files/:channelId/:workspaceId',verifyIdentity, AIController.getUploadedFileList);

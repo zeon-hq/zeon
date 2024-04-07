@@ -3,6 +3,8 @@ import { ConversationalRetrievalQAChain } from 'langchain/chains';
 import type { Document } from 'langchain/document';
 import { OpenAI } from '@langchain/openai';
 import { Chroma } from '@langchain/community/vectorstores/chroma';
+import { modelName } from "constant/AIConstant";
+import { temperature } from "constant/AIConstant";
 const CONDENSE_PROMPT = `Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question.
 
 Chat History:
@@ -24,12 +26,15 @@ const combineDocumentsFn = (docs: Document[], separator = '\n\n') => {
   return serializedDocs.join(separator);
 };
 
-export const makeChain = (vectorstore: Chroma) => {
+export const makeChain = (vectorstore: Chroma, workspaceId:string, channelId:string) => {
+  console.log(`[AIUtils.makeChain] invoking openAI, workspaceId:${workspaceId}, channalId:${channelId}`);
+
   const model = new OpenAI({
-    temperature: 0, // increase temepreature to get more creative answers
-    modelName: 'gpt-3.5-turbo', //change this to gpt-4 if you have access
+    temperature: temperature, // increase temepreature to get more creative answers
+    modelName: modelName, //change this to gpt-4 if you have access
   });
 
+  console.log(`[AIUtils.makeChain] ConversationalRetrievalQAChain from LLM`)
   const chain = ConversationalRetrievalQAChain.fromLLM(
     model,
     vectorstore.asRetriever(),
@@ -45,14 +50,10 @@ export const makeChain = (vectorstore: Chroma) => {
 
 export const writeData = async (writer: any) => {
   try {
-    // Assuming 'data' needs to be written using 'writer'
-    // This is where you'd typically write data, e.g., writer.write(data);
-
     await new Promise((resolve, reject) => {
       writer.on("finish", resolve);
       writer.on("error", reject);
     });
-
     console.log("Write finished successfully");
   } catch (error) {
     console.error("Error during write:", error);

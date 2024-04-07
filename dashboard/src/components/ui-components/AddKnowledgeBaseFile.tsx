@@ -19,7 +19,7 @@ import { getConfig as Config } from "config/Config";
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { AiOutlineCloudUpload } from "react-icons/ai";
-import { injestPdf } from "service/CoreService";
+import { injestFile } from "service/CoreService";
 interface IAddKnowledgeBaseFile {
   opened: boolean;
   onClose: () => void;
@@ -127,7 +127,7 @@ const AddKnowledgeBaseFile = ({ opened, onClose }: IAddKnowledgeBaseFile) => {
       uploadType:IInjectFileType.FILE_URL 
     }
 
-    const injestPdfCall = await injestPdf(injestPdfPayload);
+    const injestPdfCall = await injestFile(injestPdfPayload);
 
     if (injestPdfCall) {
       showNotification({
