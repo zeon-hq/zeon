@@ -12,7 +12,10 @@ export interface WorkspaceInterface {
         signupMode: string;
         isVerified: boolean;
     };
-    modules: ZeonModulesArray
+    modules: ZeonModulesArray,
+    stripeSessionId: string;
+    subscriptionInfo: any;
+    stripeCustomerId: string;
 }
 
 // Create a Schema corresponding to the document interface.
@@ -26,7 +29,13 @@ const WorkspaceSchema = new mongoose.Schema<WorkspaceInterface>({
         signupMode: { type: String, required: true },
         isVerified: { type: Boolean, required: true }
     },
-    modules: [{ type: String, required: true, default: [] }]
+    modules: [{ type: String, required: true, default: [] }],
+    stripeSessionId: { type: String, required: false },
+    subscriptionInfo: {
+        type: Object,
+        required: false
+    },
+    stripeCustomerId: { type: String, required: false }
 },{
     timestamps: true
 });

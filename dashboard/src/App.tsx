@@ -17,6 +17,8 @@ import CrmLayout from "crm/CrmLayout";
 import Finance from "finance/expense/Finance";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
+import PaymentSuccess from "components/tabInfo/account/PaymentSuccess";
+import PaymentFailed from "components/tabInfo/account/PaymentFailed";
 
 function MyGlobalStyles() {
   return (
@@ -108,6 +110,22 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Workspaces />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/payment-success"
+              element={
+                <ProtectedRoute>
+                  <PaymentSuccess />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/payment-failed"
+              element={
+                <ProtectedRoute>
+                  <PaymentFailed />
                 </ProtectedRoute>
               }
             />

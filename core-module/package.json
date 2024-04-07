@@ -15,7 +15,7 @@
   "author": "zeon",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node index.ts",
+    "start": "nodemon --exec ts-node index.ts",
     "dev": "nodemon --exec ts-node index.ts",
     "build": "tsc",
     "test": "vitest",
@@ -33,6 +33,7 @@
     "@slack/web-api": "^6.8.0",
     "@types/dotenv": "^8.2.0",
     "@types/node-fetch": "^2.6.10",
+    "@types/stripe": "^8.0.417",
     "axios": "^1.5.1",
     "bcryptjs": "2.4.3 ",
     "chromadb": "^1.8.1",
@@ -49,6 +50,7 @@
     "nodemailer": "^6.9.12",
     "pdf-parse": "^1.1.1",
     "sib-api-v3-sdk": "^8.5.0",
+    "stripe": "^14.24.0",
     "typescript": "^5.2.2"
   },
   "devDependencies": {

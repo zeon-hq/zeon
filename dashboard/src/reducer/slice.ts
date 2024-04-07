@@ -300,6 +300,7 @@ export interface IWorkspaceInfo {
   owner: any;
   admins: any[];
   members: any[];
+  stripeCustomerId?: string;
   workspaceId: string;
   logo?:string;
   timezone?:string;

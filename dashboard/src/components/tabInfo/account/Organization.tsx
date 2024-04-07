@@ -17,6 +17,7 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import { updateWorkSpaceInformation } from "service/CoreService";
 import { IWorkspaceInfoUpdatePayload } from "components/types";
 import { useDispatch } from "react-redux";
+import axios from "axios";
 
 const showTimeZoneField = true;
 
@@ -46,12 +47,37 @@ const Organization = () => {
     dispatch(initDashboard(workspaceInfo.workspaceId));
   };
 
+  const createStripeCheckout = async () => {
+    try {
+      const res = await axios.post("http://localhost:3005/create-checkout-session", {
+        priceId: "price_1M2LidB51Fz4VVlmCZS8TsUC",
+        workspaceId: workspaceInfo.workspaceId,
+        customerId: workspaceInfo.stripeCustomerId
+      });
+      window.location.href = res.data.url;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const createManageBilling = async () => {
+    try {
+      const res = await axios.post("http://localhost:3005/create-customer-portal-session", {
+        customerId: workspaceInfo.stripeCustomerId
+      });
+      window.location.href = res.data.url;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <>
+      <div></div>
       <Space h={24} />
       <Heading
         heading="Organization"
-        subheading="Update your organization details here."
+        subheading="Update your organization details here. too"
       />
 
       <OuterWrapper>
@@ -129,6 +155,33 @@ const Organization = () => {
           Save{" "}
         </Button>
       </Flex>
+      <div>
+        {/* @ts-ignore */}
+        {/* <stripe-pricing-table
+          pricing-table-id="prctbl_1P2GLpB51Fz4VVlmuZzNvSx8"
+          publishable-key="pk_live_51M0LxIB51Fz4VVlmA7Hhplee3uZlYPhGUC86PsgSKbwFxvZ7hxtdvG1SS3XMApbHGCFFCiRs00yzYRx0Sy14quHN00FeVAAS9F"
+        > */}
+          {/* @ts-ignore */}
+        {/* </stripe-pricing-table> */}
+        <Button
+          radius="md"
+          className="primary"
+          leftIcon={<img alt="profile" src={ProfileSave} />}
+          color="indigo"
+          onClick={createStripeCheckout}
+        >
+          Checkout 
+        </Button>
+        <Button
+          radius="md"
+          className="primary"
+          leftIcon={<img alt="profile" src={ProfileSave} />}
+          color="indigo"
+          onClick={createManageBilling}
+        >
+          Manage 
+        </Button>
+      </div>
     </>
   );
 };
