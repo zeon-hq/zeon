@@ -80,6 +80,7 @@ export default class AIController {
       const sanitizedQuestion = question.trim().replaceAll('\n', ' ');
 
 
+      console.log(`[AIController.getInjestFile] invoking Chroma.fromExistingCollection, question:${question}, workspaceId:${workspaceId}, channelId:${channelId}`);
       const vectorStore = await Chroma.fromExistingCollection(
         embeddings,
         {
@@ -91,6 +92,7 @@ export default class AIController {
       console.log(`[AIController.getInjestFile] makechain, question:${question}, workspaceId:${workspaceId}, channelId:${channelId}`);
       const chain = makeChain(vectorStore, workspaceId, channelId);
 
+      console.log(`[AIController.getInjestFile] chain.call, question:${question}, workspaceId:${workspaceId}, channelId:${channelId}`);
       const response = await chain.call({
         question: sanitizedQuestion,
         chat_history: history || [],
