@@ -4,7 +4,7 @@ import UserDeleteIcon from "assets/user_remove_icon.svg";
 import Heading from "components/details/inbox/component/Heading";
 import AddKnowledgeBaseFile from "components/ui-components/AddKnowledgeBaseFile";
 import useDashboard from "hooks/useDashboard";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { deleteKnowledgeBaseFile, getKnowledgeBaseList } from "service/CoreService";
 import { Plus } from "tabler-icons-react";
 
@@ -49,21 +49,19 @@ const Knowledge = () => {
   const [knowledgeFileList, setKnowledgeFileList] = useState<IKnowledgeBase[]>([]);
   const channelId = localStorage.getItem("zeon-dashboard-channelId");
   
-  useEffect(() => {
-    fetchKnowledgeBaseFiles();
-  },[]);
-
-  const fetchKnowledgeBaseFiles = async () => {
+  const fetchKnowledgeBaseFiles = useCallback(async () => {
     const fileList = await getKnowledgeBaseList(workspaceInfo.workspaceId, channelId as string);
     console.log('fileList', fileList);
-
-    if (fileList.code === '200'){
+    if (fileList.code === '200') {
       setKnowledgeFileList(fileList.data);
     } else {
       setKnowledgeFileList([]);
     }
-    
-  }
+  }, [workspaceInfo.workspaceId, channelId]); // Dependencies that the function uses
+  
+  useEffect(() => {
+    fetchKnowledgeBaseFiles();
+  }, [fetchKnowledgeBaseFiles]);
 
   const deleteFile = async (fileId: string) => {
     const response = await deleteKnowledgeBaseFile(fileId, workspaceInfo.workspaceId, channelId as string);
