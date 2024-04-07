@@ -6,7 +6,7 @@ import { Request, Response } from "express";
 import { chromaDbUrl } from "../constant/AIConstant";
 import KnowledgeBaseModel from "../schema/KnowledgeBaseModel";
 import AIService from "../service/AIService";
-import { makeChain } from "../utils/AIUtils";
+import { getCollectionName, makeChain } from "../utils/AIUtils";
 import { generateId } from "../utils/utils";
 
 const secretAccessKey = process.env.SECRET_ACCESS_KEY as string;
@@ -71,7 +71,7 @@ export default class AIController {
   public static async getInjestPdf(req: Request, res: Response) {
     try {
       const { question, history, workspaceId, channelId} = req.body;
-      const collectionName = `${workspaceId}-${channelId}`;
+      const collectionName = getCollectionName(channelId, workspaceId);
       const sanitizedQuestion = question.trim().replaceAll('\n', ' ');
       /* create vectorstore*/
       const vectorStore = await Chroma.fromExistingCollection(
