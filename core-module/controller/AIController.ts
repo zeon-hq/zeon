@@ -8,7 +8,10 @@ import KnowledgeBaseModel from "../schema/KnowledgeBaseModel";
 import AIService from "../service/AIService";
 import { getCollectionName, makeChain } from "../utils/AIUtils";
 import { generateId } from "../utils/utils";
+import { ZeonServices } from "../types/types";
+import Logger from "../functions/logger";
 
+const logger = new Logger(ZeonServices.CORE);
 const secretAccessKey = process.env.SECRET_ACCESS_KEY as string;
 const accessKeyId = process.env.ACCESS_KEY as string;
 const bucketName = process.env.BUCKET_NAME as string;
@@ -44,10 +47,10 @@ export default class AIController {
       // collection name is the channelId-workspaceId
       const collectionName = `${workspaceId}-${channelId}`;
 
-      console.log(`[AIController.injestFile] create collection workspaceId ${workspaceId}, channelId ${channelId}`)
+      logger.info({message:`[AIController.injestFile] create collection workspaceId ${workspaceId}, channelId ${channelId}`})
       await AIService.createCollectionIfNotExist(collectionName);
       
-      console.log(`[AIController.injestFile] invoking fileToVector workspaceId ${workspaceId}, channelId ${channelId}`)
+      logger.info({message:`[AIController.injestFile] invoking fileToVector workspaceId ${workspaceId}, channelId ${channelId}`})
       await AIService.fileToVector(url, workspaceId, channelId);
   
       return res.status(200).json({
@@ -74,12 +77,12 @@ export default class AIController {
     try {
       const { question, history, workspaceId, channelId} = req.body;
 
-      console.log(`[AIController.getInjestFile] gettingInjestedFile, question:${question}, workspaceId:${workspaceId}, channelId:${channelId}`);
+      logger.info({message:`[AIController.getInjestFile] gettingInjestedFile, question:${question}, workspaceId:${workspaceId}, channelId:${channelId}`})
       const collectionName = getCollectionName(channelId, workspaceId);
       const sanitizedQuestion = question.trim().replaceAll('\n', ' ');
 
 
-      console.log(`[AIController.getInjestFile] invoking Chroma.fromExistingCollection, question:${question}, workspaceId:${workspaceId}, channelId:${channelId}`);
+      logger.info({message:`[AIController.getInjestFile] invoking Chroma.fromExistingCollection, question:${question}, workspaceId:${workspaceId}, channelId:${channelId}`})
       const vectorStore = await Chroma.fromExistingCollection(
         embeddings,
         {
@@ -88,10 +91,10 @@ export default class AIController {
         },
       );
 
-      console.log(`[AIController.getInjestFile] makechain, question:${question}, workspaceId:${workspaceId}, channelId:${channelId}`);
+      logger.info({message:`[AIController.getInjestFile] makechain, question:${question}, workspaceId:${workspaceId}, channelId:${channelId}`})
       const chain = makeChain(vectorStore, workspaceId, channelId);
 
-      console.log(`[AIController.getInjestFile] chain.call, question:${question}, workspaceId:${workspaceId}, channelId:${channelId}`);
+      logger.info({message:`[AIController.getInjestFile] chain.call, question:${question}, workspaceId:${workspaceId}, channelId:${channelId}`})
       const response = await chain.call({
         question: sanitizedQuestion,
         chat_history: history || [],
@@ -210,39 +213,44 @@ export default class AIController {
     }
 }
 
-public static async uploadFiles (req: Request, res: Response) {
-  try {
-    const uploadedUrls = await Promise.all(((req.files || []) as any[])?.map(async (file: any) => {
-      const tempId = generateId(6);
-      const fileName = `${file.originalname}-${tempId}`;
-      
-      const commandPayload = {
-        Bucket: bucketName,
-        Key: fileName,
-        Body: file.buffer,
-        ContentType: file.mimetype,
-      }
+  public static async uploadFiles(req: Request, res: Response) {
+    try {
+      logger.info({message:`[AIController.uploadFiles] uploading files`});
+      const uploadedUrls = await Promise.all(((req.files || []) as any[])?.map(async (file: any) => {
+        const tempId = generateId(6);
+        const fileName = `${tempId}_${file.originalname}`;
 
-      const command = new PutObjectCommand(commandPayload);
-      await s3.send(command);
-      return { url:`https://${bucketName}.s3.${region}.amazonaws.com/${fileName}`,
-     fileName: file.originalname,
-     mimeType: file.mimetype
-    };
-    }));
+        logger.info({message:`[AIController.uploadFiles] uploading file ${fileName}`});
+        const commandPayload = {
+          Bucket: bucketName,
+          Key: fileName,
+          Body: file.buffer,
+          ContentType: file.mimetype,
+        }
 
-    return res.status(200).json({
-      message: "Logos uploaded",
-      uploadedUrls: uploadedUrls // This is an array of URLs
-    })
+        const command = new PutObjectCommand(commandPayload);
+        await s3.send(command);
+        const fileUrl = `https://${bucketName}.s3.${region}.amazonaws.com/${fileName}`;
+        logger.info({message:`[AIController.uploadFiles] file uploaded Url: ${fileUrl}`})
+        return {
+          url: fileUrl,
+          fileName: file.originalname,
+          mimeType: file.mimetype
+        }
+      }));
 
-  } catch (error) {
-    console.log('error message', error?.message);
-    return res.status(500).json({
-      message: error?.message,
-    })
+      return res.status(200).json({
+        message: "Logos uploaded",
+        uploadedUrls: uploadedUrls // This is an array of URLs
+      })
+
+    } catch (error) {
+      logger.error({message:`[AIController.uploadFiles] uploading files`});
+      return res.status(500).json({
+        message: error?.message,
+      })
+    }
   }
-}
 
 public static async testFuns(req: Request, res: Response) {
   try {

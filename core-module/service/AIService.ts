@@ -7,9 +7,13 @@ import { PDFLoader } from "langchain/document_loaders/fs/pdf";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import path from "path";
 import { chromaDbUrl } from '../constant/AIConstant';
+import { ZeonServices } from "../types/types";
 import KnowledgeBaseModel, { IKnowledgeBaseFileUploadStatus } from "../schema/KnowledgeBaseModel";
 import { getCollectionName, writeData } from "../utils/AIUtils";
 import { generateId } from '../utils/utils';
+import Logger from "../functions/logger";
+
+const logger = new Logger(ZeonServices.CORE);
 
 const chromaRawClient = new ChromaClient({
     path: chromaDbUrl
@@ -19,7 +23,7 @@ const embeddings = new OpenAIEmbeddings();
 export default class AIService {
     public static fileToVector = async (url: any, workspaceId: string, channelId: string) => {
         try {
-            console.log(`[AIService.fileToVector] No of files, ${url.length}, workspaceId ${workspaceId}, channelId: ${channelId}`);
+            logger.info({message:`[AIService.fileToVector] No of files, ${url.length}, workspaceId ${workspaceId}, channelId: ${channelId}`});
             const collectionName = getCollectionName(workspaceId, channelId);
             for (let index = 0; index < url.length; index++) {
                 const urlData = url[index];
@@ -35,8 +39,7 @@ export default class AIService {
                 tempPdfPath = path.join(__dirname, fileName);
 
 
-                // start
-                console.log(`Getting stream from the file url: ${fileUrl}, fileName: ${fileName}`)
+                logger.info({message:`Getting stream from the file url: ${fileUrl}, fileName: ${fileName}`});
                 const response = await axios({
                     method: "GET",
                     url: fileUrl,
@@ -66,32 +69,33 @@ export default class AIService {
                         }
                     )
 
-                    console.log(`[AIService.fileToVector] vectoring document, ${fileName}, workspaceId:${workspaceId}, channelId:${channelId}, url:${fileUrl}`);
+                    logger.info({message:`[AIService.fileToVector] vectoring document, ${fileName}, workspaceId:${workspaceId}, channelId:${channelId}, url:${fileUrl}`});
                     const ids = await vectorStore.addDocuments(docs);
 
                     await KnowledgeBaseModel.updateOne({ fileId, channelId, workspaceId }, { status: IKnowledgeBaseFileUploadStatus.INJECT_COMPLETED, chromaDocIds: ids });
 
-                    console.log(`[AIService.fileToVector] deleting the file, ${fileName}, workspaceId:${workspaceId}, channelId:${channelId}, url:${fileUrl}`);
+                    logger.info({message:`[AIService.fileToVector] deleting the file, ${fileName}, workspaceId:${workspaceId}, channelId:${channelId}, url:${fileUrl}`});
                     fs.unlinkSync(tempPdfPath);
 
                 } else {
-                    console.error(`Error in getting stream for the file, fileUrl: ${fileUrl}`)
+                    logger.error({message:`Error in getting stream for the file, fileUrl: ${fileUrl}`});
                 }
 
             }
 
         } catch (error) {
             console.error(`[AIService.fileToVector] Error in file injesting, ${error.message}`)
+            logger.error({message:`[AIService.fileToVector] Error in file injesting`, payload:`${error.message}`});
         }
     }
 
     public static createCollectionIfNotExist = async (collectionName: string) => {
         try {
-            console.log(`[AIService.createCollectionIfNotExist checking, if the collection is existed]', ${collectionName}`)
+            logger.info({message:`[AIService.createCollectionIfNotExist checking, if the collection is existed]', ${collectionName}`})
             await chromaRawClient.getCollection({ name: collectionName })
         } catch (error) {
             // Create vector store and index the docs
-            console.log(`[AIService.createCollectionIfNotExist] creating collection, ${collectionName}`)
+            logger.info({message:`[AIService.createCollectionIfNotExist] creating collection, ${collectionName}`})
             await chromaRawClient.createCollection({
                 name: collectionName
             });
