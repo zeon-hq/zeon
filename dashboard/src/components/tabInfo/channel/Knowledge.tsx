@@ -51,7 +51,7 @@ const Knowledge = () => {
   
   useEffect(() => {
     fetchKnowledgeBaseFiles();
-  });
+  },[]);
 
   const fetchKnowledgeBaseFiles = async () => {
     const fileList = await getKnowledgeBaseList(workspaceInfo.workspaceId, channelId as string);
