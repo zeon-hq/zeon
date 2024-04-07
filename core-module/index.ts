@@ -47,7 +47,7 @@ app.use(cors({
 // set up router
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-const stripe = require('stripe')('sk_test_51M0LxIB51Fz4VVlmxAPwH9MPLd8YCl2oOJSeASkkpbK8A677KfaGtidZTzOAoVIesllCLLqoIx40kFqHeRlsro430079HPXs2H');
+const stripe = require('stripe')(process.env.STRIPE_KEY);
 const domainURL = process.env.DOMAIN;
 // set up routes
 app.use("/auth", authRoutes);
@@ -145,7 +145,8 @@ app.post('/payment-success', async (req, res) => {
     const currentTime = new Date().getTime();
     session.subscriptionStartTime = currentTime;
     session.subscriptionEndTime = currentTime + 30 * 24 * 60 * 60 * 1000;
-    session.subscribedPlan = session.line_items.data[0].price.lookup_key;
+    const priceInfo = await stripe.prices.retrieve(session.line_items.data[0].price.id);
+    session.subscribedPlan = priceInfo.lookup_key;
     // session.subscribedPlan = SubscriptionPlan[]
     // update subscription info
     workspace.subscriptionInfo = session
@@ -221,6 +222,26 @@ app.post('/stripe_webhooks', express.json({type: 'application/json'}), async (re
       await workspace.save();
       return response.status(200).json({ message: 'Subscription updated' });
       break;
+    case 'customer.subscription.deleted':
+      const subscriptionDeleted = event.data.object;
+      console.log('subscriptionDeleted', subscriptionDeleted);
+      const priceDeleted = await stripe.prices.retrieve(subscriptionDeleted.items.data[0].price.id);
+      const lookupDeleted = priceDeleted.lookup_key;
+      const customerDeleted = subscriptionDeleted.customer;
+      const workspaceDeleted = await Workspace.findOne({ stripeCustomerId: customerDeleted });
+      if (!workspaceDeleted) {
+        return response.status(400).json({ message: 'Workspace not found' });
+      }
+      // get current time
+      const currentTimeDeleted = new Date().getTime();
+      subscriptionDeleted.subscriptionStartTime = currentTimeDeleted;
+      subscriptionDeleted.subscriptionEndTime = currentTimeDeleted + 30 * 24 * 60 * 60 * 1000;
+      subscriptionDeleted.subscribedPlan = lookupDeleted;
+      // update subscription info
+      workspaceDeleted.subscriptionInfo = subscriptionDeleted;
+      await workspaceDeleted.save();
+      return response.status(200).json({ message: 'Subscription deleted' });
+      // break;
     default:
       console.log(`Unhandled event type ${event.type}`);
   }
