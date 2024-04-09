@@ -85,6 +85,19 @@ app.post('/create-customer-portal-session', async (req, res) => {
   res.json({ url: session.url });
 })
 
+app.post('/create-customer-seesion', async (req, res) => {
+  const { customerId } = req.body;
+  const customerSession = await stripe.customerSessions.create({
+    customer: customerId,
+    components: {
+      pricing_table: {
+        enabled: true,
+      },
+    },
+  });
+  return res.json({ client_secret: customerSession.client_secret });
+})
+
 app.post("/create-checkout-session", async (req, res) => {
   
   const { priceId, workspaceId,customerId } = req.body;
@@ -189,6 +202,38 @@ app.post('/stripe_webhooks', express.json({type: 'application/json'}), async (re
   console.log('>>>>>>>>>>>>', event.type,'event', event);
   // Handle the event
   switch (event.type) {
+    case 'checkout.session.completed':
+      const checkoutSession = event.data.object;
+      console.log('checkoutSession', checkoutSession);
+      const workspaceId = checkoutSession.client_reference_id;
+      const sessionWithLineItems = await stripe.checkout.sessions.retrieve(
+      checkoutSession.id,
+      {
+        expand: ['line_items'],
+      }
+    );
+    const priceId = sessionWithLineItems.line_items.data[0].price.id;
+    const priceInfo = await stripe.prices.retrieve(priceId);
+    const lookupKey = priceInfo.lookup_key;
+    const customerId = checkoutSession.customer;
+    const workspaceInfo = await Workspace.findOne({ workspaceId, stripeCustomerId: customerId});
+      
+      if (!workspaceInfo) {
+        return response.status(400).json({ message: 'Workspace not found' });
+      }
+      const newSubscription = await stripe.subscriptions.retrieve(checkoutSession.subscription);
+      // get current time
+      const thisTime = new Date().getTime();
+      newSubscription.subscriptionStartTime = thisTime;
+      newSubscription.subscriptionEndTime = thisTime + 30 * 24 * 60 * 60 * 1000;
+      newSubscription.subscribedPlan = lookupKey;
+      // update subscription info
+      workspaceInfo.subscriptionInfo = newSubscription;
+      await workspaceInfo.save();
+      return response.status(200).json({ message: 'Subscription updated' });
+      
+      // Fulfill the purchase...
+      break;
     case 'payment_intent.succeeded':
       const paymentIntent = event.data.object;
       console.log('PaymentIntent was successful!', paymentIntent);
@@ -240,6 +285,26 @@ app.post('/stripe_webhooks', express.json({type: 'application/json'}), async (re
       workspaceDeleted.subscriptionInfo = subscriptionDeleted;
       await workspaceDeleted.save();
       return response.status(200).json({ message: 'Subscription deleted' });
+      // break;
+    case 'customer.subscription.paused':
+      const subscriptionPaused = event.data.object;
+      console.log('subscriptionPaused', subscriptionPaused);
+      const pricePaused = await stripe.prices.retrieve(subscriptionPaused.items.data[0].price.id);
+      const lookupPaused = pricePaused.lookup_key;
+      const customerPaused = subscriptionPaused.customer;
+      const workspacePaused = await Workspace.findOne({ stripeCustomerId: customerPaused });
+      if (!workspacePaused) {
+        return response.status(400).json({ message: 'Workspace not found' });
+      }
+      // get current time
+      const currentTimePaused = new Date().getTime();
+      subscriptionPaused.subscriptionStartTime = currentTimePaused;
+      subscriptionPaused.subscriptionEndTime = currentTimePaused + 30 * 24 * 60 * 60 * 1000;
+      subscriptionPaused.subscribedPlan = lookupPaused;
+      // update subscription info
+      workspacePaused.subscriptionInfo = subscriptionPaused;
+      await workspacePaused.save();
+      return response.status(200).json({ message: 'Subscription paused' });
       // break;
     default:
       console.log(`Unhandled event type ${event.type}`);
