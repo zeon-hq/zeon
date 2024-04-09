@@ -83,17 +83,18 @@ export const ListText = styled(Text)`
 `;
 
 export const TextHeading = styled.p`
-  font-size: 16px;
+  font-size: 12px;
   color: #333;
   margin: 0px;
   margin-top: 32px;
   padding: 0px;
+  font-weight: 500;
 `;
 
 export const TextDesc = styled.p`
   color: #475467;
 
-  font-size: 14px;
+  font-size: 12px;
   margin: 0px;
   padding: 0px;
   font-style: normal;

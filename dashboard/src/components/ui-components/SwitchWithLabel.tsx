@@ -6,6 +6,7 @@ interface ISwitchWithLabel {
   value: boolean;
   heading?: string;
   description?: string;
+  checkBoxFirst?: boolean;
 }
 
 const SwitchWithLabel = ({
@@ -13,21 +14,45 @@ const SwitchWithLabel = ({
   value,
   heading,
   description,
+  checkBoxFirst = false,
 }: ISwitchWithLabel) => {
   return (
     <Flex w={"100%"} justify={"space-between"} align={"center"}>
-      <div className="">
-      {heading &&
-        <TextHeading>{heading}</TextHeading>}
+      {checkBoxFirst ? (
+        <>
+          <Switch
+            checked={value || false}
+            onChange={(e) => {
+              onClick(e);
+            }}
+            color="indigo"
+          />
+          <div className="">
+            {heading && (
+              <TextHeading style={{ margin: "0px" }}>{heading}</TextHeading>
+            )}
 
-        {description && <TextDesc>{description}</TextDesc>}
-      </div>
-      <Switch
-        checked={value || false}
-        onChange={(e) => {
-          onClick(e);
-        }}
-      />
+            {description && <TextDesc>{description}</TextDesc>}
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="">
+            {heading && (
+              <TextHeading style={{ margin: "0px" }}>{heading}</TextHeading>
+            )}
+
+            {description && <TextDesc>{description}</TextDesc>}
+          </div>
+          <Switch
+            checked={value || false}
+            onChange={(e) => {
+              onClick(e);
+            }}
+            color="indigo"
+          />
+        </>
+      )}
     </Flex>
   );
 };

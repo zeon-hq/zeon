@@ -1,42 +1,49 @@
-import { Avatar } from "@mantine/core";
-import useDashboard from 'hooks/useDashboard';
+import { Avatar, Button, Text, Box, Flex, Space } from "@mantine/core";
+import useDashboard from "hooks/useDashboard";
 import styled from "styled-components";
-import AppearenceWidgetContent from './AppearenceWidgetContent';
-import BehaviorWidgetContent from './BehaviorWidgetContent';
+import AppearenceWidgetContent from "./AppearenceWidgetContent";
+import BehaviorWidgetContent from "./BehaviorWidgetContent";
 import WidgetIcon from "./WidgetIcon";
 
-import { Text } from "components/ui-components/Dashboard.styles";
-import { AiOutlineArrowLeft } from 'react-icons/ai';
+// import { Text } from "components/ui-components/Dashboard.styles";
+import { AiOutlineArrowLeft } from "react-icons/ai";
+import { BsDiscord, BsSlack, BsTwitter, BsWhatsapp, BsYoutube } from "react-icons/bs";
+import { Book } from "tabler-icons-react";
 
 type Props = {
-    configType: "appearance" | "behavior" | "inChatWidgets";    
-}
+  configType: "appearance" | "behavior" | "inChatWidgets";
+};
 
 const Wrapper = styled.div`
   /* height: 25%; */
-  background-color: ${(props:{bg:string,stroke:string}) => props.bg};
-  color: white ;
+  background-color: ${(props: { bg: string; stroke: string }) => props.bg};
+  color: white;
   padding: 24px 24px 8px 24px;
   border-radius: 12px;
   position: sticky;
   top: 0;
   z-index: 10000000;
-`
+`;
 
 const ModalWrapper = styled.div`
   /* TODO: Discuss with ajay if we need fixed height or thr height should depend upon content */
   /* height: 92vh; */
   /* width: 400px; */
-  max-height: 70vh;
-  border: 1px solid #ced4da;
+  height: 70vh;
+  border: 1px solid #eaecf0;
   border-radius: 8px 8px 8px 8px;
   // box-shadow: rgb(0 0 0 / 35%) 0px 7px 59px;
-  box-shadow: 0px 8px 8px -4px rgba(16, 24, 40, 0.03), 0px 20px 24px -4px rgba(16, 24, 40, 0.08);
+  box-shadow: 0 8px 8px -4px rgba(16, 24, 40, 0.03),
+    0 20px 24px -4px rgba(16, 24, 40, 0.08);
   /* right: 16px;
   bottom: 12vh; */
   z-index: 100000000000;
   display: flex;
   flex-direction: column;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   @media only screen and (max-width: 1300px) {
     width: 350px;
@@ -52,7 +59,6 @@ const ModalWrapper = styled.div`
     position: relative;
     right: 0px;
     bottom: 0px;
-
   }
 
   @media only screen and (max-width: 500px) {
@@ -65,7 +71,6 @@ const ModalWrapper = styled.div`
 `;
 
 const Info = styled.div`
-  padding: 10px 20px 20px;
   gap: 10px;
   max-height: 47vh;
   overflow: auto;
@@ -87,29 +92,47 @@ const IconContainer = styled.div`
   &:hover {
     cursor: pointer;
   }
-`
+`;
 
-const Widget = ({configType}: Props) => {
+const getIcons = (type: string) => {
+  switch (type) {
+    case "docs":
+      return <Book />;
+    case "discord":
+      return <BsDiscord />;
+    case 'slack':
+      return <BsSlack />;
+    case 'twitter':
+      return <BsTwitter />;
+    case 'whatsapp':
+      return <BsWhatsapp />;
+    case 'youtube':
+      return <BsYoutube />;
+    default:
+      return <Book />;
+  }
+}
+
+const Widget = ({ configType }: Props) => {
   const { channelsInfo, selectedPage } = useDashboard();
   const appearenceDetails = channelsInfo[selectedPage.name]?.appearance;
-  
+  const inChatWidgets = channelsInfo[selectedPage.name]?.inChatWidgets;
+
   return (
     <>
       <ModalWrapper>
-        <Wrapper stroke={appearenceDetails?.widgetHeaderSection?.strokeColor} bg={appearenceDetails?.widgetHeaderSection?.topBannerColor}>
+        {/* <Wrapper stroke={appearenceDetails?.widgetHeaderSection?.strokeColor} bg={appearenceDetails?.widgetHeaderSection?.topBannerColor}>
           
           <IconContainer>
             <div>
               {
                 configType !== "behavior" &&
                 <Avatar src={appearenceDetails?.widgetHeaderSection?.topLogo || "https://uploads-ssl.webflow.com/63ff8de5d1f47e7825c30910/63ff9a6ff5a715e67545858d_logowhite.svg"}/>
-                // <GiUnicorn size={"1.5rem"} color={appearenceDetails.widgetHeaderSection?.textColor}/>
+                
               }
               {configType === "behavior" && <AiOutlineArrowLeft size={"1rem"} color={appearenceDetails.widgetHeaderSection?.textColor}/>}
             </div>
-            {/* <div>
-              <AiOutlineClose size={"1.5rem"} color={appearenceDetails.widgetHeaderSection?.textColor}/>
-            </div> */}
+           
           </IconContainer>
           {
             configType !== "behavior" &&
@@ -117,20 +140,118 @@ const Widget = ({configType}: Props) => {
           }
           
           <Text color={appearenceDetails.widgetHeaderSection?.textColor} size='medium' weight='normal'> {appearenceDetails.widgetHeaderSection?.subHeading} </Text>
-        </Wrapper>
+        </Wrapper> */}
+        <Box>
+          <Flex justify="center" align="center" mb="lg" gap="4px">
+            <Box>
+              <img
+                width={"40px"}
+                src="https://zeon-assets.s3.ap-south-1.amazonaws.com/Logomark.svg"
+                alt="zeon-logo"
+              />
+            </Box>
+            <Text weight={"bolder"} size={"xl"}>
+              {" "}
+              Zeon{" "}
+            </Text>
+          </Flex>
+          {appearenceDetails?.userAvatars?.enableUserAvatars && (
+            <Avatar.Group
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              {
+                appearenceDetails?.userAvatars?.userAvatarsLinks.
+                filter((avatar) => avatar.enabled).
+                map(
+                  (avatar, index) => (
+                    <Avatar
+                      key={index}
+                      src={avatar.link}
+                      color="cyan"
+                      radius="xl"
+                    />
+                  )
+                )
+              }
+              <Avatar radius="xl">+{
+                appearenceDetails?.userAvatars?.additonalUserAvatars
+              }
+              </Avatar>
+            </Avatar.Group>
+          )}
+
+          <Text
+            weight="600"
+            style={{ fontSize: "16px", marginTop: "10px", color: "#101828" }}
+            align="center"
+          >
+            {" "}
+            Chat with us{" "}
+          </Text>
+          <Text
+            size="md"
+            weight="400"
+            style={{
+              fontSize: "12px",
+              color: "rgb(71, 84, 103)",
+              marginTop: "4px",
+              display: "flex",
+              justifyContent: "center",
+              gap: "6px",
+              alignItems: "center",
+            }}
+            align="center"
+          >
+            <div
+              style={{
+                height: "10px",
+                width: "10px",
+                borderRadius: "50%",
+                backgroundColor: "#12B76A",
+              }}
+            ></div>{" "}
+            Online now{" "}
+          </Text>
+          <Flex justify="center" align="center" gap={"16px"} mt="sm">
+            {
+              inChatWidgets
+              .filter((widget) => widget.enabled).
+              map((widget, index) => (
+                <Button
+                  key={index}
+                  leftIcon={getIcons(widget.topLogo)}
+                  variant="outline"
+                  sx={{
+                    border: "1px solid #D0D5DD",
+                    color: "#344054",
+                  }}
+                >
+                  {widget.title}
+                </Button>
+              ))
+            }
+            
+          </Flex>
+        </Box>
+        {/* <Space h={50}></Space> */}
         <Info>
-          {
-            configType === "appearance" ? 
-            <AppearenceWidgetContent/> :
-            configType === "behavior" ?
-            <BehaviorWidgetContent/> :
-            <AppearenceWidgetContent/>
-          }
+          {configType === "appearance" ? (
+            <AppearenceWidgetContent />
+          ) : configType === "behavior" ? (
+            <BehaviorWidgetContent />
+          ) : (
+            // <AppearenceWidgetContent />
+            <></>
+          )}
         </Info>
       </ModalWrapper>
-      <WidgetIcon/>
+      <WidgetIcon />
     </>
-  )
-}
+  );
+};
 
-export default Widget
+export default Widget;

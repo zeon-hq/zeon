@@ -1,16 +1,14 @@
 import { Card as MTCard, Space, Text } from "@mantine/core";
+import { getChannelById, getOpenTicket } from "api/api";
 import { IPropsType, MessageType } from "components/chat/Chat.types";
 import { generateRandomString, preProcessText } from "components/hooks/commonUtils";
+import useEmbeddable, { IEmbeddableOutput } from "components/hooks/useEmbeddable";
 import useWidget from "components/hooks/useWidget";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { useDispatch } from "react-redux";
-import { setEmail, setMessage, setStep } from "redux/slice";
+import { setAllOpenConversations, setEmail, setMessage, setStep, setWidgetDetails } from "redux/slice";
 import styled from "styled-components";
-import useEmbeddable, { IEmbeddableOutput } from "components/hooks/useEmbeddable";
-import { getChannelById, getOpenTicket } from "api/api";
-import { useEffect } from "react";
-import { setAllOpenConversations, setShowWidget, setWidgetDetails } from "redux/slice";
 const WholeWrapper = styled.div`
 ${(props: IPropsType) => props.theme.isEmbeddable ? 'height: 100%;' : ''}
 `;
@@ -22,7 +20,6 @@ type SingleCardProps = {
   bg?: string;
   onClick?: () => void;
   textColor: "black" | "white";
-  isNewConversation?: boolean;
   isContinueConversation?: boolean;
 };
 
@@ -33,7 +30,6 @@ export const SingleCard = ({
   bg = "",
   textColor = "black",
   onClick = () => {},
-  isNewConversation = false,
   isContinueConversation = false,
 }: SingleCardProps) => {
   return (
@@ -145,7 +141,7 @@ const ZeonWidgetCard = () => {
 
   useEffect(() => {
     // get channelId from the invoke script of the widget
-    (isEmbeddable?.channelId) && getChannel(isEmbeddable?.channelId as string);
+    ('mR3D18') && getChannel('mR3D18' as string);
   }, [isEmbeddable?.channelId]);
   return (
     <>
@@ -162,7 +158,7 @@ const ZeonWidgetCard = () => {
           </Text>
           }
           {allOpenConversations.length > 0 &&
-            allOpenConversations.map((data: any) => {
+            allOpenConversations.map((data: any, index:any) => {
               const messageReplaced = preProcessText(
                 data.messages[data.messages.length - 1]?.message || "",
                 { email: data.customerEmail }
@@ -170,6 +166,7 @@ const ZeonWidgetCard = () => {
               return (
                 <>
                   <SingleCard
+                  key={index}
                     heading={`Ticket Number: ${data.ticketId}`}
                     text={`${data.messages[data.messages.length - 1]?.type === MessageType.SENT ? "You" : "Agent"} : ${messageReplaced}`}
                     onClick={() => {
@@ -202,9 +199,9 @@ const ZeonWidgetCard = () => {
         Resources{" "}
       </Text>
 }
-      {widgetDetails?.inChatWidgets.map((item) => (
+      {widgetDetails?.inChatWidgets.map((item, index) => (
         <SingleCard
-          key={item.title + item.subTitle}
+          key={index}
           heading={item.title}
           text={item.subTitle}
           onClick={() => window.open(item.link, "_blank")}

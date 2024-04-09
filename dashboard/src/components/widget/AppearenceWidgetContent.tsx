@@ -1,15 +1,16 @@
-import { Button, Card, Text } from "@mantine/core";
+import { Button, Card, Flex, Text, Textarea } from "@mantine/core";
 import useDashboard from "hooks/useDashboard";
 import styled from "styled-components";
 import ChatWidgetCard from "./ChatWidgetCard";
 import { BsChatLeftDots } from "react-icons/bs";
+import MessageCard from "./MessageCard";
 
 const BrandingWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-start;
   gap: 4px;
-  margin-top: 16px;
+
   &:hover {
     cursor: pointer;
   }
@@ -22,7 +23,7 @@ const AppearenceWidgetContent = () => {
 
   return (
     <Card.Section>
-      <Button
+      {/* <Button
         style={{
           backgroundColor: appearenceDetails.newConversationButton.buttonColor,
           borderRadius: "8px",
@@ -30,34 +31,50 @@ const AppearenceWidgetContent = () => {
         leftIcon={<BsChatLeftDots size={15} />}
       >
         {appearenceDetails.newConversationButton.title}
-      </Button>
-      <Text size="sm" weight={500} mt="16px">
-        {" "}
-        Open Tickets{" "}
-      </Text>
-        <ChatWidgetCard heading={'Ticket Number: 32343'} text={'Oliver: Hello, how can i help you ?'} />
-      <Text size="sm" weight={500} mt="16px">
-        {" "}
-        Resources{" "}
-      </Text>
-      {inChatWidgets.map((widget, index) => (
+      </Button> */}
+      <MessageCard text={appearenceDetails.widgetHeaderSection.subHeading} />
+      <ChatWidgetCard heading={'Ticket Number: 32343'} text={'Oliver: Hello, how are you doing..'} />
+      <ChatWidgetCard heading={'Ticket Number: 12343'} text={'Oliver: Hey! Can you look into this?'} />
+      {/* {inChatWidgets.map((widget, index) => (
         <ChatWidgetCard key={index} heading={widget.title} text={widget.subTitle} link={widget.link} />
-      ))}
-      {appearenceDetails?.miscellaneous?.showBranding && (
-        <BrandingWrapper
-          onClick={() => window.open("https://zeonhq.com", "_blank")}
+      ))} */}
+      <Textarea mt="md" placeholder="Enter your message"/>
+      <Flex
+       justify="space-between"
+        align="center"
+        mt="md"
+      >
+        {appearenceDetails?.miscellaneous?.showBranding ? (
+          <BrandingWrapper
+            onClick={() => window.open("https://zeonhq.com", "_blank")}
+          >
+            <Text align="center" size="xs" color="gray">
+              {" "}
+              Powered By
+            </Text>
+            <img
+              width={"25px"}
+              src="https://zeon-assets.s3.ap-south-1.amazonaws.com/Logomark.svg"
+              alt="zeon-logo"
+            />
+          </BrandingWrapper>
+        ) : (
+          <div></div>
+        )
+      }
+        <Button
+          radius="md"
+          className="primary"
+          
+          style={{
+            backgroundColor: appearenceDetails.newConversationButton.buttonColor,
+          }}
+          
         >
-          <Text align="center" size="xs" color="gray">
-            {" "}
-            Powered By
-          </Text>
-          <img
-            width={"60px"}
-            src="https://zeonhq.b-cdn.net/ZeonPowered.svg"
-            alt="zeon-logo"
-          />
-        </BrandingWrapper>
-      )}
+          {" "}
+          Submit{" "}
+        </Button>
+      </Flex>
     </Card.Section>
   );
 };

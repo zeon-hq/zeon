@@ -60,7 +60,7 @@ const ChannelDetail = () => {
     {
       name: IChannelTabsName.IN_CHAT_WIDGETS,
       icon: <img alt="inchat" src={InChatDashboard} />,
-      active: true,
+      active: false,
     },
     {
       name: IChannelTabsName.KNOWLEDGE,

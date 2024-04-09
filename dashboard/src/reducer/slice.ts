@@ -27,6 +27,7 @@ export interface InChatWidgetInterface {
   title: string;
   subTitle: string;
   link: string;
+  enabled: boolean;
 }
 
 export enum MessageType {
@@ -73,7 +74,16 @@ export interface ChannelsInfo {
       };
       miscellaneous: {
         showBranding: boolean;
+
       };
+      userAvatars: {
+        enableUserAvatars: boolean;
+        userAvatarsLinks: {
+          link: string, 
+          enabled: boolean
+        }[];
+        additonalUserAvatars: string
+      }
     };
     behavior: {
       widgetBehavior: {
@@ -125,7 +135,8 @@ export interface IUpdateDashboardAction {
     | "avatarSetting"
     | "inChatWidgets"
     | "miscellaneous"
-    | "operatingHours";
+    | "operatingHours"
+    | "userAvatars";
   key:
     | "widgetButtonColor"
     | "widgetLogo"
@@ -152,7 +163,9 @@ export interface IUpdateDashboardAction {
     | "hideWidgetWhenOffline"
     | "timezone"
     | "operatingHours"
-    | "autoReplyMessageWhenOffline";
+    | "autoReplyMessageWhenOffline"
+    | "enableUserAvatars"
+    | "userAvatarsLinks";
 }
 
 export interface ICannedResponse {
@@ -450,6 +463,12 @@ export const dashboardSlice = createSlice({
         action.payload.subType
       ][action.payload.key] = action.payload.value;
     },
+    updateUserAvatarsVisibility: (
+      state,
+      action: PayloadAction<{ index:number, value: boolean }>
+    ) => {
+      state.channelsInfo[state.selectedPage.name].appearance.userAvatars.userAvatarsLinks[action.payload.index].enabled = action.payload.value;
+    },
     updateEmailTicketCreateNotification: (
       state,
       action: PayloadAction<{ emailNewTicketNotification: boolean }>
@@ -467,6 +486,13 @@ export const dashboardSlice = createSlice({
       state.channelsInfo[state.selectedPage.name].inChatWidgets.push(
         action.payload
       );
+    },
+    enableInChatWidget: (state, action: PayloadAction<{ index: number,value:boolean }>) => {
+      state.channelsInfo[state.selectedPage.name].inChatWidgets[action.payload.index].enabled = action.payload.value;
+    },
+    updateSingleInChatWidget: (state, action: PayloadAction<{ index: number,value:string,key:string }>) => {
+      // @ts-ignore
+      state.channelsInfo[state.selectedPage.name].inChatWidgets[action.payload.index][action.payload.key] = action.payload.value;
     },
     updateInChatWidget: (
       state,
@@ -596,7 +622,10 @@ export const {
   setShowSidebar,
   updateEmailTicketCreateNotification,
   setDefaultWorkSpaceSettingTab,
-  updateSlackTicketNotification
+  updateSlackTicketNotification,
+  updateUserAvatarsVisibility,
+  enableInChatWidget,
+  updateSingleInChatWidget
 } = dashboardSlice.actions;
 
 export default dashboardSlice.reducer;

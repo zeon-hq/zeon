@@ -191,8 +191,7 @@ const AddKnowledgeBaseFile = ({ opened, onClose }: IAddKnowledgeBaseFile) => {
             key={index}
             style={{
               fontSize: "14px",
-              marginTop: "12px",
-              // fontFamily: 'Inter',
+              marginTop: "12px"
             }}
           >
             <Box
@@ -200,8 +199,7 @@ const AddKnowledgeBaseFile = ({ opened, onClose }: IAddKnowledgeBaseFile) => {
               w={"100%"}
               style={{
                 justifyContent: "space-between",
-              }}
-            >
+              }}>
               <Text color={theme.colors.grey[1]}>{file.name}</Text>
 
               <img 
@@ -225,6 +223,8 @@ const AddKnowledgeBaseFile = ({ opened, onClose }: IAddKnowledgeBaseFile) => {
               <Progress
                 w={"80%"}
                 color={theme.colors.blue[1]}
+                animate={progress < 100 || !fileProgressCompleted}
+                striped={progress < 100 || !fileProgressCompleted}
                 radius="md"
                 value={progress}
               />

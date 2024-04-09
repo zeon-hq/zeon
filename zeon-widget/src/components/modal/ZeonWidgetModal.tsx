@@ -24,10 +24,9 @@ const Wrapper = styled.div`
     return props.theme.isEmbeddable ? '100%' :'70vh';
   }};
   ${(props: IPropsType) => props.theme.isEmbeddable ? 'height: 100%;' : ''}
-  border: 1px solid #eaecf0;
+  border: 1px solid #EAECF0;
   border-radius: 12px;
-  box-shadow: 0px 8px 8px -4px rgba(16, 24, 40, 0.03),
-    0px 20px 24px -4px rgba(16, 24, 40, 0.08);
+  box-shadow: 0 8px 8px -4px rgba(16, 24, 40, 0.03), 0 20px 24px -4px rgba(16, 24, 40, 0.08);
   position: fixed;
   right: ${(props: IPropsType) => {
     return props.theme.isEmbeddable ? '0px' :'16px';
@@ -38,6 +37,7 @@ const Wrapper = styled.div`
   z-index: 100000000000;
   display: flex;
   flex-direction: column;
+  padding:16px;
 
   @media only screen and (max-width: 1300px) {
     ${(props: IPropsType) => props.theme.isEmbeddable ? 'height: 100%;' : ''}

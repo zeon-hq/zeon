@@ -46,7 +46,20 @@ const inChatWidgetSchema = new Schema({
     title: String,
     subTitle: String,
     link: String,
+    enabled: Boolean
 });
+
+const userAvatarsSchema = new Schema({
+    
+    enableUserAvatars: Boolean,
+      userAvatarsLinks: [
+        {
+          link: String,
+          enabled: Boolean
+        }
+      ],
+      additonalUserAvatars: String
+})
 
 const channelSchema = new Schema({
     name: String,
@@ -63,6 +76,7 @@ const channelSchema = new Schema({
         widgetButtonSetting: widgetButtonSettingSchema,
         widgetHeaderSection: widgetHeaderSectionSchema,
         miscellaneous: miscellaneousSchema,
+        userAvatars: userAvatarsSchema,
     },
     behavior: {
         widgetBehavior: widgetBehaviorSchema,
