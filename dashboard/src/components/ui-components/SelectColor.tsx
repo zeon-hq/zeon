@@ -18,7 +18,7 @@ const StyledButton = styled.button`
   background-color: white;
   border: 1px solid #d0d5dd;
 
-  font-size: 14px;
+  font-size: 12px;
   font-style: normal;
   font-weight: 600;
   line-height: 20px;
@@ -45,7 +45,7 @@ const StyledDescription = styled.p`
   color: #475467;
   /* Text sm/Regular */
 
-  font-size: 14px;
+  font-size: 12px;
   font-style: normal;
   font-weight: 400;
   margin-top: 12px;
@@ -54,7 +54,7 @@ const StyledDescription = styled.p`
 const TextInputLabel = styled(Text)`
   color: #344054;
 
-  font-size: 14px;
+  font-size: 12px;
   font-style: normal;
   font-weight: 500;
   line-height: 20px;
@@ -75,7 +75,9 @@ const SelectColor = ({
       <div
         style={{ paddingLeft: "9px", display: "flex", flexDirection: "column" }}
       >
-        <TextInputLabel>{label}</TextInputLabel>
+        {/* @ts-ignore */}
+        <TextInputLabel sx={{marginLeft:"-5px"}}
+        >{label}</TextInputLabel>
         <Space mt={"15px"} />
         <Grid>
           <Flex>

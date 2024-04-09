@@ -4,6 +4,7 @@ import {
   Flex,
   Grid,
   Select,
+  Space,
   TextInput,
   Textarea,
 } from "@mantine/core";
@@ -25,9 +26,10 @@ import {
 import { updateChannel } from "service/DashboardService";
 import styled from "styled-components";
 import { inputWrapperData } from "util/Constant";
-import { InfoContainer } from "../tabInfo.styles";
+import { InfoContainer, WidgetContainer } from "../tabInfo.styles";
 import { useState } from "react";
 import { createDateWithTime, getOperatinHourTime } from "util/dashboardUtils";
+import Widget from "components/widget/Widget";
 
 export const MainDiv = styled.div`
   width: 100%;
@@ -35,7 +37,6 @@ export const MainDiv = styled.div`
 
 const TetInputLabel = styled(Label)`
   margin-top: 16px;
-
   font-size: 13px;
   font-style: normal;
   font-weight: 500;
@@ -43,8 +44,9 @@ const TetInputLabel = styled(Label)`
 `;
 export const Wrapper = styled.div`
   display: grid;
-  grid-template-columns: 70% 30%;
+  grid-template-columns: 60% 40%;
   overflow: none;
+  padding: 0px 16px;
 `;
 const Behavior = () => {
   const { channelsInfo, selectedPage } = useDashboard();
@@ -99,7 +101,7 @@ const Behavior = () => {
       <Wrapper>
         <InfoContainer>
           <MainDiv>
-            <Box mb={24} fw={500}>
+            <Box mb={16} fw={500}>
               {/* <SwitchWithLabel
                 onClick={(e) => {
                   handleChange({
@@ -189,7 +191,7 @@ const Behavior = () => {
                   />
                 </Grid.Col>
               </Grid>
-
+              <Space mt={16} />
               <SwitchWithLabel
                 onClick={(e) => {
                   handleChange({
@@ -382,6 +384,9 @@ const Behavior = () => {
             Save{" "}
           </Button>
         </InfoContainer>
+        <WidgetContainer>
+            <Widget configType="appearance" />
+          </WidgetContainer>
       </Wrapper>
     </>
   );

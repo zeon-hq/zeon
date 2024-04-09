@@ -29,7 +29,7 @@ const Heading = ({
 }: Props) => {
   return (
     <>
-      <Wrapper style={{ padding: "32px 32px" }}>
+      <Wrapper style={{ padding: "32px 16px" }}>
         <Box>
           <Text color="#101828" weight="600" sx={{ fontSize: "30px" }}>
             {" "}
@@ -66,7 +66,7 @@ const Heading = ({
           )}
         </Flex>
       </Wrapper>
-      <Space h={16} />
+      {/* <Space h={} /> */}
     </>
   );
 };

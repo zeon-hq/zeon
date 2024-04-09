@@ -37,6 +37,7 @@ const InChatWidgets = () => {
       subTitle: "New Widget Subtitle",
       topLogo: "Space",
       link: "",
+      enabled: true,
     };
     dispatch(addInChatWidget(newWidget));
   };

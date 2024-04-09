@@ -1,10 +1,13 @@
 import {
   Box,
+  Divider,
   FileInput,
   Grid,
   LoadingOverlay,
+  Select,
   Space,
-  TextInput
+  TextInput,
+  Text
 } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import ProfileSave from "assets/profile_save.png";
@@ -16,7 +19,7 @@ import Widget from "components/widget/Widget";
 import useDashboard from "hooks/useDashboard";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { IUpdateDashboardAction, updateDashboardSetting } from "reducer/slice";
+import { IUpdateDashboardAction, enableInChatWidget, updateDashboardSetting, updateSingleInChatWidget, updateUserAvatarsVisibility } from "reducer/slice";
 import { updateChannel, uploadFile } from "service/DashboardService";
 import { inputWrapperData } from "util/Constant";
 import {
@@ -25,14 +28,18 @@ import {
   WidgetContainer,
   Wrapper,
 } from "../tabInfo.styles";
+import { set } from "dot-prop";
 
 const Appearance = () => {
   const { channelsInfo, selectedPage } = useDashboard();
   const dispatch = useDispatch();
 
   const appearenceDetails = channelsInfo[selectedPage.name]?.appearance;
+  const inChatWidgets = channelsInfo[selectedPage.name]?.inChatWidgets;
 
   const [value, setValue] = useState<File | null>(null);
+  const [userAvatarValue, setUserAvatarValue] = useState<string | null>(null);
+  const [userAvatarIndex, setUserAvatarIndex] = useState<number>(0);
   const [loading, setLoading] = useState(false);
 
   const handleChange = ({
@@ -79,6 +86,41 @@ const Appearance = () => {
     }
   };
 
+  const handleUserAvatarSubmit = async () => {
+    setLoading(true);
+    try {
+      if (userAvatarValue) {
+        const formData = new FormData();
+        formData.append("file", userAvatarValue);
+        // formData.append('fileName', value.name);
+        const res = await uploadFile(formData);
+
+        const curAvatar = [...appearenceDetails?.userAvatars?.userAvatarsLinks]
+        // add new avatar at userAvatarIndex
+        curAvatar[userAvatarIndex] = {link:res.uploadedUrl, enabled:true}
+        handleChange({
+          subType: "userAvatars",
+          type: "appearance",
+          //@ts-ignore
+          value: curAvatar,
+          key: "userAvatarsLinks",
+        });
+
+        setLoading(false);
+      }
+      setLoading(false);
+    } catch (error) {
+      showNotification({
+        title: "Error",
+        message: "Error while uploading file",
+      });
+      setLoading(false);
+      console.log(error);
+    }
+  }
+
+
+
   const handleSave = async () => {
     try {
       //@ts-ignore
@@ -105,6 +147,10 @@ const Appearance = () => {
   useEffect(() => {
     handleSubmit();
   }, [value]); // eslint-disable-line
+
+  useEffect(() => {
+    handleUserAvatarSubmit();
+  }, [userAvatarValue]); // eslint-disable-line
 
   return (
     <>
@@ -133,15 +179,18 @@ const Appearance = () => {
                     });
                   }}
                   value={appearenceDetails?.miscellaneous?.showBranding ?? true}
-                  heading="Zeon Branding"
+                  heading="Branding"
                   description="Branding can only be disabled on paid plans."
                 />
 
-                <Space style={{ marginTop: "32px" }} />
+                <Space style={{ marginTop: "16px" }} />
 
-
-
-                <Grid>
+                <Grid
+                  style={{
+                    gridTemplateColumns:
+                      "repeat(auto-fill, minmax(200px, 1fr))",
+                  }}
+                >
                   <Grid.Col>
                     <FileInput
                       inputWrapperOrder={inputWrapperData}
@@ -151,58 +200,30 @@ const Appearance = () => {
                       //     ? "Click to change the top logo"
                       //     : "Select top logo"
                       // }
-                      label="Channel Logo"
+                      label={
+                        <Text size="12px"> Widget Branding </Text>
+                      }
+                      //@ts-ignore
+                      placeholder={
+                        appearenceDetails?.widgetHeaderSection?.topLogo ?
+                          "Click to change the top logo"
+                          : "Select top logo"
+                      }
                       // withAsterisk
                       accept="image/png,image/jpeg"
                       onChange={setValue}
+                      
                       name="img"
                       disabled={loading}
                     />
                   </Grid.Col>
                 </Grid>
-
-                <Label text={"Widget Button"} size="sm" />
-
-                <Space style={{ marginTop: "32px" }} />
-
-                <SelectColor
-                  description="Color should be in HEX format."
-                  label={"Color"}
-                  value={
-                    appearenceDetails?.widgetButtonSetting.widgetButtonColor
-                  }
-                  handleChange={(colorValue: string) => {
-                    handleChange({
-                      subType: "widgetButtonSetting",
-                      key: "widgetButtonColor",
-                      value: colorValue,
-                      type: "appearance",
-                    });
-                  }}
-                />
               </Box>
-
+              <Divider my="sm" />
               <Box mb={16}>
-                {/* <img src={TopBannerSvg} alt="Widget Header Section" /> */}
-                <Space mb={"20px"} />
-                {/*                 <SelectColor
-                // description="dfdf"
-                label={'Top Banner Color'}
-                  value={appearenceDetails?.widgetHeaderSection?.topBannerColor}
-                  handleChange={(colorValue: string) => {
-                    handleChange({
-                      subType: "widgetHeaderSection",
-                      key: "topBannerColor",
-                      value: colorValue,
-                      type: "appearance",
-                    });
-                  }}
-                /> */}
-                <Space mb={"20px"} />
+                
 
-                <Label text={"Header"} size="sm" />
-
-                <Space style={{ marginTop: "32px" }} />
+                <Label style={{marginTop:"16px"}} text={"Heading and Initial Message"} size="sm" />
                 <Label text={"Heading"} size="sm" />
                 <Grid>
                   <Grid.Col>
@@ -225,7 +246,7 @@ const Appearance = () => {
                   </Grid.Col>
                 </Grid>
 
-                <Label text={"Sub Heading"} />
+                <Label text={"Initial Message"} />
                 <Grid>
                   <Grid.Col>
                     <TextInput
@@ -245,73 +266,271 @@ const Appearance = () => {
                   </Grid.Col>
                 </Grid>
                 <Space mb={"20px"} />
-
-                {/*                 <Label text={"Text Color"} />
+              </Box>
+              <Divider my="sm" />
+              <Box mb={16}>
+                <Space mb={"20px"} />
                 <Grid>
                   <Grid.Col>
-                    <Select
-                      rightSection={<MdKeyboardArrowDown />}
-                      inputWrapperOrder={inputWrapperData}
-                      description="This is the color of the text for whole widget. You can select either black or white depending on the color of the banner."
-                      placeholder="Pick one"
-                      defaultValue={
-                        appearenceDetails?.widgetHeaderSection?.textColor ||
-                        "black"
-                      }
-                      data={[
-                        { value: "black", label: "Black" },
-                        { value: "white", label: "White" },
-                      ]}
-                      onChange={(e: string) => {
+                    <SwitchWithLabel
+                      onClick={(e) => {
                         handleChange({
-                          subType: "widgetHeaderSection",
-                          key: "textColor",
-                          value: e,
+                          subType: "userAvatars",
+                          key: "enableUserAvatars",
+                          value: e.target.checked,
                           type: "appearance",
                         });
                       }}
+                      value={appearenceDetails?.userAvatars?.enableUserAvatars}
+                      heading="User Avatars"
+                      description="Customize and manage your online chat agents to highlight for your users"
                     />
                   </Grid.Col>
                 </Grid>
- */}
-                {/*                 <Label text={"Stroke Color"} />
 
-                <Grid>
-                  <Grid.Col>
-                    <Select
-                      rightSection={<MdKeyboardArrowDown />}
-                      placeholder="Pick one"
-                      inputWrapperOrder={inputWrapperData}
-                      description="This is the color of the stroke for whole widget. You can select either dark, light or none."
-                      defaultValue={
-                        appearenceDetails?.widgetHeaderSection?.strokeColor ||
-                        "dark"
-                      }
-                      data={[
-                        { value: "dark", label: "Dark" },
-                        { value: "light", label: "Light" },
-                        { value: "none", label: "None" },
-                      ]}
-                      onChange={(e: string) => {
-                        handleChange({
-                          subType: "widgetHeaderSection",
-                          key: "strokeColor",
-                          value: e,
-                          type: "appearance",
-                        });
+                <Space style={{ marginTop: "32px" }} />
+                <Grid
+                  style={{
+                    gridTemplateColumns:
+                      "repeat(auto-fill, minmax(200px, 1fr))",
+                  }}
+                  mb="md"
+                >
+                  <Grid.Col span={2}>
+                    <SwitchWithLabel
+                      checkBoxFirst={true}
+                      onClick={(e) => {
+                        
+                        dispatch(updateUserAvatarsVisibility({
+                          index: 0,
+                          //@ts-ignore
+                          value: e.target.checked
+                        }))
                       }}
+                      value={appearenceDetails.userAvatars.userAvatarsLinks[0].enabled}
+                      heading="Avatar 1"
+                      // description="Show user avatars in the chat widget"
                     />
                   </Grid.Col>
-                </Grid> */}
+                  <Grid.Col span={10}>
+                    <FileInput
+                      inputWrapperOrder={inputWrapperData}
+                      description="Upload your logo with a transparent background. PNG, SVG Supported. 50px by 50px"
+                      //@ts-ignore
+                      placeholder={
+                        appearenceDetails.userAvatars.userAvatarsLinks[0].link
+                          ? "Click to change the avatar"
+                          : "Select Avatar 1"
+                      }
+                      // withAsterisk
+                      accept="image/png,image/jpeg"
+                      //@ts-ignore
+                      onChange={
+                        (file) => {
+                          setUserAvatarIndex(0);
+                          //@ts-ignore
+                          setUserAvatarValue(file)
+                        }
+                      }
+                      name="img"
+                      disabled={loading}
+                    />
+                  </Grid.Col>
+                </Grid>
+                <Grid
+                  style={{
+                    gridTemplateColumns:
+                      "repeat(auto-fill, minmax(200px, 1fr))",
+                  }}
+                  mb="md"
+                >
+                  <Grid.Col span={2}>
+                    <SwitchWithLabel
+                    checkBoxFirst={true}
+                      onClick={(e) => {
+                        dispatch(updateUserAvatarsVisibility({
+                          index: 1,
+                          //@ts-ignore
+                          value: e.target.checked
+                        }))
+                      }}
+                      value={appearenceDetails.userAvatars.userAvatarsLinks[1].enabled}
+                      heading="Avatar 2"
+                      // description="Show user avatars in the chat widget"
+                    />
+                  </Grid.Col>
+                  <Grid.Col span={10}>
+                    <FileInput
+                      inputWrapperOrder={inputWrapperData}
+                      description="Upload your logo with a transparent background. PNG, SVG Supported. 50px by 50px"
+                      //@ts-ignore
+                      placeholder={
+                        appearenceDetails.userAvatars.userAvatarsLinks[1].link
+                          ? "Click to change the avatar"
+                          : "Select Avatar 2"
+                      }
+                      // withAsterisk
+                      accept="image/png,image/jpeg"
+                      //@ts-ignore
+                      onChange={
+                        (file) => {
+                          setUserAvatarIndex(1);
+                          //@ts-ignore
+                          setUserAvatarValue(file)
+                        }
+                      }
+                      name="img"
+                      disabled={loading}
+                    />
+                  </Grid.Col>
+                </Grid>
+                <Grid
+                  style={{
+                    gridTemplateColumns:
+                      "repeat(auto-fill, minmax(200px, 1fr))",
+                  }}
+                  mb="md"
+                >
+                  <Grid.Col span={2}>
+                    <SwitchWithLabel
+                    checkBoxFirst={true}
+                      onClick={(e) => {
+                        
+                        dispatch(updateUserAvatarsVisibility({
+                          index: 2,
+                          //@ts-ignore
+                          value: e.target.checked
+                        }))
+                      }}
+                      value={appearenceDetails.userAvatars.userAvatarsLinks[2].enabled}
+                      heading="Avatar 3"
+                      // description="Show user avatars in the chat widget"
+                    />
+                  </Grid.Col>
+                  <Grid.Col span={10}>
+                    <FileInput
+                      inputWrapperOrder={inputWrapperData}
+                      description="Upload your logo with a transparent background. PNG, SVG Supported. 50px by 50px"
+                       //@ts-ignore
+                       placeholder={
+                        appearenceDetails.userAvatars.userAvatarsLinks[2].link
+                          ? "Click to change the avatar"
+                          : "Select Avatar 3"
+                      }
+                      // withAsterisk
+                      accept="image/png,image/jpeg"
+                      //@ts-ignore
+                      onChange={
+                        (file) => {
+                          setUserAvatarIndex(2);
+                          //@ts-ignore
+                          setUserAvatarValue(file)
+                        }
+                      }
+                      name="img"
+                      disabled={loading}
+                    />
+                  </Grid.Col>
+                </Grid>
+                <Grid
+                  style={{
+                    gridTemplateColumns:
+                      "repeat(auto-fill, minmax(200px, 1fr))",
+                  }}
+                >
+                  <Grid.Col span={2}>
+                    <SwitchWithLabel
+                    checkBoxFirst={true}
+                      onClick={(e) => {
+                        dispatch(updateUserAvatarsVisibility({
+                          index: 3,
+                          //@ts-ignore
+                          value: e.target.checked
+                        }))
+                      }}
+                      value={appearenceDetails.userAvatars.userAvatarsLinks[3].enabled}
+                      heading="Avatar 4"
+                      // description="Show user avatars in the chat widget"
+                    />
+                  </Grid.Col>
+                  <Grid.Col span={10}>
+                    <FileInput
+                      inputWrapperOrder={inputWrapperData}
+                      description="Upload your logo with a transparent background. PNG, SVG Supported. 50px by 50px"
+                       //@ts-ignore
+                       placeholder={
+                        appearenceDetails.userAvatars.userAvatarsLinks[3].link
+                          ? "Click to change the avatar"
+                          : "Select Avatar 4"
+                      }
+                      // withAsterisk
+                      accept="image/png,image/jpeg"
+                      //@ts-ignore
+                      onChange={
+                        (file) => {
+                          setUserAvatarIndex(3);
+                          //@ts-ignore
+                          setUserAvatarValue(file)
+                        }
+                      }
+                      name="img"
+                      disabled={loading}
+                    />
+                  </Grid.Col>
+                </Grid>
+                <Grid
+                  style={{
+                    gridTemplateColumns:
+                      "repeat(auto-fill, minmax(200px, 1fr))",
+                  }}
+                >
+                  <Grid.Col span={2}>
+                    <SwitchWithLabel
+                    checkBoxFirst={true}
+                      onClick={(e) => {
+                        dispatch(updateUserAvatarsVisibility({
+                          index: 4,
+                          //@ts-ignore
+                          value: e.target.checked
+                        }))
+                      }}
+                      value={appearenceDetails.userAvatars.userAvatarsLinks[4].enabled}
+                      heading="Avatar 5"
+                      // description="Show user avatars in the chat widget"
+                    />
+                  </Grid.Col>
+                  <Grid.Col span={10}>
+                    <FileInput
+                      inputWrapperOrder={inputWrapperData}
+                      description="Upload your logo with a transparent background. PNG, SVG Supported. 50px by 50px"
+                       //@ts-ignore
+                       placeholder={
+                        appearenceDetails.userAvatars.userAvatarsLinks[4].link
+                          ? "Click to change the avatar"
+                          : "Select Avatar 5"
+                      }
+                      // withAsterisk
+                      accept="image/png,image/jpeg"
+                      //@ts-ignore
+                      onChange={
+                        (file) => {
+                          setUserAvatarIndex(4);
+                          //@ts-ignore
+                          setUserAvatarValue(file)
+                        }
+                      }
+                      name="img"
+                      disabled={loading}
+                    />
+                  </Grid.Col>
+                </Grid>
               </Box>
-
+              <Divider my="sm" />
               <Box mb={16}>
-                <Label text={"New Conversation Button"} size="sm" />
+                <Label text={"Submit Button"} size="sm" />
 
                 <Space mb={"20px"} />
-
-                <Label text={"Button Color"} />
-
+                {/* <Label text={"Button Color"} /> */}
                 <SelectColor
                   description="This sets the color of the new conversation button. Color should be in HEX format."
                   label={"Color"}
@@ -325,78 +544,176 @@ const Appearance = () => {
                     });
                   }}
                 />
-                <Label text={"Title"} />
+              </Box>
+              <Divider my="sm" />
+              <Space h="16px" />
+              <Box mb={16}>
+                <SwitchWithLabel
+                  onClick={(e) => {
+                    dispatch(
+                      enableInChatWidget({
+                        index: 0,
+                        value: e.target.checked,
+                      })
+                    )
+                  }}
+                  value={inChatWidgets[0].enabled}
+                  heading="CTA 1"
+                  description=""
+                />
+                <Grid>
+                  <Grid.Col span={4}>
+                    <Select
+                      data={[
+                        { value: "slack", label: "Slack" },
+                        { value: "docs", label: "Documentation" },
+                        { value: "discord", label: "Discord" },
+                        { value: "twitter", label: "Twiiter" },
+                        {value:"whatsapp", label:"Whatsapp"},
+                        {value:'youtube', label:'Youtube'}
+                      ]}
+                      placeholder="Select an option"
+                      label={
+                        <Text size="12px"> Icon </Text>
+                      }
+                      onChange={(e) => {
+                        dispatch(
+                          updateSingleInChatWidget({
+                            index: 0,
+                            key: "topLogo",
+                            value: e || "slack",
+
+                          })
+                        )
+                      }}
+                      value={inChatWidgets[0].topLogo}
+                    />
+                  </Grid.Col>
+                  <Grid.Col span={8}>
+                    <TextInput value={
+                      inChatWidgets[0].title
+                      
+                    }
+                    onChange={
+                      (event) => {
+                        dispatch(
+                          updateSingleInChatWidget({
+                            index: 0,
+                            key: "title",
+                            value: event.target.value
+                          })
+                        )
+                      }
+                    }
+                     placeholder="Enter text" label={
+                      <Text size="12px"> Title </Text>
+                    }  />
+                  </Grid.Col>
+                </Grid>
+                <Grid>
+                  <Grid.Col span={12}>
+                    <TextInput
+                    value={inChatWidgets[0].link}
+                    onChange={(event) => {
+                      dispatch(
+                        updateSingleInChatWidget({
+                          index: 0,
+                          key: "link",
+                          value: event.target.value
+                        })
+                      )
+                    }}
+                    placeholder="Enter text" label={
+                      <Text size="12px"> Target Link </Text>
+                    }  />
+                  </Grid.Col>
+                </Grid>
+              </Box>
+
+              <Box mb={16}>
                 <Grid>
                   <Grid.Col>
-                    <TextInput
-                      inputWrapperOrder={inputWrapperData}
-                      description="Ideally Short (2-3 Words)"
-                      value={appearenceDetails.newConversationButton.title}
-                      placeholder={"Start a New Conversation Right Now"}
-                      onChange={(e) =>
-                        handleChange({
-                          subType: "newConversationButton",
-                          key: "title",
-                          value: e.target.value,
-                          type: "appearance",
+                    <SwitchWithLabel
+                     onClick={(e) => {
+                      dispatch(
+                        enableInChatWidget({
+                          index: 1,
+                          value: e.target.checked,
                         })
+                      )
+                    }}
+                      value={
+                        inChatWidgets[1].enabled
                       }
-                      maxLength={30}
+                      heading="CTA 2"
+                      description=""
                     />
                   </Grid.Col>
                 </Grid>
-
-                {/*                 <Label text={"Sub Title"} />
                 <Grid>
-                  <Grid.Col>
-                    <TextInput
-                      value={appearenceDetails.newConversationButton.subTitle}
-                      placeholder={
-                        "Ask us anything, or share your feedback. We’re here to help, no matter where you’re based in the world."
-                      }
-                      required
-                      onChange={(e) =>
-                        handleChange({
-                          subType: "newConversationButton",
-                          key: "subTitle",
-                          value: e.target.value,
-                          type: "appearance",
-                        })
-                      }
-                      maxLength={40}
-                    />
-                  </Grid.Col>
-                </Grid> */}
-
-                {/*                 <Label text={"Text Color"} />
-
-                <Grid>
-                  <Grid.Col>
+                  <Grid.Col span={4}>
                     <Select
-                      placeholder="Pick one"
-                      rightSection={<MdKeyboardArrowDown />}
-                      inputWrapperOrder={inputWrapperData}
-                      description="This is the color of the text for whole widget. You can select either black or white depending on the background."
-                      defaultValue={
-                        appearenceDetails?.newConversationButton.textColor ||
-                        "white"
-                      }
                       data={[
-                        { value: "black", label: "Black" },
-                        { value: "white", label: "White" },
+                        { value: "slack", label: "Slack" },
+                        { value: "docs", label: "Documentation" },
+                        { value: "discord", label: "Discord" },
+                        { value: "twitter", label: "Twiiter" },
+                        {value:"whatsapp", label:"Whatsapp"},
+                        {value:'youtube', label:'Youtube'}
                       ]}
-                      onChange={(e: string) => {
-                        handleChange({
-                          subType: "newConversationButton",
-                          key: "textColor",
-                          value: e,
-                          type: "appearance",
-                        });
+                      placeholder="Select an option"
+                      label={
+                        <Text size="12px"> Icon </Text>
+                      }
+                      onChange={(e) => {
+                        dispatch(
+                          updateSingleInChatWidget({
+                            index: 1,
+                            key: "topLogo",
+                            value: e || "slack"
+                          })
+                        )
                       }}
+                      value={inChatWidgets[1].topLogo}
                     />
                   </Grid.Col>
-                </Grid> */}
-                <Space h="32px" />
+                  <Grid.Col span={8}>
+                    <TextInput onChange={(event) => {
+                      dispatch(
+                        updateSingleInChatWidget({
+                          index: 1,
+                          key: "title",
+                          value: event.target.value
+                        })
+                      )
+                    }
+
+                    } placeholder="Enter text" value={
+                      inChatWidgets[1].title
+                    } label={
+                      <Text size="12px"> Title </Text>
+                    } />
+                  </Grid.Col>
+                </Grid>
+                <Grid>
+                  <Grid.Col span={12}>
+                    <TextInput
+                    onChange={(event) => {
+                      dispatch(
+                        updateSingleInChatWidget({
+                          index: 1,
+                          key: "link",
+                          value: event.target.value
+                        })
+                      )
+                    }
+                    }
+                    value={inChatWidgets[1].link}
+                    placeholder="Enter text" label={
+                      <Text size="12px"> Target Link </Text>
+                    }  />
+                  </Grid.Col>
+                </Grid>
               </Box>
             </MainDiv>
           </InfoContainer>

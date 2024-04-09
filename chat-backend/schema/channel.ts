@@ -6,6 +6,7 @@ export interface InChatWidgetInterface {
   title: string;
   subTitle: string;
   link: string;
+  enabled: boolean;
 }
 
 export interface IChannelsInfo {
@@ -31,6 +32,16 @@ export interface IChannelsInfo {
     };
     miscellaneous: {
       showBranding: boolean;
+    };
+    userAvatars: {
+      enableUserAvatars: boolean;
+      userAvatarsLinks: [
+        {
+          link: string;
+          enabled: boolean;
+        }
+      ];
+      additonalUserAvatars: string;
     };
   };
   behavior: {
@@ -63,10 +74,10 @@ export interface IChannelsInfo {
   };
   inChatWidgets: InChatWidgetInterface[];
   workspaceId: string;
-  slackChannelId:string;
-  emailNewTicketNotification?:{type:Boolean,default:false},
-  isAIEnabled?:{type:Boolean,default:false},
-  accessToken:string;
+  slackChannelId: string;
+  emailNewTicketNotification?: { type: Boolean; default: false };
+  isAIEnabled?: { type: Boolean; default: false };
+  accessToken: string;
   members: string[];
   channelId: string;
   cannedResponses: string[];
@@ -74,10 +85,10 @@ export interface IChannelsInfo {
 
 const ChannelSchema: Schema = new Schema({
   name: { type: String, required: true },
-  slackChannelId:{type:String},
-  emailNewTicketNotification:{type:Boolean,default:false},
-  isAIEnabled:{type:Boolean,default:false},
-  accessToken:{type:String},
+  slackChannelId: { type: String },
+  emailNewTicketNotification: { type: Boolean, default: false },
+  isAIEnabled: { type: Boolean, default: false },
+  accessToken: { type: String },
   appearance: {
     newConversationButton: {
       buttonColor: { type: String, default: "#4C6EF5" },
@@ -111,6 +122,38 @@ const ChannelSchema: Schema = new Schema({
     },
     miscellaneous: {
       showBranding: { type: Boolean, default: true },
+    },
+    userAvatars: {
+      enableUserAvatars: { type: Boolean, default: true },
+      userAvatarsLinks: {
+        type: [{
+          link: { type: String, default: "" },
+          enabled: { type: Boolean, default: true },
+        }],
+        default: [
+          {
+            link: "https://randomuser.me/api/portraits/men/9.jpg",
+            enabled: true,
+          },
+          {
+            link: "https://randomuser.me/api/portraits/women/59.jpg",
+            enabled: true,
+          },
+          {
+            link: "https://randomuser.me/api/portraits/men/44.jpg",
+            enabled: true,
+          },
+          {
+            link: "https://randomuser.me/api/portraits/women/19.jpg",
+            enabled: true,
+          },
+          {
+            link: "https://randomuser.me/api/portraits/men/9.jpg",
+            enabled: true,
+          },
+        ],
+      },
+      additonalUserAvatars: { type: String, default: "+5" },
     },
   },
   behavior: {
@@ -164,18 +207,41 @@ const ChannelSchema: Schema = new Schema({
       },
     },
   },
-  inChatWidgets: [
-    {
-      topLogo: { type: String, default: "" },
-      title: { type: String, default: "Title" },
-      subTitle: { type: String, default: "This is the subtitle" },
-      link: { type: String, default: "" },
-    },
-  ],
-  workspaceId: { type:String, required: true },
+  inChatWidgets:{
+    type: [
+      {
+        topLogo: { type: String, default: "slack" },
+        title: { type: String, default: "Title" },
+        subTitle: { type: String, default: "This is the subtitle" },
+        link: { type: String, default: "https://" },
+        enabled: { type: Boolean, default: true },
+      },
+    ],
+    default: [
+      {
+        topLogo: "slack",
+        title: "Title",
+        subTitle: "This is the subtitle",
+        link: "https://",
+        enabled: true,
+      },
+      {
+        topLogo: "docs",
+        title: "Title",
+        subTitle: "This is the subtitle",
+        link: "https://",
+        enabled: true,
+      },
+    ],
+  } ,
+  workspaceId: { type: String, required: true },
   channelId: { type: String, required: true },
   cannedResponses: [
-    { type: mongoose.Schema.Types.ObjectId, ref: "CannedResponse", default:[] }
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "CannedResponse",
+      default: [],
+    },
   ],
   members: [{ type: String, default: [] }],
 });

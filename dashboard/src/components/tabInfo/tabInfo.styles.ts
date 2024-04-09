@@ -4,10 +4,11 @@ export const Wrapper = styled.div`
   display: grid;
   grid-template-columns: 60% 40%;
   overflow-y: none;
+  padding: 0px 16px;
 `;
 
 export const InfoContainer = styled.div`
-  height: 90vh;
+  height: 75vh;
   overflow-y: auto;
 `;
 
