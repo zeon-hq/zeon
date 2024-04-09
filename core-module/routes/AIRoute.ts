@@ -8,20 +8,20 @@ const upload = multer({ storage })
 
 // AI related routes
 // upload pdf and injest the data to store in vector's db
-router.post('/injest-file',verifyIdentity, AIController.injestFile);
+router.post('/injest-file', AIController.injestFile);
 
-router.post('/internal/injest-text',verifyIdentity, AIController.getInjestFile);
+router.post('/internal/injest-text', AIController.getInjestFile);
 
 // get the list of uploaded file 
-router.get('/get-uploaded-files/:channelId/:workspaceId',verifyIdentity, AIController.getUploadedFileList);
+router.get('/get-uploaded-files/:channelId/:workspaceId', AIController.getUploadedFileList);
 
 // delete the file
-router.delete('/delete-file/:fileId/:channelId/:workspaceId',verifyIdentity, AIController.deleteFile);
+router.delete('/delete-file/:fileId/:channelId/:workspaceId', AIController.deleteFile);
 
 // download uploaded file
-router.get('/download-file/:fileId', verifyIdentity,AIController.downloadFile);
+router.get('/download-file/:fileId', AIController.downloadFile);
 
-router.put('/asset/upload-files', [upload.array("files"), verifyIdentity], AIController.uploadFiles);
+router.put('/asset/upload-files', upload.array("files") , AIController.uploadFiles);
 
 router.get('/test', AIController.testFuns);
 

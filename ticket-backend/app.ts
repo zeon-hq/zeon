@@ -63,7 +63,8 @@ let mqConnection: Connection;
 io.on("connection", (socket:Socket) => {
 
   socket.on("open-ticket", async (ticketOptions: ITicketOptions) => {
-
+    const channelId = ticketOptions.channelId;
+    const workspaceId = ticketOptions.workspaceId;
     try {
 
       const openTicketData: any = await openTicket(ticketOptions, socket.id);
@@ -71,10 +72,10 @@ io.on("connection", (socket:Socket) => {
       // code commented by sathithya yogi, we are not using the below emit event
       // socket.emit("open-ticket-complete", openTicketData);
 
-      const socketIds = await getConnectedDashboardSockets(ticketOptions.workspaceId);
+      const socketIds = await getConnectedDashboardSockets(workspaceId);
 
       const socketTicketPayload: ISocketTicketPayload = {
-        workspaceId: ticketOptions.workspaceId,
+        workspaceId: workspaceId,
         message: ticketOptions.message,
         customerEmail: ticketOptions.customerEmail,
         isOpen: ticketOptions.isOpen,
@@ -86,7 +87,7 @@ io.on("connection", (socket:Socket) => {
       io.to(socketIds).emit("open-ticket", socketTicketPayload);
 
 
-      const channel = await ChannelModel.findOne({ channelId: ticketOptions.channelId });
+      const channel = await ChannelModel.findOne({ channelId: channelId });
       const isEmailConfigured = channel?.emailNewTicketNotification;
       const isSlackConfigured = channel?.slackChannelId;
       const isAIEnabled = channel?.isAIEnabled;
@@ -94,7 +95,7 @@ io.on("connection", (socket:Socket) => {
       if (isEmailConfigured) {
         channel?.members.forEach(async (member: any) => {
           const user = await User.findOne({ userId: member })
-          await CoreService.sendMail(ticketOptions.message, user?.email, ticketOptions.customerEmail, openTicketData.ticketId, ticketOptions.channelId, ticketOptions.workspaceId);
+          await CoreService.sendMail(ticketOptions.message, user?.email, ticketOptions.customerEmail, openTicketData.ticketId, channelId, workspaceId);
         })
       }
 
@@ -155,7 +156,7 @@ io.on("connection", (socket:Socket) => {
                 "type": "plain_text",
                 "text": "Go to chat ->"
               },
-              "url": `${process.env.WEBSITE_URL}/${ticketOptions.workspaceId}/chat?channelId=${ticketOptions.channelId}&ticketId=${socketTicketPayload.ticketId}`
+              "url": `${process.env.WEBSITE_URL}/${workspaceId}/chat?channelId=${channelId}&ticketId=${socketTicketPayload.ticketId}`
             }
           }
         ]
@@ -176,13 +177,15 @@ io.on("connection", (socket:Socket) => {
       if (isAIEnabled || true) {
         const aiMessagepayload = {
           question: ticketOptions.message,
-          history: []
+          history: [],
+          workspaceId, 
+          channelId
         }
-        const aiResponse = await CoreService.getAIMessage(aiMessagepayload);
+        const aiResponse = await CoreService.getAIMessage(aiMessagepayload, workspaceId, channelId);
         if (aiResponse) {
           const messageOptions: MessageOptions = {
-            workspaceId: ticketOptions.workspaceId,
-            channelId: ticketOptions.channelId,
+            workspaceId: workspaceId,
+            channelId: channelId,
             type: "received",
             isRead: true,
             message: aiResponse?.text,
