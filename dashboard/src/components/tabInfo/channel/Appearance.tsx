@@ -28,7 +28,6 @@ import {
   WidgetContainer,
   Wrapper,
 } from "../tabInfo.styles";
-import { set } from "dot-prop";
 
 const Appearance = () => {
   const { channelsInfo, selectedPage } = useDashboard();

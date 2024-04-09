@@ -1,15 +1,13 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import useQuery from 'hooks/useQuery'
 import axios from 'axios';
 import { showNotification } from '@mantine/notifications';
-import useDashboard from 'hooks/useDashboard';
 
 type Props = {}
 
 const PaymentSuccess = (props: Props) => {
     // get session id from url
     const query = useQuery();
-    const {workspaceInfo} = useDashboard();
     const paymentSuccess = async () => {
         try {
             const res = await axios.post("http://localhost:3005/payment-success", {
@@ -30,7 +28,7 @@ const PaymentSuccess = (props: Props) => {
     }
     useEffect(() => {
         paymentSuccess();
-    },[])
+    },[]) // eslint-disable-line react-hooks/exhaustive-deps
   return (
     <div>PaymentSuccess</div>
   )

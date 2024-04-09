@@ -1,29 +1,21 @@
-import { Avatar, Button, Text, Box, Flex, Space } from "@mantine/core";
+import { Avatar, Button, Text, Box, Flex } from "@mantine/core";
 import useDashboard from "hooks/useDashboard";
 import styled from "styled-components";
 import AppearenceWidgetContent from "./AppearenceWidgetContent";
 import BehaviorWidgetContent from "./BehaviorWidgetContent";
 import WidgetIcon from "./WidgetIcon";
-
-// import { Text } from "components/ui-components/Dashboard.styles";
-import { AiOutlineArrowLeft } from "react-icons/ai";
-import { BsDiscord, BsSlack, BsTwitter, BsWhatsapp, BsYoutube } from "react-icons/bs";
+import {
+  BsDiscord,
+  BsSlack,
+  BsTwitter,
+  BsWhatsapp,
+  BsYoutube,
+} from "react-icons/bs";
 import { Book } from "tabler-icons-react";
 
 type Props = {
   configType: "appearance" | "behavior" | "inChatWidgets";
 };
-
-const Wrapper = styled.div`
-  /* height: 25%; */
-  background-color: ${(props: { bg: string; stroke: string }) => props.bg};
-  color: white;
-  padding: 24px 24px 8px 24px;
-  border-radius: 12px;
-  position: sticky;
-  top: 0;
-  z-index: 10000000;
-`;
 
 const ModalWrapper = styled.div`
   /* TODO: Discuss with ajay if we need fixed height or thr height should depend upon content */
@@ -86,32 +78,24 @@ const Info = styled.div`
   }
 `;
 
-const IconContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
 const getIcons = (type: string) => {
   switch (type) {
     case "docs":
       return <Book />;
     case "discord":
       return <BsDiscord />;
-    case 'slack':
+    case "slack":
       return <BsSlack />;
-    case 'twitter':
+    case "twitter":
       return <BsTwitter />;
-    case 'whatsapp':
+    case "whatsapp":
       return <BsWhatsapp />;
-    case 'youtube':
+    case "youtube":
       return <BsYoutube />;
     default:
       return <Book />;
   }
-}
+};
 
 const Widget = ({ configType }: Props) => {
   const { channelsInfo, selectedPage } = useDashboard();
@@ -121,26 +105,6 @@ const Widget = ({ configType }: Props) => {
   return (
     <>
       <ModalWrapper>
-        {/* <Wrapper stroke={appearenceDetails?.widgetHeaderSection?.strokeColor} bg={appearenceDetails?.widgetHeaderSection?.topBannerColor}>
-          
-          <IconContainer>
-            <div>
-              {
-                configType !== "behavior" &&
-                <Avatar src={appearenceDetails?.widgetHeaderSection?.topLogo || "https://uploads-ssl.webflow.com/63ff8de5d1f47e7825c30910/63ff9a6ff5a715e67545858d_logowhite.svg"}/>
-                
-              }
-              {configType === "behavior" && <AiOutlineArrowLeft size={"1rem"} color={appearenceDetails.widgetHeaderSection?.textColor}/>}
-            </div>
-           
-          </IconContainer>
-          {
-            configType !== "behavior" &&
-            <Text color={appearenceDetails.widgetHeaderSection?.textColor} size='large' weight='bold'> {appearenceDetails.widgetHeaderSection?.mainHeading} </Text>  
-          }
-          
-          <Text color={appearenceDetails.widgetHeaderSection?.textColor} size='medium' weight='normal'> {appearenceDetails.widgetHeaderSection?.subHeading} </Text>
-        </Wrapper> */}
         <Box>
           <Flex justify="center" align="center" mb="lg" gap="4px">
             <Box>
@@ -163,23 +127,18 @@ const Widget = ({ configType }: Props) => {
                 alignItems: "center",
               }}
             >
-              {
-                appearenceDetails?.userAvatars?.userAvatarsLinks.
-                filter((avatar) => avatar.enabled).
-                map(
-                  (avatar, index) => (
-                    <Avatar
-                      key={index}
-                      src={avatar.link}
-                      color="cyan"
-                      radius="xl"
-                    />
-                  )
-                )
-              }
-              <Avatar radius="xl">+{
-                appearenceDetails?.userAvatars?.additonalUserAvatars
-              }
+              {appearenceDetails?.userAvatars?.userAvatarsLinks
+                .filter((avatar) => avatar.enabled)
+                .map((avatar, index) => (
+                  <Avatar
+                    key={index}
+                    src={avatar.link}
+                    color="cyan"
+                    radius="xl"
+                  />
+                ))}
+              <Avatar radius="xl">
+                +{appearenceDetails?.userAvatars?.additonalUserAvatars}
               </Avatar>
             </Avatar.Group>
           )}
@@ -217,10 +176,9 @@ const Widget = ({ configType }: Props) => {
             Online now{" "}
           </Text>
           <Flex justify="center" align="center" gap={"16px"} mt="sm">
-            {
-              inChatWidgets
-              .filter((widget) => widget.enabled).
-              map((widget, index) => (
+            {inChatWidgets
+              .filter((widget) => widget.enabled)
+              .map((widget, index) => (
                 <Button
                   key={index}
                   leftIcon={getIcons(widget.topLogo)}
@@ -232,9 +190,7 @@ const Widget = ({ configType }: Props) => {
                 >
                   {widget.title}
                 </Button>
-              ))
-            }
-            
+              ))}
           </Flex>
         </Box>
         {/* <Space h={50}></Space> */}

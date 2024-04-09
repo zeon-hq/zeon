@@ -2,7 +2,6 @@ import { Button, Card, Flex, Text, Textarea } from "@mantine/core";
 import useDashboard from "hooks/useDashboard";
 import styled from "styled-components";
 import ChatWidgetCard from "./ChatWidgetCard";
-import { BsChatLeftDots } from "react-icons/bs";
 import MessageCard from "./MessageCard";
 
 const BrandingWrapper = styled.div`
@@ -19,25 +18,13 @@ const BrandingWrapper = styled.div`
 const AppearenceWidgetContent = () => {
   const { channelsInfo, selectedPage } = useDashboard();
   const appearenceDetails = channelsInfo[selectedPage.name]?.appearance;
-  const inChatWidgets = channelsInfo[selectedPage.name]?.inChatWidgets;
-
   return (
     <Card.Section>
-      {/* <Button
-        style={{
-          backgroundColor: appearenceDetails.newConversationButton.buttonColor,
-          borderRadius: "8px",
-        }}
-        leftIcon={<BsChatLeftDots size={15} />}
-      >
-        {appearenceDetails.newConversationButton.title}
-      </Button> */}
+     
       <MessageCard text={appearenceDetails.widgetHeaderSection.subHeading} />
       <ChatWidgetCard heading={'Ticket Number: 32343'} text={'Oliver: Hello, how are you doing..'} />
       <ChatWidgetCard heading={'Ticket Number: 12343'} text={'Oliver: Hey! Can you look into this?'} />
-      {/* {inChatWidgets.map((widget, index) => (
-        <ChatWidgetCard key={index} heading={widget.title} text={widget.subTitle} link={widget.link} />
-      ))} */}
+      
       <Textarea mt="md" placeholder="Enter your message"/>
       <Flex
        justify="space-between"
