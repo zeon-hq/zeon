@@ -173,7 +173,7 @@ const WorkspaceCard = ({
             customer-session-client-secret={clientSecret}
             client-reference-id={workspace.workspaceId}
             pricing-table-id={
-              process.env.REACT_APP_PRICING_TABLE_WITH_PAID_PLAN
+              process.env.REACT_APP_PRICING_TABLE_WITH_FREE_PLAN
             }
             publishable-key={process.env.REACT_APP_STRIPE_KEY}
           >
