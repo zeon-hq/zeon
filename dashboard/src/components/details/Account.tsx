@@ -21,6 +21,7 @@ import { SideBarInnerWrapper } from "./inbox/inbox.styles";
 import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { useNavigate } from "react-router";
+import BillingModal from "components/tabInfo/account/BillingModal";
 const Account = () => {
   const dispatch = useDispatch();
   const location = useLocation();
@@ -67,7 +68,7 @@ const Account = () => {
     {
       name: IWorkSpaceSettings.BILLING,
       icon: <img alt="test"src={WorkSpaceBilling} />,
-      active: false, // currently disabled
+      active: true, // currently disabled
     },
   ];
 
@@ -85,7 +86,7 @@ const Account = () => {
       case IWorkSpaceSettings.BILLING:
         return (
           <>
-            <Billing />
+            <BillingModal />
           </>
         );
       case IWorkSpaceSettings.ORGANIZATION:
