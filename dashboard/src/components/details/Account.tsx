@@ -34,11 +34,9 @@ const Account = () => {
     const pageName = queryParameters.get("pageName");
     const channelIdInUrl:string | null = queryParameters.get("channelId");
     // menuClick(pageName as RightPanelSettingName)
-
     if (pageName && !channelIdInUrl) {
       setTabValue(pageName as IWorkSpaceSettings);
     }
-
   }, []); // eslint-disable-line
 
   
