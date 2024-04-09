@@ -14,19 +14,19 @@ export const pricingPlanName: any = {
 
 export const pricingPlanAllowedActions = {
   [PricingPlan.ZEON_ENTERPRISE_MONTHLY]: {
-    ["AI_ACTIONS"]: "50k",
-    ["CONVERSATIONS"]: "100k",
+    AI_ACTIONS: "50k",
+    CONVERSATIONS: "100k",
   },
-    [PricingPlan.ZEON_PROFESSIONAL_MONTHLY]: {
-        ["AI_ACTIONS"]: "3000",
-        ["CONVERSATIONS"]: "30k",
-    },
-    [PricingPlan.ZEON_ADVANCED_MONTHLY]: {
-        ["AI_ACTIONS"]: "1000",
-        ["CONVERSATIONS"]: "10k",
-    },
-    [PricingPlan.ZEON_BASIC_MONTHLY]: {
-        ["AI_ACTIONS"]: "0",
-        ["CONVERSATIONS"]: "0",
-    },
+  [PricingPlan.ZEON_PROFESSIONAL_MONTHLY]: {
+    AI_ACTIONS: "3000",
+    CONVERSATIONS: "30k",
+  },
+  [PricingPlan.ZEON_ADVANCED_MONTHLY]: {
+    AI_ACTIONS: "1000",
+    CONVERSATIONS: "10k",
+  },
+  [PricingPlan.ZEON_BASIC_MONTHLY]: {
+    AI_ACTIONS: "0",
+    CONVERSATIONS: "0",
+  },
 };

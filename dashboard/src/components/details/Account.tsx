@@ -6,7 +6,7 @@ import WorkSpaceModules from "assets/workspace_modules.svg";
 import WorkSpaceOrganization from "assets/workspace_organization.svg";
 import WorkSpaceProfile from "assets/workspace_profile.svg";
 import WorkSpaceUser from "assets/workspace_users.svg";
-import { Admin, Billing, Referral } from "components/tabInfo";
+import { Admin, Referral } from "components/tabInfo";
 import Modules from "components/tabInfo/account/Modules";
 import Organization from "components/tabInfo/account/Organization";
 import Profile from "components/tabInfo/account/Profile";

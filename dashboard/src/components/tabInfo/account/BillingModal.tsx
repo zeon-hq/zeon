@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { SubscriptionCardProps } from "./SubscriptionCard";
-import SubscriptionCard from "./SubscriptionCard";
 import styled from "styled-components";
 import useDashboard from "hooks/useDashboard";
 import axios from "axios";
@@ -66,29 +64,6 @@ const BillingModal = (props: Props) => {
     }
   };
 
-  
-  const createStripeCheckout = async () => {
-    try {
-      const res = await axios.post(
-        "http://localhost:3005/create-checkout-session",
-        {
-          priceId: "price_1P2GGbB51Fz4VVlmqkG42SVZ",
-          workspaceId: workspaceInfo.workspaceId,
-          customerId: workspaceInfo.stripeCustomerId,
-        }
-      );
-      window.location.href = res.data.url;
-    } catch (error: any) {
-      console.log(error);
-      showNotification({
-        title: "Error",
-        message:
-          error?.response?.data?.error?.message ?? "Something went wrong",
-        color: "red",
-      });
-    }
-  };
-
   const createManageBilling = async () => {
     try {
       const res = await axios.post(
@@ -112,7 +87,7 @@ const BillingModal = (props: Props) => {
     if(workspaceInfo.subscriptionInfo.subscribedPlan === PricingPlan.ZEON_BASIC_MONTHLY || !workspaceInfo.subscriptionInfo.subscribedPlan) {
       setShowPricingTable(true);
     }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>

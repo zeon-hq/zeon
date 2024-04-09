@@ -2,7 +2,6 @@ import {
   Button,
   Divider,
   Flex,
-  Modal,
   Select,
   Space,
   Text,
@@ -25,11 +24,6 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import { updateWorkSpaceInformation } from "service/CoreService";
 import { IWorkspaceInfoUpdatePayload } from "components/types";
 import { useDispatch } from "react-redux";
-import axios from "axios";
-import Billing from "./Billing";
-import SubscriptionCard from "./SubscriptionCard";
-import BillingModal from "./BillingModal";
-import { showNotification } from "@mantine/notifications";
 
 const showTimeZoneField = true;
 
@@ -45,8 +39,6 @@ const Organization = () => {
   const [organizationPic, setOrganizationPic] = useState<string | any>(
     workspaceInfo?.workspaceConfig?.logo
   );
-  const [showBillingModal, setShowBillingModal] = useState(false);
-
   const saveOrganizationInfo = async () => {
     const workSpaceId = workspaceInfo.workspaceId;
 
@@ -58,41 +50,6 @@ const Organization = () => {
     await updateWorkSpaceInformation(workSpacePayload, workSpaceId);
     //@ts-ignore
     dispatch(initDashboard(workspaceInfo.workspaceId));
-  };
-
-  const createStripeCheckout = async () => {
-    try {
-      const res = await axios.post(
-        "https://core.zeonhq.com/create-checkout-session",
-        {
-          priceId: "price_1P2GGbB51Fz4VVlmqkG42SVZ",
-          workspaceId: workspaceInfo.workspaceId,
-          customerId: workspaceInfo.stripeCustomerId,
-        }
-      );
-      window.location.href = res.data.url;
-    } catch (error:any) {
-      console.log(error);
-      showNotification({
-        title: "Error",
-        message: error?.response?.data?.error?.message ?? "Something went wrong",
-        color: "red",
-      });
-    }
-  };
-
-  const createManageBilling = async () => {
-    try {
-      const res = await axios.post(
-        "https://core.zeonhq.com/create-customer-portal-session",
-        {
-          customerId: workspaceInfo.stripeCustomerId,
-        }
-      );
-      window.location.href = res.data.url;
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   return (
