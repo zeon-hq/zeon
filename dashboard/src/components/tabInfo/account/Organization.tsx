@@ -178,63 +178,10 @@ const Organization = () => {
           {" "}
           Save{" "}
         </Button>
-        <Button
-          radius="md"
-          className="primary"
-          onClick={() => setShowBillingModal(true)}
-        >
-          Billing
-        </Button>
+       
       </Flex>
-      <div>
-        {/* @ts-ignore */}
-        {/* <stripe-pricing-table
-          pricing-table-id="prctbl_1P2GLpB51Fz4VVlmuZzNvSx8"
-          publishable-key="pk_live_51M0LxIB51Fz4VVlmA7Hhplee3uZlYPhGUC86PsgSKbwFxvZ7hxtdvG1SS3XMApbHGCFFCiRs00yzYRx0Sy14quHN00FeVAAS9F"
-        > */}
-        {/* @ts-ignore */}
-        {/* </stripe-pricing-table> */}
-        <Button
-          radius="md"
-          className="primary"
-          leftIcon={<img alt="profile" src={ProfileSave} />}
-          color="indigo"
-          onClick={createStripeCheckout}
-        >
-          Checkout 
-        </Button>
-        <Button
-          radius="md"
-          className="primary"
-          leftIcon={<img alt="profile" src={ProfileSave} />}
-          color="indigo"
-          onClick={createManageBilling}
-        >
-          Manage 
-        </Button>
-        {/* <Billing  /> */}
-        {/* @ts-ignore */}
+      
 
-        {/* <stripe-pricing-table
-          pricing-table-id="prctbl_1P2GLpB51Fz4VVlmuZzNvSx8"
-          publishable-key="pk_live_51M0LxIB51Fz4VVlmA7Hhplee3uZlYPhGUC86PsgSKbwFxvZ7hxtdvG1SS3XMApbHGCFFCiRs00yzYRx0Sy14quHN00FeVAAS9F"
-        ></stripe-pricing-table> */}
-      </div>
-
-      {/* <Modal
-        title="Subscription"
-        size="xl"
-
-        opened={showBillingModal}
-        onClose={() => setShowBillingModal(false)}
-        styles={{
-          body: {
-            padding: 0,
-          },
-        }}
-      >
-        <BillingModal />
-      </Modal> */}
     </>
   );
 };
