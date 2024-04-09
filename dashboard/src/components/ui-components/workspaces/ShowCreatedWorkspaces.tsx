@@ -122,6 +122,8 @@ const ShowCreatedWorkspaces = ({ workspaces, invites, getWorkspaceToWhichUserIsI
                     name={workspace.workspaceName}
                     info={`Managed by: ${workspace.primaryContactName}`}
                     workspaceId={workspace.workspaceId}
+                    activePlan={workspace?.subscriptionInfo?.subscribedPlan}
+                    workspace={workspace}
                   />
                 ))}
               </Flex>
@@ -146,6 +148,7 @@ const ShowCreatedWorkspaces = ({ workspaces, invites, getWorkspaceToWhichUserIsI
                     onAccept={() => handleInviteChange(invite.inviteId, true)}
                     onReject={() => handleInviteChange(invite.inviteId, false)}
                     workspaceId={invite.workspace.workspaceId}
+                    workspace={invite.workspace}
                   />
                 ))}
               </Flex>

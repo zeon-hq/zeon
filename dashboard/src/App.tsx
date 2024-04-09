@@ -65,9 +65,11 @@ function App() {
             <Route
               path="/:workspaceId/chat"
               element={
+               
                 <Layout>
                   <Details />
                 </Layout>
+               
               }
             />
             <Route

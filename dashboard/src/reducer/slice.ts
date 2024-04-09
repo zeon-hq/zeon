@@ -228,7 +228,8 @@ export interface IWorkspace {
     workspaceName: string,
     primaryContactName: string,
     primaryContactEmail: string,
-    isDeleted: boolean
+    isDeleted: boolean;
+    subscriptionInfo: any
   
 }
 

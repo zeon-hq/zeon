@@ -42,16 +42,12 @@ const BillingModal = (props: Props) => {
   const { workspaceInfo } = useDashboard();
   const [clientSecret, setClientSecret] = useState<string>("");
   const [showPricingTable, setShowPricingTable] = useState<boolean>();
-  const coreApi = Config('CORE_API_DOMAIN')
+  const coreApi = Config("CORE_API_DOMAIN");
   const fetchCustomerSession = async () => {
     try {
-      const res = await axios.post(
-        `${coreApi}/create-customer-seesion`,
-        {
-          customerId: workspaceInfo.stripeCustomerId,
-        }
-      );
-      console.log(res.data);
+      const res = await axios.post(`${coreApi}/create-customer-seesion`, {
+        customerId: workspaceInfo.stripeCustomerId,
+      });
       setClientSecret(res.data.client_secret);
     } catch (error: any) {
       console.log(error);
@@ -84,7 +80,11 @@ const BillingModal = (props: Props) => {
 
   useEffect(() => {
     fetchCustomerSession();
-    if(workspaceInfo.subscriptionInfo.subscribedPlan === PricingPlan.ZEON_BASIC_MONTHLY || !workspaceInfo.subscriptionInfo.subscribedPlan) {
+    if (
+      workspaceInfo.subscriptionInfo.subscribedPlan ===
+        PricingPlan.ZEON_BASIC_MONTHLY ||
+      !workspaceInfo.subscriptionInfo.subscribedPlan
+    ) {
       setShowPricingTable(true);
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -96,139 +96,144 @@ const BillingModal = (props: Props) => {
         subheading="Manage your billing and payment details."
       />
       <Wrapper>
-        <Grid>
-          <Grid.Col span={4}>
-            <AnalyticCard>
-              Total Conversations
-              <Space h="md" />
-              <Progress
-                mt="mb"
-                radius="lg"
-                size={16}
-                sections={[
-                  {
-                    value: 50,
-                    color: "indigo",
-                    label: "50/100",
-                  },
-                ]}
-              />
-            </AnalyticCard>
-          </Grid.Col>
-          <Grid.Col span={4}>
-            <AnalyticCard>
-              AI Actions
-              <Space h="md" />
-              <Progress
-                mt="mb"
-                radius="lg"
-                size={16}
-                sections={[
-                  {
-                    value: 50,
-                    color: "indigo",
-                    label: "50/100",
-                  },
-                ]}
-              />
-            </AnalyticCard>
-          </Grid.Col>
-          <Grid.Col span={4}>
-            <AnalyticCard>
-              Document Queries
-              <Space h="md" />
-              <Progress
-                mt="mb"
-                radius="lg"
-                size={16}
-                sections={[
-                  {
-                    value: 50,
-                    color: "indigo",
-                    label: "50/100",
-                  },
-                ]}
-              />
-            </AnalyticCard>
-          </Grid.Col>
-        </Grid>
-        <Grid mt="md">
-          <Grid.Col span={8}>
-            <CurrentPlan>
-              <Flex
-                justify="space-between"
-                align="center"
-                style={{
-                  borderBottom: "1px solid #EAECF0",
-                  padding: "16px 20px",
-                }}
-              >
-                <Text size="16px" weight="bold">
-                  {/* @ts-ignore */}
-                  {pricingPlanName?.[
-                    workspaceInfo.subscriptionInfo.subscribedPlan
-                  ] || "Not found"}
-                </Text>
-                <Badge>Active Plan</Badge>
-              </Flex>
-              <Box style={{ padding: "16px 20px" }}>
-                <Text size="14px" weight="normal">
-                  {" "}
-                  1000 Messages{" "}
-                </Text>
-                <Text size="14px" weight="normal">
-                  {" "}
-                  1 User{" "}
-                </Text>
-              </Box>
-            </CurrentPlan>
-          </Grid.Col>
-          <Grid.Col span={4}>
-            <Button
-              radius="md"
-              fullWidth
-              // leftIcon={icon}
-              className="primary"
-              onClick={createManageBilling}
-            >
-              Upgrade or Downgrade Plan
-            </Button>
-            {/* @ts-ignore */}
-            <AuthSecondaryButton
-              radius="md"
-              rightIcon={
-                <ArrowRight size={20} strokeWidth="1" color={"#344054"} />
-              }
-              fullWidth
-              style={{
-                marginTop: "8px",
-              }}
-              // leftIcon={icon}
+        {workspaceInfo?.subscriptionInfo?.subscribedPlan && (
+          <>
+            <Grid>
+              <Grid.Col span={4}>
+                <AnalyticCard>
+                  Total Conversations
+                  <Space h="md" />
+                  <Progress
+                    mt="mb"
+                    radius="lg"
+                    size={16}
+                    sections={[
+                      {
+                        value: 50,
+                        color: "indigo",
+                        label: "50/100",
+                      },
+                    ]}
+                  />
+                </AnalyticCard>
+              </Grid.Col>
+              <Grid.Col span={4}>
+                <AnalyticCard>
+                  AI Actions
+                  <Space h="md" />
+                  <Progress
+                    mt="mb"
+                    radius="lg"
+                    size={16}
+                    sections={[
+                      {
+                        value: 50,
+                        color: "indigo",
+                        label: "50/100",
+                      },
+                    ]}
+                  />
+                </AnalyticCard>
+              </Grid.Col>
+              <Grid.Col span={4}>
+                <AnalyticCard>
+                  Document Queries
+                  <Space h="md" />
+                  <Progress
+                    mt="mb"
+                    radius="lg"
+                    size={16}
+                    sections={[
+                      {
+                        value: 50,
+                        color: "indigo",
+                        label: "50/100",
+                      },
+                    ]}
+                  />
+                </AnalyticCard>
+              </Grid.Col>
+            </Grid>
+            <Grid mt="md">
+              <Grid.Col span={8}>
+                <CurrentPlan>
+                  <Flex
+                    justify="space-between"
+                    align="center"
+                    style={{
+                      borderBottom: "1px solid #EAECF0",
+                      padding: "16px 20px",
+                    }}
+                  >
+                    <Text size="16px" weight="bold">
+                      {/* @ts-ignore */}
+                      {pricingPlanName?.[
+                        workspaceInfo.subscriptionInfo.subscribedPlan
+                      ] || "Not found"}
+                    </Text>
+                    <Badge>Active Plan</Badge>
+                  </Flex>
+                  <Box style={{ padding: "16px 20px" }}>
+                    <Text size="14px" weight="normal">
+                      {" "}
+                      1000 Messages{" "}
+                    </Text>
+                    <Text size="14px" weight="normal">
+                      {" "}
+                      1 User{" "}
+                    </Text>
+                  </Box>
+                </CurrentPlan>
+              </Grid.Col>
+              <Grid.Col span={4}>
+                <Button
+                  radius="md"
+                  fullWidth
+                  // leftIcon={icon}
+                  className="primary"
+                  onClick={createManageBilling}
+                >
+                  Upgrade or Downgrade Plan
+                </Button>
+                {/* @ts-ignore */}
+                <AuthSecondaryButton
+                  radius="md"
+                  rightIcon={
+                    <ArrowRight size={20} strokeWidth="1" color={"#344054"} />
+                  }
+                  fullWidth
+                  style={{
+                    marginTop: "8px",
+                  }}
+                  // leftIcon={icon}
 
-              variant="outline"
-              onClick={createManageBilling}
-            >
-              Manage Billing
-            </AuthSecondaryButton>
-            <Text align="center" size="14px" weight="400" mt="md">
-              <span
-                style={{
-                  color: "#0560E8",
-                  cursor: "pointer",
-                }}
-                onClick={() => handleShowPricingTable()}
-              >
-                {showPricingTable ? "Hide" : "Click here"}
-              </span>
-              <span>
-                {showPricingTable
-                  ? " the pricing table"
-                  : " to show pricing table"}
-              </span>
-            </Text>
-          </Grid.Col>
-        </Grid>
-        <Space h="md" />
+                  variant="outline"
+                  onClick={createManageBilling}
+                >
+                  Manage Billing
+                </AuthSecondaryButton>
+                <Text align="center" size="14px" weight="400" mt="md">
+                  <span
+                    style={{
+                      color: "#0560E8",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => handleShowPricingTable()}
+                  >
+                    {showPricingTable ? "Hide" : "Click here"}
+                  </span>
+                  <span>
+                    {showPricingTable
+                      ? " the pricing table"
+                      : " to show pricing table"}
+                  </span>
+                </Text>
+              </Grid.Col>
+            </Grid>
+            <Space h="md" />
+          </>
+        )}
+
         {clientSecret && showPricingTable && (
           <>
             {workspaceInfo.subscriptionInfo.subscribedPlan &&
