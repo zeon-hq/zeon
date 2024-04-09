@@ -17,7 +17,7 @@ const ZeonWidgetWrapper = styled.div`
   bottom: 25px;
   padding: 10px;
   border-radius: 8px;
-  background-color: ${(props:{bg?:string}) => props.bg || "#4c6ef5"};
+  background-color: ${(props: { bg?: string }) => props.bg || "#4c6ef5"};
 `;
 
 const WidgetButton = () => {
@@ -28,93 +28,96 @@ const WidgetButton = () => {
     audioPlayer?.current.play();
   }
 
-  const handleMessageReceived  = (processedMessage:string, threadId:string) => {
+  const handleMessageReceived = (
+    processedMessage: string,
+    threadId: string
+  ) => {
     dispatch(
       setMessage({
         message: processedMessage,
         type: MessageType.RECEIVED,
-        time: Date.now().toString()
+        time: Date.now().toString(),
       })
     );
-  }
+  };
 
   const handleCloseTicket = () => {
     localStorage.removeItem("test");
     localStorage.removeItem("threadId");
     localStorage.removeItem("usci");
     localStorage.removeItem("messages");
-    dispatch(clearPrevChat())
+    dispatch(clearPrevChat());
 
-    dispatch(setStep("initial")) 
-  }
+    dispatch(setStep("initial"));
+  };
 
   useEffect(() => {
     socketInstance.on("message", (data) => {
-      console.log(data)
+      console.log(data);
       if (data.threadId) {
         localStorage.setItem("threadId", data.threadId);
       }
-      localStorage.setItem("us-firstName", data.firstName)
-      localStorage.setItem("us-lastName", data.lastName)
-      localStorage.setItem("us-profileImg", data.image)
-      handleMessageReceived(data.message,data.threadId)
-      if(!showWidget){
-        dispatch(setShowWidget(true))
+      localStorage.setItem("us-firstName", data.firstName);
+      localStorage.setItem("us-lastName", data.lastName);
+      localStorage.setItem("us-profileImg", data.image);
+      handleMessageReceived(data.message, data.threadId);
+      if (!showWidget) {
+        dispatch(setShowWidget(true));
       }
-      playAudio()
+      playAudio();
     });
 
     socketInstance.on("typing", (data) => {
-     console.log('typing',data);
+      console.log("typing", data);
     });
 
-    socketInstance.on("close-ticket", (data)=> {
-      handleCloseTicket()
-    })
-
-    socketInstance.on("open-ticket-complete", (info: {ticketId:string}) => {
-      localStorage.setItem("ticketId",info.ticketId);
+    socketInstance.on("close-ticket", (data) => {
+      handleCloseTicket();
     });
-      
 
-    if(localStorage.getItem("ticketId")) {
-      socketInstance.emit("reconnect",{ticketId:localStorage.getItem("ticketId")})
+    socketInstance.on("open-ticket-complete", (info: { ticketId: string }) => {
+      localStorage.setItem("ticketId", info.ticketId);
+    });
+
+    if (localStorage.getItem("ticketId")) {
+      socketInstance.emit("reconnect", {
+        ticketId: localStorage.getItem("ticketId"),
+      });
     }
   }, []);
 
   const openWidget = () => {
     const getWidgetId = localStorage.getItem("widgetId");
-    if (getWidgetId){
-      dispatch(setShowWidget(true))
-    }else {
+    if (getWidgetId) {
+      dispatch(setShowWidget(true));
+    } else {
       const widgetId = generateRandomString(6);
       localStorage.setItem("widgetId", widgetId);
-      dispatch(setShowWidget(true))
+      dispatch(setShowWidget(true));
     }
-  }
+  };
 
   const dispatch = useDispatch();
-  const {showWidget, widgetDetails} = useWidget();
-  
+  const { showWidget, widgetDetails } = useWidget();
+
   return (
     <>
-      <ZeonWidgetWrapper bg={widgetDetails?.appearance?.widgetButtonSetting?.widgetButtonColor} onClick={openWidget}>
-        {
-          !showWidget ? (
-            <img width={"35px"} src={widgetImageUrl} alt="wserstak-widget"/>
-          ) : (
-            <>
-            <AiOutlineClose size={"2rem"} color={widgetDetails?.appearance.newConversationButton.textColor} />
-            </>
-          )
-        }
-        
+      <ZeonWidgetWrapper
+        bg={widgetDetails?.appearance?.widgetButtonSetting?.widgetButtonColor}
+        onClick={openWidget}
+      >
+        {!showWidget ? (
+          <img width={"35px"} src={widgetImageUrl} alt="wserstak-widget" />
+        ) : (
+          <>
+            <AiOutlineClose
+              size={"2rem"}
+              color={widgetDetails?.appearance?.newConversationButton?.textColor}
+            />
+          </>
+        )}
       </ZeonWidgetWrapper>
-      {
-        showWidget && (
-            <ZeonWidgetModal/>
-        )
-      }
+      {showWidget && <ZeonWidgetModal />}
       <audio ref={audioPlayer} src={notificationSound} />
     </>
   );

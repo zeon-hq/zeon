@@ -7,7 +7,7 @@ import Heading from "components/details/inbox/component/Heading";
 import { Flex, Grid, Text, Box, Button, Space, Progress } from "@mantine/core";
 import { AuthSecondaryButton } from "components/auth/auth.styles";
 import { ArrowRight } from "tabler-icons-react";
-import { PricingPlan, pricingPlanName } from "constants/pricingPlan";
+import { PricingPlan, pricingPlanFeatures, pricingPlanName } from "constants/pricingPlan";
 import { getConfig as Config } from "config/Config";
 
 type Props = {};
@@ -174,14 +174,18 @@ const BillingModal = (props: Props) => {
                     <Badge>Active Plan</Badge>
                   </Flex>
                   <Box style={{ padding: "16px 20px" }}>
-                    <Text size="14px" weight="normal">
-                      {" "}
-                      1000 Messages{" "}
-                    </Text>
-                    <Text size="14px" weight="normal">
-                      {" "}
-                      1 User{" "}
-                    </Text>
+                    {
+                      //@ts-ignore
+                      pricingPlanFeatures?.[workspaceInfo.subscriptionInfo.subscribedPlan]?.map((text:string) => {
+                        return (
+                          <Text size="14px" weight="normal">
+                            {text}
+                            
+                          </Text>
+                        )
+                      
+                      })
+                    }
                   </Box>
                 </CurrentPlan>
               </Grid.Col>

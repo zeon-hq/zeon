@@ -30,3 +30,39 @@ export const pricingPlanAllowedActions = {
     CONVERSATIONS: "0",
   },
 };
+
+
+export const pricingPlanFeatures = {
+  [PricingPlan.ZEON_BASIC_MONTHLY]: [
+    "Unlimited Users",
+    "Unlimited Channels",
+    "Unlimited Messages",
+    "Unlimited Integrations",
+    "Unlimited AI Actions",
+    "Unlimited Conversations",
+  ],
+  [PricingPlan.ZEON_ENTERPRISE_MONTHLY]: [
+    "Unlimited Users",
+    "Unlimited Channels",
+    "Unlimited Messages",
+    "Unlimited Integrations",
+    "Unlimited AI Actions",
+    "Unlimited Conversations",
+  ],
+  [PricingPlan.ZEON_PROFESSIONAL_MONTHLY]: [
+    "Unlimited Users",
+    "Unlimited Channels",
+    "Unlimited Messages",
+    "Unlimited Integrations",
+    "Unlimited AI Actions",
+    "Unlimited Conversations",
+  ],
+  [PricingPlan.ZEON_ADVANCED_MONTHLY]: [
+    "Unlimited Users",
+    "Unlimited Channels",
+    "Unlimited Messages",
+    "Unlimited Integrations",
+    "Unlimited AI Actions",
+    "Unlimited Conversations",
+  ],
+}

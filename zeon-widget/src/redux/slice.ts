@@ -105,7 +105,7 @@ const initialState: WidgetInterface = {
   step: "initial",
   email: "",
   messages: [],
-  showWidget: false,
+  showWidget: true,
   formSubmitButtonLoading: false,
   //@ts-ignore
   widgetDetails: {},
