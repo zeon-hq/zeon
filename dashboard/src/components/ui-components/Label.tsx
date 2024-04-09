@@ -11,7 +11,7 @@ type Props = {
 const TextInputLabel = styled(Text)`
   color: #344054;
 
-  font-size: 14px;
+  font-size: 12px;
   font-style: normal;
   font-weight: 500;
   line-height: 20px;
