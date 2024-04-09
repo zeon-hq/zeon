@@ -31,7 +31,7 @@ export default class AIService {
                 const fileId = generateId(6);
 
                 const fileName = urlData?.name;
-                const fileUrl = urlData?.url
+                const fileUrl = urlData?.s3Url
 
                 await KnowledgeBaseModel.create({ fileId, workspaceId, channelId, fileName, s3FileUrls: fileUrl, status: IKnowledgeBaseFileUploadStatus.INJECT_STARTED });
                 AIService.injestFile(fileName, fileUrl, collectionName, channelId, workspaceId, fileId);

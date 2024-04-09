@@ -7,6 +7,7 @@ import useDashboard from "hooks/useDashboard";
 import { useCallback, useEffect, useState } from "react";
 import { deleteKnowledgeBaseFile, getKnowledgeBaseList } from "service/CoreService";
 import { Plus } from "tabler-icons-react";
+import ConfirmationDialog from "components/ui-components/ConfirmationDialog";
 
 const useStyles = createStyles((theme) => ({
   text: {
@@ -46,6 +47,7 @@ const Knowledge = () => {
   const [openAddDataModal, setOpenAddDataModal] = useState(false);
   const { classes } = useStyles();
   const { workspaceInfo } = useDashboard();
+  const [deleteFileId, setDeleteFileId] = useState<string>();
   const [knowledgeFileList, setKnowledgeFileList] = useState<IKnowledgeBase[]>([]);
   const channelId = localStorage.getItem("zeon-dashboard-channelId");
   
@@ -63,7 +65,7 @@ const Knowledge = () => {
     fetchKnowledgeBaseFiles();
   }, [fetchKnowledgeBaseFiles]);
 
-  const deleteFile = async (fileId: string) => {
+  const deleteInjestedFile = async (fileId: string) => {
     const response = await deleteKnowledgeBaseFile(fileId, workspaceInfo.workspaceId, channelId as string);
     if (response.code === '200'){
       await fetchKnowledgeBaseFiles();
@@ -143,7 +145,7 @@ const Knowledge = () => {
                   <img 
                   className="pointer"
                   onClick={async()=>{
-                    await deleteFile(item.fileId);
+                    setDeleteFileId(item.fileId)
                   }}
                   style={{padding:'10px'}} alt="delete icon"src={UserDeleteIcon} />
                   {/* <img style={{padding:'10px'}} alt="edit icon"src={EditIcon} /> */}
@@ -154,6 +156,18 @@ const Knowledge = () => {
         })
       }
 
+      <ConfirmationDialog
+        headerTitle="Are you sure you want to delete the injested file from your knowledge base ?"
+        opened={!!deleteFileId}
+        onClose={() => {
+          setDeleteFileId('');
+        }}
+        onCTAClick={async () => {
+          setDeleteFileId('');
+          await deleteInjestedFile(deleteFileId as string);
+        }}
+      />
+
       {
         openAddDataModal &&
         <div style={{
@@ -161,7 +175,10 @@ const Knowledge = () => {
         }}>
           <AddKnowledgeBaseFile
             opened={openAddDataModal}
-            onClose={() => setOpenAddDataModal(false)}
+            onClose={async () => {
+              setOpenAddDataModal(false)
+              await fetchKnowledgeBaseFiles();
+            }}
           />
         </div>
       }
