@@ -13,36 +13,36 @@ export default class Logger {
     }
     
     info(input:ZLoggerInput) {
-        input.type = "INFO";
-        input.service = this.service;
-        console.log(`[INFO]: ${JSON.stringify(input)}`);
-        this.sendToSlack(input);
+        // input.type = "INFO";
+        // input.service = this.service;
+        // console.log(`[INFO]: ${JSON.stringify(input)}`);
+        // this.sendToSlack(input);
     }
     
     warn(input:ZLoggerInput) {
-        input.type = "WARN";
-        input.service = this.service;
-        console.log(`[WARN]: ${JSON.stringify(input)}`);
-        this.sendToSlack(input);
+        // input.type = "WARN";
+        // input.service = this.service;
+        // console.log(`[WARN]: ${JSON.stringify(input)}`);
+        // this.sendToSlack(input);
 
     }
     
     error(input:ZLoggerInput) {
-        input.type = "ERROR";
-        input.service = this.service;
-        console.log(`[ERROR]: ${JSON.stringify(input)}`);
-        this.sendToSlack(input);
+        // input.type = "ERROR";
+        // input.service = this.service;
+        // console.log(`[ERROR]: ${JSON.stringify(input)}`);
+        // this.sendToSlack(input);
     }
 
     private async sendToSlack(message: any) {
         // send message to slack
         try {
-            await axios.post(this.webhook, {
-                text: JSON.stringify(message)
-            })
+            // await axios.post(this.webhook, {
+            //     text: JSON.stringify(message)
+            // })
         } catch (error) {
-            console.log("Error sending to slack");
-            console.log(error);
+            // console.log("Error sending to slack");
+            // console.log(error);
         }
         
     }
