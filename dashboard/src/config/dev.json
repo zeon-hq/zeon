@@ -1,7 +1,7 @@
 {
-  "API_DOMAIN": "http://localhost:4000",
+  "API_DOMAIN": "https://chat.zeonhq.com",
   "TICKET_SERVICE": "https://devservice.zeonhq.com",
-  "CORE_API_DOMAIN": "http://localhost:3005",
+  "CORE_API_DOMAIN": "https://core.zeonhq.com",
   "widgetJSFile": "https://zeonhq.b-cdn.net/zeon-widget.js",
   "widgetCSSFile": "https://zeonhq.b-cdn.net/zeon-widget.css",
   "CHAT_WIDGET_URL": "https://widget.zeonhq.com",
