@@ -144,7 +144,7 @@ const ChatConfigRightSide = () => {
           }}
           sx={{ backgroundColor: "#039855" }}
         >
-          {activeChat?.isOpen ? "Close ticket" : "Open Ticket"}
+          {activeChat?.isOpen ? "Close Ticket" : "Open Ticket"}
         </Button>
 
         <Flex>
