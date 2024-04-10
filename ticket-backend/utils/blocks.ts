@@ -56,7 +56,7 @@ export function makeBlocks(blockOptions: BlockOptions): any {
               text: {
                 type: "plain_text",
                 emoji: true,
-                text: "Close Ticket",
+                text: "Close ticket",
               },
               style: "primary",
               value: "click_me_123",
