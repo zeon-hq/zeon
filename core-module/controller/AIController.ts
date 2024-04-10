@@ -78,7 +78,7 @@ export default class AIController {
       const { question, history, workspaceId, channelId} = req.body;
 
       logger.info({message:`[AIController.getInjestFile] gettingInjestedFile, question:${question}, workspaceId:${workspaceId}, channelId:${channelId}`})
-      const collectionName = getCollectionName(channelId, workspaceId);
+      const collectionName = getCollectionName(workspaceId,channelId);
       const sanitizedQuestion = question.trim().replaceAll('\n', ' ');
 
 
@@ -254,8 +254,9 @@ export default class AIController {
 
 public static async testFuns(req: Request, res: Response) {
   try {
-    const test = await chromaRawClient.reset()
-    console.log('test', test);
+    // const test = await chromaRawClient.reset()
+    // console.log('test', test);
+    await chromaRawClient.deleteCollection({name: "mR3D18-ksjtf3"})
     
 } catch (error) {
   console.log('error message', error?.message);

@@ -181,7 +181,7 @@ io.on("connection", (socket:Socket) => {
           workspaceId, 
           channelId
         }
-        const aiResponse = await CoreService.getAIMessage(aiMessagepayload, workspaceId, channelId);
+        const aiResponse = await CoreService.getAIMessage(aiMessagepayload);
         if (aiResponse) {
           const messageOptions: MessageOptions = {
             workspaceId: workspaceId,
