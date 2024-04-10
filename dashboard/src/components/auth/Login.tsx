@@ -200,7 +200,7 @@ const Login = () => {
           </AuthContainer>
           <Box>
             <iframe
-              src="https://roadmap.zeonhq.com/ducalis-roadmap/changelog"
+              src="https://forum.zeonhq.com/c/product-updates/5"
               height={"100%"}
               width={600}
               title="Changelog"
