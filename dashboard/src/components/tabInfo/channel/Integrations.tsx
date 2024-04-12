@@ -78,7 +78,7 @@ const Integrations = () => {
       channelsInfo[selectedPage.name].channelId,
       {...channelsInfo[selectedPage.name],...emailUpdatePayload}
     );
-    if (updateNotificatonMessage?.status === 200){
+    if (updateNotificatonMessage?.status === 200) {
       await dispatch(updateEmailTicketCreateNotification(emailUpdatePayload));
       showNotification({
         title: "Notification",

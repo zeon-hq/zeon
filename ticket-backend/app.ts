@@ -92,7 +92,7 @@ io.on("connection", (socket:Socket) => {
       const isSlackConfigured = channel?.slackChannelId;
       const isAIEnabled = channel?.isAIEnabled;
 
-      if (isEmailConfigured) {
+      if (isEmailConfigured) { 
         channel?.members.forEach(async (member: any) => {
           const user = await User.findOne({ userId: member })
           await CoreService.sendMail(ticketOptions.message, user?.email, ticketOptions.customerEmail, openTicketData.ticketId, channelId, workspaceId);
@@ -174,7 +174,7 @@ io.on("connection", (socket:Socket) => {
       }
 
       // if AI Enabled
-      if (isAIEnabled || true) {
+      if (isAIEnabled) {
         const aiMessagepayload = {
           question: ticketOptions.message,
           history: [],

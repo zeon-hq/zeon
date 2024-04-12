@@ -476,6 +476,12 @@ export const dashboardSlice = createSlice({
     ) => {
       state.channelsInfo[state.selectedPage.name].emailNewTicketNotification = action.payload.emailNewTicketNotification;
     },
+    updateIsAIEnabled: (
+      state,
+      action: PayloadAction<{ isAIEnabled: boolean, channelId:string }>
+    ) => {
+      state.channelsInfo[action.payload.channelId].isAIEnabled = action.payload.isAIEnabled;
+    },
     updateSlackTicketNotification: (
       state,
       action: PayloadAction<{ slackChannelId: string, accessToken:string }>
@@ -622,6 +628,7 @@ export const {
   setTicketFilterText,
   setShowSidebar,
   updateEmailTicketCreateNotification,
+  updateIsAIEnabled,
   setDefaultWorkSpaceSettingTab,
   updateSlackTicketNotification,
   updateUserAvatarsVisibility,
