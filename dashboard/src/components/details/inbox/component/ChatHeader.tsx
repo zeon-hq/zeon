@@ -14,7 +14,7 @@ const Flex = styled.div`
   justify-content: space-between;
 `
 
-const ChatHeader = () => {
+const DashboardChatHeader = () => {
   const { activeChat } = useDashboard()
 
   return (
@@ -57,4 +57,4 @@ const ChatHeader = () => {
   );
 }
 
-export default ChatHeader
+export default DashboardChatHeader

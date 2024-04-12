@@ -3,7 +3,7 @@ import _ from "lodash";
 import styled from "styled-components";
 import ChatConfigRightSide from "./ChatConfigRightSide";
 import ChatArea from "./component/ChatArea";
-import ChatHeader from "./component/ChatHeader";
+import DashboardChatHeader from "./component/ChatHeader";
 import NoContentDialogue from "./component/NoContentDialogue";
 
 const StyledContainer = styled.div`
@@ -42,7 +42,7 @@ const Chat = () => {
               width: '100%',
             }}
             >
-              <ChatHeader />
+              <DashboardChatHeader />
               <ChatArea />
             </div>
             <ChatConfigRightSide/>

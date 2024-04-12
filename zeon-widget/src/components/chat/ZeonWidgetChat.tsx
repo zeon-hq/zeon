@@ -11,18 +11,8 @@ import { useDispatch } from "react-redux";
 import { Message, setMessage } from "redux/slice";
 import styled from "styled-components";
 import { IPropsType, MessageType } from "./Chat.types";
-import ChatHeader from "./ChatHeader";
+import WidgetChatHeader from "./WidgetChatHeader";
 import ChatMessageFooter from "./ChatMessageFooter";
-
-const TopText = styled.div`
-  background: #f2f4f7;
-  padding: 12px 24px;
-  color: #475467;
-  font-size: 14px;
-  font-weight: 500;
-  display: flex;
-  justify-content: center;
-`;
 
 const Wrapper = styled.div`
 height: 100%;
@@ -122,13 +112,7 @@ const ZeonWidgetChat = () => {
       height: "100%",
       overflow: "auto",
     }}>
-      <ChatHeader />
-      {/* <TopText>
-        <Text size="sm" weight={500}>
-          {" "}
-          A copy will be sent to: {email}{" "}
-        </Text>
-      </TopText> */}
+      <WidgetChatHeader />
       <Wrapper as={"form"} onSubmit={handleSubmit(submitForm)}>
         <ChatContainer>
           {!isOnScreen && (

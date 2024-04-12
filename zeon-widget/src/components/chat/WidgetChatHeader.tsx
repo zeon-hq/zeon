@@ -29,10 +29,10 @@ const IconWrapper = styled.div`
   }
 `;
 
-const ChatHeader = () => {
+const WidgetChatHeader = () => {
   const dispatch = useDispatch()
   const {widgetDetails} = useWidget()
-  
+  const ticketNumber = localStorage.getItem("ticketId")?.slice(-6);
   const handleBackClick = () => {
     dispatch(setStep("initial"))
     dispatch(setActiveConversation(""))
@@ -54,7 +54,7 @@ const ChatHeader = () => {
         
         <Box sx={{display:"flex", justifyContent:"space-between", alignItems:"center", width:"100%"}}>
           <Text size="medium" weight="bold">
-            Ticket Number : {localStorage.getItem("ticketId")?.slice(-6)}
+            Ticket Number : {ticketNumber}
           </Text>
           <div
             style={{
@@ -80,4 +80,4 @@ const ChatHeader = () => {
   );
 };
 
-export default ChatHeader;
+export default WidgetChatHeader;
