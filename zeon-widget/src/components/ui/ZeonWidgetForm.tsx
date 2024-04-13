@@ -109,6 +109,7 @@ const ZeonWidgetForm = () => {
             channelId: localStorage.getItem("usci"),
             type: MessageType.RECEIVED,
             message: widgetDetails?.behavior?.operatingHours.autoReplyMessageWhenOffline,
+            isAIEnabled:false
           })
         },3000)
       } else if(widgetDetails?.behavior?.widgetBehavior.autoReply ) {
@@ -129,6 +130,7 @@ const ZeonWidgetForm = () => {
             createdAt: Date.now().toString(),
             ticketId: localStorage.getItem("ticketId"),
             type: MessageType.RECEIVED,
+            isAIEnabled:false
           })
         },3000)
       }

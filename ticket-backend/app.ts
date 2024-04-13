@@ -176,7 +176,6 @@ io.on("connection", (socket:Socket) => {
 
       // if AI Enabled
       if (isAIEnabled || true) {
-      // if (isAIEnabled) {
         const aiMessagepayload = {
           question: ticketOptions.message,
           history: [],
@@ -219,10 +218,7 @@ io.on("connection", (socket:Socket) => {
     const channelId = messageOptions?.channelId;
     const workspaceId = messageOptions?.workspaceId;
     const ticketId = messageOptions?.ticketId;
-    const data = {
-      source: "widget",
-      messageOptions,
-    };
+ 
 
     const channel = await ChannelModel.findOne({ channelId: messageOptions.channelId });
     const isSlackConfigured = channel?.slackChannelId;
@@ -242,9 +238,16 @@ io.on("connection", (socket:Socket) => {
       }
     }
 
+    const data = {
+      source: "widget",
+      messageOptions,
+    };
+
+    await sendMessage(mqChannel, data);
+
      // if AI Enabled
-       if (isAIEnabled || true) {
-    //  if (isAIEnabled) {
+     // messageOptions?.isAIEnabled is to turn off the AI for the auto reply things
+       if (messageOptions?.isAIEnabled != false && isAIEnabled || true) {
       const aiMessagepayload = {
         question: messageOptions.message,
         history: [],
@@ -269,9 +272,15 @@ io.on("connection", (socket:Socket) => {
         }
 
         await sendMessage(mqChannel, data);
+
+        const widgetData = {
+          source: "widget",
+          messageOptions
+        }
+
+        await sendMessage(mqChannel, widgetData);
       }
     }
-    await sendMessage(mqChannel, data);
   });
 
   socket.on("reconnect", async (ticketId: any) => {
@@ -288,7 +297,8 @@ io.on("connection", (socket:Socket) => {
 
   socket.on("dashboard-disconnect-event", async (workspaceId: string) => {
     try {
-      await removeDashboardSocket(socket.id);
+      // TODO: Discuss with kaush
+      // await removeDashboardSocket(socket.id);
     } catch (error) {
       console.error(error);
     }
@@ -296,7 +306,8 @@ io.on("connection", (socket:Socket) => {
 
   socket.on("disconnect", async (reason: any) => {
     try {
-      await removeDashboardSocket(socket.id);
+      // TODO: Discuss with kaush
+      // await removeDashboardSocket(socket.id);
     } catch (error) {
       console.error(error);
     }

@@ -42,16 +42,21 @@ const TetInputLabel = styled(Label)`
   font-weight: 500;
   line-height: 20px;
 `;
+
 export const Wrapper = styled.div`
   display: grid;
   grid-template-columns: 60% 40%;
   overflow: none;
   padding: 0px 16px;
 `;
+
 const Behavior = () => {
   const { channelsInfo, selectedPage } = useDashboard();
   const dispatch = useDispatch();
   const behaviourDetails = channelsInfo[selectedPage.name]?.behavior;
+  const autoReplyConfig = behaviourDetails.widgetBehavior.autoReply;
+  const isOperatingHourEnabled = behaviourDetails.operatingHours.enableOperatingHours;
+  const configuredTimeZone = behaviourDetails.operatingHours.timezone;
   const [fromTime, setFromTime] = useState<string>(getOperatinHourTime(new Date(channelsInfo?.[selectedPage.name]?.behavior?.operatingHours?.operatingHours?.from) || new Date()));
   const [toTime, setToTime] = useState<string>(getOperatinHourTime(new Date(channelsInfo?.[selectedPage.name]?.behavior?.operatingHours?.operatingHours?.to) || new Date()));
 
@@ -201,7 +206,7 @@ const Behavior = () => {
                     key: "autoReply",
                   });
                 }}
-                value={!!behaviourDetails.widgetBehavior.autoReply || false}
+                value={!!autoReplyConfig || false}
                 heading="Auto Responder"
                 description="Collect e-mail before a conversation is created."
               />
@@ -211,7 +216,7 @@ const Behavior = () => {
                 <Grid.Col>
                   <Textarea
                     // disabled={true}
-                    value={behaviourDetails.widgetBehavior.autoReply}
+                    value={autoReplyConfig}
                     radius={"8px"}
                     inputWrapperOrder={inputWrapperData}
                     description="Set up an auto-response after user submits an email. Available Tags: {useremail}"
@@ -239,15 +244,13 @@ const Behavior = () => {
                     key: "enableOperatingHours",
                   });
                 }}
-                value={
-                  behaviourDetails.operatingHours.enableOperatingHours || false
-                }
+                value={isOperatingHourEnabled || false}
                 heading="Operating Hours"
                 description="Configure when your business is inactive and have a
                 auto-responder takeover"
               />
 
-              {behaviourDetails.operatingHours.enableOperatingHours && (
+              {isOperatingHourEnabled && (
                 <>
                   {/*                   <SwitchWithLabel
                     onClick={(e) => {
@@ -270,7 +273,7 @@ const Behavior = () => {
                         width={"100%"}
                         placeholder="Select Timezone"
                         rightSection={<MdKeyboardArrowDown />}
-                        defaultValue={behaviourDetails.operatingHours.timezone}
+                        defaultValue={configuredTimeZone}
                         data={moment.tz.names().map((name) => ({
                           value: name,
                           label: name,
@@ -280,8 +283,7 @@ const Behavior = () => {
                           handleChange({
                             subType: "operatingHours",
                             type: "behavior",
-                            value:
-                              value || behaviourDetails.operatingHours.timezone,
+                            value: value || configuredTimeZone,
                             key: "timezone",
                           })
                         }
@@ -289,7 +291,6 @@ const Behavior = () => {
                     </Grid.Col>
                   </Grid>
 
-                  {/* <TimeInput/> */}
                   <Grid mt={"32px"}>
                     <Grid.Col>
                       <Flex

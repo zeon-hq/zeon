@@ -1,18 +1,17 @@
-import { Button, Text } from "@mantine/core";
+import { Button } from "@mantine/core";
 import socketInstance from "api/socket";
 import useOnScreen from "components/hooks/useOnScreen";
 import useWidget from "components/hooks/useWidget";
 import MessageCard from "components/ui/MessageCard";
-import EmojiPicker from "emoji-picker-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { BsArrow90DegDown } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import { Message, setMessage } from "redux/slice";
 import styled from "styled-components";
 import { IPropsType, MessageType } from "./Chat.types";
-import WidgetChatHeader from "./WidgetChatHeader";
 import ChatMessageFooter from "./ChatMessageFooter";
+import WidgetChatHeader from "./WidgetChatHeader";
 
 const Wrapper = styled.div`
 height: 100%;
@@ -54,7 +53,6 @@ type FormDataType = {
 const ZeonWidgetChat = () => {
   const elementRef = useRef<any>(null);
   const isOnScreen = useOnScreen(elementRef);
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   const scrollToBottom = () => {
     //@ts-ignore
@@ -65,15 +63,12 @@ const ZeonWidgetChat = () => {
     register,
     handleSubmit,
     reset,
-    setValue,
     watch,
-    getValues,
     formState: { isSubmitting },
   } = useForm<FormDataType>();
   const dispatch = useDispatch();
   const { messages, widgetDetails } = useWidget();
 
-  const { email } = useWidget();
 
   useEffect(() => {
     scrollToBottom();
@@ -141,14 +136,6 @@ const ZeonWidgetChat = () => {
             <MessageCard info={message} />
           ))}
           <div ref={elementRef} />
-          {showEmojiPicker && (
-            <EmojiPicker
-              width={300}
-              onEmojiClick={(emoji) => {
-                setValue("message", `${getValues().message} ${emoji.emoji}`);
-              }}
-            />
-          )}
         </ChatContainer>
 
       <ChatMessageFooter 

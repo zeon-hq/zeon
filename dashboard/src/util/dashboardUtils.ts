@@ -70,11 +70,13 @@ export function convert(t: number) {
 }
 
 export const getTime = (time: string) => {
-  const inputTime = +time;
-  const date = new Date(inputTime);
-
-  const dateFormat = isToday(date) ? "h:mm a" : "d/M/yyyy h:mm a";
-  return format(date, dateFormat);
+  if (time) {
+    const inputTime = +time;
+    const date = new Date(inputTime);
+    
+    const dateFormat = isToday(date) ? "h:mm a" : "d/M/yyyy h:mm a";
+    return format(date, dateFormat);
+  }
 };
 
 export const showFullDate = (t: number | undefined) => {
