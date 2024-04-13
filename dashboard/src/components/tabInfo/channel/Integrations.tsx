@@ -32,7 +32,6 @@ const Integrations = () => {
     const stateParameter = encodeURIComponent(JSON.stringify(stateObject));
 
     // if (channelsInfo[selectedPage.name]?.channelId) return;
-    console.log('channelinfo', channelsInfo);
     
     localStorage.setItem(
       "userstak-dashboard-workspaceId",

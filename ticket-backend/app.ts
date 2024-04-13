@@ -65,9 +65,10 @@ io.on("connection", (socket:Socket) => {
   socket.on("open-ticket", async (ticketOptions: ITicketOptions) => {
     const channelId = ticketOptions.channelId;
     const workspaceId = ticketOptions.workspaceId;
+    const widgetId = ticketOptions.widgetId;
     try {
-
       const openTicketData: any = await openTicket(ticketOptions, socket.id);
+      const ticketId = openTicketData.ticketId;
       
       // code commented by sathithya yogi, we are not using the below emit event
       // socket.emit("open-ticket-complete", openTicketData);
@@ -80,8 +81,8 @@ io.on("connection", (socket:Socket) => {
         customerEmail: ticketOptions.customerEmail,
         isOpen: ticketOptions.isOpen,
         assignedUser: ticketOptions.assignedUser,
-        ticketId: openTicketData.ticketId,
-        widgetId: ticketOptions.widgetId
+        ticketId: ticketId,
+        widgetId: widgetId
       }
 
       io.to(socketIds).emit("open-ticket", socketTicketPayload);
@@ -168,36 +169,45 @@ io.on("connection", (socket:Socket) => {
         }
 
         const slackMessageResponse = await CoreService.sendSlackMessage(sendSlackPayload);
-        console.log(`slackMessageResponse, ticketId:${openTicketData.ticketId}`, slackMessageResponse)
+
 
         await TicketModel.updateMany({ ticketId: openTicketData.ticketId }, { $set: { thread_ts: slackMessageResponse[0].result.ts } })
       }
 
       // if AI Enabled
-      if (isAIEnabled) {
+      if (isAIEnabled || true) {
+      // if (isAIEnabled) {
         const aiMessagepayload = {
           question: ticketOptions.message,
           history: [],
           workspaceId, 
           channelId
         }
+
         const aiResponse = await CoreService.getAIMessage(aiMessagepayload);
         if (aiResponse) {
           const messageOptions: MessageOptions = {
-            workspaceId: workspaceId,
-            channelId: channelId,
+            workspaceId,
+            channelId,
             type: "received",
             isRead: true,
             message: aiResponse?.text,
             ticketId: openTicketData.ticketId,
           }
 
-          const data = {
+          const dashboardData = {
             source: "dashboard",
             messageOptions
           }
 
-          await sendMessage(mqChannel, data);
+          await sendMessage(mqChannel, dashboardData);
+
+          const widgetData = {
+            source: "widget",
+            messageOptions
+          }
+
+          await sendMessage(mqChannel, widgetData);
         }
       }
     } catch (error) {
@@ -206,6 +216,9 @@ io.on("connection", (socket:Socket) => {
   });
 
   socket.on("message", async (messageOptions: MessageOptions) => {
+    const channelId = messageOptions?.channelId;
+    const workspaceId = messageOptions?.workspaceId;
+    const ticketId = messageOptions?.ticketId;
     const data = {
       source: "widget",
       messageOptions,
@@ -213,12 +226,12 @@ io.on("connection", (socket:Socket) => {
 
     const channel = await ChannelModel.findOne({ channelId: messageOptions.channelId });
     const isSlackConfigured = channel?.slackChannelId;
+    const isAIEnabled = channel?.isAIEnabled;
 
     // send message to slack when the slack in configured
     if (isSlackConfigured) {
       const getThread_rs = await TicketModel.findOne({ ticketId: messageOptions.ticketId });
       if (getThread_rs?.thread_ts) {
-        console.log('getThread_rs not found')
         const slackPayload: ISendSlackMessage = {
           channelId: channel.slackChannelId,
           message: messageOptions.message,
@@ -226,6 +239,36 @@ io.on("connection", (socket:Socket) => {
           thread_ts: getThread_rs?.thread_ts
         }
         await CoreService.sendSlackMessage(slackPayload);
+      }
+    }
+
+     // if AI Enabled
+       if (isAIEnabled || true) {
+    //  if (isAIEnabled) {
+      const aiMessagepayload = {
+        question: messageOptions.message,
+        history: [],
+        workspaceId, 
+        channelId
+      }
+      
+      const aiResponse = await CoreService.getAIMessage(aiMessagepayload);
+      if (aiResponse) {
+        const messageOptions: MessageOptions = {
+          workspaceId,
+          channelId,
+          type: "received",
+          isRead: true,
+          message: aiResponse?.text,
+          ticketId
+        }
+
+        const data = {
+          source: "dashboard",
+          messageOptions
+        }
+
+        await sendMessage(mqChannel, data);
       }
     }
     await sendMessage(mqChannel, data);
@@ -477,11 +520,9 @@ app.use("/health", (req: Request, res: Response) => {
 async function init() {
   getAdapterCollection()
     .then((collection) => {
-      // @ts-ignore
       io.adapter(createAdapter(collection));
       console.log("Server event adapter created");
-    })
-    .catch((error) => console.error(error));
+    }).catch((error) => console.error(error));
 
   // Open a message queue connection
   let queue = await connectQueue();

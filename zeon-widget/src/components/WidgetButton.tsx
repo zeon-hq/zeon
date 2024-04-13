@@ -25,10 +25,10 @@ const WidgetButton = () => {
 
   function playAudio() {
     //@ts-ignore
-    audioPlayer?.current.play();
+    audioPlayer?.current?.play();
   }
 
-  const handleMessageReceived  = (processedMessage:string, threadId:string) => {
+  const handleMessageReceived  = (processedMessage:string) => {
     dispatch(
       setMessage({
         message: processedMessage,
@@ -57,7 +57,7 @@ const WidgetButton = () => {
       localStorage.setItem("us-firstName", data.firstName)
       localStorage.setItem("us-lastName", data.lastName)
       localStorage.setItem("us-profileImg", data.image)
-      handleMessageReceived(data.message,data.threadId)
+      handleMessageReceived(data.message)
       if(!showWidget){
         dispatch(setShowWidget(true))
       }
