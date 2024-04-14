@@ -108,7 +108,7 @@ const ZeonWidgetForm = () => {
         //     createdAt: Date.now().toString(),
         //     ticketId: localStorage.getItem("ticketId"),
         //     workspaceId: widgetDetails?.workspaceId,
-        //     channelId: localStorage.getItem("usci"),
+        //     channelId: localStorage.getItem("channelId"),
         //     type: MessageType.RECEIVED,
         //     message: widgetDetails?.behavior?.operatingHours.autoReplyMessageWhenOffline,
         //     isAIEnabled:false
@@ -129,7 +129,7 @@ const ZeonWidgetForm = () => {
 
         //   socketInstance.emit("message", {
         //     workspaceId: widgetDetails?.workspaceId,
-        //     channelId: localStorage.getItem("usci"),
+        //     channelId: localStorage.getItem("channelId"),
         //     message: widgetDetails?.behavior?.widgetBehavior.autoReply,
         //     createdAt: Date.now().toString(),
         //     ticketId: localStorage.getItem("ticketId"),

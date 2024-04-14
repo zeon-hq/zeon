@@ -4,8 +4,8 @@ import { Server } from "socket.io";
 import {
   getConnectedDashboardSockets,
   getTicketByIDTemp,
-  getTicketByTicketID
 } from "../services/DataBaseService";
+import { ITicketModel } from "../model/TicketModel";
 
 export async function initConsumer(channel: Channel, io: Server) {
   try {
@@ -36,12 +36,7 @@ export async function initConsumer(channel: Channel, io: Server) {
       // Deliver messages from dashboard
       if (source === "dashboard") {
         if (!messageOptions.file) {
-          let tickets;
-          if (messageOptions.ticketId) {
-            tickets = await getTicketByIDTemp(messageOptions.ticketId || "");
-          } else {
-            tickets = await getTicketByTicketID(messageOptions.ticketId || "");
-          }
+            const tickets:ITicketModel | null = await getTicketByIDTemp(messageOptions.ticketId);
           if (messageOptions.type !== "NOTE") {
             // Only send non-note messages to widget
             const ticket = tickets;

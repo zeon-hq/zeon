@@ -10,7 +10,6 @@ import socketInstance from "socket";
 import { IMessage } from "../inbox.types";
 import SelectCannedResponse from "./SelectCannedResponseChatArea";
 import SingleMessage from "./SingleMessage";
-// import { relative } from "path";
 
 interface ITabContent {
   onFormSubmit: (e: any, type: MessageType) => void;
@@ -78,9 +77,6 @@ const ChatArea = () => {
   const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState<string | null>("reply");
   const [query, setQuery] = useInputState("");
-
-  
-  
 
   const scrollToBottom = () => {
       const chatContainerParentDiv: any = document.getElementById('chat_container_div');

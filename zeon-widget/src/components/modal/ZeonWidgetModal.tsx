@@ -1,9 +1,6 @@
 import { Text } from "@mantine/core";
-import { getOpenTicket } from "api/api";
 import { IPropsType } from "components/chat/Chat.types";
 import ZeonWidgetChat from "components/chat/ZeonWidgetChat";
-import { generateRandomString } from "components/hooks/commonUtils";
-import useEmbeddable, { IEmbeddableOutput } from "components/hooks/useEmbeddable";
 import useOutsideAlerter from "components/hooks/useOutsideAlerter";
 import useWidget from "components/hooks/useWidget";
 import { BrandingWrapper } from "components/ui-components/uStyleComponents";
@@ -12,7 +9,7 @@ import ZeonWidgetCard from "components/ui/ZeonWidgetCard";
 import ZeonWidgetForm from "components/ui/ZeonWidgetForm";
 import { useRef } from "react";
 import { useDispatch } from "react-redux";
-import { setAllOpenConversations, setShowWidget } from "redux/slice";
+import { setShowWidget } from "redux/slice";
 import styled from "styled-components";
 const Wrapper = styled.div`
   background-color: white;
@@ -113,26 +110,10 @@ const ZeonWidgetModal = () => {
   const { step, widgetDetails } = useWidget();
   const dispatch = useDispatch();
   
-  const isEmbeddable:IEmbeddableOutput = useEmbeddable();
   useOutsideAlerter(wrapperRef, () => {
     dispatch(setShowWidget(false));
   });
 
-
-
-
-
-  const getOpenTicketData = async () => {
-    const getWidgetId: any = localStorage.getItem("widgetId");
-    if (getWidgetId) {
-      const getData: any = await getOpenTicket(getWidgetId);
-      // dispatch(setMessage(getData.data.ticket))
-      dispatch(setAllOpenConversations(getData.data.ticket));
-    } else {
-      const widgetId = generateRandomString(6);
-      localStorage.setItem("widgetId", widgetId);
-    }
-  };
 
   const showBrandingImage =
     widgetDetails?.appearance?.miscellaneous?.showBranding;

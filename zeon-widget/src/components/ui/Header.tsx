@@ -82,18 +82,18 @@ const Header = ({ isForm }: { isForm: boolean }) => {
         <Button
           mt={16}
           onClick={()=>{
-            localStorage.setItem("usci", widgetDetails?.channelId);
+            localStorage.setItem("channelId", widgetDetails?.channelId);
             dispatch(setStep("form"));
           }}
           style={{
             backgroundColor:
-              widgetDetails?.appearance.newConversationButton.buttonColor,
+              widgetDetails?.appearance?.newConversationButton?.buttonColor,
             borderRadius: "8px",
           }}
           leftIcon={<BsChatLeftDots size={15} />}
         >
           {" "}
-          {widgetDetails?.appearance.newConversationButton.title}
+          {widgetDetails?.appearance?.newConversationButton?.title}
         </Button>
       )}
     </Wrapper>

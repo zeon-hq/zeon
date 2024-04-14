@@ -39,8 +39,7 @@ const WidgetButton = () => {
   }
 
   const handleCloseTicket = () => {
-    localStorage.removeItem("test");
-    localStorage.removeItem("usci");
+    localStorage.removeItem("channelId");
     localStorage.removeItem("messages");
     dispatch(clearPrevChat())
 
@@ -48,8 +47,14 @@ const WidgetButton = () => {
   }
 
   useEffect(() => {
+    console.log('socketInstance',socketInstance);
+    
+    socketInstance.on('connect', function() {
+      const socketId = socketInstance.id;
+      console.log('socketId',socketId)
+    });
+
     socketInstance.on("message", (data) => {
-      console.log(data)
       localStorage.setItem("us-firstName", data.firstName)
       localStorage.setItem("us-lastName", data.lastName)
       localStorage.setItem("us-profileImg", data.image)
@@ -75,7 +80,6 @@ const WidgetButton = () => {
       //TODO: Kaush review
       // localStorage.setItem("ticketId",info.ticketId);
     });
-      
 
     if(localStorage.getItem("ticketId")) {
       socketInstance.emit("reconnect",{ticketId:localStorage.getItem("ticketId")})
@@ -104,7 +108,7 @@ const WidgetButton = () => {
             <img width={"35px"} src={widgetImageUrl} alt="wserstak-widget"/>
           ) : (
             <>
-            <AiOutlineClose size={"2rem"} color={widgetDetails?.appearance.newConversationButton.textColor} />
+            <AiOutlineClose size={"2rem"} color={widgetDetails?.appearance?.newConversationButton?.textColor} />
             </>
           )
         }

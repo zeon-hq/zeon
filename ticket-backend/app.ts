@@ -7,7 +7,7 @@ import { createServer } from "http";
 import mongoose from "mongoose";
 import { Server, Socket } from "socket.io";
 import MessageModel from "./model/MessageModel";
-import TicketModel from "./model/TicketModel";
+import TicketModel, { ITicketModel } from "./model/TicketModel";
 import { connectQueue } from "./mq/connect";
 import { initConsumer } from "./mq/consumer";
 import { sendMessage, sendMessageIo } from "./mq/producer";
@@ -344,7 +344,7 @@ io.on("connection", (socket:Socket) => {
           !isOpen
         );
         if (updateResult) {
-          const ticket: any = await getTicketByIDTemp(ticketId);
+          const ticket:ITicketModel | null = await getTicketByIDTemp(messageOptions.ticketId);
           if (ticket) {
             if (isOpen) {
               io.to(ticket.socketId).emit("close-ticket", ticketId);

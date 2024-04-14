@@ -1,12 +1,11 @@
 import { Collection, MongoClient, ObjectId } from "mongodb";
 import dotenv from "dotenv";
 import { MessageOptions, ITicketOptions } from "../schema/types/ticket";
-import TicketModel from "../model/TicketModel";
+import TicketModel, { ITicketModel } from "../model/TicketModel";
 import MessageModel from "../model/MessageModel";
 import SocketModel from "../model/SocketModel";
 import TeamModel from "../model/TeamModel";
 import ChannelModel from "../model/ChannelModel";
-import { generateRandomString } from "../utils/blocks";
 
 dotenv.config();
 
@@ -81,26 +80,13 @@ export async function getChannelByID(channelId: string) {
   }
 }
 
-/**
- * Returns a ticket data from database
- * @param ticketId - Unique message thread Id
- * @returns
- */
-export async function getTicketByTicketID(ticketId: string) {
-  try {
-    const tickets = await TicketModel.findOne({ ticketId }).exec();
-    return tickets;
-  } catch (error) {
-    console.error('Error retrieving tickets by thread ID:', error);
-    throw error;
-  }
-}
 
-export async function getTicketByIDTemp(ticketId: string) {
+export async function getTicketByIDTemp(ticketId: string): Promise<ITicketModel | null> {
   try {
-    const getTickets = await TicketModel.findOne({ ticketId });
+    const getTickets: ITicketModel | null = await TicketModel.findOne({ ticketId });
     return getTickets;
   } finally {
+    // This block is optional if you are not using it to perform any cleanup
   }
 }
 

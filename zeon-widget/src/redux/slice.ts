@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { MessageType } from "components/chat/Chat.types";
-//@ts-ignore
 import { isEqual } from "lodash";
 
 type StepType = "initial" | "form" | "chat";
@@ -132,13 +131,11 @@ export const widgetSlice = createSlice({
           }
         } else {
           state.messages = [...state.messages, action.payload];
-          localStorage.setItem("test", JSON.stringify(state.messages));
         }
       }
     },
     clearPrevChat: (state) => {
       state.messages = []
-      localStorage.setItem("test", JSON.stringify(state.messages));
     },
     setShowWidget: (state, action: PayloadAction<boolean>) => {
       state.showWidget = action.payload;

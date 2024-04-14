@@ -2,7 +2,7 @@
 import mongoose, { Document, Schema } from "mongoose";
 
 // Define an interface for your JSON data
-export interface TicketModel {
+export interface ITicketModel {
   workspaceId: string;
   ticketId: string;
   channelId: string;
@@ -22,7 +22,7 @@ export interface TicketModel {
 }
 
 // Define the Mongoose schema
-const ticketModelSchema = new Schema<TicketModel>({
+const ticketModelSchema = new Schema<ITicketModel>({
   workspaceId: String,
   channelId: {type: String, required: true},
   text: String,
@@ -44,6 +44,6 @@ const ticketModelSchema = new Schema<TicketModel>({
 });
 
 // Create a Mongoose model using the schema
-const TicketModel = mongoose.model<TicketModel & Document>("tickets", ticketModelSchema);
+const TicketModel = mongoose.model<ITicketModel & Document>("tickets", ticketModelSchema);
 
 export default TicketModel;

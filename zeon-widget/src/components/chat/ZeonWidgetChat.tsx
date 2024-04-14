@@ -81,24 +81,25 @@ const ZeonWidgetChat = () => {
   },[])
 
   const submitForm = async (data: FormDataType) => {
+    const channelId = localStorage.getItem("channelId");
+    const ticketId = localStorage.getItem("ticketId");
+    const createdAt = Date.now().toString();
+    const type = MessageType.SENT;
+    const workspaceId = widgetDetails?.workspaceId;
+    const message =  data.message;
+
+    const newMessagePayload = {
+      workspaceId,
+      channelId,
+      ticketId,
+      message,
+      type,
+      createdAt,
+    }
     try {
-      const { message } = data;
       if (!isSubmitting) {
-        socketInstance.emit("message", {
-          workspaceId: widgetDetails?.workspaceId,
-          channelId: localStorage.getItem("usci"),
-          ticketId: localStorage.getItem("ticketId"),
-          message,
-          type: MessageType.SENT,
-          createdAt: Date.now().toString(),
-        });
-        dispatch(
-          setMessage({
-            message: data.message,
-            type: MessageType.SENT,
-            time: Date.now().toString(),
-          })
-        );
+        socketInstance.emit("message", newMessagePayload);
+        dispatch(setMessage(newMessagePayload));
         reset();
       }
     } catch (error) {
