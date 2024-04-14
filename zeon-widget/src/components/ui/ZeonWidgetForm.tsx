@@ -57,6 +57,8 @@ const ZeonWidgetForm = () => {
     const { email, message } = data;
     dispatch(setEmail(email));
     const widgetId = localStorage.getItem('widgetId');
+    const ticketId = generateId(6);
+    localStorage.setItem("ticketId", ticketId);
     try {
       const output = await getIPAddress();
       dispatch(clearPrevChat());
@@ -71,8 +73,7 @@ const ZeonWidgetForm = () => {
           isOpen: true,
           widgetId,
           type: "Computer (laptop)",
-          ticketId: localStorage.getItem("ticketId") || "",
-          threadId: localStorage.getItem("threadId") || "",
+          ticketId: ticketId,
           ipAddress:output?.data?.ip || ""
         },(data:any) => console.log("emited",data)
       );
@@ -92,52 +93,51 @@ const ZeonWidgetForm = () => {
 
       const sendAutoReplyMessageWhenOffline = widgetDetails?.behavior.operatingHours.enableOperatingHours && checkIsOutOfOperatingHours
       if (sendAutoReplyMessageWhenOffline) {
-        setTimeout(() => {
-          dispatch(
-            setMessage({
-              message: widgetDetails?.behavior?.operatingHours.autoReplyMessageWhenOffline,
-              type: MessageType.RECEIVED,
-              time: Date.now().toString(),
-            })
-          );
+        // commenting out for some testing purpose
+        
+        // setTimeout(() => {
+        //   dispatch(
+        //     setMessage({
+        //       message: widgetDetails?.behavior?.operatingHours.autoReplyMessageWhenOffline,
+        //       type: MessageType.RECEIVED,
+        //       time: Date.now().toString(),
+        //     })
+        //   );
 
-          socketInstance.emit("message", {
-            createdAt: Date.now().toString(),
-            threadId: localStorage.getItem("threadId"),
-            ticketId: localStorage.getItem("ticketId"),
-            workspaceId: widgetDetails?.workspaceId,
-            channelId: localStorage.getItem("usci"),
-            type: MessageType.RECEIVED,
-            message: widgetDetails?.behavior?.operatingHours.autoReplyMessageWhenOffline,
-            isAIEnabled:false
-          })
-        },3000)
-      } else if(widgetDetails?.behavior?.widgetBehavior.autoReply ) {
-        setTimeout(() => {
-          dispatch(
-            setMessage({
-              message: widgetDetails?.behavior?.widgetBehavior.autoReply,
-              type: MessageType.RECEIVED,
-              time: Date.now().toString(),
-            })
-          );
+        //   socketInstance.emit("message", {
+        //     createdAt: Date.now().toString(),
+        //     ticketId: localStorage.getItem("ticketId"),
+        //     workspaceId: widgetDetails?.workspaceId,
+        //     channelId: localStorage.getItem("usci"),
+        //     type: MessageType.RECEIVED,
+        //     message: widgetDetails?.behavior?.operatingHours.autoReplyMessageWhenOffline,
+        //     isAIEnabled:false
+        //   })
+        // },3000)
+      } else if(widgetDetails?.behavior?.widgetBehavior.autoReply) {
+        // commenting out for some testing purpose
 
-          socketInstance.emit("message", {
-            threadId: localStorage.getItem("threadId"),
-            workspaceId: widgetDetails?.workspaceId,
-            channelId: localStorage.getItem("usci"),
-            message: widgetDetails?.behavior?.widgetBehavior.autoReply,
-            createdAt: Date.now().toString(),
-            ticketId: localStorage.getItem("ticketId"),
-            type: MessageType.RECEIVED,
-            isAIEnabled:false
-          })
-        },3000)
+
+        // setTimeout(() => {
+        //   dispatch(
+        //     setMessage({
+        //       message: widgetDetails?.behavior?.widgetBehavior.autoReply,
+        //       type: MessageType.RECEIVED,
+        //       time: Date.now().toString(),
+        //     })
+        //   );
+
+        //   socketInstance.emit("message", {
+        //     workspaceId: widgetDetails?.workspaceId,
+        //     channelId: localStorage.getItem("usci"),
+        //     message: widgetDetails?.behavior?.widgetBehavior.autoReply,
+        //     createdAt: Date.now().toString(),
+        //     ticketId: localStorage.getItem("ticketId"),
+        //     type: MessageType.RECEIVED,
+        //     isAIEnabled:false
+        //   })
+        // },3000)
       }
-
-     
-      // localStorage.removeItem("threadId");
-      // localStorage.removeItem("ticketId");
     } catch (error) {
       console.log("error", error);
     }

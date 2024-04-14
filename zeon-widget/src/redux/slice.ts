@@ -28,7 +28,6 @@ export type WidgetInterface = {
   showWidget: boolean;
   formSubmitButtonLoading: boolean;
   widgetDetails: IWidgetDetails,
-  // TODO: add more types
   allOpenConversations: IAllOpenConversations[],
   activeConversation: string,
 };

@@ -10,7 +10,7 @@ import MessageModel from "./model/MessageModel";
 import TicketModel from "./model/TicketModel";
 import { connectQueue } from "./mq/connect";
 import { initConsumer } from "./mq/consumer";
-import { sendMessage } from "./mq/producer";
+import { sendMessage, sendMessageIo } from "./mq/producer";
 import { MessageOptions, ITicketOptions } from "./schema/types/ticket";
 import {
   createDashboardSocket,
@@ -175,40 +175,40 @@ io.on("connection", (socket:Socket) => {
       }
 
       // if AI Enabled
-      if (isAIEnabled || true) {
-        const aiMessagepayload = {
-          question: ticketOptions.message,
-          history: [],
-          workspaceId, 
-          channelId
-        }
+      // if (isAIEnabled || true) {
+      //   const aiMessagepayload = {
+      //     question: ticketOptions.message,
+      //     history: [],
+      //     workspaceId, 
+      //     channelId
+      //   }
 
-        const aiResponse = await CoreService.getAIMessage(aiMessagepayload);
-        if (aiResponse) {
-          const messageOptions: MessageOptions = {
-            workspaceId,
-            channelId,
-            type: "received",
-            isRead: true,
-            message: aiResponse?.text,
-            ticketId: openTicketData.ticketId,
-          }
+      //   const aiResponse = await CoreService.getAIMessage(aiMessagepayload);
+      //   if (aiResponse) {
+      //     const messageOptions: MessageOptions = {
+      //       workspaceId,
+      //       channelId,
+      //       type: "received",
+      //       isRead: true,
+      //       message: aiResponse?.text,
+      //       ticketId: openTicketData.ticketId,
+      //     }
 
-          const dashboardData = {
-            source: "dashboard",
-            messageOptions
-          }
+      //     const dashboardData = {
+      //       source: "dashboard",
+      //       messageOptions
+      //     }
 
-          await sendMessage(mqChannel, dashboardData);
+      //     await sendMessage(mqChannel, dashboardData);
 
-          const widgetData = {
-            source: "widget",
-            messageOptions
-          }
+      //     const widgetData = {
+      //       source: "widget",
+      //       messageOptions
+      //     }
 
-          await sendMessage(mqChannel, widgetData);
-        }
-      }
+      //     await sendMessage(mqChannel, widgetData);
+      //   }
+      // }
     } catch (error) {
       console.error(error);
     }
@@ -243,44 +243,45 @@ io.on("connection", (socket:Socket) => {
       messageOptions,
     };
 
-    await sendMessage(mqChannel, data);
+    // await sendMessage(mqChannel, data);
+    await sendMessageIo(io, data);
 
      // if AI Enabled
      // messageOptions?.isAIEnabled is to turn off the AI for the auto reply things
-       if (messageOptions?.isAIEnabled != false && isAIEnabled || true) {
-      const aiMessagepayload = {
-        question: messageOptions.message,
-        history: [],
-        workspaceId, 
-        channelId
-      }
+    //    if (messageOptions?.isAIEnabled != false && isAIEnabled || true) {
+    //   const aiMessagepayload = {
+    //     question: messageOptions.message,
+    //     history: [],
+    //     workspaceId, 
+    //     channelId
+    //   }
       
-      const aiResponse = await CoreService.getAIMessage(aiMessagepayload);
-      if (aiResponse) {
-        const messageOptions: MessageOptions = {
-          workspaceId,
-          channelId,
-          type: "received",
-          isRead: true,
-          message: aiResponse?.text,
-          ticketId
-        }
+    //   const aiResponse = await CoreService.getAIMessage(aiMessagepayload);
+    //   if (aiResponse) {
+    //     const messageOptions: MessageOptions = {
+    //       workspaceId,
+    //       channelId,
+    //       type: "received",
+    //       isRead: true,
+    //       message: aiResponse?.text,
+    //       ticketId
+    //     }
 
-        const data = {
-          source: "dashboard",
-          messageOptions
-        }
+    //     const data = {
+    //       source: "dashboard",
+    //       messageOptions
+    //     }
 
-        await sendMessage(mqChannel, data);
+    //     await sendMessage(mqChannel, data);
 
-        const widgetData = {
-          source: "widget",
-          messageOptions
-        }
+    //     const widgetData = {
+    //       source: "widget",
+    //       messageOptions
+    //     }
 
-        await sendMessage(mqChannel, widgetData);
-      }
-    }
+    //     await sendMessage(mqChannel, widgetData);
+    //   }
+    // }
   });
 
   socket.on("reconnect", async (ticketId: any) => {
@@ -330,7 +331,8 @@ io.on("connection", (socket:Socket) => {
         messageOptions,
       };
 
-      await sendMessage(mqChannel, data);
+      // await sendMessage(mqChannel, data);
+      await sendMessageIo(io, data);
     }
   );
   socket.on(
@@ -512,7 +514,8 @@ app.post('/slack/events', async (req, res) => {
           messageOptions
         }
 
-        await sendMessage(mqChannel, data);
+        // await sendMessage(mqChannel, data);
+        await sendMessageIo(io, data);
       }
     }
     // send this message to the dashboard
@@ -521,7 +524,8 @@ app.post('/slack/events', async (req, res) => {
 });
 
 
-httpServer.on("listening", () => init());
+// httpServer.on("listening", () => init());
+init();
 httpServer.listen(port, async () => console.log(`Listening on port ${port}`));
 
 app.use("/health", (req: Request, res: Response) => {
@@ -541,5 +545,5 @@ async function init() {
   mqConnection = queue?.connection as Connection;
 
   // Initialize consumer
-  await initConsumer(mqChannel, io);
+initConsumer(mqChannel, io);
 }

@@ -16,6 +16,7 @@ export interface ITicketOptions {
   assignedUser?: string;
   widgetId?:string;
   ipAddress?:string;
+  ticketId:string;
 }
 
 /**

@@ -74,12 +74,17 @@ const ZeonWidgetChat = () => {
     scrollToBottom();
   }, [messages]);
 
+  useEffect(()=>{
+    return ()=>{
+      localStorage.removeItem("ticketId")
+    }
+  },[])
+
   const submitForm = async (data: FormDataType) => {
     try {
       const { message } = data;
       if (!isSubmitting) {
         socketInstance.emit("message", {
-          threadId: localStorage.getItem("threadId"),
           workspaceId: widgetDetails?.workspaceId,
           channelId: localStorage.getItem("usci"),
           ticketId: localStorage.getItem("ticketId"),

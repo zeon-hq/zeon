@@ -35,7 +35,7 @@ const ChatMessageFooter = ({submitForm, watch, register}:IChatMessageFooter) => 
 
     <ActionIcon
     onClick={submitForm}
-    disabled={watch()?.message?.length == 0}
+    // disabled={watch()?.message?.length == 0}
       variant={"filled"}
       style={{
         width: "42px",

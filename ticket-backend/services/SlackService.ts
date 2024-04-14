@@ -23,7 +23,8 @@ export async function openTicket(
       socketId: socketId,
       messageCount: 1,
       assignedUser: "",
-    };
+      ticketId: ticketOptions.ticketId
+    }
 
     const dbResult = await storeTicket(ticket);
     return {

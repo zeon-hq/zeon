@@ -33,7 +33,7 @@ export async function storeTicket(ticketOptions: ITicketOptions) {
       messageCount:ticketOptions.messageCount,
       socketId: ticketOptions.socketId,
       asignedUser: ticketOptions.assignedUser,
-      ticketId:generateRandomString(6)
+      ticketId:ticketOptions.ticketId
     })
 
     return createTicket;

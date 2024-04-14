@@ -40,7 +40,6 @@ const WidgetButton = () => {
 
   const handleCloseTicket = () => {
     localStorage.removeItem("test");
-    localStorage.removeItem("threadId");
     localStorage.removeItem("usci");
     localStorage.removeItem("messages");
     dispatch(clearPrevChat())
@@ -51,16 +50,16 @@ const WidgetButton = () => {
   useEffect(() => {
     socketInstance.on("message", (data) => {
       console.log(data)
-      if (data.threadId) {
-        localStorage.setItem("threadId", data.threadId);
-      }
       localStorage.setItem("us-firstName", data.firstName)
       localStorage.setItem("us-lastName", data.lastName)
       localStorage.setItem("us-profileImg", data.image)
       handleMessageReceived(data.message)
-      if(!showWidget){
-        dispatch(setShowWidget(true))
-      }
+      //TODO: commented this out, need to implement in a better way
+      // correct implementation will be showing a indicator icon, no of messages
+      
+      // if(!showWidget){
+      //   dispatch(setShowWidget(true))
+      // }
       playAudio()
     });
 
@@ -73,14 +72,15 @@ const WidgetButton = () => {
     })
 
     socketInstance.on("open-ticket-complete", (info: {ticketId:string}) => {
-      localStorage.setItem("ticketId",info.ticketId);
+      //TODO: Kaush review
+      // localStorage.setItem("ticketId",info.ticketId);
     });
       
 
     if(localStorage.getItem("ticketId")) {
       socketInstance.emit("reconnect",{ticketId:localStorage.getItem("ticketId")})
     }
-  }, []);
+  }, [socketInstance]);
 
   const openWidget = () => {
     const getWidgetId = localStorage.getItem("widgetId");

@@ -557,17 +557,19 @@ export const dashboardSlice = createSlice({
       }
 
       // check if active chat is the same as the conversation, if yes update that as well
-      state.activeChat?.ticketId === action.payload.data.ticketId && state.activeChat.messages.push({...action.payload.data, type: action.payload.type})
+      if (state.activeChat?.ticketId === action.payload.data.ticketId) { 
+        state.activeChat.messages.push({...action.payload.data, type: action.payload.type})
+      }
     },
     setNewMessageToFalse:(state, action: PayloadAction<string>) => {
       const conversation = state.inbox.allConversations.find((conversation) => conversation.ticketId === action.payload)
-      if(conversation){
+      if (conversation) {
         conversation.hasNewMessage = 0
       }
     },
     updateAssignedUser: (state, action: PayloadAction<{ticketId:string, assignedUser:string, assignedUserInfo:IUser|undefined}>) => {
       const conversation = state.inbox.allConversations.find((conversation) => conversation.ticketId === action.payload.ticketId)
-      if(conversation){
+      if (conversation) {
         conversation.assignedUser = action.payload.assignedUser
         conversation.assignedUserInfo = action.payload.assignedUserInfo
       }
@@ -579,7 +581,6 @@ export const dashboardSlice = createSlice({
       }
     
     }
-
   },
   extraReducers: (builder) => {
     builder
