@@ -115,7 +115,6 @@ const MessageContainer = () => {
         name: "inbox",
         channelId: channelIdInUrl,
       });
-      //@ts-ignore
       dispatch(setActiveChat(null));
 
       const conversation = allConversations.find(
@@ -241,7 +240,7 @@ const MessageContainer = () => {
             <>
               <MessageBox
                 onClick={() => {
-                  localStorage.setItem("usci", conversation.channelId);
+                  localStorage.setItem("channelId", conversation.channelId);
                   dispatch(setActiveChat(conversation));
                   dispatch(setNewMessageToFalse(conversation.ticketId));
                   navigate(`/${workspaceId}/chat?channelId=${conversation.channelId}&ticketId=${conversation.ticketId}`);

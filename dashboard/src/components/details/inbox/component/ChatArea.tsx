@@ -85,13 +85,16 @@ const ChatArea = () => {
   };
 
   const sendMessage = (message: string, type: MessageType) => {
+    const channelId = localStorage.getItem("channelId");
+    const ticketId = activeChat?.ticketId;
+    
     socketInstance.emit("dashboard-message-event", {
       workspaceId: workspaceInfo?.workspaceId,
-      channelId: localStorage.getItem("usci"),
+      channelId,
       type,
       isRead: true,
       message,
-      ticketId: activeChat?.ticketId,
+      ticketId,
     });
 
     dispatch(
