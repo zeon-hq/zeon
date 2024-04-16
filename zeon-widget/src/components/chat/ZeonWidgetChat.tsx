@@ -98,7 +98,6 @@ const ZeonWidgetChat = () => {
     }
     try {
       if (!isSubmitting) {
-        socketInstance.emit("message", newMessagePayload);
         dispatch(setMessage(newMessagePayload));
         reset();
       }

@@ -19,7 +19,7 @@ import {
 import { MessageType } from "components/chat/Chat.types";
 import { generateId } from "components/util/utils";
 import { ErrorMessage } from '@hookform/error-message';
-import { getIPAddress } from "api/api";
+import { getIPAddress, sendMessage } from "api/api";
 
 /**
  *
@@ -56,18 +56,40 @@ const ZeonWidgetForm = () => {
   const submitForm = async (data: FormDataType) => {
     const { email, message } = data;
     dispatch(setEmail(email));
-    const widgetId = localStorage.getItem('widgetId');
+    const widgetId = localStorage.getItem('widgetId') || '';
+    const workspaceId = widgetDetails?.workspaceId;
+    const channelId = widgetDetails?.channelId;
     const ticketId = generateId(6);
     localStorage.setItem("ticketId", ticketId);
     socketInstance.emit("join-room", ticketId);
     try {
       const output = await getIPAddress();
+      const openTicketPayload = {
+        workspaceId,
+        channelId,
+        customerEmail: email,
+        createdAt: Date.now().toString(),
+        message,
+        isOpen: true,
+        widgetId,
+        type: "Computer (laptop)",
+        ticketId,
+        ipAddress: output?.data?.ip || "",
+        isNewTicket: true
+      }
       dispatch(clearPrevChat());
       socketInstance.emit(
         "open-ticket",
-        {
-          workspaceId: widgetDetails?.workspaceId ,
-          channelId: widgetDetails?.channelId,
+        openTicketPayload, (data: any) => console.log("emited", data)
+      );
+
+      const sendMessagePayload = {
+        ticketId: ticketId,
+        workspaceId,
+        isNewTicket: true,
+        messageData: {
+          workspaceId,
+          channelId,
           customerEmail: email,
           createdAt: Date.now().toString(),
           message,
@@ -75,9 +97,12 @@ const ZeonWidgetForm = () => {
           widgetId,
           type: "Computer (laptop)",
           ticketId,
-          ipAddress:output?.data?.ip || ""
-        },(data:any) => console.log("emited",data)
-      );
+          ipAddress: output?.data?.ip || ""
+        },
+        messageSource: "widget"
+      }
+
+      await sendMessage(sendMessagePayload)
       const uniqueId = generateId(6);
       dispatch(
         setMessage({

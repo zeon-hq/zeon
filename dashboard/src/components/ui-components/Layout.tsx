@@ -34,8 +34,19 @@ const Layout = ({ children }: { children: any }) => {
       socketInstance.emit("dashboard-connect-event", { workspaceId, ticketId:activeChat?.ticketId });
     })
 
-    socketInstance.off("message").on("message", (data) => {
-      dispatch(updateConversation({ data, type: MessageType.SENT }));
+    // socketInstance.off("message").on("message", (data) => {
+    //   dispatch(updateConversation({ data, type: MessageType.SENT }));
+    // })
+
+    socketInstance.on("message", (data) => {
+      if (data?.messageSource == 'widget') {
+        if (data?.isNewTicket) {
+          //@ts-ignore
+          dispatch(updateInbox(workspaceId));
+        } else {
+          dispatch(updateConversation({ data, type: MessageType.SENT }));
+        }
+      }
     })
 
     socketInstance.on("open-ticket", (data) => {
@@ -50,7 +61,7 @@ const Layout = ({ children }: { children: any }) => {
     })
 
     socketInstance.emit("dashboard-reconnect-event", { workspaceId, ticketId:activeChat?.ticketId });
-  }, [socketInstance, dispatch, workspaceId, activeChat?.ticketId]);
+  }, [socketInstance, workspaceId]);
 
   return (
     <>

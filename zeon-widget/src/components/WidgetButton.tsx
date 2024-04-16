@@ -72,6 +72,12 @@ const WidgetButton = () => {
       // }
       playAudio()
     });
+    socketInstance.on("message", (data) => {
+      if (data?.messageSource == 'dashboard') {
+        handleMessageReceived(data.message)
+        playAudio()
+      }
+    })
 
     socketInstance.on("typing", (data) => {
      console.log('typing',data);

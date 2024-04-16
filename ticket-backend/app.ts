@@ -14,6 +14,7 @@ import { sendMessage, sendMessageIo } from "./mq/producer";
 import { MessageOptions, ITicketOptions } from "./schema/types/ticket";
 import {
   createDashboardSocket,
+  createMessage,
   getAdapterCollection,
   getChannelByID,
   getChannelIDByReferenceCode,
@@ -529,12 +530,50 @@ app.post('/slack/events', async (req, res) => {
 });
 
 app.post('/send/message', async (req, res) => {
-  // ticketId, message Data
-
   const { ticketId, workspaceId, messageData, messageSource, isNewTicket } = req.body;
-  await createMessage({...messageData.messageOptions, createdAt: new Date()});
 
-  io.in(ticketId).emit("messageReceived", messageData);
+  // create new ticket
+  // store the data in mongo
+  let socketTicketPayload: ISocketTicketPayload;
+  const widgetId = messageData?.widgetId || "";
+  if (isNewTicket) {
+    await openTicket(messageData, "socket.id"); // pass socketId
+    
+    socketTicketPayload = {
+      workspaceId: workspaceId,
+      message: messageData.message,
+      customerEmail: messageData.customerEmail,
+      isOpen: messageData.isOpen,
+      assignedUser: messageData.assignedUser,
+      ticketId,
+      widgetId,
+      isNewTicket,
+      messageSource
+    }
+  } else {
+    // store the actual message in the message collection
+    await createMessage({...messageData, createdAt: new Date()});
+    socketTicketPayload = {
+      workspaceId: workspaceId,
+      message: messageData.message,
+      time: messageData.createdAt,
+      type: messageData.type,
+      isRead: messageData.isRead,
+      ticketId,
+      isNewTicket,
+      widgetId,
+      messageSource
+    }
+  }
+
+  // store the actual message in the message collection
+
+  // emit the event to the widget or dashboard
+  io.emit("message", socketTicketPayload);
+
+  return res.status(200).json({
+    message: "Channel data fetched successfully"
+  });
 })
 
 

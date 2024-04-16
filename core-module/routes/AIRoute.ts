@@ -1,7 +1,6 @@
 import express, { Router } from "express";
 import multer from 'multer';
 import AIController from "../controller/AIController";
-import {verifyIdentity} from "../functions/user";
 const router: Router = express.Router();
 const storage = multer.memoryStorage()
 const upload = multer({ storage })
