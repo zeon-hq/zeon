@@ -24,7 +24,7 @@ function App({ widgetId }: any) {
 
   useEffect(() => {
     // get channelId from the invoke script of the widget
-    getChannel(widgetId || isEmbeddable.channelId);
+    getChannel('RAF2On' || isEmbeddable.channelId);
   }, [widgetId, isEmbeddable.channelId]);
 
   return (

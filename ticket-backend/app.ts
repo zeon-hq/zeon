@@ -85,7 +85,8 @@ io.on("connection", (socket:Socket) => {
         widgetId: widgetId
       }
 
-      io.to(socketIds).emit("open-ticket", socketTicketPayload);
+      socket.join(ticketId);
+      io.in(ticketId).emit("open-ticket", socketTicketPayload);
 
 
       const channel = await ChannelModel.findOne({ channelId: channelId });
@@ -214,6 +215,10 @@ io.on("connection", (socket:Socket) => {
     }
   });
 
+  socket.on("join-room", async (ticketId: string) => {
+    socket.join(ticketId);
+  })
+
   socket.on("message", async (messageOptions: MessageOptions) => {
     const channelId = messageOptions?.channelId;
     const workspaceId = messageOptions?.workspaceId;
@@ -244,7 +249,7 @@ io.on("connection", (socket:Socket) => {
     };
 
     // await sendMessage(mqChannel, data);
-    await sendMessageIo(io, data);
+    await sendMessageIo(socket, data);
 
      // if AI Enabled
      // messageOptions?.isAIEnabled is to turn off the AI for the auto reply things
@@ -332,7 +337,7 @@ io.on("connection", (socket:Socket) => {
       };
 
       // await sendMessage(mqChannel, data);
-      await sendMessageIo(io, data);
+      await sendMessageIo(socket, data);
     }
   );
   socket.on(
@@ -515,13 +520,22 @@ app.post('/slack/events', async (req, res) => {
         }
 
         // await sendMessage(mqChannel, data);
-        await sendMessageIo(io, data);
+        await sendMessageIo(socket, data);
       }
     }
     // send this message to the dashboard
   }
 
 });
+
+app.post('/send/message', async (req, res) => {
+  // ticketId, message Data
+
+  const { ticketId, workspaceId, messageData, messageSource, isNewTicket } = req.body;
+  await createMessage({...messageData.messageOptions, createdAt: new Date()});
+
+  io.in(ticketId).emit("messageReceived", messageData);
+})
 
 
 // httpServer.on("listening", () => init());

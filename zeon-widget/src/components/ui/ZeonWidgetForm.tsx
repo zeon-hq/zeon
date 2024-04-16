@@ -59,6 +59,7 @@ const ZeonWidgetForm = () => {
     const widgetId = localStorage.getItem('widgetId');
     const ticketId = generateId(6);
     localStorage.setItem("ticketId", ticketId);
+    socketInstance.emit("join-room", ticketId);
     try {
       const output = await getIPAddress();
       dispatch(clearPrevChat());
@@ -73,7 +74,7 @@ const ZeonWidgetForm = () => {
           isOpen: true,
           widgetId,
           type: "Computer (laptop)",
-          ticketId: ticketId,
+          ticketId,
           ipAddress:output?.data?.ip || ""
         },(data:any) => console.log("emited",data)
       );

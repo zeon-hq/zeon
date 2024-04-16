@@ -9,6 +9,7 @@ import { AiOutlineArrowRight } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 import { setAllOpenConversations, setEmail, setMessage, setStep, setWidgetDetails } from "redux/slice";
 import styled from "styled-components";
+import socketInstance from "api/socket";
 const WholeWrapper = styled.div`
 ${(props: IPropsType) => props.theme.isEmbeddable ? 'height: 100%;' : ''}
 `;
@@ -118,7 +119,6 @@ const ZeonWidgetCard = () => {
     const getWidgetId: any = localStorage.getItem("widgetId");
     if (getWidgetId) {
       const getData: any = await getOpenTicket(getWidgetId);
-      // dispatch(setMessage(getData.data.ticket))
       dispatch(setAllOpenConversations(getData.data.ticket));
     } else {
       const widgetId = generateRandomString(6);
@@ -141,7 +141,7 @@ const ZeonWidgetCard = () => {
 
   useEffect(() => {
     // get channelId from the invoke script of the widget
-    (isEmbeddable?.channelId) && getChannel(isEmbeddable?.channelId as string);
+    ('RAF2On') && getChannel('RAF2On' as string);
   }, [isEmbeddable?.channelId]);
   return (
     <>
@@ -170,6 +170,8 @@ const ZeonWidgetCard = () => {
                     heading={`Ticket Number: ${data.ticketId}`}
                     text={`${data.messages[data.messages.length - 1]?.type === MessageType.SENT ? "You" : "Agent"} : ${messageReplaced}`}
                     onClick={() => {
+                      socketInstance.emit('join-room', data.ticketId);
+                      
                       localStorage.setItem("ticketId", data.ticketId);
                       const messageDataArray = [
                         ...[

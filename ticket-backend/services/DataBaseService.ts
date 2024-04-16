@@ -199,7 +199,7 @@ export async function createMessage(message: MessageOptions): Promise<boolean> {
 }
 
 export async function createDashboardSocket(
-  workspaceId: string,
+  workspaceId: any,
   socketId: string
 ): Promise<boolean> {
   try {
@@ -207,7 +207,7 @@ export async function createDashboardSocket(
 
     // Create a new document using the SocketModel
     await SocketModel.create({
-      workspaceId: workspaceId,
+      workspaceId: workspaceId?.workspaceId || workspaceId,
       socketId: socketId
     });
 

@@ -1,11 +1,7 @@
 import { Channel } from "amqplib";
+import { Socket } from "socket.io";
 import { createMessage } from "../services/DataBaseService";
-import { Server } from "socket.io";
-import {
-    getConnectedDashboardSockets,
-    getTicketByIDTemp  
-  } from "../services/DataBaseService";
-import { ITicketModel } from "../model/TicketModel";
+
 
 export async function sendMessage(channel: Channel, data: any) {
     try {
@@ -23,50 +19,44 @@ export async function sendMessage(channel: Channel, data: any) {
     }
 }
 
-export async function sendMessageIo(io:Server, data:any) {
-    try {
-      const source = data.source;
-      const messageOptions = data.messageOptions;
-      await createMessage({...data.messageOptions, createdAt: new Date()});
-      // Deliver messages from widget
-      if (source === "widget") {
-        if (!messageOptions.file) {
-          const socketIds = await getConnectedDashboardSockets(
-            messageOptions.workspaceId
-          );
-          io.to(socketIds).emit("message", {
-            workspaceId: messageOptions.workspaceId,
-            message: messageOptions.message,
-            time: messageOptions.createdAt,
-            type: messageOptions.type,
-            isRead: messageOptions.isRead,
-            ticketId: messageOptions.ticketId,
-          });
-        }
-      }
+export async function sendMessageIo(socket:Socket, data: any) {
+  try {
+    const source = data.source;
+    const messageOptions = data.messageOptions;
+    await createMessage({ ...data.messageOptions, createdAt: new Date() });
 
-      // Deliver messages from dashboard
-      if (source === "dashboard") {
-        if (!messageOptions.file) {
-          const tickets:ITicketModel | null = await getTicketByIDTemp(messageOptions.ticketId);
-          if (messageOptions.type !== "NOTE") {
-            // Only send non-note messages to widget
-            const ticket = tickets;
-            if (!!ticket?.socketId) {
-              io.to(ticket.socketId).emit("message", {
-                workspaceId: messageOptions.workspaceId,
-                message: messageOptions.message,
-                time: messageOptions.createdAt,
-                type: messageOptions.type,
-                isRead: messageOptions.isRead,
-                ticketId: messageOptions.ticketId,
-              });
-            }
-          }
-        }
-      }
+    // Use rooms based on ticketId
+    const roomId = messageOptions.ticketId;
 
-    } catch (error) {
-        
+
+    // Deliver messages from widget
+    if (source === "widget") {
+      if (!messageOptions.file) {
+        socket.in(roomId).emit("message", {
+          workspaceId: messageOptions.workspaceId,
+          message: messageOptions.message,
+          time: messageOptions.createdAt,
+          type: messageOptions.type,
+          isRead: messageOptions.isRead,
+          ticketId: roomId,
+        });
+      }
     }
+
+    // Deliver messages from dashboard
+    if (source === "dashboard") {
+      if (!messageOptions.file && messageOptions.type !== "NOTE") {
+        socket.in(roomId).emit("message", {
+          workspaceId: messageOptions.workspaceId,
+          message: messageOptions.message,
+          time: messageOptions.createdAt,
+          type: messageOptions.type,
+          isRead: messageOptions.isRead,
+          ticketId: roomId,
+        });
+      }
+    }
+  } catch (error) {
+    console.error('sendMessageIo error:', error);
+  }
 }

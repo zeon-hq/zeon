@@ -52,9 +52,14 @@ const WidgetButton = () => {
     socketInstance.on('connect', function() {
       const socketId = socketInstance.id;
       console.log('socketId',socketId)
+      
+      const ticketId = localStorage.getItem("ticketId");
+      if (ticketId) {
+        socketInstance.emit("join-room", ticketId);
+      }
     });
 
-    socketInstance.on("message", (data) => {
+    socketInstance.on("messageReceived", (data) => {
       localStorage.setItem("us-firstName", data.firstName)
       localStorage.setItem("us-lastName", data.lastName)
       localStorage.setItem("us-profileImg", data.image)

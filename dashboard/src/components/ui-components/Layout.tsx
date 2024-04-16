@@ -25,30 +25,32 @@ const ChildWrapper = styled.div<{ isFinance: boolean, isCRM: boolean }>`
 const Layout = ({ children }: { children: any }) => {
   const dispatch = useDispatch()
   const { workspaceId } = useParams()
-  const { showSidebar, isFinance, isChat, isCRM } = useDashboard()
+  const { showSidebar, isFinance, isChat, isCRM, activeChat } = useDashboard()
 
   useEffect(() => {
     //@ts-ignore
     dispatch(initDashboard(workspaceId))
     socketInstance.on("connect", () => {
-      socketInstance.emit("dashboard-connect-event", workspaceId)
+      socketInstance.emit("dashboard-connect-event", { workspaceId, ticketId:activeChat?.ticketId });
     })
 
-    socketInstance.off("message").on("message", (data: any) => {
-      dispatch(updateConversation({ data, type: MessageType.SENT }))
+    socketInstance.off("message").on("message", (data) => {
+      dispatch(updateConversation({ data, type: MessageType.SENT }));
     })
 
-    socketInstance.on("open-ticket", (data: any) => {
+    socketInstance.on("open-ticket", (data) => {
       //@ts-ignore
-      dispatch(updateInbox(workspaceId))
+      dispatch(updateInbox(workspaceId));
+      // Join the room for a new ticket
+      socketInstance.emit("join-room", data.ticketId);
     })
 
-    socketInstance.on("connect_error", (err: any) => {
-      console.log(`connect_error due to ${err.message}`)
+    socketInstance.on("connect_error", (err) => {
+      console.log(`connect_error due to ${err.message}`);
     })
 
-    socketInstance.emit("dashboard-reconnect-event", workspaceId)
-  }, [socketInstance]) // eslint-disable-line react-hooks/exhaustive-deps
+    socketInstance.emit("dashboard-reconnect-event", { workspaceId, ticketId:activeChat?.ticketId });
+  }, [socketInstance, dispatch, workspaceId, activeChat?.ticketId]);
 
   return (
     <>
@@ -77,22 +79,6 @@ const Layout = ({ children }: { children: any }) => {
         <ChildWrapper isCRM={isCRM} isFinance={isFinance}>{children}</ChildWrapper>
       </div>
     </>
-    // <AppShell
-    //   padding="0px"
-    //   navbar={workspaceId && showSidebar === true ? <Sidebar workspaceId={workspaceId} /> : <></>}
-    //   header={<Topbar workspaceId={workspaceId || ""}/>}
-    //   styles={(theme) => ({
-    //     main: {
-    //       height:'100vh',
-    //       overflowY: 'auto',
-    //       backgroundColor: theme.colorScheme ==== 'dark' ? theme.colors.dark[8] : theme.colors.white ,
-    //       marginTop:'0px',
-    //     },
-
-    //   })}
-    // >
-    //   <Details/>
-    // </AppShell>
   )
 }
 
