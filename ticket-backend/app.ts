@@ -536,6 +536,8 @@ app.post('/send/message', async (req, res) => {
   // store the data in mongo
   let socketTicketPayload: ISocketTicketPayload;
   const widgetId = messageData?.widgetId || "";
+  const channel = await ChannelModel.findOne({ channelId: messageData?.channelId });
+  const isAIEnabled = channel?.isAIEnabled;
   if (isNewTicket) {
     await openTicket(messageData, "socket.id"); // pass socketId
     
@@ -571,6 +573,31 @@ app.post('/send/message', async (req, res) => {
   // emit the event to the widget or dashboard
   io.emit("message", socketTicketPayload);
 
+  if (isAIEnabled) {
+        const aiMessagepayload = {
+          question: ticketOptions.message,
+          history: [],
+          workspaceId, 
+          channelId
+        }
+
+        const aiResponse = await CoreService.getAIMessage(aiMessagepayload);
+        if (aiResponse) {
+          const messageOptions: MessageOptions = {
+            workspaceId,
+            channelId,
+            type: "received",
+            isRead: true,
+            type: messageData.type,
+            time: messageData.createdAt,
+            message: aiResponse?.text,
+            ticketId,
+            widgetId,
+            messageSource:"both"
+          }
+          io.emit("message", messageOptions);
+        }
+        }
   return res.status(200).json({
     message: "Channel data fetched successfully"
   });

@@ -73,7 +73,7 @@ const WidgetButton = () => {
       playAudio()
     });
     socketInstance.on("message", (data) => {
-      if (data?.messageSource == 'dashboard') {
+      if (data?.messageSource == 'dashboard' || data?.messageSource ==  "both") {
         handleMessageReceived(data.message)
         playAudio()
       }

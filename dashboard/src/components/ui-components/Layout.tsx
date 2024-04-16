@@ -39,7 +39,7 @@ const Layout = ({ children }: { children: any }) => {
     // })
 
     socketInstance.on("message", (data) => {
-      if (data?.messageSource == 'widget') {
+      if (data?.messageSource == 'widget' || data?.messageSource ==  "both") {
         if (data?.isNewTicket) {
           //@ts-ignore
           dispatch(updateInbox(workspaceId));
