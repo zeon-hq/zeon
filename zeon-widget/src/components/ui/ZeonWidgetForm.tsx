@@ -61,27 +61,9 @@ const ZeonWidgetForm = () => {
     const channelId = widgetDetails?.channelId;
     const ticketId = generateId(6);
     localStorage.setItem("ticketId", ticketId);
-    socketInstance.emit("join-room", ticketId);
     try {
       const output = await getIPAddress();
-      const openTicketPayload = {
-        workspaceId,
-        channelId,
-        customerEmail: email,
-        createdAt: Date.now().toString(),
-        message,
-        isOpen: true,
-        widgetId,
-        type: "Computer (laptop)",
-        ticketId,
-        ipAddress: output?.data?.ip || "",
-        isNewTicket: true
-      }
       dispatch(clearPrevChat());
-      socketInstance.emit(
-        "open-ticket",
-        openTicketPayload, (data: any) => console.log("emited", data)
-      );
 
       const sendMessagePayload = {
         ticketId: ticketId,

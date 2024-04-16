@@ -7,6 +7,7 @@ import { getConfig as Config } from "config/Config";
 import { getAuthToken } from "util/dashboardUtils";
 
 const coreAPIDomain = Config("CORE_API_DOMAIN");
+const ticketAPIDomain = Config("TICKET_SERVICE");
 
 let axiosInstance = axios.create({
   /*...*/
@@ -59,6 +60,11 @@ export async function injestFile(injestPdfPayload: any) {
     console.log(error);
     return Promise.reject(error?.response?.data?.error);
   }
+}
+
+export const sendMessageAPI = async (data:any)=>{
+  const res:any = await axios.post(`${ticketAPIDomain}/send/message`, data);
+  return res
 }
 
 export const login = async (email: string, password: string) => {

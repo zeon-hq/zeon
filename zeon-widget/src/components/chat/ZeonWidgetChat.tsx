@@ -12,6 +12,7 @@ import styled from "styled-components";
 import { IPropsType, MessageType } from "./Chat.types";
 import ChatMessageFooter from "./ChatMessageFooter";
 import WidgetChatHeader from "./WidgetChatHeader";
+import { sendMessage } from "api/api";
 
 const Wrapper = styled.div`
 height: 100%;
@@ -99,6 +100,24 @@ const ZeonWidgetChat = () => {
     try {
       if (!isSubmitting) {
         dispatch(setMessage(newMessagePayload));
+
+        const sendMessagePayload = {
+          ticketId: ticketId,
+          workspaceId,
+          isNewTicket: false,
+          messageData: {
+            workspaceId,
+            channelId,
+            createdAt: Date.now().toString(),
+            message,
+            isOpen: true,
+            type: "Computer (laptop)",
+            ticketId,
+          },
+          messageSource: "widget"
+        }
+  
+        await sendMessage(sendMessagePayload)
         reset();
       }
     } catch (error) {

@@ -10,7 +10,7 @@ import socketInstance from "socket";
 import { IMessage } from "../inbox.types";
 import SelectCannedResponse from "./SelectCannedResponseChatArea";
 import SingleMessage from "./SingleMessage";
-
+import { sendMessageAPI } from "service/CoreService";
 interface ITabContent {
   onFormSubmit: (e: any, type: MessageType) => void;
   type: MessageType;
@@ -84,10 +84,10 @@ const ChatArea = () => {
       lastChild.scrollIntoView({ behavior: 'smooth', block: 'end' });
   };
 
-  const sendMessage = (message: string, type: MessageType) => {
+  const sendMessage = async (message: string, type: MessageType) => {
     const channelId = localStorage.getItem("channelId");
     const ticketId = activeChat?.ticketId;
-    
+    const workspaceId = workspaceInfo?.workspaceId;
     socketInstance.emit("dashboard-message-event", {
       workspaceId: workspaceInfo?.workspaceId,
       channelId,
@@ -96,6 +96,27 @@ const ChatArea = () => {
       message,
       ticketId,
     });
+
+
+    const sendMessagePayload = {
+      ticketId: ticketId,
+      workspaceId,
+      isNewTicket: true,
+      messageData: {
+        workspaceId,
+        channelId,
+        createdAt: Date.now().toString(),
+        message,
+        isOpen: true,
+        type: "Computer (laptop)",
+        ticketId,
+      },
+      messageSource: "widget"
+    }
+
+    await sendMessageAPI(sendMessagePayload)
+
+
 
     dispatch(
       updateConversation({
@@ -264,7 +285,7 @@ const ChatArea = () => {
                               }}
                               inputPlaceHolder="Enter your reply"
                               onInputOnChange={handleChange}
-                              onFormSubmit={(e, type) => {
+                              onFormSubmit={() => {
                                 value && sendMessage(value, MessageType.RECEIVED);
                               }}
                           />

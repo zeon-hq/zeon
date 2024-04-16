@@ -49,13 +49,6 @@ const Layout = ({ children }: { children: any }) => {
       }
     })
 
-    socketInstance.on("open-ticket", (data) => {
-      //@ts-ignore
-      dispatch(updateInbox(workspaceId));
-      // Join the room for a new ticket
-      socketInstance.emit("join-room", data.ticketId);
-    })
-
     socketInstance.on("connect_error", (err) => {
       console.log(`connect_error due to ${err.message}`);
     })
