@@ -14,7 +14,7 @@ export interface ITicketModel {
   type: string;
   messageCount: number;
   socketId: string;
-  widgetId: string;
+  widgetId?: string;
   messages?: any[];
   assignedUser?: string;
   assignedUserInfo?: any;
@@ -34,7 +34,7 @@ const ticketModelSchema = new Schema<ITicketModel>({
   isOpen: Boolean,
   type: String,
   socketId: {type: String, required: true},
-  widgetId: {type: String, required: true},
+  widgetId: {type: String},
   messages: {type: Array, required: false},
   messageCount: {type: Number, required: true},
   assignedUser: String,
