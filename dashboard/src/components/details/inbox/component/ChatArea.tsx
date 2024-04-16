@@ -111,7 +111,7 @@ const ChatArea = () => {
         type: "Computer (laptop)",
         ticketId,
       },
-      messageSource: "widget"
+      messageSource: "dashboard"
     }
 
     await sendMessageAPI(sendMessagePayload)
