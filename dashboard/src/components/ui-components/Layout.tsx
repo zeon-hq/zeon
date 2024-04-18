@@ -39,7 +39,7 @@ const Layout = ({ children }: { children: any }) => {
     // })
 
     socketInstance.on("message", (data) => {
-      if (data?.messageSource == 'widget' || data?.messageSource ==  "both") {
+      if (data?.messageSource === 'widget' || data?.messageSource ===  "both") {
         if (data?.isNewTicket) {
           //@ts-ignore
           dispatch(updateInbox(workspaceId));
@@ -54,7 +54,7 @@ const Layout = ({ children }: { children: any }) => {
     })
 
     socketInstance.emit("dashboard-reconnect-event", { workspaceId, ticketId:activeChat?.ticketId });
-  }, [socketInstance, workspaceId]);
+  }, [socketInstance, workspaceId]); // eslint-disable-line
 
   return (
     <>
