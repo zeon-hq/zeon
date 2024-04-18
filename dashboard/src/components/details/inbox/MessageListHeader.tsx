@@ -110,7 +110,7 @@ export function MessageListHeader() {
 
                                 const updateNotificatonMessage = await updateChannel(channelId, {...currentChannelInfo ,...aiEnablePayload});
                                 await dispatch(updateIsAIEnabled({...aiEnablePayload, channelId})); 
-                                if (updateNotificatonMessage?.status != 200) {
+                                if (updateNotificatonMessage?.status !== 200) {
                                     showNotification({
                                       title: "Notification",
                                       message: "Something went wrong",
