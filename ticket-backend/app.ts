@@ -538,7 +538,8 @@ app.post('/send/message', async (req, res) => {
   const widgetId = messageData?.widgetId || "";
   const channelId = messageData?.channelId;
   const channel = await ChannelModel.findOne({ channelId });
-  const isAIEnabled = channel?.isAIEnabled;
+  const isAIEnabled = channel?.toObject().isAIEnabled;
+  
   if (isNewTicket) {
     await openTicket(messageData, "socket.id"); // pass socketId
     
@@ -574,32 +575,33 @@ app.post('/send/message', async (req, res) => {
   // emit the event to the widget or dashboard
   io.emit("message", socketTicketPayload);
 
-  if (isAIEnabled || true) {
-        const aiMessagepayload = {
-          question: messageData.message,
-          history: [],
-          workspaceId, 
-          channelId
-        }
+  if (isAIEnabled && messageSource ==  "widget") {
+    const aiMessagepayload = {
+      question: messageData.message,
+      history: [],
+      workspaceId,
+      channelId
+    }
 
-        const aiResponse = await CoreService.getAIMessage(aiMessagepayload);
-        if (aiResponse) {
-          const messageOptions: MessageOptions = {
-            workspaceId,
-            channelId,
-            type: "received",
-            isRead: true,
-            type: messageData.type,
-            time: messageData.createdAt,
-            message: aiResponse?.text,
-            ticketId,
-            widgetId,
-            messageSource:"both"
-          }
-          await createMessage({...messageData, createdAt: new Date(), message: aiResponse?.text});
-          io.emit("message", messageOptions);
-        }
-        }
+    const aiResponse = await CoreService.getAIMessage(aiMessagepayload);
+    if (aiResponse) {
+      const messageOptions: MessageOptions = {
+        workspaceId,
+        channelId,
+        type: "sent",
+        isRead: true,
+        type: messageData.type,
+        time: messageData.createdAt,
+        message: aiResponse?.text,
+        ticketId,
+        widgetId,
+        messageSource: "both"
+      }
+      await createMessage({ ...messageData, createdAt: new Date(), message: aiResponse?.text });
+      io.emit("message", messageOptions);
+    }
+  }
+  
   return res.status(200).json({
     message: "Channel data fetched successfully"
   });

@@ -1,6 +1,6 @@
 import socketInstance from "api/socket";
 import ZeonWidgetModal from "components/modal/ZeonWidgetModal";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { clearPrevChat, setMessage, setShowWidget, setStep } from "redux/slice";
 import styled from "styled-components";
@@ -22,7 +22,8 @@ const ZeonWidgetWrapper = styled.div`
 
 const WidgetButton = () => {
   const audioPlayer = useRef<HTMLAudioElement>(null);
-
+  const [isMessageUpdated, setIsMessageUpdated] = useState(false);
+  const { messages, widgetDetails, showWidget } = useWidget();
   function playAudio() {
     //@ts-ignore
     audioPlayer?.current?.play();
@@ -59,21 +60,9 @@ const WidgetButton = () => {
       }
     });
 
-    socketInstance.on("messageReceived", (data) => {
-      localStorage.setItem("us-firstName", data.firstName)
-      localStorage.setItem("us-lastName", data.lastName)
-      localStorage.setItem("us-profileImg", data.image)
-      handleMessageReceived(data.message)
-      //TODO: commented this out, need to implement in a better way
-      // correct implementation will be showing a indicator icon, no of messages
-      
-      // if(!showWidget){
-      //   dispatch(setShowWidget(true))
-      // }
-      playAudio()
-    });
     socketInstance.on("message", (data) => {
       if (data?.messageSource == 'dashboard' || data?.messageSource ==  "both") {
+        setIsMessageUpdated((prev)=> !prev);
         handleMessageReceived(data.message)
         playAudio()
       }
@@ -95,7 +84,14 @@ const WidgetButton = () => {
     if(localStorage.getItem("ticketId")) {
       socketInstance.emit("reconnect",{ticketId:localStorage.getItem("ticketId")})
     }
-  }, [socketInstance]);
+
+    return () => {
+      socketInstance.off("message");
+      socketInstance.off("typing");
+      socketInstance.off("close-ticket");
+      socketInstance.off("open-ticket-complete");
+    }
+  }, [socketInstance, isMessageUpdated]);
 
   const openWidget = () => {
     const getWidgetId = localStorage.getItem("widgetId");
@@ -109,7 +105,6 @@ const WidgetButton = () => {
   }
 
   const dispatch = useDispatch();
-  const {showWidget, widgetDetails} = useWidget();
   
   return (
     <>
