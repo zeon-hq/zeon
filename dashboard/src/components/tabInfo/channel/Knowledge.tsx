@@ -1,13 +1,14 @@
-import { Box, createStyles, Flex as MFlex, Space, Text } from "@mantine/core";
+import { Box, createStyles, Flex as MFlex, Space, Text, Tooltip } from "@mantine/core";
+import KBFileViewIcon from "assets/kb_file.svg";
 import KBPdfIcon from "assets/kb_pdf.svg";
 import UserDeleteIcon from "assets/user_remove_icon.svg";
 import Heading from "components/details/inbox/component/Heading";
 import AddKnowledgeBaseFile from "components/ui-components/AddKnowledgeBaseFile";
+import ConfirmationDialog from "components/ui-components/ConfirmationDialog";
 import useDashboard from "hooks/useDashboard";
 import { useCallback, useEffect, useState } from "react";
 import { deleteKnowledgeBaseFile, getKnowledgeBaseList } from "service/CoreService";
 import { Plus } from "tabler-icons-react";
-import ConfirmationDialog from "components/ui-components/ConfirmationDialog";
 
 const useStyles = createStyles((theme) => ({
   text: {
@@ -142,13 +143,25 @@ const Knowledge = () => {
                 <Box display={'flex'} className={classes.tableWrapper} w={'24%'} style={{
                   justifyContent: 'center'
                 }}>
+                   <Tooltip
+                          multiline
+                          position="bottom-end"
+                          style={{
+                            maxWidth: "320px",
+                          }}
+                          label={'view file'}>
+                            <a href={item.s3FileUrls} target="_blank">
+                  <img style={{padding:'10px'}} alt="edit icon"src={KBFileViewIcon} />
+                  </a>
+
+                        </Tooltip>
                   <img 
                   className="pointer"
                   onClick={async()=>{
                     setDeleteFileId(item.fileId)
                   }}
                   style={{padding:'10px'}} alt="delete icon"src={UserDeleteIcon} />
-                  {/* <img style={{padding:'10px'}} alt="edit icon"src={EditIcon} /> */}
+                  
                 </Box>
               </MFlex>
             </>
