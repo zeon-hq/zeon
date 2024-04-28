@@ -29,7 +29,6 @@ export async function storeTicket(ticketOptions: ITicketOptions) {
       widgetId:ticketOptions.widgetId,
       type: ticketOptions.type,
       channelId:ticketOptions.channelId,
-      messageCount:ticketOptions.messageCount,
       socketId: ticketOptions.socketId,
       asignedUser: ticketOptions.assignedUser,
       ticketId:ticketOptions.ticketId
@@ -166,21 +165,6 @@ export async function getAdapterCollection(): Promise<Collection<Document>> {
     return collection;
   } finally {
     // await _client.close();
-  }
-}
-
-export async function incrementMessageCount(
-  ticketId: string
-): Promise<boolean> {
-  try {
-     // Assuming you have already connected to the MongoDB database elsewhere in your application
-
-    // Find the ticket by its ID and update the messageCount field
-    const result = await TicketModel.updateOne({ ticketId }, { $inc: { messageCount: 1 } });
-
-    return result.modifiedCount > 0;
-  } finally {
-    // await client.close();
   }
 }
 

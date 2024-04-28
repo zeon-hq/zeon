@@ -257,7 +257,6 @@ export interface ITicket {
   isOpen: boolean;
   type: string;
   socketId: string;
-  messageCount: number;
 }
 
 export interface IInbox {
@@ -273,7 +272,6 @@ export interface IInbox {
   isOpen: boolean;
   type: string;
   socketId: string;
-  messageCount: number;
   assignedUser: string;
   assignedUserInfo: IUser | undefined;
   source : string;
@@ -322,7 +320,6 @@ export interface IWorkspaceInfo {
   subscriptionStatus: string;
   openTickets: number;
   closedTickets: number;
-  messageCount: number;
   months: any[];
   workspaceConfig?:any;
   subscriptionEndDate: number | undefined;
@@ -375,7 +372,6 @@ const initialState: DashboardInterface = {
     trialSubscriptionEndDate : undefined,
     openTickets: 0,
     closedTickets: 0,
-    messageCount: 0,
     months: [],
     subscriptionInfo: {},
     allUsers : []
@@ -400,7 +396,6 @@ const getFirstLoadInfo = async (workspaceId: string) => {
 
     workspaceInfo.openTickets = 0;
     workspaceInfo.closedTickets = 0;
-    workspaceInfo.messageCount = 0;
 
     const monthsPayload = Object.keys({}).map(
       (month: string) => ({

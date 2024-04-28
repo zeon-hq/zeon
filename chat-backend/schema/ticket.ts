@@ -12,7 +12,6 @@ interface ITicket {
   type: string;
   socketId: string;
   ticketId?:string; // making the ticketId optional, because this is adding after 1 year, so it won't break in older structure
-  messageCount: number;
   messages?: any[];
   assignedUser?: string;
   assignedUserInfo?: any;
@@ -28,7 +27,6 @@ const TicketSchema: Schema = new Schema({
   ticketId: String,
   type: {type: String, required: true},
   socketId: {type: String, required: true},
-  messageCount: {type: Number, required: true},
   messages: {type: Array, required: false},
   assignedUser: {type: String, required: true},
   assignedUserInfo: {type: Object, required: true},

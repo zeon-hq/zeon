@@ -42,10 +42,11 @@ const Dashboard = () => {
       <div>
         <Grid>
           <Grid.Col span={4}>
-            <AnalyticsCard
+            {/* need to re write this logic */}
+            {/* <AnalyticsCard
               heading="Total Messages Sent This Month"
               text={workspaceInfo.messageCount.toString()}
-            />
+            /> */}
           </Grid.Col>
           <Grid.Col span={4}>
             <AnalyticsCard

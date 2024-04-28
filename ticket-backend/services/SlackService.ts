@@ -21,7 +21,6 @@ export async function openTicket(
       isOpen: true,
       type: ticketOptions.type,
       socketId: socketId,
-      messageCount: 1,
       assignedUser: "",
       ticketId: ticketOptions.ticketId
     }

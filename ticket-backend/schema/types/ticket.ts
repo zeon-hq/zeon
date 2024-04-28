@@ -12,7 +12,6 @@ export interface ITicketOptions {
   isOpen?: boolean;
   type?: string;
   socketId?: string;
-  messageCount?: number;
   assignedUser?: string;
   widgetId?:string;
   ipAddress?:string;
