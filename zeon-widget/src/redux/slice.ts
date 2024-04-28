@@ -9,6 +9,12 @@ export enum IUIStepType  {
   CHAT = "CHAT"
 }
 
+export enum IMessageSource {
+  DASHBOARD = "dashboard",
+  BOTH = "both",
+  WIDGET = "widget"
+}
+
 export interface Message {
   message: string;
   type: MessageType;

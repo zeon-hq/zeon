@@ -2,13 +2,14 @@ import socketInstance from "api/socket";
 import ZeonWidgetModal from "components/modal/ZeonWidgetModal";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { clearPrevChat, IUIStepType, setMessage, setShowWidget, setStep } from "redux/slice";
+import { clearPrevChat, IMessageSource, IUIStepType, setAllOpenConversations, setMessage, setShowWidget, setStep } from "redux/slice";
 import styled from "styled-components";
 import { MessageType } from "./chat/Chat.types";
 import useWidget from "./hooks/useWidget";
 import { AiOutlineClose } from "react-icons/ai";
 import { notificationSound, widgetImageUrl } from "config/Config";
 import { generateRandomString } from "./hooks/commonUtils";
+import { cloneDeep } from "lodash";
 
 const ZeonWidgetWrapper = styled.div`
   z-index: 10000000000;
@@ -23,20 +24,47 @@ const ZeonWidgetWrapper = styled.div`
 const WidgetButton = () => {
   const audioPlayer = useRef<HTMLAudioElement>(null);
   const [isMessageUpdated, setIsMessageUpdated] = useState(false);
-  const { step ,widgetDetails, showWidget } = useWidget();
-
+  const { step ,widgetDetails, showWidget, allOpenConversations } = useWidget();
   const playAudio = () => {
     audioPlayer?.current?.play();
   }
 
-  const handleMessageReceived  = (processedMessage:string) => {
-    dispatch(
-      setMessage({
-        message: processedMessage,
-        type: MessageType.RECEIVED,
-        time: Date.now().toString()
-      })
-    );
+  const handleMessageReceived = (processData: any) => {
+    if (step == IUIStepType.INITIAL) {
+      // Clone the current state of all open conversations to avoid direct mutation
+      const copiedAllOpenConversations = cloneDeep(allOpenConversations);
+
+      // Find the conversation that matches the provided ticketId
+      const activeConversation = copiedAllOpenConversations.find(
+        (conversation) => conversation.ticketId === processData.ticketId
+      );
+
+      // Check if the conversation exists
+      if (activeConversation) {
+        // Push the new message into the messages array of the active conversation
+        activeConversation.messages.push({
+          message: processData.message,
+          type: MessageType.RECEIVED,
+          time: Date.now().toString()
+        });
+
+        // Dispatch the updated conversations to the Redux store
+        dispatch(setAllOpenConversations(copiedAllOpenConversations));
+      } else {
+        // Handle the case where no conversation matches the ticketId
+        console.error('No active conversation found for the provided ticketId');
+        // Optionally, add logic to create a new conversation or show an error message, etc.
+      }
+
+    } else if (step == IUIStepType.CHAT) {
+      dispatch(
+        setMessage({
+          message: processData.message,
+          type: MessageType.RECEIVED,
+          time: Date.now().toString()
+        })
+      );
+    }
   }
 
   const handleCloseTicket = () => {
@@ -61,9 +89,9 @@ const WidgetButton = () => {
     });
 
     socketInstance.on("message", (data) => {
-      if (data?.messageSource == 'dashboard' || data?.messageSource ==  "both") {
+      if (data?.messageSource == IMessageSource.DASHBOARD || data?.messageSource ==  IMessageSource.BOTH) {
         setIsMessageUpdated((prev)=> !prev);
-        handleMessageReceived(data.message)
+        handleMessageReceived(data)
         playAudio()
       }
     })

@@ -11,6 +11,7 @@ import socketInstance from "api/socket";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import {
   clearPrevChat,
+  IMessageSource,
   IUIStepType,
   setActiveConversation,
   setEmail,
@@ -82,7 +83,7 @@ const ZeonWidgetForm = () => {
           ticketId,
           ipAddress: output?.data?.ip || ""
         },
-        messageSource: "widget"
+        messageSource: IMessageSource.WIDGET
       }
 
       await sendMessage(sendMessagePayload)

@@ -7,7 +7,7 @@ import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { BsArrow90DegDown } from "react-icons/bs";
 import { useDispatch } from "react-redux";
-import { Message, setMessage } from "redux/slice";
+import { IMessageSource, Message, setMessage } from "redux/slice";
 import styled from "styled-components";
 import { IPropsType, MessageType } from "./Chat.types";
 import ChatMessageFooter from "./ChatMessageFooter";
@@ -114,7 +114,7 @@ const ZeonWidgetChat = () => {
             type: "Computer (laptop)",
             ticketId,
           },
-          messageSource: "widget"
+          messageSource: IMessageSource.WIDGET
         }
   
         await sendMessage(sendMessagePayload)
