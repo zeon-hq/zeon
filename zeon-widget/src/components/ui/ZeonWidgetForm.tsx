@@ -13,7 +13,6 @@ import {
   clearPrevChat,
   IMessageSource,
   IUIStepType,
-  setActiveConversation,
   setEmail,
   setMessage,
   setStep,
@@ -87,7 +86,6 @@ const ZeonWidgetForm = () => {
       }
 
       await sendMessage(sendMessagePayload)
-      const uniqueId = generateId(6);
       dispatch(
         setMessage({
           message: message || "Hey this is hardcoded",
@@ -96,7 +94,6 @@ const ZeonWidgetForm = () => {
         })
       );
 
-      dispatch(setActiveConversation(uniqueId));
       dispatch(setStep(IUIStepType.CHAT));
         
       const checkIsOutOfOperatingHours = isOutOfOperatingHours(widgetDetails?.behavior.operatingHours.operatingHours.from, widgetDetails?.behavior.operatingHours.operatingHours.to, widgetDetails?.behavior.operatingHours.timezone)

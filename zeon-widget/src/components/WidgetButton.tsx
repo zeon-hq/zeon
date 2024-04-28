@@ -37,14 +37,15 @@ const WidgetButton = () => {
       const copiedAllOpenConversations = cloneDeep(allOpenConversations);
 
       // Find the conversation that matches the provided ticketId
-      const activeConversation = copiedAllOpenConversations.find(
+      const currentActiveConversation = copiedAllOpenConversations.find(
         (conversation) => conversation.ticketId === processData.ticketId
       );
 
       // Check if the conversation exists
-      if (activeConversation) {
+      if (currentActiveConversation) {
         // Push the new message into the messages array of the active conversation
-        activeConversation.messages.push({
+        currentActiveConversation.unReadMessage = (currentActiveConversation.unReadMessage + 0) + 1;
+        currentActiveConversation.messages.push({
           message: processData.message,
           type: MessageType.RECEIVED,
           time: Date.now().toString()
@@ -80,8 +81,6 @@ const WidgetButton = () => {
 
   useEffect(() => {
     socketInstance.on('connect', function() {
-      const socketId = socketInstance.id;
-      
       const ticketId = localStorage.getItem("ticketId");
       if (ticketId) {
         socketInstance.emit("join-room", ticketId);
@@ -89,9 +88,11 @@ const WidgetButton = () => {
     });
 
     socketInstance.on("message", (data) => {
+      console.log('Message Received:', data);
       if (data?.messageSource == IMessageSource.DASHBOARD || data?.messageSource ==  IMessageSource.BOTH) {
         setIsMessageUpdated((prev)=> !prev);
         const checkIsThisNewTicket:boolean = !!allOpenConversations.find((conversation) => conversation.ticketId === data.ticketId);
+        console.log('checkIsThisNewTicket', checkIsThisNewTicket);
         handleMessageReceived(data, checkIsThisNewTicket);
         playAudio()
       }
@@ -101,11 +102,6 @@ const WidgetButton = () => {
       handleCloseTicket()
     })
 
-    socketInstance.on("open-ticket-complete", (info: {ticketId:string}) => {
-      //TODO: Kaush review
-      // localStorage.setItem("ticketId",info.ticketId);
-    });
-
     if(localStorage.getItem("ticketId")) {
       socketInstance.emit("reconnect",{ticketId:localStorage.getItem("ticketId")})
     }
@@ -114,7 +110,6 @@ const WidgetButton = () => {
       socketInstance.off("message");
       socketInstance.off("typing");
       socketInstance.off("close-ticket");
-      socketInstance.off("open-ticket-complete");
     }
   }, [socketInstance, isMessageUpdated]);
 

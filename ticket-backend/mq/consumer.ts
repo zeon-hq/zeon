@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { Channel, Message } from "amqplib";
 import { Server } from "socket.io";
 import {

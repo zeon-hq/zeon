@@ -70,11 +70,7 @@ io.on("connection", (socket:Socket) => {
     try {
       const openTicketData: any = await openTicket(ticketOptions, socket.id);
       const ticketId = openTicketData.ticketId;
-      
-      // code commented by sathithya yogi, we are not using the below emit event
-      // socket.emit("open-ticket-complete", openTicketData);
 
-      const socketIds = await getConnectedDashboardSockets(workspaceId);
 
       const socketTicketPayload: ISocketTicketPayload = {
         workspaceId: workspaceId,

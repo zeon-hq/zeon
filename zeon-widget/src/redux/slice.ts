@@ -37,8 +37,7 @@ export type WidgetInterface = {
   showWidget: boolean;
   formSubmitButtonLoading: boolean;
   widgetDetails: IWidgetDetails,
-  allOpenConversations: IAllOpenConversations[],
-  activeConversation: string,
+  allOpenConversations: IAllOpenConversations[]
 };
 
 export interface InChatWidgetInterface {
@@ -117,8 +116,7 @@ const initialState: WidgetInterface = {
   formSubmitButtonLoading: false,
   //@ts-ignore
   widgetDetails: {},
-  allOpenConversations: [],
-  activeConversation: ""
+  allOpenConversations: []
 };
 
 export const widgetSlice = createSlice({
@@ -161,9 +159,6 @@ export const widgetSlice = createSlice({
     },
     setAllOpenConversations: (state, action: PayloadAction<any>) => {
       state.allOpenConversations = action.payload;
-    },
-    setActiveConversation: (state, action: PayloadAction<string>) => {
-      state.activeConversation = action.payload;
     }
   },
 });
@@ -177,7 +172,6 @@ export const {
   setFormSubmitButtonLoadingState,
   setWidgetDetails,
   setAllOpenConversations,
-  setActiveConversation,
   clearPrevChat
 } = widgetSlice.actions;
 

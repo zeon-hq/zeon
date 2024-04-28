@@ -37,7 +37,6 @@ const useWidget = () => {
   const formSubmitButtonLoading = useSelector((state: RootState ) => state.widget.formSubmitButtonLoading);
   const widgetDetails = useSelector((state: RootState ) => state.widget.widgetDetails);
   const allOpenConversations = useSelector((state: RootState ) => state.widget.allOpenConversations);
-  const activeConversation = useSelector((state: RootState ) => state.widget.activeConversation);
 
   return {
     step,
@@ -47,7 +46,6 @@ const useWidget = () => {
     formSubmitButtonLoading,
     widgetDetails,
     allOpenConversations,
-    activeConversation,
     isOutOfOperatingHours
   };
 };
