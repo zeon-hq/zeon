@@ -6,7 +6,6 @@ export interface ResponseInterface {
   message: string;
 }
 
-
 const ticketServiceUrl:string = Config("ticketService");
 
 export const getChannelById = async (channelId: string) => {

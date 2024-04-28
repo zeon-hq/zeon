@@ -108,8 +108,7 @@ const ChannelSchema: Schema = new Schema({
       topBannerColor: { type: String, default: "white" },
       topLogo: {
         type: String,
-        default:
-          "https://userstak-toplogo.fra1.digitaloceanspaces.com/logo.svg",
+        default: "https://zeon-assets.s3.ap-south-1.amazonaws.com/Logomark.svg",
       },
       mainHeading: { type: String, default: "Hey There!" },
       subHeading: {

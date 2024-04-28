@@ -3,7 +3,7 @@ import useWidget from "components/hooks/useWidget";
 import { AiOutlineArrowLeft } from "components/icons/icons";
 import { Text } from "components/ui-components/uStyleComponents";
 import { useDispatch } from "react-redux";
-import { setActiveConversation, setMessage, setStep } from "redux/slice";
+import { IUIStepType, setActiveConversation, setMessage, setStep } from "redux/slice";
 import styled from "styled-components";
 import { Mail } from "tabler-icons-react";
 
@@ -34,7 +34,7 @@ const WidgetChatHeader = () => {
   const {widgetDetails} = useWidget()
   const ticketNumber = localStorage.getItem("ticketId")?.slice(-6);
   const handleBackClick = () => {
-    dispatch(setStep("initial"))
+    dispatch(setStep(IUIStepType.INITIAL))
     dispatch(setActiveConversation(""))
     dispatch(setMessage([]))
   }

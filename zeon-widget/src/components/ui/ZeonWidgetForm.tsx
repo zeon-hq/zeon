@@ -11,6 +11,7 @@ import socketInstance from "api/socket";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import {
   clearPrevChat,
+  IUIStepType,
   setActiveConversation,
   setEmail,
   setMessage,
@@ -95,7 +96,7 @@ const ZeonWidgetForm = () => {
       );
 
       dispatch(setActiveConversation(uniqueId));
-      dispatch(setStep("chat"));
+      dispatch(setStep(IUIStepType.CHAT));
         
       const checkIsOutOfOperatingHours = isOutOfOperatingHours(widgetDetails?.behavior.operatingHours.operatingHours.from, widgetDetails?.behavior.operatingHours.operatingHours.to, widgetDetails?.behavior.operatingHours.timezone)
 

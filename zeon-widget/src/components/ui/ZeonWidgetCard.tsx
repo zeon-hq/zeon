@@ -7,7 +7,7 @@ import useWidget from "components/hooks/useWidget";
 import { ReactNode, useEffect } from "react";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { useDispatch } from "react-redux";
-import { setAllOpenConversations, setEmail, setMessage, setStep, setWidgetDetails } from "redux/slice";
+import { IUIStepType, setAllOpenConversations, setEmail, setMessage, setStep, setWidgetDetails } from "redux/slice";
 import styled from "styled-components";
 import socketInstance from "api/socket";
 const WholeWrapper = styled.div`
@@ -141,7 +141,7 @@ const ZeonWidgetCard = () => {
 
   useEffect(() => {
     // get channelId from the invoke script of the widget
-    (isEmbeddable?.channelId) && getChannel(isEmbeddable?.channelId as string);
+    ('RAF2On') && getChannel('RAF2On' as string);
   }, [isEmbeddable?.channelId]);
   return (
     <>
@@ -158,17 +158,17 @@ const ZeonWidgetCard = () => {
           </Text>
           }
           {allOpenConversations.length > 0 &&
-            allOpenConversations.map((data: any, index:any) => {
-              const messageReplaced = preProcessText(
-                data.messages[data.messages.length - 1]?.message || "",
-                { email: data.customerEmail }
-              );
+            allOpenConversations.map((data: any, index:number) => {
+              const message = data.messages[data.messages.length - 1]?.message || "";
+              const contextMessage = { email: data.customerEmail };
+              const replacedMessage = preProcessText(message, contextMessage);
+
               return (
                 <>
                   <SingleCard
                   key={index}
                     heading={`Ticket Number: ${data.ticketId}`}
-                    text={`${data.messages[data.messages.length - 1]?.type === MessageType.SENT ? "You" : "Agent"} : ${messageReplaced}`}
+                    text={`${data.messages[data.messages.length - 1]?.type === MessageType.SENT ? "You" : "Agent"} : ${replacedMessage}`}
                     onClick={() => {
                       socketInstance.emit('join-room', data.ticketId);
                       
@@ -182,10 +182,10 @@ const ZeonWidgetCard = () => {
                           },
                         ],
                         ...data.messages,
-                      ];
+                      ];             
                       dispatch(setMessage(messageDataArray));
                       dispatch(setEmail(data.customerEmail));
-                      dispatch(setStep("chat"));
+                      dispatch(setStep(IUIStepType.CHAT));
                     }}
                     textColor={"black"}
                   />

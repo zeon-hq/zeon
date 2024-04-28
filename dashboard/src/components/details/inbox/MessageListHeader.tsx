@@ -101,9 +101,19 @@ export function MessageListHeader() {
                         style={{
                             display: "flex",
                             alignItems: "center",
-                            justifyContent: "center",
-                            gap: "6px",
+                            justifyContent: "flex-end"
                         }}>
+                                <Text 
+                         style={{
+                            border: "1px solid #D0D5DD",
+                            borderRadius: "6px",
+                            paddingLeft: "8px",
+                            paddingRight: "8px",
+                            marginLeft: "0px",
+                        }}
+                        color="#344054" fw={"500"} fz="12px">
+                            {'Enable AI'}
+                        </Text>
                         <SwitchWithLabel
                             onClick={async (e) => {
                                 const aiEnablePayload = {isAIEnabled:e.target.checked};

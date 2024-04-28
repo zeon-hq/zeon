@@ -1,15 +1,12 @@
 import { Avatar, Button } from "@mantine/core";
-import axios from "axios";
 import useWidget from "components/hooks/useWidget";
 import { Text } from "components/ui-components/uStyleComponents";
-import { AiOutlineArrowLeft, AiOutlineClose } from "react-icons/ai";
+import { AiOutlineArrowLeft } from "react-icons/ai";
 import { BsChatLeftDots } from "react-icons/bs";
 import { useDispatch } from "react-redux";
-import { setShowWidget, setStep } from "redux/slice";
+import { IUIStepType, setStep } from "redux/slice";
 import styled from "styled-components";
-import { getConfig as Config } from "../../config/Config";
 
-//@ts-ignore
 const Wrapper = styled.div`
   /* height: 25%; */
   background-color: ${(props: { bg: string }) => props.bg};
@@ -43,7 +40,7 @@ const Header = ({ isForm }: { isForm: boolean }) => {
         <div>
           {!isForm && (
             <Avatar
-              onClick={() => dispatch(setStep("initial"))}
+              onClick={() => dispatch(setStep(IUIStepType.INITIAL))}
               src={
                 widgetDetails?.appearance.widgetHeaderSection.topLogo ||
                 "https://zeonhq.b-cdn.net/ZeonPowered.svg"
@@ -52,7 +49,7 @@ const Header = ({ isForm }: { isForm: boolean }) => {
           )}
           {isForm && (
             <AiOutlineArrowLeft
-              onClick={() => dispatch(setStep("initial"))}
+              onClick={() => dispatch(setStep(IUIStepType.INITIAL))}
               size={"1rem"}
               color={widgetDetails?.appearance.widgetHeaderSection.textColor}
             />
@@ -83,7 +80,7 @@ const Header = ({ isForm }: { isForm: boolean }) => {
           mt={16}
           onClick={()=>{
             localStorage.setItem("channelId", widgetDetails?.channelId);
-            dispatch(setStep("form"));
+            dispatch(setStep(IUIStepType.FORM));
           }}
           style={{
             backgroundColor:

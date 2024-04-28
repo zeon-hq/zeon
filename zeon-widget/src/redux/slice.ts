@@ -3,7 +3,11 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import { MessageType } from "components/chat/Chat.types";
 import { isEqual } from "lodash";
 
-type StepType = "initial" | "form" | "chat";
+export enum IUIStepType  {
+  INITIAL = "initial",
+  FORM  = "FORM",
+  CHAT = "CHAT"
+}
 
 export interface Message {
   message: string;
@@ -21,7 +25,7 @@ export interface IAllOpenConversations {
 }
 
 export type WidgetInterface = {
-  step: StepType;
+  step: IUIStepType;
   email: String;
   messages: Array<Message> | [];
   showWidget: boolean;
@@ -100,7 +104,7 @@ export interface IWidgetDetails  {
 }
 
 const initialState: WidgetInterface = {
-  step: "initial",
+  step: IUIStepType.INITIAL,
   email: "",
   messages: [],
   showWidget: false,
@@ -115,7 +119,7 @@ export const widgetSlice = createSlice({
   name: "widget",
   initialState,
   reducers: {
-    setStep: (state, action: PayloadAction<StepType>) => {
+    setStep: (state, action: PayloadAction<IUIStepType>) => {
       state.step = action.payload;
     },
     setEmail: (state, action: PayloadAction<String>) => {

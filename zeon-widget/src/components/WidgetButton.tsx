@@ -2,7 +2,7 @@ import socketInstance from "api/socket";
 import ZeonWidgetModal from "components/modal/ZeonWidgetModal";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { clearPrevChat, setMessage, setShowWidget, setStep } from "redux/slice";
+import { clearPrevChat, IUIStepType, setMessage, setShowWidget, setStep } from "redux/slice";
 import styled from "styled-components";
 import { MessageType } from "./chat/Chat.types";
 import useWidget from "./hooks/useWidget";
@@ -23,9 +23,9 @@ const ZeonWidgetWrapper = styled.div`
 const WidgetButton = () => {
   const audioPlayer = useRef<HTMLAudioElement>(null);
   const [isMessageUpdated, setIsMessageUpdated] = useState(false);
-  const { messages, widgetDetails, showWidget } = useWidget();
-  function playAudio() {
-    //@ts-ignore
+  const { step ,widgetDetails, showWidget } = useWidget();
+
+  const playAudio = () => {
     audioPlayer?.current?.play();
   }
 
@@ -44,7 +44,7 @@ const WidgetButton = () => {
     localStorage.removeItem("messages");
     dispatch(clearPrevChat())
 
-    dispatch(setStep("initial")) 
+    dispatch(setStep(IUIStepType.INITIAL)); 
   }
 
   useEffect(() => {
