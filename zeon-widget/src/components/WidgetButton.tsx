@@ -24,13 +24,15 @@ const ZeonWidgetWrapper = styled.div`
 const WidgetButton = () => {
   const audioPlayer = useRef<HTMLAudioElement>(null);
   const [isMessageUpdated, setIsMessageUpdated] = useState(false);
-  const { step ,widgetDetails, showWidget, allOpenConversations } = useWidget();
+  const { step ,widgetDetails, showWidget, allOpenConversations, messages } = useWidget();
   const playAudio = () => {
     audioPlayer?.current?.play();
   }
 
-  const handleMessageReceived = (processData: any) => {
-    if (step == IUIStepType.INITIAL) {
+  const handleMessageReceived = (processData: any, isNewTicket:boolean) => {
+    console.log('step', step);
+    console.log('messages', messages);
+    if (isNewTicket) {
       // Clone the current state of all open conversations to avoid direct mutation
       const copiedAllOpenConversations = cloneDeep(allOpenConversations);
 
@@ -56,7 +58,8 @@ const WidgetButton = () => {
         // Optionally, add logic to create a new conversation or show an error message, etc.
       }
 
-    } else if (step == IUIStepType.CHAT) {
+    } else {
+      console.log('Adding New messages:', messages);
       dispatch(
         setMessage({
           message: processData.message,
@@ -76,11 +79,8 @@ const WidgetButton = () => {
   }
 
   useEffect(() => {
-    console.log('socketInstance',socketInstance);
-    
     socketInstance.on('connect', function() {
       const socketId = socketInstance.id;
-      console.log('socketId',socketId)
       
       const ticketId = localStorage.getItem("ticketId");
       if (ticketId) {
@@ -91,14 +91,11 @@ const WidgetButton = () => {
     socketInstance.on("message", (data) => {
       if (data?.messageSource == IMessageSource.DASHBOARD || data?.messageSource ==  IMessageSource.BOTH) {
         setIsMessageUpdated((prev)=> !prev);
-        handleMessageReceived(data)
+        const checkIsThisNewTicket:boolean = !!allOpenConversations.find((conversation) => conversation.ticketId === data.ticketId);
+        handleMessageReceived(data, checkIsThisNewTicket);
         playAudio()
       }
     })
-
-    socketInstance.on("typing", (data) => {
-     console.log('typing',data);
-    });
 
     socketInstance.on("close-ticket", (data)=> {
       handleCloseTicket()

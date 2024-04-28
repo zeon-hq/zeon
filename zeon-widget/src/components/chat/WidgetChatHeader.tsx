@@ -39,12 +39,6 @@ const WidgetChatHeader = () => {
     dispatch(setMessage([]))
   }
 
-  let firstName = localStorage.getItem("us-firstName") || widgetDetails?.behavior.widgetBehavior.agentName
-  firstName = firstName === "undefined" || firstName === "null" ? "Agent" : firstName
-
-  let lastName = localStorage.getItem("us-lastName")
-  lastName = lastName === "undefined" || lastName === "null" ? "" : lastName
-
   return (
     <Wrapper stroke={widgetDetails?.appearance.widgetHeaderSection.strokeColor}  bg={widgetDetails?.appearance?.widgetHeaderSection?.topBannerColor}>
       <IconWrapper>

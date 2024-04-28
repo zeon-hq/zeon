@@ -134,7 +134,7 @@ export const widgetSlice = createSlice({
     setMessage: (state, action: PayloadAction<any>) => {
       if (!isEqual(action.payload, state.messages)) {
         if (Array.isArray(action.payload)) {
-          if (action.payload.length == 0){
+          if (action.payload.length === 0){
             state.messages = [];
           } else {
             state.messages = [...state.messages, ...action.payload];

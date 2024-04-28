@@ -73,7 +73,7 @@ const ZeonWidgetChat = () => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages?.length]);
 
   useEffect(()=>{
     return ()=>{
