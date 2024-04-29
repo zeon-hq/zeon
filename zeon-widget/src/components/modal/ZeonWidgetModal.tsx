@@ -7,7 +7,7 @@ import { BrandingWrapper } from "components/ui-components/uStyleComponents";
 import Header from "components/ui/Header";
 import ZeonWidgetCard from "components/ui/ZeonWidgetCard";
 import ZeonWidgetForm from "components/ui/ZeonWidgetForm";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { IUIStepType, setMessage, setShowWidget, setStep } from "redux/slice";
 import styled from "styled-components";
@@ -114,7 +114,26 @@ const ZeonWidgetModal = () => {
     dispatch(setShowWidget(false));
     dispatch(setMessage([]))
     dispatch(setStep(IUIStepType.INITIAL))
+    localStorage.removeItem("ticketId");
   });
+
+
+  useEffect(() => {
+    const handleBeforeUnload = (e:any) => {
+    console.log('Page is reloading...');  // Log to console
+    dispatch(setShowWidget(false));
+    dispatch(setMessage([]))
+    dispatch(setStep(IUIStepType.INITIAL))
+    localStorage.removeItem("ticketId");
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    // Cleanup function to remove the event listener on component unmount
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
 
 
   const showBrandingImage =
@@ -122,7 +141,7 @@ const ZeonWidgetModal = () => {
 
   const openZeon = () => {
     window.open("https://zeonhq.com", "_blank");
-  };
+  }
 
   return (
     <>
