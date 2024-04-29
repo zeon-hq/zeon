@@ -101,7 +101,7 @@ const ChatArea = () => {
     const sendMessagePayload = {
       ticketId: ticketId,
       workspaceId,
-      isNewTicket: true,
+      isNewTicket: false,
       messageData: {
         workspaceId,
         channelId,
