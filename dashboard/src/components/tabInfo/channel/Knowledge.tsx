@@ -150,7 +150,7 @@ const Knowledge = () => {
                             maxWidth: "320px",
                           }}
                           label={'view file'}>
-                            <a href={item.s3FileUrls} target="_blank">
+                            <a href={item.s3FileUrls} rel="noreferrer" target="_blank">
                   <img style={{padding:'10px'}} alt="edit icon"src={KBFileViewIcon} />
                   </a>
 
