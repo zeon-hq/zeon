@@ -12,6 +12,8 @@ import { connectQueue } from "./mq/connect";
 import { initConsumer } from "./mq/consumer";
 import { sendMessage, sendMessageIo } from "./mq/producer";
 import { MessageOptions, ITicketOptions } from "./schema/types/ticket";
+import { instrument } from "@socket.io/admin-ui";
+
 import {
   createDashboardSocket,
   createMessage,
@@ -50,9 +52,15 @@ const app = express();
 const httpServer = createServer(app);
 app.use(cors());
 const io = new Server(httpServer, {
-  // transports: ["websocket"],
+  cors:{
+    origin:['https://admin.socket.io'],
+    credentials: true
+  }
 });
-
+instrument(io, {
+  auth: false,
+  mode: "development",
+});
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -82,7 +90,6 @@ io.on("connection", (socket:Socket) => {
         widgetId: widgetId
       }
 
-      socket.join(ticketId);
       io.in(ticketId).emit("open-ticket", socketTicketPayload);
 
 
@@ -212,9 +219,6 @@ io.on("connection", (socket:Socket) => {
     }
   });
 
-  socket.on("join-room", async (ticketId: string) => {
-    socket.join(ticketId);
-  })
 
   socket.on("message", async (messageOptions: MessageOptions) => {
     const channelId = messageOptions?.channelId;
@@ -360,6 +364,21 @@ io.on("connection", (socket:Socket) => {
       }
     }
   );
+
+  socket.on("join", (data)=> {
+    console.log('data', data);
+    socket.join(data.ticketId);
+    
+    // boom working one    
+    // socket.broadcast.to(data.ticketId).emit('message', {
+    // "test":"new"
+    // })
+
+  // boom bang!  working    
+    // io.to(data.ticketId).emit('message', {
+    //   "test":"new"
+    //   });
+  })
 });
 const MONGODB_DB_URI: string = process.env.DB_URI as string + process.env.DB_NAME as string;
 
@@ -569,7 +588,9 @@ app.post('/send/message', async (req, res) => {
   // store the actual message in the message collection
 
   // emit the event to the widget or dashboard
-  io.emit("message", socketTicketPayload);
+  
+  // io.emit("message", socketTicketPayload);
+  io.to(ticketId).emit('message', socketTicketPayload);
 
   if (isAIEnabled && messageSource ==  "widget") {
     const aiMessagepayload = {
@@ -594,7 +615,8 @@ app.post('/send/message', async (req, res) => {
         messageSource: "both"
       }
       await createMessage({ ...messageData, createdAt: new Date(), message: aiResponse?.text });
-      io.emit("message", messageOptions);
+      // io.emit("message", messageOptions);
+      io.to(ticketId).emit('message', messageOptions);
     }
   }
   

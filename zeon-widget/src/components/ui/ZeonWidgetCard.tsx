@@ -179,7 +179,11 @@ const ZeonWidgetCard = () => {
                         heading={`Ticket Number: ${data.ticketId}`}
                         text={`${data.messages[data.messages.length - 1]?.type === MessageType.SENT ? "You" : "Agent"} : ${replacedMessage}`}
                         onClick={() => {
-                          socketInstance.emit('join-room', data.ticketId);
+                          socketInstance.emit("join", {
+                            ticketId:data.ticketId,
+                            channelId:isEmbeddable?.channelId,
+                            source:'DASHBOARD'
+                          })
 
                           localStorage.setItem("ticketId", data.ticketId);
                           const messageDataArray = [
