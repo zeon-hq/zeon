@@ -1,4 +1,4 @@
-import { Button, Flex, Loader, Space, Text, TextInput } from "@mantine/core";
+import { Box, Button, Flex, Loader, Space, Text, TextInput } from "@mantine/core";
 import { useInputState } from "@mantine/hooks";
 import { getIPAddress, sendMessage } from "api/api";
 import { IPropsType, MessageType } from "components/chat/Chat.types";
@@ -301,11 +301,14 @@ const ZeonWidgetModal = () => {
                         {" "}
                         Powered By
                       </Text>
+                      <Box style={{display:"flex", alignItems:"center", gap:"4px"}}>
                       <img
                         width={"25px"}
                         src="https://zeon-assets.s3.ap-south-1.amazonaws.com/Logomark.svg"
                         alt="zeon-logo"
                       />
+                      <Text size="sm" weight="600" color="#344054">Zeon</Text>
+                      </Box>
                     </BrandingWrapper>
                   )}
                   <Button
