@@ -584,7 +584,7 @@ app.post('/send/message', async (req, res) => {
       const messageOptions: MessageOptions = {
         workspaceId,
         channelId,
-        type: "sent",
+        type: "received",
         isRead: true,
         type: messageData.type,
         time: messageData.createdAt,

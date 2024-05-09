@@ -108,7 +108,7 @@ const ChatArea = () => {
         createdAt: Date.now().toString(),
         message,
         isOpen: true,
-        type: "Computer (laptop)",
+        type: MessageType.RECEIVED,
         ticketId,
       },
       messageSource: "dashboard"

@@ -1,33 +1,48 @@
-import { Avatar, Button } from "@mantine/core";
+//@ts-nocheck
+import { Avatar, Box, Button, Flex, Text } from "@mantine/core";
 import useWidget from "components/hooks/useWidget";
-import { Text } from "components/ui-components/uStyleComponents";
-import { AiOutlineArrowLeft } from "react-icons/ai";
-import { BsChatLeftDots } from "react-icons/bs";
-import { useDispatch } from "react-redux";
-import { IUIStepType, setStep } from "redux/slice";
 import styled from "styled-components";
+import {
+  BsDiscord,
+  BsSlack,
+  BsTwitter,
+  BsWhatsapp,
+  BsYoutube,
+} from "react-icons/bs";
+import { Book } from "tabler-icons-react";
+import MessageCard from "./MessageCard";
+
 
 const Wrapper = styled.div`
   /* height: 25%; */
   background-color: ${(props: { bg: string }) => props.bg};
   color: white;
-  padding: 24px 24px 0px 24px;
   border-radius: 12px;
   position: sticky;
   top: 0;
   z-index: 10000000;
 `;
 
-const IconContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  &:hover {
-    cursor: pointer;
+const getIcons = (type: string) => {
+  switch (type) {
+    case "docs":
+      return <Book />;
+    case "discord":
+      return <BsDiscord />;
+    case "slack":
+      return <BsSlack />;
+    case "twitter":
+      return <BsTwitter />;
+    case "whatsapp":
+      return <BsWhatsapp />;
+    case "youtube":
+      return <BsYoutube />;
+    default:
+      return <Book />;
   }
-`;
+};
 
 const Header = ({ isForm }: { isForm: boolean }) => {
-  const dispatch = useDispatch();
   const { widgetDetails } = useWidget();
 
   return (
@@ -36,7 +51,7 @@ const Header = ({ isForm }: { isForm: boolean }) => {
       stroke={widgetDetails?.appearance.widgetHeaderSection.strokeColor}
       bg={widgetDetails?.appearance.widgetHeaderSection.topBannerColor}
     >
-      <IconContainer>
+      {/* <IconContainer>
         <div>
           {!isForm && (
             <Avatar
@@ -92,7 +107,97 @@ const Header = ({ isForm }: { isForm: boolean }) => {
           {" "}
           {widgetDetails?.appearance?.newConversationButton?.title}
         </Button>
-      )}
+      )} */}
+      <Box>
+          <Flex justify="center" align="center" mb="lg" gap="4px">
+            {/* <Box>
+              <img
+                width={"40px"}
+                src="https://zeon-assets.s3.ap-south-1.amazonaws.com/Logomark.svg"
+                alt="zeon-logo"
+              />
+            </Box> */}
+            {/* <Text weight={"bolder"} size={"xl"}>
+              {" "}
+              Zeon{" "}
+            </Text> */}
+          </Flex>
+          {widgetDetails?.appearance?.userAvatars?.enableUserAvatars && (
+            <Avatar.Group
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              {widgetDetails?.appearance?.userAvatars?.userAvatarsLinks.slice(0, 4)
+                ?.filter((avatar) => avatar.enabled)
+                .map((avatar, index) => (
+                  <Avatar
+                    key={index}
+                    src={avatar.link}
+                    color="cyan"
+                    radius="xl"
+                  />
+                ))}
+              <Avatar radius="xl">
+                {widgetDetails?.appearance?.userAvatars?.additonalUserAvatars}
+              </Avatar>
+            </Avatar.Group>
+          )}
+
+          <Text
+            weight="600"
+            style={{ fontSize: "16px", marginTop: "10px", color: "#101828" }}
+            align="center"
+          >
+            {" "}
+            Chat with us{" "}
+          </Text>
+          <Text
+            size="md"
+            weight="400"
+            style={{
+              fontSize: "12px",
+              color: "rgb(71, 84, 103)",
+              marginTop: "4px",
+              display: "flex",
+              justifyContent: "center",
+              gap: "6px",
+              alignItems: "center",
+            }}
+            align="center"
+          >
+            <div
+              style={{
+                height: "10px",
+                width: "10px",
+                borderRadius: "50%",
+                backgroundColor: "#12B76A",
+              }}
+            ></div>{" "}
+            Online now{" "}
+          </Text>
+          <Flex justify="center" align="center" mb="sm" gap={"16px"} mt="sm">
+            {widgetDetails?.inChatWidgets
+              .filter((widget) => widget.enabled)
+              .map((widget, index) => (
+                <Button
+                  key={index}
+                  fullWidth
+                  leftIcon={getIcons(widget.topLogo)}
+                  variant="outline"
+                  sx={{
+                    border: "1px solid #D0D5DD",
+                    color: "#344054",
+                  }}
+                >
+                  {widget.title}
+                </Button>
+              ))}
+          </Flex>
+        </Box>
+        <MessageCard type="received" time={new Date()} text={widgetDetails?.appearance.widgetHeaderSection.subHeading} />
     </Wrapper>
   );
 };

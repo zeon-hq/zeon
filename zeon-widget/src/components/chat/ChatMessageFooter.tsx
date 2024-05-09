@@ -11,11 +11,10 @@ const ChatMessageFooter = ({submitForm, watch, register}:IChatMessageFooter) => 
   return (
     <Flex
     style={{
-      width: "90%",
+      width: "98%",
       justifyContent: "space-between",
       alignItems: "end",
-      padding: "0px 24px",
-      marginBottom: "24px",
+      padding: "0px 6px",
     }}
   >
     <Input

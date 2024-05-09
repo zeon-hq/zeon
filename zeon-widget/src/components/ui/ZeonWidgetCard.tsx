@@ -1,17 +1,30 @@
 import { Card as MTCard, Space, Text } from "@mantine/core";
 import { getChannelById, getOpenTicket } from "api/api";
 import { IPropsType, MessageType } from "components/chat/Chat.types";
-import { generateRandomString, preProcessText } from "components/hooks/commonUtils";
-import useEmbeddable, { IEmbeddableOutput } from "components/hooks/useEmbeddable";
+import {
+  generateRandomString,
+  preProcessText,
+} from "components/hooks/commonUtils";
+import useEmbeddable, {
+  IEmbeddableOutput,
+} from "components/hooks/useEmbeddable";
 import useWidget from "components/hooks/useWidget";
 import { ReactNode, useEffect } from "react";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { useDispatch } from "react-redux";
-import { IUIStepType, setAllOpenConversations, setEmail, setMessage, setStep, setWidgetDetails } from "redux/slice";
+import {
+  IUIStepType,
+  setAllOpenConversations,
+  setEmail,
+  setMessage,
+  setStep,
+  setWidgetDetails,
+} from "redux/slice";
 import styled from "styled-components";
 import socketInstance from "api/socket";
+import ChatWidgetCard from "./ChatWidgetCard";
 const WholeWrapper = styled.div`
-${(props: IPropsType) => props.theme.isEmbeddable ? 'height: 100%;' : ''}
+  ${(props: IPropsType) => (props.theme.isEmbeddable ? "height: 100%;" : "")}
 `;
 
 type SingleCardProps = {
@@ -47,7 +60,7 @@ export const SingleCard = ({
       onClick={onClick}
       mt={isContinueConversation ? 0 : 15}
       style={{
-        cursor:'pointer',
+        cursor: "pointer",
         width: "100%",
         border: "1px solid #DEE2E6",
         backgroundColor: bg ? bg : " #fff",
@@ -100,20 +113,33 @@ export const SingleCard = ({
 
 const ZeonWidgetCard = () => {
   const dispatch = useDispatch();
-  const { widgetDetails, isOutOfOperatingHours, allOpenConversations } = useWidget();
-  const isEmbeddable:IEmbeddableOutput = useEmbeddable();
-  const enableDuringOperatingHours = widgetDetails?.behavior?.operatingHours?.enableOperatingHours;
-  const hideNewConversationButtonWhenOffline = widgetDetails?.behavior?.operatingHours?.hideNewConversationButtonWhenOffline;
-  const operatingHoursToTime = widgetDetails?.behavior?.operatingHours?.operatingHours.to;
-  const operatingHoursFromTime = widgetDetails?.behavior?.operatingHours?.operatingHours.from;
-  const operatingHoursTimeZone = widgetDetails?.behavior?.operatingHours?.timezone;
+  const { widgetDetails, isOutOfOperatingHours, allOpenConversations } =
+    useWidget();
+  const isEmbeddable: IEmbeddableOutput = useEmbeddable();
+  const enableDuringOperatingHours =
+    widgetDetails?.behavior?.operatingHours?.enableOperatingHours;
+  const hideNewConversationButtonWhenOffline =
+    widgetDetails?.behavior?.operatingHours
+      ?.hideNewConversationButtonWhenOffline;
+  const operatingHoursToTime =
+    widgetDetails?.behavior?.operatingHours?.operatingHours.to;
+  const operatingHoursFromTime =
+    widgetDetails?.behavior?.operatingHours?.operatingHours.from;
+  const operatingHoursTimeZone =
+    widgetDetails?.behavior?.operatingHours?.timezone;
 
-  const hideNewConversationButtonWhenOfflineAndOutOfOperatingHours = enableDuringOperatingHours && hideNewConversationButtonWhenOffline && isOutOfOperatingHours(operatingHoursFromTime,operatingHoursToTime, operatingHoursTimeZone);
+  const hideNewConversationButtonWhenOfflineAndOutOfOperatingHours =
+    enableDuringOperatingHours &&
+    hideNewConversationButtonWhenOffline &&
+    isOutOfOperatingHours(
+      operatingHoursFromTime,
+      operatingHoursToTime,
+      operatingHoursTimeZone
+    );
 
   useEffect(() => {
     getOpenTicketData();
   }, []);
-
 
   const getOpenTicketData = async () => {
     const getWidgetId: any = localStorage.getItem("widgetId");
@@ -125,10 +151,10 @@ const ZeonWidgetCard = () => {
       localStorage.setItem("widgetId", widgetId);
     }
   };
-  const getChannel = async (channelId:string) => {
+  const getChannel = async (channelId: string) => {
     try {
       const res = await getChannelById(channelId);
-      if (res.status != 200) {
+      if (res.status !== 200) {
         dispatch(setWidgetDetails(res.data.channel));
         getOpenTicketData();
       } else {
@@ -141,76 +167,66 @@ const ZeonWidgetCard = () => {
 
   useEffect(() => {
     // get channelId from the invoke script of the widget
-    ('RAF2On') && getChannel('RAF2On' as string);
+    "RAF2On" && getChannel("RAF2On" as string);
   }, [isEmbeddable?.channelId]);
   return (
     <>
-    <WholeWrapper>
-      {hideNewConversationButtonWhenOfflineAndOutOfOperatingHours
-      ? (
-        <></>
-      ) : (
-        <>
-        {
-          allOpenConversations.length > 0 && 
-          <Text size="sm" weight={500} mt="8px">
-            Open Tickets
-          </Text>
-          }
-          {allOpenConversations.length > 0 &&
-            allOpenConversations.map((data: any, index:number) => {
-              const message = data.messages[data.messages.length - 1]?.message || "";
-              const contextMessage = { email: data.customerEmail };
-              const replacedMessage = preProcessText(message, contextMessage);
+      <WholeWrapper>
+        {hideNewConversationButtonWhenOfflineAndOutOfOperatingHours ? (
+          <></>
+        ) : (
+          <>
+            {allOpenConversations.length > 0 && (
+              <Text size="sm" weight={500} mt="8px">
+                Open Tickets
+              </Text>
+            )}
+            {allOpenConversations.length > 0 &&
+              allOpenConversations.map((data: any, index: number) => {
+                console.log(data);
+                const rawMessage = data.messages.length === 1 ? data.text :
+                           data.messages[data.messages.length - 1]?.message || "";
 
-              return (
-                <>
-                  <SingleCard
-                  key={index}
-                    heading={`Ticket Number: ${data.ticketId}`}
-                    text={`${data.messages[data.messages.length - 1]?.type === MessageType.SENT ? "You" : "Agent"} : ${replacedMessage}`}
-                    onClick={() => {
-                      socketInstance.emit('join-room', data.ticketId);
-                      
-                      localStorage.setItem("ticketId", data.ticketId);
-                      const messageDataArray = [
-                        ...[
-                          {
-                            type: MessageType.SENT,
-                            time: data.createdAt,
-                            message: data.text,
-                          },
-                        ],
-                        ...data.messages,
-                      ];             
-                      dispatch(setMessage(messageDataArray));
-                      dispatch(setEmail(data.customerEmail));
-                      dispatch(setStep(IUIStepType.CHAT));
-                    }}
-                    textColor={"black"}
-                  />
-                </>
-              );
-            })}
-        </>
-      )}
+                const message = rawMessage.length > 28 ? `${rawMessage.substring(0, 28)}...` : rawMessage;
+                const contextMessage = { email: data.customerEmail };
+                const replacedMessage = preProcessText(message, contextMessage);
 
-{widgetDetails?.inChatWidgets.length > 0 &&
-      <Text size="sm" weight={500} mt="16px">
-        {" "}
-        Resources{" "}
-      </Text>
-}
-      {widgetDetails?.inChatWidgets.map((item, index) => (
-        <SingleCard
-          key={index}
-          heading={item.title}
-          text={item.subTitle}
-          onClick={() => window.open(item.link, "_blank")}
-          textColor={"black"}
-        />
-      ))}
+                return (
+                  <>
+                    <ChatWidgetCard
+                      onClick={() => {
+                        socketInstance.emit("join-room", data.ticketId);
 
+                        localStorage.setItem("ticketId", data.ticketId);
+                        const messageDataArray = [
+                          ...[
+                            {
+                              type: MessageType.SENT,
+                              time: data.createdAt,
+                              message: data.text,
+                            },
+                          ],
+                          ...data.messages,
+                        ];
+                        dispatch(setMessage(messageDataArray));
+                        dispatch(setEmail(data.customerEmail));
+                        dispatch(setStep(IUIStepType.CHAT));
+                      }}
+                      heading={`Ticket Number: ${data.ticketId}`}
+                      text={`${
+                        data.messages[data.messages.length - 1]?.type ===
+                        MessageType.RECEIVED
+                          ? "Agent"
+                          : "You"
+                      } : ${replacedMessage}`}
+                    />
+                  </>
+                );
+              })}
+          </>
+        )}
+
+       
       </WholeWrapper>
     </>
   );

@@ -64,7 +64,7 @@ const ModalWrapper = styled.div`
 
 const Info = styled.div`
   gap: 10px;
-  max-height: 47vh;
+  max-height: 56vh;
   overflow: auto;
   background: white;
   border-radius: 8px;

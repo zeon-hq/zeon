@@ -15,7 +15,6 @@ import WidgetChatHeader from "./WidgetChatHeader";
 import { sendMessage } from "api/api";
 
 const Wrapper = styled.div`
-height: 100%;
 display: flex;
 flex-direction: column;
 justify-content: space-between;
@@ -33,10 +32,12 @@ background-color: ${(props: IPropsType) => {
 `;
 
 const ChatContainer = styled.div`
-  padding: 20px 24px;
-  height: 47vh;
+  padding: 20px 0px;
+  height: 56vh;
   overflow-y: auto;
   background: white;
+  // display: flex;
+  // flex-direction: column-reverse;
 
   @media only screen and (max-width: 650px) {
     max-height: 100vh;
@@ -156,8 +157,10 @@ const ZeonWidgetChat = () => {
               </Button>
             </div>
           )}
+          
           {messages.map((message: Message) => (
-            <MessageCard info={message} />
+            //@ts-ignore
+            <MessageCard text={message.message} type={message.type} time={message.time || message.createdAt}/>
           ))}
           <div ref={elementRef} />
         </ChatContainer>
