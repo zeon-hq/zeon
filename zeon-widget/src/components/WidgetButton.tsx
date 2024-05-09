@@ -44,7 +44,7 @@ const WidgetButton = () => {
       // Check if the conversation exists
       if (currentActiveConversation) {
         // Push the new message into the messages array of the active conversation
-        currentActiveConversation.unReadMessage = (currentActiveConversation.unReadMessage + 0) + 1;
+        currentActiveConversation.unreadMessage = (currentActiveConversation?.unreadMessage || 0) + 1;
         currentActiveConversation.messages.push({
           message: processData.message,
           type: MessageType.RECEIVED,
@@ -91,7 +91,8 @@ const WidgetButton = () => {
       console.log('Message Received:', data);
       if (data?.messageSource == IMessageSource.DASHBOARD || data?.messageSource ==  IMessageSource.BOTH) {
         setIsMessageUpdated((prev)=> !prev);
-        const checkIsThisNewTicket:boolean = !!allOpenConversations.find((conversation) => conversation.ticketId === data.ticketId);
+        const checkIsThisNewTicket:boolean = (!!allOpenConversations.find((conversation) => conversation.ticketId === data.ticketId))
+        //  || (!!localStorage.getItem('ticketId'));
         console.log('checkIsThisNewTicket', checkIsThisNewTicket);
         handleMessageReceived(data, checkIsThisNewTicket);
         playAudio()

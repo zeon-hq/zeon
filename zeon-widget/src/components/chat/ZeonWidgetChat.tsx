@@ -1,5 +1,4 @@
 import { Button } from "@mantine/core";
-import socketInstance from "api/socket";
 import useOnScreen from "components/hooks/useOnScreen";
 import useWidget from "components/hooks/useWidget";
 import MessageCard from "components/ui/MessageCard";

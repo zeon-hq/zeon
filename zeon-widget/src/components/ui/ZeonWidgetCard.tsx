@@ -21,6 +21,7 @@ import {
   setWidgetDetails,
 } from "redux/slice";
 import styled from "styled-components";
+import { Badge } from '@mantine/core';
 import socketInstance from "api/socket";
 import ChatWidgetCard from "./ChatWidgetCard";
 const WholeWrapper = styled.div`
@@ -35,6 +36,7 @@ type SingleCardProps = {
   onClick?: () => void;
   textColor: "black" | "white";
   isContinueConversation?: boolean;
+  totalUnreadMessage?: number;
 };
 
 export const SingleCard = ({
@@ -43,8 +45,9 @@ export const SingleCard = ({
   icon,
   bg = "",
   textColor = "black",
-  onClick = () => {},
+  onClick = () => { },
   isContinueConversation = false,
+  totalUnreadMessage = 0,
 }: SingleCardProps) => {
   return (
     <MTCard
@@ -86,7 +89,12 @@ export const SingleCard = ({
             </Text>
           </div>
           <div>
-            <AiOutlineArrowRight />
+            {
+              totalUnreadMessage > 0 ?
+                <Badge color="blue" size="sm">{totalUnreadMessage}</Badge>
+                :
+                <AiOutlineArrowRight />
+            }
           </div>
         </div>
 

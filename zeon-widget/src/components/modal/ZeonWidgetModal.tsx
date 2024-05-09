@@ -11,7 +11,7 @@ import MessageCard from "components/ui/MessageCard";
 import ZeonWidgetCard from "components/ui/ZeonWidgetCard";
 import ZeonWidgetForm from "components/ui/ZeonWidgetForm";
 import { generateId } from "components/util/utils";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IoMdArrowForward } from "react-icons/io";
 import { useDispatch } from "react-redux";
 import {
@@ -139,6 +139,7 @@ const ZeonWidgetModal = () => {
     dispatch(setShowWidget(false));
     dispatch(rSetMessage([]));
     dispatch(setStep(IUIStepType.INITIAL));
+    localStorage.removeItem("ticketId");
   });
 
   const submitForm = async () => {
@@ -225,9 +226,30 @@ const ZeonWidgetModal = () => {
     }
   };
 
+  useEffect(() => {
+    const handleBeforeUnload = (e:any) => {
+    console.log('Page is reloading...');  // Log to console
+    dispatch(setShowWidget(false));
+    dispatch(rSetMessage([]))
+    dispatch(setStep(IUIStepType.INITIAL))
+    localStorage.removeItem("ticketId");
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    // Cleanup function to remove the event listener on component unmount
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
+
   const showBrandingImage =
     widgetDetails?.appearance?.miscellaneous?.showBranding;
 
+  const openZeon = () => {
+    window.open("https://zeonhq.com", "_blank");
+  }
 
   return (
     <>
