@@ -5,13 +5,18 @@ export enum IMessageSource {
   WIDGET = "widget",
 }
 
+export enum IMessageType {
+  SENT = "sent",
+  RECEIVED = "received",
+  NOTE = "NOTE"
+}
 
 export interface IMessage extends Document {
   message: string;
   ticketId: string;
   workspaceId: string;
   createdAt: number;
-  type: string;
+  type: IMessageType;
   messageSource: IMessageSource;
   isRead: boolean;
 }

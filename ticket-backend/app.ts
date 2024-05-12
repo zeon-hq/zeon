@@ -6,7 +6,7 @@ import express, { Request, Response } from "express";
 import { createServer } from "http";
 import mongoose from "mongoose";
 import { Server, Socket } from "socket.io";
-import MessageModel from "./model/MessageModel";
+import MessageModel, { IMessageType } from "./model/MessageModel";
 import TicketModel from "./model/TicketModel";
 import { sendMessageIo } from "./mq/producer";
 import { ITicketOptions, MessageOptions } from "./schema/types/ticket";
@@ -492,12 +492,6 @@ app.post('/send/message', async (req, res) => {
     io.to(workspaceId).emit("message", socketTicketPayload);
   }
 
-  // store the actual message in the message collection
-
-  // emit the event to the widget or dashboard
-  
-  // io.emit("message", socketTicketPayload);
-
   if (isAIEnabled && messageSource ==  "widget") {
     const aiMessagepayload = {
       question: messageData.message,
@@ -512,16 +506,15 @@ app.post('/send/message', async (req, res) => {
       const messageOptions: MessageOptions = {
         workspaceId,
         channelId,
-        type: "sent",
+        type: IMessageType.RECEIVED,
         isRead: true,
-        type: messageData.type,
         time: messageData.createdAt,
         message,
         ticketId,
         widgetId,
         messageSource: "both"
       }
-      await createMessage({ ...messageData, createdAt: new Date(), message });
+      await createMessage({ ...messageData, createdAt: new Date(), message, type: IMessageType.RECEIVED });
       // io.emit("message", messageOptions);
       io.to(workspaceId).emit("message", messageOptions);
     } else {
@@ -529,17 +522,15 @@ app.post('/send/message', async (req, res) => {
       const messageOptions: MessageOptions = {
         workspaceId,
         channelId,
-        type: "sent",
+        type: IMessageType.SENT,
         isRead: true,
-        type: messageData.type,
         time: messageData.createdAt,
         message,
         ticketId,
         widgetId,
         messageSource: "widget"
       }
-      await createMessage({ ...messageData, createdAt: new Date(), message });
-      // io.emit("message", messageOptions);
+      await createMessage({ ...messageData, createdAt: new Date(), message, type: IMessageType.SENT });
       io.to(workspaceId).emit("message", messageOptions);
     }
   }
