@@ -3,6 +3,8 @@ import mongoose, { Document, Schema } from "mongoose";
 export enum IMessageSource {
   DASHBOARD = "dashbaord",
   WIDGET = "widget",
+  BOTH = "both",
+  HUMAN_INTERVENTION = "human_intervention"
 }
 
 export enum IMessageType {
