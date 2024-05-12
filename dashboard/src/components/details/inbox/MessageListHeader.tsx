@@ -40,7 +40,7 @@ const RightFilterContainer = styled.div`
   justify-content: flex-end;
 `;
 
-export function MessageListHeader() {
+export const MessageListHeader = () => {
     const dispatch = useDispatch();
     const { selectedPage, channelsInfo } = useDashboard();
     const handleClick = ({ type, name, channelId }: ISelectedPage) => {
@@ -67,7 +67,7 @@ export function MessageListHeader() {
         dispatch(setSelectedFilter(value));
     };
 
-    const channelId:string = selectedPage?.channelId as string;
+    const channelId: string = selectedPage?.channelId as string;
     const currentChannelInfo = channelsInfo[channelId];
     return (
         <Wrapper>
@@ -75,17 +75,17 @@ export function MessageListHeader() {
             <div style={{ padding: "0px 12px" }}>
                 <Flex justify={"space-between"} align={"center"}>
                     <Box display={'flex'} style={{
-                        gap:'12px'
+                        gap: '12px'
                     }}>
-                        <Text 
-                         style={{
-                            border: "1px solid #D0D5DD",
-                            borderRadius: "6px",
-                            paddingLeft: "8px",
-                            paddingRight: "8px",
-                            marginLeft: "0px",
-                        }}
-                        color="#344054" fw={"500"} fz="12px">
+                        <Text
+                            style={{
+                                border: "1px solid #D0D5DD",
+                                borderRadius: "6px",
+                                paddingLeft: "8px",
+                                paddingRight: "8px",
+                                marginLeft: "0px",
+                            }}
+                            color="#344054" fw={"500"} fz="12px">
                             {'Inbox'}
                         </Text>
                         <Image
@@ -94,8 +94,8 @@ export function MessageListHeader() {
                             onClick={gotoSettingsPage}
                             radius="md"
                             src={settingIcon}
-                            />
-                            </Box>
+                        />
+                    </Box>
 
                     <Box
                         style={{
@@ -103,30 +103,30 @@ export function MessageListHeader() {
                             alignItems: "center",
                             justifyContent: "flex-end"
                         }}>
-                                <Text 
-                         style={{
-                            border: "1px solid #D0D5DD",
-                            borderRadius: "6px",
-                            paddingLeft: "8px",
-                            paddingRight: "8px",
-                            marginLeft: "0px",
-                        }}
-                        color="#344054" fw={"500"} fz="12px">
+                        <Text
+                            style={{
+                                border: "1px solid #D0D5DD",
+                                borderRadius: "6px",
+                                paddingLeft: "8px",
+                                paddingRight: "8px",
+                                marginLeft: "0px",
+                            }}
+                            color="#344054" fw={"500"} fz="12px">
                             {'Enable AI'}
                         </Text>
                         <SwitchWithLabel
                             onClick={async (e) => {
-                                const aiEnablePayload = {isAIEnabled:e.target.checked};
+                                const aiEnablePayload = { isAIEnabled: e.target.checked };
 
-                                const updateNotificatonMessage = await updateChannel(channelId, {...currentChannelInfo ,...aiEnablePayload});
-                                await dispatch(updateIsAIEnabled({...aiEnablePayload, channelId})); 
+                                const updateNotificatonMessage = await updateChannel(channelId, { ...currentChannelInfo, ...aiEnablePayload });
+                                await dispatch(updateIsAIEnabled({ ...aiEnablePayload, channelId }));
                                 if (updateNotificatonMessage?.status !== 200) {
                                     showNotification({
-                                      title: "Notification",
-                                      message: "Something went wrong",
-                                      color: "red"
+                                        title: "Notification",
+                                        message: "Something went wrong",
+                                        color: "red"
                                     });
-                                  }
+                                }
                             }}
                             value={!!currentChannelInfo?.isAIEnabled}
                         />

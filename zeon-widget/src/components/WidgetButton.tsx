@@ -2,7 +2,7 @@ import socketInstance from "api/socket";
 import ZeonWidgetModal from "components/modal/ZeonWidgetModal";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { clearPrevChat, IMessageSource, IUIStepType, setAllOpenConversations, setMessage, setShowWidget, setStep } from "redux/slice";
+import { IMessageSource, setAllOpenConversations, setMessage, setShowWidget } from "redux/slice";
 import styled from "styled-components";
 import { MessageType } from "./chat/Chat.types";
 import useWidget from "./hooks/useWidget";
@@ -26,7 +26,7 @@ const WidgetButton = () => {
   const [isMessageUpdated, setIsMessageUpdated] = useState(false);
   const { step ,widgetDetails, showWidget, allOpenConversations, messages } = useWidget();
   const playAudio = () => {
-    audioPlayer?.current?.play();
+    // audioPlayer?.current?.play();
   }
 
   const handleMessageReceived = (processData: any, isNewTicket:boolean) => {
@@ -46,7 +46,7 @@ const WidgetButton = () => {
         // Push the new message into the messages array of the active conversation
         currentActiveConversation.unreadMessage = (currentActiveConversation?.unreadMessage || 0) + 1;
         currentActiveConversation.messages.push({
-          message: processData.message,
+        message: processData.message,
           type: MessageType.RECEIVED,
           time: Date.now().toString()
         });
@@ -71,46 +71,41 @@ const WidgetButton = () => {
     }
   }
 
-  const handleCloseTicket = () => {
-    localStorage.removeItem("channelId");
-    localStorage.removeItem("messages");
-    dispatch(clearPrevChat())
-
-    dispatch(setStep(IUIStepType.INITIAL)); 
-  }
+  useEffect(()=>{
+    const ticketId = localStorage.getItem("ticketId");
+      if (ticketId) {
+        socketInstance.emit("join_ticket", {
+          ticketId,
+          workspaceId: widgetDetails?.workspaceId,
+          source:IMessageSource.WIDGET
+        });
+      }
+  },[])
 
   useEffect(() => {
     socketInstance.on('connect', function() {
       const ticketId = localStorage.getItem("ticketId");
       if (ticketId) {
-        socketInstance.emit("join-room", ticketId);
+        socketInstance.emit("join_ticket", {
+          ticketId,
+          workspaceId: widgetDetails?.workspaceId,
+          source:IMessageSource.WIDGET
+        });
       }
     });
 
-    socketInstance.on("message", (data) => {
+    socketInstance.on("message", (data) => { 
       console.log('Message Received:', data);
       if (data?.messageSource == IMessageSource.DASHBOARD || data?.messageSource ==  IMessageSource.BOTH) {
         setIsMessageUpdated((prev)=> !prev);
         const checkIsThisNewTicket:boolean = (!!allOpenConversations.find((conversation) => conversation.ticketId === data.ticketId))
-        //  || (!!localStorage.getItem('ticketId'));
-        console.log('checkIsThisNewTicket', checkIsThisNewTicket);
         handleMessageReceived(data, checkIsThisNewTicket);
         playAudio()
       }
     })
 
-    socketInstance.on("close-ticket", (data)=> {
-      handleCloseTicket()
-    })
-
-    if(localStorage.getItem("ticketId")) {
-      socketInstance.emit("reconnect",{ticketId:localStorage.getItem("ticketId")})
-    }
-
     return () => {
       socketInstance.off("message");
-      socketInstance.off("typing");
-      socketInstance.off("close-ticket");
     }
   }, [socketInstance, isMessageUpdated]);
 

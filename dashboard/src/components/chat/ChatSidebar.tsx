@@ -2,15 +2,15 @@ import { LoadingOverlay, Navbar, Space } from "@mantine/core";
 import channelCreate from "assets/channelCreate.svg";
 import SubscribeModal from "components/Billing/SubscribeModal";
 import CreateChannelModalNew from "components/channel/CreateChannelModalNew";
+import ChannelList, { IChannelData } from "components/details/inbox/component/ChannelList";
+import { SideBarInnerWrapper, SideBarTopWrapper } from "components/details/inbox/inbox.styles";
 import PanelLabel from "components/widget/PanelLabel";
 import useDashboard from "hooks/useDashboard";
 import _ from "lodash";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { ISelectedPage, setActiveChat, setSelectedPage } from "reducer/slice";
-import styled from "styled-components"
-import ChannelList, { IChannelData } from "components/details/inbox/component/ChannelList";
-import { SideBarInnerWrapper, SideBarTopWrapper } from "components/details/inbox/inbox.styles";
+import styled from "styled-components";
 
 const MainWrapper = styled.div`
     height: calc(100vh - 62px);
@@ -79,16 +79,12 @@ const ChatSidebar = ({ workspaceId }: { workspaceId: string }) => {
           <ChannelList
             channelData={channel}
             onChannelClick={(singleChannel: IChannelData) => {
-              localStorage.setItem(
-                "zeon-dashboard-channelId",
-                singleChannel.channelId
-              );
+              localStorage.setItem("zeon-dashboard-channelId", singleChannel.channelId);
               handleClick({
                 type: "detail",
                 name: "inbox",
                 channelId: singleChannel.channelId,
               });
-              //@ts-ignore
               dispatch(setActiveChat(null));
             }}
           />

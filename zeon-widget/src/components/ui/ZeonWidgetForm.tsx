@@ -82,9 +82,10 @@ const ZeonWidgetForm = () => {
           message,
           isOpen: true,
           widgetId,
-          type: "Computer (laptop)",
+          type: MessageType.SENT,
           ticketId,
           ipAddress: output?.data?.ip || "",
+          messageSource: IMessageSource.WIDGET
         },
         messageSource: IMessageSource.WIDGET,
       };
@@ -135,14 +136,6 @@ const ZeonWidgetForm = () => {
       console.log("error", error);
     }
   };
-
-  useEffect(() => {
-    socketInstance.on("connect", () => {});
-
-    return () => {
-      socketInstance.off("connect");
-    };
-  }, []);
 
   return (
     <Wrapper as={"form"} onSubmit={handleSubmit(submitForm)}>

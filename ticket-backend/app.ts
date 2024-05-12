@@ -1,39 +1,31 @@
 // @ts-nocheck
+import { instrument } from "@socket.io/admin-ui";
 import { createAdapter } from "@socket.io/mongo-adapter";
-import { Channel, Connection } from "amqplib";
 import cors from "cors";
 import express, { Request, Response } from "express";
 import { createServer } from "http";
 import mongoose from "mongoose";
 import { Server, Socket } from "socket.io";
 import MessageModel from "./model/MessageModel";
-import TicketModel, { ITicketModel } from "./model/TicketModel";
-import { connectQueue } from "./mq/connect";
-import { initConsumer } from "./mq/consumer";
-import { sendMessage, sendMessageIo } from "./mq/producer";
-import { MessageOptions, ITicketOptions } from "./schema/types/ticket";
+import TicketModel from "./model/TicketModel";
+import { sendMessageIo } from "./mq/producer";
+import { ITicketOptions, MessageOptions } from "./schema/types/ticket";
+
+import ChannelModel from "./model/ChannelModel";
+import User from "./model/UserModel";
+import CoreService, { ISendSlackMessage } from "./services/CoreService";
 import {
-  createDashboardSocket,
   createMessage,
   getAdapterCollection,
   getChannelByID,
   getChannelIDByReferenceCode,
-  getConnectedDashboardSockets,
   getMessagesByTicketID,
-  getTicketByID,
-  getTicketByIDTemp,
-  removeDashboardSocket,
-  updateClientSocketId,
-  updateTicketStatus,
-  updateTicketStatusByTicketId,
+  updateTicketStatus
 } from "./services/DataBaseService";
+import ExternalService from "./services/ExternalService";
 import {
   openTicket,
 } from "./services/SlackService";
-import CoreService, { ISendSlackMessage } from "./services/CoreService"
-import ChannelModel from "./model/ChannelModel";
-import User from "./model/UserModel";
-import ExternalService from "./services/ExternalService";
 
 export interface ISocketTicketPayload {
   workspaceId: string;
@@ -50,17 +42,21 @@ const app = express();
 const httpServer = createServer(app);
 app.use(cors());
 const io = new Server(httpServer, {
-  // transports: ["websocket"],
+  cors:{
+    origin:['https://admin.socket.io'],
+    credentials: true
+  }
 });
-
+instrument(io, {
+  auth: false,
+  mode: "development",
+});
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const port: string | number = process.env.TICKET_BACKEND_PORT || 8080;
 
 
-let mqChannel: Channel;
-let mqConnection: Connection;
 io.on("connection", (socket:Socket) => {
 
   socket.on("open-ticket", async (ticketOptions: ITicketOptions) => {
@@ -82,7 +78,6 @@ io.on("connection", (socket:Socket) => {
         widgetId: widgetId
       }
 
-      socket.join(ticketId);
       io.in(ticketId).emit("open-ticket", socketTicketPayload);
 
 
@@ -197,14 +192,12 @@ io.on("connection", (socket:Socket) => {
       //       messageOptions
       //     }
 
-      //     await sendMessage(mqChannel, dashboardData);
 
       //     const widgetData = {
       //       source: "widget",
       //       messageOptions
       //     }
 
-      //     await sendMessage(mqChannel, widgetData);
       //   }
       // }
     } catch (error) {
@@ -212,27 +205,24 @@ io.on("connection", (socket:Socket) => {
     }
   });
 
-  socket.on("join-room", async (ticketId: string) => {
-    socket.join(ticketId);
-  })
 
   socket.on("message", async (messageOptions: MessageOptions) => {
     const channelId = messageOptions?.channelId;
     const workspaceId = messageOptions?.workspaceId;
     const ticketId = messageOptions?.ticketId;
+    const message = messageOptions.message;
  
-
-    const channel = await ChannelModel.findOne({ channelId: messageOptions.channelId });
+    const channel = await ChannelModel.findOne({ channelId });
     const isSlackConfigured = channel?.slackChannelId;
     const isAIEnabled = channel?.isAIEnabled;
 
     // send message to slack when the slack in configured
     if (isSlackConfigured) {
-      const getThread_rs = await TicketModel.findOne({ ticketId: messageOptions.ticketId });
+      const getThread_rs = await TicketModel.findOne({ ticketId });
       if (getThread_rs?.thread_ts) {
         const slackPayload: ISendSlackMessage = {
-          channelId: channel.slackChannelId,
-          message: messageOptions.message,
+          channelId,
+          message ,
           token: channel.accessToken,
           thread_ts: getThread_rs?.thread_ts
         }
@@ -245,7 +235,8 @@ io.on("connection", (socket:Socket) => {
       messageOptions,
     };
 
-    // await sendMessage(mqChannel, data);
+
+    // configure send message here
     await sendMessageIo(socket, data);
 
      // if AI Enabled
@@ -274,92 +265,38 @@ io.on("connection", (socket:Socket) => {
     //       messageOptions
     //     }
 
-    //     await sendMessage(mqChannel, data);
+
+    // configure send message here
 
     //     const widgetData = {
     //       source: "widget",
     //       messageOptions
     //     }
 
-    //     await sendMessage(mqChannel, widgetData);
+    // configure send message here
     //   }
     // }
   });
 
-  socket.on("reconnect", async (ticketId: any) => {
-    await updateClientSocketId(ticketId.ticketId, socket.id);
-  });
 
-  socket.on("dashboard-connect-event", async (workspaceId: string) => {
-    try {
-      await createDashboardSocket(workspaceId, socket.id);
-    } catch (error) {
-      console.error(error);
-    }
-  });
 
-  socket.on("dashboard-disconnect-event", async (workspaceId: string) => {
-    try {
-      // TODO: Discuss with kaush
-      // await removeDashboardSocket(socket.id);
-    } catch (error) {
-      console.error(error);
-    }
-  });
 
-  socket.on("disconnect", async (reason: any) => {
-    try {
-      // TODO: Discuss with kaush
-      // await removeDashboardSocket(socket.id);
-    } catch (error) {
-      console.error(error);
-    }
-  });
 
-  socket.on("dashboard-reconnect-event", async (workspaceId: string) => {
-    try {
-      await createDashboardSocket(workspaceId, socket.id);
-    } catch (error) {
-      console.error(error);
-    }
-  });
+  socket.on("join_ticket", (data)=> {
+    console.log('data', data);
+    socket.join(data.workspaceId);
+    
+    // boom working one    
+    // socket.broadcast.to(data.ticketId).emit("message", {
+    // "test":"new"
+    // })
 
-  // this is the even we use to send message to the widget from the dashboard
-  socket.on(
-    "dashboard-message-event",
-    async (messageOptions: MessageOptions) => {
-      const data = {
-        source: "dashboard",
-        messageOptions,
-      };
+  // boom bang!  working    
+    // io.to(data.ticketId).emit("message", {
+    //   "test":"new"
+    //   });
+  })
 
-      // await sendMessage(mqChannel, data);
-      await sendMessageIo(socket, data);
-    }
-  );
-  socket.on(
-    "dashboard-update-ticket-status-event",
-    async ({ ticketId, isOpen }: { ticketId: string; isOpen: boolean }) => {
-      try {
-        const updateResult = await updateTicketStatusByTicketId(
-          ticketId,
-          !isOpen
-        );
-        if (updateResult) {
-          const ticket:ITicketModel | null = await getTicketByIDTemp(messageOptions.ticketId);
-          if (ticket) {
-            if (isOpen) {
-              io.to(ticket.socketId).emit("close-ticket", ticketId);
-            } else {
-              io.to(ticket.socketId).emit("reopen-ticket", ticketId);
-            }
-          }
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  );
 });
 const MONGODB_DB_URI: string = process.env.DB_URI as string + process.env.DB_NAME as string;
 
@@ -369,27 +306,12 @@ mongoose.connect(MONGODB_DB_URI).then(() => {
   console.log(`Error: MongoDB connection error for  Db. Please make sure MongoDB is running. ${err}`);
 });
 
-io.on("socket-adapter-event", (data: any) => {
-  if (io.sockets.adapter.sids.get(data.socketId) != undefined) {
-    io.to(data.socketId).emit("message", data.msgOptions);
-  }
-});
+
 
 app.post("/ticket/status", async (req, res) => {
   const { ticketId, isOpen } = req.body;
   try {
-    const updateResult = await updateTicketStatus(ticketId, isOpen);
-    if (updateResult) {
-      const ticket: any = await getTicketByID(ticketId);
-      if (ticket) {
-        // await updateTicket(ticket, isOpen);
-        if (isOpen) {
-          io.to(ticket.socketId).emit("close-ticket", ticketId);
-        } else {
-          io.to(ticket.socketId).emit("reopen-ticket", ticketId);
-        }
-      }
-    }
+    await updateTicketStatus(ticketId, isOpen);
     return res.status(200).json({
       code: '200',
       message: `Ticket Status Fetched`,
@@ -516,7 +438,7 @@ app.post('/slack/events', async (req, res) => {
           messageOptions
         }
 
-        // await sendMessage(mqChannel, data);
+        // configure send message here
         await sendMessageIo(socket, data);
       }
     }
@@ -537,7 +459,7 @@ app.post('/send/message', async (req, res) => {
   const isAIEnabled = channel?.toObject().isAIEnabled;
   
   if (isNewTicket) {
-    await openTicket(messageData, "socket.id"); // pass socketId
+    await openTicket(messageData, "no_socket_id"); // pass socketId
     
     socketTicketPayload = {
       workspaceId: workspaceId,
@@ -550,6 +472,8 @@ app.post('/send/message', async (req, res) => {
       isNewTicket,
       messageSource
     }
+
+    io.to(workspaceId).emit("message", socketTicketPayload)
   } else {
     // store the actual message in the message collection
     await createMessage({...messageData, createdAt: new Date()});
@@ -564,12 +488,15 @@ app.post('/send/message', async (req, res) => {
       widgetId,
       messageSource
     }
+
+    io.to(workspaceId).emit("message", socketTicketPayload);
   }
 
   // store the actual message in the message collection
 
   // emit the event to the widget or dashboard
-  io.emit("message", socketTicketPayload);
+  
+  // io.emit("message", socketTicketPayload);
 
   if (isAIEnabled && messageSource ==  "widget") {
     const aiMessagepayload = {
@@ -594,7 +521,8 @@ app.post('/send/message', async (req, res) => {
         messageSource: "both"
       }
       await createMessage({ ...messageData, createdAt: new Date(), message: aiResponse?.text });
-      io.emit("message", messageOptions);
+      // io.emit("message", messageOptions);
+      io.to(workspaceId).emit("message", messageOptions);
     }
   }
   
@@ -619,11 +547,5 @@ async function init() {
       console.log("Server event adapter created");
     }).catch((error) => console.error(error));
 
-  // Open a message queue connection
-  let queue = await connectQueue();
-  mqChannel = queue?.channel as Channel;
-  mqConnection = queue?.connection as Connection;
 
-  // Initialize consumer
-initConsumer(mqChannel, io);
 }

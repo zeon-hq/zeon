@@ -7,6 +7,7 @@ import _ from "lodash";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
+import socketInstance from "socket";
 import { useLocation, useParams } from "react-router-dom";
 import { ISelectedPage, setActiveChat, setDefaultWorkSpaceSettingTab, setLoading, setNewMessageToFalse, setSelectedPage, setShowSidebar } from "reducer/slice";
 import styled from "styled-components";
@@ -240,6 +241,12 @@ const MessageContainer = () => {
             <>
               <MessageBox
                 onClick={() => {
+                  socketInstance.emit("join_ticket", {
+                    workspaceId,
+                    ticketId:conversation.ticketId,
+                    channelId:conversation.channelId,
+                    source:'dashboard'
+                  })
                   localStorage.setItem("channelId", conversation.channelId);
                   dispatch(setActiveChat(conversation));
                   dispatch(setNewMessageToFalse(conversation.ticketId));

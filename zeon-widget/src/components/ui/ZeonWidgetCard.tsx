@@ -1,116 +1,19 @@
-import { Card as MTCard, Space, Text } from "@mantine/core";
+import { Text } from "@mantine/core";
 import { getChannelById, getOpenTicket } from "api/api";
-import { IPropsType, MessageType } from "components/chat/Chat.types";
-import {
-  generateRandomString,
-  preProcessText,
-} from "components/hooks/commonUtils";
-import useEmbeddable, {
-  IEmbeddableOutput,
-} from "components/hooks/useEmbeddable";
-import useWidget from "components/hooks/useWidget";
-import { ReactNode, useEffect } from "react";
-import { AiOutlineArrowRight } from "react-icons/ai";
-import { useDispatch } from "react-redux";
-import {
-  IUIStepType,
-  setAllOpenConversations,
-  setEmail,
-  setMessage,
-  setStep,
-  setWidgetDetails,
-} from "redux/slice";
-import styled from "styled-components";
-import { Badge } from '@mantine/core';
 import socketInstance from "api/socket";
-import ChatWidgetCard from "./ChatWidgetCard";
+import { IPropsType, MessageType } from "components/chat/Chat.types";
+import { generateRandomString, preProcessText } from "components/hooks/commonUtils";
+import useEmbeddable, { IEmbeddableOutput } from "components/hooks/useEmbeddable";
+import useWidget from "components/hooks/useWidget";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { IMessageSource, IUIStepType, setAllOpenConversations, setEmail, setMessage, setStep, setWidgetDetails } from "redux/slice";
+import styled from "styled-components";
+import SingleCard from "./SingleCard";
 const WholeWrapper = styled.div`
-  ${(props: IPropsType) => (props.theme.isEmbeddable ? "height: 100%;" : "")}
+${(props: IPropsType) => props.theme.isEmbeddable ? 'height: 100%;' : ''}
 `;
 
-type SingleCardProps = {
-  heading: string;
-  text: string;
-  icon?: ReactNode;
-  bg?: string;
-  onClick?: () => void;
-  textColor: "black" | "white";
-  isContinueConversation?: boolean;
-  totalUnreadMessage?: number;
-};
-
-export const SingleCard = ({
-  heading,
-  text,
-  icon,
-  bg = "",
-  textColor = "black",
-  onClick = () => { },
-  isContinueConversation = false,
-  totalUnreadMessage = 0,
-}: SingleCardProps) => {
-  return (
-    <MTCard
-      styles={{
-        root: {
-          borderRadius: "12px",
-          borderColor: "1px solid var(--gray-200, #EAECF0)",
-          "&:hover": {
-            cursor: "pointer",
-          },
-        },
-      }}
-      onClick={onClick}
-      mt={isContinueConversation ? 0 : 15}
-      style={{
-        cursor: "pointer",
-        width: "100%",
-        border: "1px solid #DEE2E6",
-        backgroundColor: bg ? bg : " #fff",
-      }}
-    >
-      <MTCard.Section p={10}>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-            {icon}
-            <Text
-              color={textColor === "black" ? "dark" : "white"}
-              size="sm"
-              weight={500}
-            >
-              {" "}
-              {heading}{" "}
-            </Text>
-          </div>
-          <div>
-            {
-              totalUnreadMessage > 0 ?
-                <Badge color="blue" size="sm">{totalUnreadMessage}</Badge>
-                :
-                <AiOutlineArrowRight />
-            }
-          </div>
-        </div>
-
-        <Space h={5}></Space>
-        <Text
-          truncate
-          color={textColor === "black" ? "dark" : "white"}
-          size="sm"
-        >
-          {" "}
-          {text}{" "}
-        </Text>
-      </MTCard.Section>
-    </MTCard>
-  );
-};
 
 /**
  *
@@ -121,33 +24,20 @@ export const SingleCard = ({
 
 const ZeonWidgetCard = () => {
   const dispatch = useDispatch();
-  const { widgetDetails, isOutOfOperatingHours, allOpenConversations } =
-    useWidget();
+  const { widgetDetails, isOutOfOperatingHours, allOpenConversations } = useWidget();
   const isEmbeddable: IEmbeddableOutput = useEmbeddable();
-  const enableDuringOperatingHours =
-    widgetDetails?.behavior?.operatingHours?.enableOperatingHours;
-  const hideNewConversationButtonWhenOffline =
-    widgetDetails?.behavior?.operatingHours
-      ?.hideNewConversationButtonWhenOffline;
-  const operatingHoursToTime =
-    widgetDetails?.behavior?.operatingHours?.operatingHours.to;
-  const operatingHoursFromTime =
-    widgetDetails?.behavior?.operatingHours?.operatingHours.from;
-  const operatingHoursTimeZone =
-    widgetDetails?.behavior?.operatingHours?.timezone;
+  const enableDuringOperatingHours = widgetDetails?.behavior?.operatingHours?.enableOperatingHours;
+  const hideNewConversationButtonWhenOffline = widgetDetails?.behavior?.operatingHours?.hideNewConversationButtonWhenOffline;
+  const operatingHoursToTime = widgetDetails?.behavior?.operatingHours?.operatingHours.to;
+  const operatingHoursFromTime = widgetDetails?.behavior?.operatingHours?.operatingHours.from;
+  const operatingHoursTimeZone = widgetDetails?.behavior?.operatingHours?.timezone;
 
-  const hideNewConversationButtonWhenOfflineAndOutOfOperatingHours =
-    enableDuringOperatingHours &&
-    hideNewConversationButtonWhenOffline &&
-    isOutOfOperatingHours(
-      operatingHoursFromTime,
-      operatingHoursToTime,
-      operatingHoursTimeZone
-    );
+  const hideNewConversationButtonWhenOfflineAndOutOfOperatingHours = enableDuringOperatingHours && hideNewConversationButtonWhenOffline && isOutOfOperatingHours(operatingHoursFromTime, operatingHoursToTime, operatingHoursTimeZone);
 
   useEffect(() => {
     getOpenTicketData();
   }, []);
+
 
   const getOpenTicketData = async () => {
     const getWidgetId: any = localStorage.getItem("widgetId");
@@ -162,7 +52,11 @@ const ZeonWidgetCard = () => {
   const getChannel = async (channelId: string) => {
     try {
       const res = await getChannelById(channelId);
-      if (res.status !== 200) {
+      if (res.status != 200) {
+        socketInstance.emit("join_ticket", {
+          workspaceId:res.data.channel.workspaceId,
+          source:IMessageSource.WIDGET
+        })
         dispatch(setWidgetDetails(res.data.channel));
         getOpenTicketData();
       } else {
@@ -175,66 +69,82 @@ const ZeonWidgetCard = () => {
 
   useEffect(() => {
     // get channelId from the invoke script of the widget
-    "RAF2On" && getChannel("RAF2On" as string);
+    ('RAF2On') && getChannel('RAF2On' as string);
   }, [isEmbeddable?.channelId]);
   return (
     <>
       <WholeWrapper>
-        {hideNewConversationButtonWhenOfflineAndOutOfOperatingHours ? (
-          <></>
-        ) : (
-          <>
-            {allOpenConversations.length > 0 && (
-              <Text size="sm" weight={500} mt="8px">
-                Open Tickets
-              </Text>
-            )}
-            {allOpenConversations.length > 0 &&
-              allOpenConversations.map((data: any, index: number) => {
-                console.log(data);
-                const rawMessage = data.messages.length === 1 ? data.text :
-                           data.messages[data.messages.length - 1]?.message || "";
+        {hideNewConversationButtonWhenOfflineAndOutOfOperatingHours
+          ? (
+            <></>
+          ) : (
+            <>
+              {
+                allOpenConversations.length > 0 &&
+                <Text size="sm" weight={500} mt="8px">
+                  Open Tickets
+                </Text>
+              }
+              {allOpenConversations.length > 0 &&
+                allOpenConversations.map((data: any, index: number) => {
+                  const message = data.messages[data.messages.length - 1]?.message || "";
+                  const contextMessage = { email: data.customerEmail };
+                  const replacedMessage = preProcessText(message, contextMessage);
 
-                const message = rawMessage.length > 28 ? `${rawMessage.substring(0, 28)}...` : rawMessage;
-                const contextMessage = { email: data.customerEmail };
-                const replacedMessage = preProcessText(message, contextMessage);
+                  return (
+                    <>
+                      <SingleCard
+                        key={index}
+                        totalUnreadMessage={data.unreadMessage}
+                        heading={`Ticket Number: ${data.ticketId}`}
+                        text={`${data.messages[data.messages.length - 1]?.type === MessageType.SENT ? "You" : "Agent"} : ${replacedMessage}`}
+                        onClick={() => {
+                          socketInstance.emit("join_ticket", {
+                            workspaceId:widgetDetails?.workspaceId,
+                            ticketId:data.ticketId,
+                            channelId:isEmbeddable?.channelId,
+                            source:IMessageSource.WIDGET
+                          })
 
-                return (
-                  <>
-                    <ChatWidgetCard
-                      onClick={() => {
-                        socketInstance.emit("join-room", data.ticketId);
+                          localStorage.setItem("ticketId", data.ticketId);
+                          const messageDataArray = [
+                            ...[
+                              {
+                                type: MessageType.SENT,
+                                time: data.createdAt,
+                                message: data.text,
+                              },
+                            ],
+                            ...data.messages,
+                          ];
+                          dispatch(setMessage(messageDataArray));
+                          dispatch(setEmail(data.customerEmail));
+                          dispatch(setStep(IUIStepType.CHAT));
+                        }}
+                        textColor={"black"}
+                      />
+                    </>
+                  );
+                })}
+            </>
+          )}
 
-                        localStorage.setItem("ticketId", data.ticketId);
-                        const messageDataArray = [
-                          ...[
-                            {
-                              type: MessageType.SENT,
-                              time: data.createdAt,
-                              message: data.text,
-                            },
-                          ],
-                          ...data.messages,
-                        ];
-                        dispatch(setMessage(messageDataArray));
-                        dispatch(setEmail(data.customerEmail));
-                        dispatch(setStep(IUIStepType.CHAT));
-                      }}
-                      heading={`Ticket Number: ${data.ticketId}`}
-                      text={`${
-                        data.messages[data.messages.length - 1]?.type ===
-                        MessageType.RECEIVED
-                          ? "Agent"
-                          : "You"
-                      } : ${replacedMessage}`}
-                    />
-                  </>
-                );
-              })}
-          </>
-        )}
+        {widgetDetails?.inChatWidgets.length > 0 &&
+          <Text size="sm" weight={500} mt="16px">
+            {" "}
+            Resources{" "}
+          </Text>
+        }
+        {widgetDetails?.inChatWidgets.map((item, index) => (
+          <SingleCard
+            key={index}
+            heading={item.title}
+            text={item.subTitle}
+            onClick={() => window.open(item.link, "_blank")}
+            textColor={"black"}
+          />
+        ))}
 
-       
       </WholeWrapper>
     </>
   );

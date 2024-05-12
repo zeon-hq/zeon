@@ -1,23 +1,5 @@
-import { Channel } from "amqplib";
 import { Socket } from "socket.io";
 import { createMessage } from "../services/DataBaseService";
-
-
-export async function sendMessage(channel: Channel, data: any) {
-    try {
-        await createMessage({...data.messageOptions, createdAt: new Date()});
-
-        // Ensure the message is sent to the queue
-        const sent = channel.sendToQueue("ticket-message-queue", Buffer.from(JSON.stringify(data)));
-        if (!sent) {
-            console.error('Message buffer is full, or channel is closed');
-        } else {
-            console.log('Message sent successfully');
-        }
-    } catch (error) {
-        console.error('Error in sendMessage:', error);
-    }
-}
 
 export async function sendMessageIo(socket:Socket, data: any) {
   try {

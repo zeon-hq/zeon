@@ -30,9 +30,6 @@ const Layout = ({ children }: { children: any }) => {
   useEffect(() => {
     //@ts-ignore
     dispatch(initDashboard(workspaceId))
-    socketInstance.on("connect", () => {
-      socketInstance.emit("dashboard-connect-event", { workspaceId, ticketId:activeChat?.ticketId });
-    })
 
     // socketInstance.off("message").on("message", (data) => {
     //   dispatch(updateConversation({ data, type: MessageType.SENT }));
@@ -48,12 +45,6 @@ const Layout = ({ children }: { children: any }) => {
         }
       }
     })
-
-    socketInstance.on("connect_error", (err) => {
-      console.log(`connect_error due to ${err.message}`);
-    })
-
-    socketInstance.emit("dashboard-reconnect-event", { workspaceId, ticketId:activeChat?.ticketId });
   }, [socketInstance, workspaceId]); // eslint-disable-line
 
   return (

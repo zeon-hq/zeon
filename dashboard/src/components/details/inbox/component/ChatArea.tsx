@@ -6,11 +6,10 @@ import { FormEvent, useEffect, useState } from "react";
 import { BsArrow90DegDown } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import { MessageType, updateConversation } from "reducer/slice";
-import socketInstance from "socket";
+import { sendMessageAPI } from "service/CoreService";
 import { IMessage } from "../inbox.types";
 import SelectCannedResponse from "./SelectCannedResponseChatArea";
 import SingleMessage from "./SingleMessage";
-import { sendMessageAPI } from "service/CoreService";
 interface ITabContent {
   onFormSubmit: (e: any, type: MessageType) => void;
   type: MessageType;
@@ -88,16 +87,7 @@ const ChatArea = () => {
     const channelId = localStorage.getItem("channelId");
     const ticketId = activeChat?.ticketId;
     const workspaceId = workspaceInfo?.workspaceId;
-    socketInstance.emit("dashboard-message-event", {
-      workspaceId: workspaceInfo?.workspaceId,
-      channelId,
-      type,
-      isRead: true,
-      message,
-      ticketId,
-    });
-
-
+  
     const sendMessagePayload = {
       ticketId: ticketId,
       workspaceId,
@@ -110,6 +100,7 @@ const ChatArea = () => {
         isOpen: true,
         type: MessageType.RECEIVED,
         ticketId,
+        messageSource: "dashboard"
       },
       messageSource: "dashboard"
     }
