@@ -88,7 +88,11 @@ export default class CoreService {
                     })
                     .catch((error) => {
                         console.error(`Error in Send slack, Error: ${error?.message || error}`);
-                        return resolve(error?.message || error);
+                        const errorObj = {
+                            error: error?.message || error
+                        }
+                        
+                        return resolve(errorObj);
                     });
             } catch (error) {
                 console.error(`Error in Send slack, Error: ${error}`);

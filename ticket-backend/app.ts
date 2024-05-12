@@ -507,7 +507,8 @@ app.post('/send/message', async (req, res) => {
     }
 
     const aiResponse = await CoreService.getAIMessage(aiMessagepayload);
-    if (aiResponse) {
+    if (!aiResponse?.error) {
+      const message = aiResponse?.text;
       const messageOptions: MessageOptions = {
         workspaceId,
         channelId,
@@ -515,12 +516,29 @@ app.post('/send/message', async (req, res) => {
         isRead: true,
         type: messageData.type,
         time: messageData.createdAt,
-        message: aiResponse?.text,
+        message,
         ticketId,
         widgetId,
         messageSource: "both"
       }
-      await createMessage({ ...messageData, createdAt: new Date(), message: aiResponse?.text });
+      await createMessage({ ...messageData, createdAt: new Date(), message });
+      // io.emit("message", messageOptions);
+      io.to(workspaceId).emit("message", messageOptions);
+    } else {
+      const message = `${aiResponse?.error} \n Note: this is only appears in the dashboard, customers won't see this message`;
+      const messageOptions: MessageOptions = {
+        workspaceId,
+        channelId,
+        type: "sent",
+        isRead: true,
+        type: messageData.type,
+        time: messageData.createdAt,
+        message,
+        ticketId,
+        widgetId,
+        messageSource: "widget"
+      }
+      await createMessage({ ...messageData, createdAt: new Date(), message });
       // io.emit("message", messageOptions);
       io.to(workspaceId).emit("message", messageOptions);
     }
