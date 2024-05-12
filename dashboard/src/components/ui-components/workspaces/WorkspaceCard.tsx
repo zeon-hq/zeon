@@ -9,6 +9,7 @@ import { IWorkspace } from "reducer/slice";
 import styled from "styled-components";
 import { getConfig as Config } from "config/Config";
 import axios from "axios";
+import socketInstance from "socket";
 
 type Props = {
   name: string;
@@ -101,6 +102,10 @@ const WorkspaceCard = ({
     <>
       <Wrapper
         onClick={() => {
+          socketInstance.emit("join_ticket", {
+            workspaceId,
+            source:'dashboard'
+          })
           if (activePlan) {
             navigate(`/${workspaceId}/chat`);
           } else {

@@ -1,4 +1,5 @@
 import { ReadStream } from "fs";
+import { IMessageSource } from "../../model/MessageModel";
 
 /**
  * Ticket event data options
@@ -33,7 +34,8 @@ export interface MessageOptions {
   firstName?: string;
   lastName?: string;
   image?: string;
-  ticketId?: string;
+  ticketId: string;
+  source: IMessageSource;
 }
 
 /**

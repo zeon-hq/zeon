@@ -3,11 +3,12 @@ import ZeonWidgetModal from "components/modal/ZeonWidgetModal";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { BrowserRouter, Route, Routes, useParams } from "react-router-dom";
-import { setWidgetDetails } from "redux/slice";
+import { IMessageSource, setWidgetDetails } from "redux/slice";
 import "./App.css";
 import WidgetButton from "components/WidgetButton";
 import ZThemeProvider from "components/provider/ZThemeProvider";
 import useEmbeddable, { IEmbeddableOutput } from "components/hooks/useEmbeddable";
+import socketInstance from "api/socket";
 
 function App({ widgetId }: any) {
   const dispatch = useDispatch();
@@ -16,6 +17,10 @@ function App({ widgetId }: any) {
   const getChannel = async (id:string) => {
     try {
       const res = await getChannelById(id);
+      socketInstance.emit("join_ticket", {
+        workspaceId:res.data.channel.workspaceId,
+        source:IMessageSource.WIDGET
+      })
       dispatch(setWidgetDetails(res.data.channel));
     } catch (error) {
       console.log(error);

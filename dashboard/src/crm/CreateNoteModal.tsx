@@ -40,7 +40,7 @@ const CreateNoteModal = ({
       await createNote({
         content: data.content,
         noteType: data.noteType,
-        source: "DASHBOARD",
+        source: "dashboard",
         resourceType: resourceType,
         resourceId: resourceId,
       })

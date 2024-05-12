@@ -241,10 +241,11 @@ const MessageContainer = () => {
             <>
               <MessageBox
                 onClick={() => {
-                  socketInstance.emit("join", {
+                  socketInstance.emit("join_ticket", {
+                    workspaceId,
                     ticketId:conversation.ticketId,
                     channelId:conversation.channelId,
-                    source:'DASHBOARD'
+                    source:'dashboard'
                   })
                   localStorage.setItem("channelId", conversation.channelId);
                   dispatch(setActiveChat(conversation));

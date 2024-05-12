@@ -110,8 +110,9 @@ const ZeonWidgetChat = () => {
             createdAt: Date.now().toString(),
             message,
             isOpen: true,
-            type: "Computer (laptop)",
+            type: MessageType.SENT,
             ticketId,
+            messageSource: IMessageSource.WIDGET
           },
           messageSource: IMessageSource.WIDGET
         }

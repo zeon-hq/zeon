@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import CreateWorkspaceModal from "./CreateWorkspaceModal";
 import zeonLogo from "assets/zeonLogo.svg";
+import socketInstance from "socket";
 
 interface IDropdownData {
     label: string;
@@ -27,8 +28,12 @@ const TopBarWorkSpaceLeftSelect = ({ workspaceId }: { workspaceId: string }) => 
     const navigate = useNavigate();
 
 
-    const handleChange = (value: string | null) => {
-        navigate(`/${value}/chat`);
+    const handleChange = (workspaceId: string | null) => {
+        socketInstance.emit("join_ticket", {
+            workspaceId,
+            source: 'dashboard'
+        })
+        navigate(`/${workspaceId}/chat`);
         window.location.reload();
     };
 
