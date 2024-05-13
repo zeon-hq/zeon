@@ -3,15 +3,22 @@ import mongoose, { Document, Schema } from "mongoose";
 export enum IMessageSource {
   DASHBOARD = "dashbaord",
   WIDGET = "widget",
+  BOTH = "both",
+  HUMAN_INTERVENTION = "human_intervention"
 }
 
+export enum IMessageType {
+  SENT = "sent",
+  RECEIVED = "received",
+  NOTE = "NOTE"
+}
 
 export interface IMessage extends Document {
   message: string;
   ticketId: string;
   workspaceId: string;
   createdAt: number;
-  type: string;
+  type: IMessageType;
   messageSource: IMessageSource;
   isRead: boolean;
 }

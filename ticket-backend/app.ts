@@ -6,7 +6,7 @@ import express, { Request, Response } from "express";
 import { createServer } from "http";
 import mongoose from "mongoose";
 import { Server, Socket } from "socket.io";
-import MessageModel from "./model/MessageModel";
+import MessageModel, { IMessageSource, IMessageType } from "./model/MessageModel";
 import TicketModel from "./model/TicketModel";
 import { sendMessageIo } from "./mq/producer";
 import { ITicketOptions, MessageOptions } from "./schema/types/ticket";
@@ -492,12 +492,6 @@ app.post('/send/message', async (req, res) => {
     io.to(workspaceId).emit("message", socketTicketPayload);
   }
 
-  // store the actual message in the message collection
-
-  // emit the event to the widget or dashboard
-  
-  // io.emit("message", socketTicketPayload);
-
   if (isAIEnabled && messageSource ==  "widget") {
     const aiMessagepayload = {
       question: messageData.message,
@@ -507,21 +501,62 @@ app.post('/send/message', async (req, res) => {
     }
 
     const aiResponse = await CoreService.getAIMessage(aiMessagepayload);
-    if (aiResponse) {
+    if (!aiResponse?.error) {
+
+      if (aiResponse.text === 'human_intervention_needed') {
+        // human intervention needed
+        const message = `human_intervention_needed`;
       const messageOptions: MessageOptions = {
         workspaceId,
         channelId,
-        type: "received",
+        type: IMessageType.SENT,
         isRead: true,
-        type: messageData.type,
         time: messageData.createdAt,
-        message: aiResponse?.text,
+        message,
         ticketId,
         widgetId,
-        messageSource: "both"
+        messageSource: "widget"
       }
-      await createMessage({ ...messageData, createdAt: new Date(), message: aiResponse?.text });
+      await createMessage({ ...messageData, createdAt: new Date(), message, type: IMessageType.SENT });
+      io.to(workspaceId).emit("message", messageOptions);
+
+      } else {
+      // success
+      const message = aiResponse?.text;
+      const messageOptions: MessageOptions = {
+        workspaceId,
+        channelId,
+        type: IMessageType.RECEIVED,
+        isRead: true,
+        time: messageData.createdAt,
+        message,
+        ticketId,
+        widgetId,
+        messageSource: IMessageSource.BOTH
+      }
+      await createMessage({ ...messageData, createdAt: new Date(), message, type: IMessageType.RECEIVED });
       // io.emit("message", messageOptions);
+      io.to(workspaceId).emit("message", messageOptions);
+    }
+
+
+      
+
+
+    } else {
+      const message = `${aiResponse?.error} \n Note: this is only appears in the dashboard, customers won't see this message`;
+      const messageOptions: MessageOptions = {
+        workspaceId,
+        channelId,
+        type: IMessageType.SENT,
+        isRead: true,
+        time: messageData.createdAt,
+        message,
+        ticketId,
+        widgetId,
+        messageSource: "widget"
+      }
+      await createMessage({ ...messageData, createdAt: new Date(), message, type: IMessageType.SENT });
       io.to(workspaceId).emit("message", messageOptions);
     }
   }
@@ -546,6 +581,4 @@ async function init() {
       io.adapter(createAdapter(collection));
       console.log("Server event adapter created");
     }).catch((error) => console.error(error));
-
-
 }
