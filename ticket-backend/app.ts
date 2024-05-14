@@ -538,11 +538,6 @@ app.post('/send/message', async (req, res) => {
       // io.emit("message", messageOptions);
       io.to(workspaceId).emit("message", messageOptions);
     }
-
-
-      
-
-
     } else {
       const message = `${aiResponse?.error} \n Note: this is only appears in the dashboard, customers won't see this message`;
       const messageOptions: MessageOptions = {
