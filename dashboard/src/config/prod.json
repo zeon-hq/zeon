@@ -1,8 +1,8 @@
 {
   "API_DOMAIN": "https://chat.zeonhq.com",
   "TICKET_SERVICE": "https://tickets.zeonhq.com",
-  "widgetJSFile": "https://zeonhq.b-cdn.net/zeon-widget.js",
-  "widgetCSSFile": "https://zeonhq.b-cdn.net/zeon-widget.css",
+  "widgetJSFile": "https://zeon-assets.s3.ap-south-1.amazonaws.com/zeon-widget.js",
+  "widgetCSSFile": "https://zeon-assets.s3.ap-south-1.amazonaws.com/zeon-widget.css",
   "CORE_API_DOMAIN": "https://core.zeonhq.com",
   "SLACK_REDIRECTION_URL": "https://chat.zeonhq.com/oauth/slack/authorize",
   "CHAT_WIDGET_URL": "https://widget.zeonhq.com",
