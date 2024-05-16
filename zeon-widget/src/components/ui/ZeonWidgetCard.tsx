@@ -69,7 +69,7 @@ const ZeonWidgetCard = () => {
 
   useEffect(() => {
     // get channelId from the invoke script of the widget
-    ('RAF2On') && getChannel('RAF2On' as string);
+    isEmbeddable?.channelId && getChannel(isEmbeddable?.channelId as string);
   }, [isEmbeddable?.channelId]);
   return (
     <>
