@@ -24,4 +24,6 @@ router.put('/asset/upload-files', upload.array("files") , AIController.uploadFil
 
 router.get('/test', AIController.testFuns);
 
+router.get('/analytics/:workspaceId', AIController.getAnalytics);
+
 export default router;

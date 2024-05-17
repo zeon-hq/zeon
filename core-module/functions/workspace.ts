@@ -74,11 +74,11 @@ export const createWorkspace = async (params: CreateWorkspaceDTO): Promise<Works
           roleId: "admin"
         })
 
-        // create cateogries
-        const res = await createBulkCategory({
-          workspaceId: workspace.workspaceId,
-          categories: categoriesJSON
-        })
+        // // create cateogries
+        // const res = await createBulkCategory({
+        //   workspaceId: workspace.workspaceId,
+        //   categories: categoriesJSON
+        // })
 
         // create workspace config
         await WorkspaceConfig.create({

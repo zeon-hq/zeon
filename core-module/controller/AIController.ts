@@ -5,6 +5,7 @@ import { ChromaClient } from 'chromadb';
 import { Request, Response } from "express";
 import { chromaDbUrl } from "../constant/AIConstant";
 import KnowledgeBaseModel from "../schema/KnowledgeBaseModel";
+import AIQuestionLogModel, { IStatus } from "../schema/AIQuestionLog";
 import AIService from "../service/AIService";
 import { getCollectionName, makeChain } from "../utils/AIUtils";
 import { generateId } from "../utils/utils";
@@ -74,9 +75,9 @@ export default class AIController {
   }
 
   public static async getInjestFile(req: Request, res: Response) {
+    const { question, history, workspaceId, channelId, userId} = req.body;
+    const aiQuestionLogId = generateId(6);
     try {
-      const { question, history, workspaceId, channelId} = req.body;
-
       logger.info({message:`[AIController.getInjestFile] gettingInjestedFile, question:${question}, workspaceId:${workspaceId}, channelId:${channelId}`})
       const collectionName = getCollectionName(workspaceId,channelId);
       const sanitizedQuestion = question.trim().replaceAll('\n', ' ');
@@ -99,9 +100,10 @@ export default class AIController {
         question: sanitizedQuestion,
         chat_history: history || [],
       });
-
+      await AIQuestionLogModel.create({aiQuestionLogId, question, workspaceId, channelId, userId, response, status:IStatus.SUCCESS});
       res.status(200).json(response);
     } catch (e) {
+      await AIQuestionLogModel.create({aiQuestionLogId, question, workspaceId, channelId, userId, status: IStatus.FAILURE, error:e?.message});
       if (e.response) {
         return res.status(e.response.status).json({
           code: e.response.data ? e.response.data.code : e.response.status,
@@ -265,5 +267,34 @@ public static async testFuns(req: Request, res: Response) {
   return res.status(200).json({
     message: "5"
   })
+}
+
+public static async getAnalytics(req: Request, res: Response) {
+  try {
+    const { workspaceId } = req.params;
+
+    const getFileUploadedCount = await KnowledgeBaseModel.countDocuments({workspaceId}).exec();
+
+    const getAICalls = await AIQuestionLogModel.countDocuments({workspaceId}).exec();
+
+    return res.status(200).json({
+      getFileUploadedCount,
+      getAICalls
+    })
+
+  } catch (e) {
+    if (e.response) {
+      return res.status(e.response.status).json({
+        code: e.response.data ? e.response.data.code : e.response.status,
+        message: e.response.data ? e.response.data.message : e.message,
+        data: e.response.data ? e.response.data.data : null,
+      });
+    } else {
+      return res.status(500).json({
+        code: "500",
+        message: e.message,
+      });
+    }
+  }
 }
 }
