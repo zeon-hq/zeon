@@ -9,6 +9,7 @@ import { AuthSecondaryButton } from "components/auth/auth.styles";
 import { ArrowRight } from "tabler-icons-react";
 import { PricingPlan, pricingPlanName } from "constants/pricingPlan";
 import { getConfig as Config } from "config/Config";
+import { getAIAnalyticsAPI } from "service/CoreService";
 
 type Props = {};
 
@@ -39,10 +40,11 @@ const Wrapper = styled.div`
 `;
 
 const BillingModal = (props: Props) => {
-  const { workspaceInfo } = useDashboard();
+  const { workspaceInfo, inbox:{allConversations} } = useDashboard();
   const [clientSecret, setClientSecret] = useState<string>("");
   const [showPricingTable, setShowPricingTable] = useState<boolean>();
   const coreApi = Config("CORE_API_DOMAIN");
+  const [analytics, setAnalytics] = useState<any>({}); // eslint-disable-line
   const fetchCustomerSession = async () => {
     try {
       const res = await axios.post(`${coreApi}/create-customer-seesion`, {
@@ -78,8 +80,26 @@ const BillingModal = (props: Props) => {
     setShowPricingTable((prev) => !prev);
   };
 
+  const getAIAnalytics = async () => {
+    try {
+      const res = await getAIAnalyticsAPI(workspaceInfo.workspaceId);
+      console.log(res);
+      setAnalytics(res);
+    } catch (error: any) {
+      console.log(error);
+      showNotification({
+        title: "Error",
+        message:
+          error?.response?.data?.error?.message ?? "Something went wrong",
+        color: "red",
+      });
+    }
+  
+  }
+
   useEffect(() => {
     fetchCustomerSession();
+    getAIAnalytics();
     if (
       workspaceInfo.subscriptionInfo.subscribedPlan ===
         PricingPlan.ZEON_BASIC_MONTHLY ||
@@ -109,9 +129,9 @@ const BillingModal = (props: Props) => {
                     size={16}
                     sections={[
                       {
-                        value: 50,
+                        value: allConversations?.length || 0,
                         color: "indigo",
-                        label: "50/100",
+                        label: `${allConversations?.length || 0}/100`,
                       },
                     ]}
                   />
@@ -127,9 +147,9 @@ const BillingModal = (props: Props) => {
                     size={16}
                     sections={[
                       {
-                        value: 50,
+                        value: analytics?.getAICalls || 0,
                         color: "indigo",
-                        label: "50/100",
+                        label: `${analytics.getAICalls}/100`,
                       },
                     ]}
                   />
@@ -145,9 +165,9 @@ const BillingModal = (props: Props) => {
                     size={16}
                     sections={[
                       {
-                        value: 50,
+                        value:  analytics?.getFileUploadedCount,
                         color: "indigo",
-                        label: "50/100",
+                        label: `${analytics.getFileUploadedCount}/100`,
                       },
                     ]}
                   />
