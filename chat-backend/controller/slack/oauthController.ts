@@ -77,13 +77,4 @@ export default class oauthController {
             }
         }
     }
-
-    public static async unOAuthSlackAuthorize(req: Request, res: Response): Promise<any> {
-        try {
-            const { channelId } = req.params;
-            
-        } catch (error) {
-            
-        }
-    }
 }

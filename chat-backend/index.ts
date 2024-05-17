@@ -61,8 +61,6 @@ app.use("/health", (req, res)=>{
 
 app.get('/oauth/slack/authorize', oauthController.oauthSlackAuthorize);
 
-app.get('/oauth/slack/un-authorize/:channelId', oauthController.unOAuthSlackAuthorize);
-
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at ${os.hostname()}:${port}`);
