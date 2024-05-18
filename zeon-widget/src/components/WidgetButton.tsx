@@ -7,7 +7,7 @@ import styled from "styled-components";
 import { MessageType } from "./chat/Chat.types";
 import useWidget from "./hooks/useWidget";
 import { AiOutlineClose } from "react-icons/ai";
-import { notificationSound, widgetImageUrl } from "config/Config";
+import { chevronDown, notificationSound, widgetImageUrl } from "config/Config";
 import { generateRandomString } from "./hooks/commonUtils";
 import { cloneDeep } from "lodash";
 
@@ -129,9 +129,9 @@ const WidgetButton = () => {
           !showWidget ? (
             <img width={"35px"} src={widgetImageUrl} alt="wserstak-widget"/>
           ) : (
-            <>
-            <AiOutlineClose size={"2rem"} color={widgetDetails?.appearance?.newConversationButton?.textColor} />
-            </>
+            <div style={{paddingTop:"4px"}}>
+            <img  width={"35px"} src={chevronDown} alt="wserstak-widget"/>
+            </div>
           )
         }
         

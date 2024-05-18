@@ -129,7 +129,7 @@ const ZeonWidgetCard = () => {
             </>
           )}
 
-        {widgetDetails?.inChatWidgets.length > 0 &&
+        {/* {widgetDetails?.inChatWidgets.length > 0 &&
           <Text size="sm" weight={500} mt="16px">
             {" "}
             Resources{" "}
@@ -143,7 +143,7 @@ const ZeonWidgetCard = () => {
             onClick={() => window.open(item.link, "_blank")}
             textColor={"black"}
           />
-        ))}
+        ))} */}
 
       </WholeWrapper>
     </>

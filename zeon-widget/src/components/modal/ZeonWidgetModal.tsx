@@ -304,6 +304,18 @@ const ZeonWidgetModal = () => {
                       size="sm"
                       type="email"
                       onChange={setEmail}
+                      // click on Enter to submit the form
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          //@ts-ignore
+                          if (showEmailCollection) {
+                            submitForm();
+                          } else {
+                            setFinalMessage(message);
+                            setShowEmailCollection(true);
+                          }
+                        }
+                      }}
                       style={{ borderRadius: "12px" }}
                     />
                   ) : (
@@ -313,6 +325,17 @@ const ZeonWidgetModal = () => {
                       value={message}
                       size="sm"
                       onChange={setMessage}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          //@ts-ignore
+                          if (showEmailCollection) {
+                            submitForm();
+                          } else {
+                            setFinalMessage(message);
+                            setShowEmailCollection(true);
+                          }
+                        }
+                      }}
                       style={{ borderRadius: "12px" }}
                     />
                   )}
