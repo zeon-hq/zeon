@@ -52,7 +52,6 @@ const TabContent = ({
           <Input
             value={value}
             onBlur={()=>{
-              console.log('------- stop typing', );
               socketInstance.emit("dashboard_stop_typing", {
                 workspaceId,
                 ticketId:activeChat?.ticketId,
@@ -62,7 +61,6 @@ const TabContent = ({
             }}
             style={{ borderRadius: "8px" }}
             onChange={(e)=>{
-              console.log('------- typing', );
               socketInstance.emit("dashboard_typing", {
                 workspaceId,
                 ticketId:activeChat?.ticketId,

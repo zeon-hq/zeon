@@ -298,26 +298,18 @@ io.on("connection", (socket:Socket) => {
   });
 
   socket.on("dashboard_typing", (data) =>{
-    console.log('-----------', data);
-    
     io.to(data?.workspaceId).emit("dashboard_typing", data);
   });
 
   socket.on("dashboard_stop_typing", (data) =>{
-    console.log('-----------', data);
-    
     io.to(data?.workspaceId).emit("dashboard_stop_typing", data);
   }); 
   
   socket.on("widget_typing", (data) =>{
-    console.log('-----------', data);
-    
     io.to(data?.workspaceId).emit("widget_typing", data);
   });
 
   socket.on("widget_stop_typing", (data) => {
-    console.log('-----------', data);
-    
     io.to(data?.workspaceId).emit("widget_stop_typing", data);
   });
 

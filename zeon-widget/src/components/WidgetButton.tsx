@@ -105,15 +105,12 @@ const WidgetButton = () => {
     });
 
     socketInstance.on("dashboard_typing",(data)=>{
-      console.log('------typing');
-      
       if (!typing && data.ticketId == localStorage.getItem("ticketId")) {
         dispatch(setTyping(true));
       }
     });
 
     socketInstance.on("dashboard_stop_typing",(data)=>{
-      console.log('------stop typing');
       // if (typing && data.ticketId == localStorage.getItem("ticketId")) {
         dispatch(setTyping(false));
       // }

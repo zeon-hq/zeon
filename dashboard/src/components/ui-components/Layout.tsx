@@ -48,14 +48,10 @@ const Layout = ({ children }: { children: any }) => {
     });
 
     socketInstance.on("widget_typing", (data)=> {
-      console.log('---------widget_typing', data);
-      // if (!typing && activeChat?.ticketId == data?.ticketId) {
         dispatch(setTyping(true));
-      // }
     });
  
     socketInstance.on("widget_stop_typing", (data)=> {
-      console.log('---------widget_stop_typing', data);
       dispatch(setTyping(false));
     });
 

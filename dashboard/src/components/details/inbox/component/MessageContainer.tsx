@@ -16,6 +16,8 @@ import { getTime, preProcessText } from "util/dashboardUtils";
 enum ITicketType {
   OPEN = "Open",
   RESOLVED = "Resolved",
+  AI_RESPONDING = "AI Responding",
+  HUMAN_REQUIRED = "Human Required",
 }
 
 const MessageBox = styled.div`
@@ -58,12 +60,9 @@ const TicketStatusBadge = ({ ticketType }: ITicketStatusBadge) => {
     <>
       <Badge
         size="sm"
-        variant="filled"
+        variant="dot"
         radius="sm"
-        color={ticketType === ITicketType.OPEN ? "red" : "green"}
-      >
-        {" "}
-
+        color={ticketType === ITicketType.OPEN ? "red" : "green"}>
         {ticketType}
       </Badge>
     </>
@@ -279,12 +278,7 @@ const MessageContainer = () => {
                         </Flex>
                       </Text>
                       <TicketStatusBadge
-                        ticketType={
-                          conversation.isOpen
-                            ? ITicketType.OPEN
-                            : ITicketType.RESOLVED
-                        }
-                      />
+                      ticketType={conversation.isOpen ? ITicketType.OPEN : ITicketType.RESOLVED}/>
                     </DetailWrapper>
                     <DetailWrapper>
                       <Flex
