@@ -1,13 +1,17 @@
 import { ActionIcon, Flex, Input } from "@mantine/core";
+import socketInstance from "api/socket";
+import useEmbeddable, { IEmbeddableOutput } from "components/hooks/useEmbeddable";
+import useWidget from "components/hooks/useWidget";
 
 interface IChatMessageFooter {
     submitForm: () => void;
-    watch: any;
-    register: any;
-    
+    setValue: any;   
 }
 
-const ChatMessageFooter = ({submitForm, watch, register}:IChatMessageFooter) => {
+const ChatMessageFooter = ({submitForm, setValue}:IChatMessageFooter) => {
+  const { widgetDetails, typing } = useWidget();
+  const ticketId = localStorage.getItem("ticketId");
+  const isEmbeddable: IEmbeddableOutput = useEmbeddable();
   return (
     <Flex
     style={{
@@ -27,14 +31,31 @@ const ChatMessageFooter = ({submitForm, watch, register}:IChatMessageFooter) => 
       }}
       placeholder="Message"
       mt="8px"
+      onChange={(e)=>{
+        setValue('message', e.target.value)
+        socketInstance.emit("widget_typing", {
+          workspaceId:widgetDetails?.workspaceId,
+          ticketId:ticketId,
+          channelId:isEmbeddable.channelId,
+          source:'widget'
+        }) 
+      }}
+
+      onBlur={()=>{
+        socketInstance.emit("widget_stop_typing", {
+          workspaceId:widgetDetails?.workspaceId,
+          ticketId:ticketId,
+          channelId:isEmbeddable.channelId,
+          source:'widget'
+        }) 
+      }}
       size="md"
       radius={"md"}
-      {...register("message")}
+      // {...register("message")}
     />
 
     <ActionIcon
     onClick={submitForm}
-    // disabled={watch()?.message?.length == 0}
       variant={"filled"}
       style={{
         width: "42px",

@@ -2,7 +2,7 @@ import socketInstance from "api/socket";
 import ZeonWidgetModal from "components/modal/ZeonWidgetModal";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { IMessageSource, setAllOpenConversations, setMessage, setShowWidget } from "redux/slice";
+import { IMessageSource, setAllOpenConversations, setMessage, setShowWidget, setTyping } from "redux/slice";
 import styled from "styled-components";
 import { MessageType } from "./chat/Chat.types";
 import useWidget from "./hooks/useWidget";
@@ -24,7 +24,7 @@ const ZeonWidgetWrapper = styled.div`
 const WidgetButton = () => {
   const audioPlayer = useRef<HTMLAudioElement>(null);
   const [isMessageUpdated, setIsMessageUpdated] = useState(false);
-  const { step ,widgetDetails, showWidget, allOpenConversations, messages } = useWidget();
+  const { step ,widgetDetails, showWidget, allOpenConversations, messages, typing } = useWidget();
   const playAudio = () => {
     // audioPlayer?.current?.play();
   }
@@ -83,8 +83,8 @@ const WidgetButton = () => {
   },[])
 
   useEffect(() => {
+    const ticketId = localStorage.getItem("ticketId");
     socketInstance.on('connect', function() {
-      const ticketId = localStorage.getItem("ticketId");
       if (ticketId) {
         socketInstance.emit("join_ticket", {
           ticketId,
@@ -102,7 +102,22 @@ const WidgetButton = () => {
         handleMessageReceived(data, checkIsThisNewTicket);
         playAudio()
       }
-    })
+    });
+
+    socketInstance.on("dashboard_typing",(data)=>{
+      console.log('------typing');
+      
+      if (!typing && data.ticketId == localStorage.getItem("ticketId")) {
+        dispatch(setTyping(true));
+      }
+    });
+
+    socketInstance.on("dashboard_stop_typing",(data)=>{
+      console.log('------stop typing');
+      // if (typing && data.ticketId == localStorage.getItem("ticketId")) {
+        dispatch(setTyping(false));
+      // }
+    });
 
     return () => {
       socketInstance.off("message");

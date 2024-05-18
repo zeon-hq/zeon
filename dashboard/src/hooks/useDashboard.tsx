@@ -15,6 +15,7 @@ const useDashboard = () => {
     const activeChat = useSelector((item:RootState) => item.dashboard.activeChat);
     const showSidebar = useSelector((item:RootState) => item.dashboard.showSidebar);
     const defaultWorkSpaceSettingTab = useSelector((item:RootState) => item.dashboard.defaultWorkSpaceSettingTab);
+    const typing = useSelector((item:RootState) => item.dashboard.typing);
     const isFinance = url.includes("finance");
     const isCRM = url.includes("relation");
     /**
@@ -37,6 +38,7 @@ const useDashboard = () => {
         activeChat,
         showSidebar,
         defaultWorkSpaceSettingTab,
+        typing,
         activeEntity,
         isChat,
         isFinance,

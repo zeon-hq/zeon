@@ -11,6 +11,7 @@ import {
   MessageType,
   updateConversation,
   updateInbox,
+  setTyping
 } from "reducer/slice"
 import socketInstance from "socket"
 import styled from "styled-components"
@@ -25,7 +26,7 @@ const ChildWrapper = styled.div<{ isFinance: boolean, isCRM: boolean }>`
 const Layout = ({ children }: { children: any }) => {
   const dispatch = useDispatch()
   const { workspaceId } = useParams()
-  const { showSidebar, isFinance, isChat, isCRM, activeChat } = useDashboard()
+  const { showSidebar, isFinance, isChat, isCRM, activeChat, typing } = useDashboard()
 
   useEffect(() => {
     //@ts-ignore
@@ -44,7 +45,20 @@ const Layout = ({ children }: { children: any }) => {
           dispatch(updateConversation({ data, type: MessageType.SENT }));
         }
       }
-    })
+    });
+
+    socketInstance.on("widget_typing", (data)=> {
+      console.log('---------widget_typing', data);
+      if (!typing && activeChat?.ticketId == data?.ticketId) {
+        dispatch(setTyping(true));
+      }
+    });
+ 
+    socketInstance.on("widget_stop_typing", (data)=> {
+      console.log('---------widget_stop_typing', data);
+      dispatch(setTyping(false));
+    });
+
   }, [socketInstance, workspaceId]); // eslint-disable-line
 
   return (

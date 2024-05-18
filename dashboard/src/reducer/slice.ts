@@ -115,6 +115,7 @@ export interface ChannelsInfo {
     };
     inChatWidgets: InChatWidgetInterface[];
     name: string;
+    typing:boolean;
     channelId: string;
     slackChannelId?: string;
     isAIEnabled?: boolean;
@@ -306,6 +307,7 @@ export type DashboardInterface = {
     ticketFilterText: string;
   };
   activeChat: IInbox | null;
+  typing:boolean;
 };
 
 export interface IWorkspaceInfo {
@@ -376,7 +378,8 @@ const initialState: DashboardInterface = {
     subscriptionInfo: {},
     allUsers : []
   },
-  activeChat: null
+  activeChat: null,
+  typing:false
 };
 
 const getFirstLoadInfo = async (workspaceId: string) => {
@@ -541,6 +544,9 @@ export const dashboardSlice = createSlice({
     setDefaultWorkSpaceSettingTab: (state, action:PayloadAction<IWorkSpaceSettings>) => {
       state.defaultWorkSpaceSettingTab = action.payload;
     },
+    setTyping: (state, action: PayloadAction<boolean>) => {
+      state.typing = action.payload;
+    },
     setNewConversation:(state, action: PayloadAction<IInbox>) => {
       state.inbox.allConversations.push(action.payload)
     },
@@ -629,7 +635,8 @@ export const {
   updateSlackTicketNotification,
   updateUserAvatarsVisibility,
   enableInChatWidget,
-  updateSingleInChatWidget
+  updateSingleInChatWidget,
+  setTyping
 } = dashboardSlice.actions;
 
 export default dashboardSlice.reducer;

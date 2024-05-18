@@ -10,6 +10,9 @@ import { sendMessageAPI } from "service/CoreService";
 import { IMessage } from "../inbox.types";
 import SelectCannedResponse from "./SelectCannedResponseChatArea";
 import SingleMessage from "./SingleMessage";
+import socketInstance from "socket";
+import { useParams } from "react-router-dom";
+
 interface ITabContent {
   onFormSubmit: (e: any, type: MessageType) => void;
   type: MessageType;
@@ -27,6 +30,9 @@ const TabContent = ({
   onIconClick,
   inputPlaceHolder,
 }: ITabContent) => {
+  const {workspaceId} = useParams();
+  const { activeChat } = useDashboard();
+  
   return (
     <>
       <Flex
@@ -45,8 +51,26 @@ const TabContent = ({
         >
           <Input
             value={value}
+            onBlur={()=>{
+              console.log('------- stop typing', );
+              socketInstance.emit("dashboard_stop_typing", {
+                workspaceId,
+                ticketId:activeChat?.ticketId,
+                channelId:activeChat?.channelId,
+                source:'dashboard'
+              })
+            }}
             style={{ borderRadius: "8px" }}
-            onChange={onInputOnChange}
+            onChange={(e)=>{
+              console.log('------- typing', );
+              socketInstance.emit("dashboard_typing", {
+                workspaceId,
+                ticketId:activeChat?.ticketId,
+                channelId:activeChat?.channelId,
+                source:'dashboard'
+              })
+              onInputOnChange(e?.target?.value)
+            }}
             placeholder={inputPlaceHolder}
             
           />
@@ -71,7 +95,7 @@ const TabContent = ({
 };
 
 const ChatArea = () => {
-  const { activeChat, workspaceInfo } = useDashboard();
+  const { activeChat, workspaceInfo, typing } = useDashboard();
   const [value, handleChange] = useInputState("");
   const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState<string | null>("reply");
@@ -197,6 +221,10 @@ const ChatArea = () => {
                           {activeChat?.messages?.map((message: IMessage) => (
                               <SingleMessage info={message} />
                           ))}
+{
+  typing &&
+  <p>typing...</p>
+}
                            {/* <div ref={elementRef} /> */}
                       </>
                   )}
@@ -275,7 +303,9 @@ const ChatArea = () => {
                                 value && sendMessage(value, MessageType.RECEIVED);
                               }}
                               inputPlaceHolder="Enter your reply"
-                              onInputOnChange={handleChange}
+                              onInputOnChange={(value:string)=>{
+                                handleChange(value)
+                              }}
                               onFormSubmit={() => {
                                 value && sendMessage(value, MessageType.RECEIVED);
                               }}
