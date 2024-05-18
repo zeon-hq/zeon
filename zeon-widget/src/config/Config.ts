@@ -22,4 +22,5 @@ function getEnvConfig(): any {
 
 export const notificationSound = 'https://zeonhq.b-cdn.net/notification.mp3';
 
-export const widgetImageUrl = 'https://zeonhq.b-cdn.net/chatWidgetSVG.svg';
+export const widgetImageUrl = 'https://zeon-assets.s3.ap-south-1.amazonaws.com/aichatMIX.svg';
+export const chevronDown = 'https://zeon-assets.s3.ap-south-1.amazonaws.com/chevron-down+(1).svg';

@@ -1,4 +1,12 @@
-import { Box, Button, Flex, Loader, Space, Text, TextInput } from "@mantine/core";
+import {
+  Box,
+  Button,
+  Flex,
+  Loader,
+  Space,
+  Text,
+  TextInput,
+} from "@mantine/core";
 import { useInputState } from "@mantine/hooks";
 import { getIPAddress, sendMessage } from "api/api";
 import { IPropsType, MessageType } from "components/chat/Chat.types";
@@ -227,29 +235,28 @@ const ZeonWidgetModal = () => {
   };
 
   useEffect(() => {
-    const handleBeforeUnload = (e:any) => {
-    console.log('Page is reloading...');  // Log to console
-    dispatch(setShowWidget(false));
-    dispatch(rSetMessage([]))
-    dispatch(setStep(IUIStepType.INITIAL))
-    localStorage.removeItem("ticketId");
+    const handleBeforeUnload = (e: any) => {
+      console.log("Page is reloading..."); // Log to console
+      dispatch(setShowWidget(false));
+      dispatch(rSetMessage([]));
+      dispatch(setStep(IUIStepType.INITIAL));
+      localStorage.removeItem("ticketId");
     };
 
-    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener("beforeunload", handleBeforeUnload);
 
     // Cleanup function to remove the event listener on component unmount
     return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, []);
-
 
   const showBrandingImage =
     widgetDetails?.appearance?.miscellaneous?.showBranding;
 
   const openZeon = () => {
     window.open("https://zeonhq.com", "_blank");
-  }
+  };
 
   return (
     <>
@@ -260,11 +267,7 @@ const ZeonWidgetModal = () => {
           ) : (
             <>
               <Header isForm={step === IUIStepType.FORM} />
-              <Info>
-                {step === IUIStepType.FORM && (
-                  <ZeonWidgetForm />
-                )}
-              </Info>
+              <Info>{step === IUIStepType.FORM && <ZeonWidgetForm />}</Info>
               {finalMessage && (
                 <>
                   <MessageCard
@@ -281,83 +284,119 @@ const ZeonWidgetModal = () => {
                   />
                 </>
               )}
-              <div>
-              {step === IUIStepType.INITIAL && !showEmailCollection && (
-                <>
-                  <ZeonWidgetCard />
-                  <Space h="sm" />
-                  </>
+              <div style={{height:"28vh", overflow:"auto"}}>
+                {step === IUIStepType.INITIAL && !showEmailCollection && (
+                  <div>
+                    <>
+                      <ZeonWidgetCard />
+                      <Space h="sm" />
+                    </>
+                  </div>
                 )}
-                
-                {showEmailCollection ? (
-                  <TextInput
-                    placeholder="Type your email here..."
-                    radius="md"
-                    value={email}
-                    // disabled={loading}
-                    size="sm"
-                    type="email"
-                    onChange={setEmail}
-                    
-                    style={{ borderRadius: "12px" }}
-                  />
-                ) : (
-                  <TextInput
-                    placeholder="Type your message here..."
-                    radius="md"
-                    value={message}
-                    size="sm"
-                    onChange={setMessage}
-                    style={{ borderRadius: "12px" }}
-                  />
-                )}
-                <Flex
-                  justify="space-between"
-                  align="baseline"
-                >
-                  {showBrandingImage && (
-                    <BrandingWrapper
-                      onClick={() => window.open("https://zeonhq.com", "_blank")}
-                    >
-                      <Text align="center" size="xs" color="gray">
-                        {" "}
-                        Powered By
-                      </Text>
-                      <Box style={{display:"flex", alignItems:"center", gap:"4px"}}>
-                      <img
-                        width={"25px"}
-                        src="https://zeon-assets.s3.ap-south-1.amazonaws.com/Logomark.svg"
-                        alt="zeon-logo"
-                      />
-                      <Text size="sm" weight="600" color="#344054">Zeon</Text>
-                      </Box>
-                    </BrandingWrapper>
-                  )}
-                  <Button
-                    size="sm"
-                    sx={{
-                      backgroundColor:"#3C69E7"
-                    }}
-                    radius="md"
-                    color="blue"
-                    onClick={() => {
-                      if(showEmailCollection) {
-                        submitForm()
-                      } else {
-                        setFinalMessage(message);
-                        setShowEmailCollection(true);
-                      }
-                      
-                    }}
-                    disabled={loading}
-                    rightIcon={
-                      <IoMdArrowForward size={15} style={{ color: "white" }} />
-                    }
-                  >
-                    {loading ? <Loader size={20} /> : "Submit"}
-                  </Button>
-                </Flex>
               </div>
+                <div>
+                  {showEmailCollection ? (
+                    <TextInput
+                      placeholder="Type your email here..."
+                      radius="md"
+                      value={email}
+                      // disabled={loading}
+                      size="sm"
+                      type="email"
+                      onChange={setEmail}
+                      // click on Enter to submit the form
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          //@ts-ignore
+                          if (showEmailCollection) {
+                            submitForm();
+                          } else {
+                            setFinalMessage(message);
+                            setShowEmailCollection(true);
+                          }
+                        }
+                      }}
+                      style={{ borderRadius: "12px" }}
+                    />
+                  ) : (
+                    <TextInput
+                      placeholder="Type your message here..."
+                      radius="md"
+                      value={message}
+                      size="sm"
+                      onChange={setMessage}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          //@ts-ignore
+                          if (showEmailCollection) {
+                            submitForm();
+                          } else {
+                            setFinalMessage(message);
+                            setShowEmailCollection(true);
+                          }
+                        }
+                      }}
+                      style={{ borderRadius: "12px" }}
+                    />
+                  )}
+
+                  <Flex justify="space-between" align="baseline">
+                    {showBrandingImage && (
+                      <BrandingWrapper
+                        onClick={() =>
+                          window.open("https://zeonhq.com", "_blank")
+                        }
+                      >
+                        <Text align="center" size="xs" color="gray">
+                          {" "}
+                          Powered By
+                        </Text>
+                        <Box
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "4px",
+                          }}
+                        >
+                          <img
+                            width={"25px"}
+                            src="https://zeon-assets.s3.ap-south-1.amazonaws.com/Logomark.svg"
+                            alt="zeon-logo"
+                          />
+                          <Text size="sm" weight="600" color="#344054">
+                            Zeon
+                          </Text>
+                        </Box>
+                      </BrandingWrapper>
+                    )}
+                    <Button
+                      size="sm"
+                      sx={{
+                        backgroundColor: "#3C69E7",
+                      }}
+                      radius="md"
+                      color="blue"
+                      onClick={() => {
+                        if (showEmailCollection) {
+                          submitForm();
+                        } else {
+                          setFinalMessage(message);
+                          setShowEmailCollection(true);
+                        }
+                      }}
+                      disabled={loading}
+                      rightIcon={
+                        <IoMdArrowForward
+                          size={15}
+                          style={{ color: "white" }}
+                        />
+                      }
+                    >
+                      {loading ? <Loader size={20} /> : "Submit"}
+                    </Button>
+                  </Flex>
+                </div>
+              
             </>
           )}
         </Wrapper>

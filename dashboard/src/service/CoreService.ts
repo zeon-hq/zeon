@@ -396,3 +396,14 @@ export const deleteKnowledgeBaseFile = async (fileId: string, workspaceId:string
     return {};
   }
 }
+
+export const getAIAnalyticsAPI = async (workspaceId: string) => {
+  try {
+    const res = await axiosInstance.get(
+      `${coreAPIDomain}/ai/analytics/${workspaceId}`
+    );
+    return res.data
+  } catch (error) {
+    return {};
+  }
+}

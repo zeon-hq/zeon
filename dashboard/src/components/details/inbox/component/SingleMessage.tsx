@@ -32,7 +32,6 @@ const ParentWrapper = styled.div`
 const SingleMessage = ({ info }: any) => {
   const { activeChat, user } = useDashboard();
   const { type, message } = info;
-  const isSentMessage = (type === MessageType.SENT);
   const isReceivedMessage = (type === MessageType.RECEIVED);
   const isNote = (type === MessageType.NOTE);
 
