@@ -562,6 +562,10 @@ export const dashboardSlice = createSlice({
 
         if (action.payload.data.message == 'human_intervention_needed') {
           conversation.info = ITicketType.HUMAN_REQUIRED;
+        } 
+
+        if (conversation.info == ITicketType.HUMAN_REQUIRED) {
+          conversation.info = undefined;
         }
       }
 
