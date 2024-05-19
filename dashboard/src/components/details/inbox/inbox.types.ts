@@ -8,4 +8,5 @@ export interface IMessage {
     ticketId: string;
     channelId:string;
     workspaceId:string;
+    messageSource:string;
 }

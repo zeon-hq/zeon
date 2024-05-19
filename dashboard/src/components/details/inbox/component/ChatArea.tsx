@@ -141,6 +141,7 @@ const ChatArea = () => {
           workspaceId,
           channelId:channelId as string,
           message,
+          messageSource:"dashboard"
         },
         type,
       })

@@ -559,6 +559,10 @@ export const dashboardSlice = createSlice({
           conversation.hasNewMessage = conversation.hasNewMessage ? conversation.hasNewMessage + 1 : 1
         }
         conversation.messages.push({...action.payload.data, type: action.payload.type})
+
+        if (conversation.info == ITicketType.HUMAN_REQUIRED && action.payload.data?.messageSource == "dashboard") {
+          conversation.info = undefined;
+        }
       }
 
       // check if active chat is the same as the conversation, if yes update that as well
