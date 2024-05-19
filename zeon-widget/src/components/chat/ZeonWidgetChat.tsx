@@ -17,6 +17,7 @@ const Wrapper = styled.div`
 display: flex;
 flex-direction: column;
 justify-content: space-between;
+height: 93%;
 background-color: ${(props: IPropsType) => {
   return props.theme.isEmbeddable ? 'white' :'white';
 }};
@@ -32,7 +33,6 @@ background-color: ${(props: IPropsType) => {
 
 const ChatContainer = styled.div`
   padding: 20px 0px;
-  height: 56vh;
   overflow-y: auto;
   background: white;
   // display: flex;

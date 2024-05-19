@@ -21,7 +21,7 @@ const ModalWrapper = styled.div`
   /* TODO: Discuss with ajay if we need fixed height or thr height should depend upon content */
   /* height: 92vh; */
   /* width: 400px; */
-  height: 70vh;
+  height: 700px;
   border: 1px solid #eaecf0;
   border-radius: 8px 8px 8px 8px;
   // box-shadow: rgb(0 0 0 / 35%) 0px 7px 59px;

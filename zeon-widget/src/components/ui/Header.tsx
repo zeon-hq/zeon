@@ -188,7 +188,7 @@ const Header = ({ isForm }: { isForm: boolean }) => {
                   leftIcon={getIcons(widget.topLogo)}
                   variant="outline"
                   sx={{
-                    border: "1px solid #D0D5DD",
+                    border: "1px solid #D0D5DD !important",
                     color: "#344054",
                   }}
                 >
