@@ -1,5 +1,6 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { ITicketType } from "components/details/inbox/component/MessageContainer";
 import { IMessage } from "components/details/inbox/inbox.types";
 import { ChronologyName, FilterName, IWorkSpaceSettings, SubFilterName } from "components/types";
 import { fetchUserInfo } from "service/CoreService";
@@ -267,6 +268,7 @@ export interface IInbox {
   channelId: string;
   customerEmail: string;
   createdAt: number;
+  info:string;
   updatedAt: number;
   text: string;
   ticketId:string;
@@ -552,9 +554,15 @@ export const dashboardSlice = createSlice({
     },
     updateConversation:(state, action: PayloadAction<{data:IMessage, type:MessageType}>) => {
       const conversation = state.inbox.allConversations.find((conversation) => conversation?.ticketId === action.payload.data.ticketId)
-      if(conversation){
-        if(action.payload.type ===  MessageType.SENT) conversation.hasNewMessage = conversation.hasNewMessage ? conversation.hasNewMessage + 1 : 1
+      if (conversation) {
+        if(action.payload.type ===  MessageType.SENT) {
+          conversation.hasNewMessage = conversation.hasNewMessage ? conversation.hasNewMessage + 1 : 1
+        }
         conversation.messages.push({...action.payload.data, type: action.payload.type})
+
+        if (action.payload.data.message == 'human_intervention_needed') {
+          conversation.info = ITicketType.HUMAN_REQUIRED;
+        }
       }
 
       // check if active chat is the same as the conversation, if yes update that as well

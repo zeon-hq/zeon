@@ -516,7 +516,20 @@ app.post('/send/message', async (req, res) => {
       channelId
     }
 
+    io.to(workspaceId).emit("ai_responding", {
+      ticketId,
+      workspaceId,
+      channelId
+    });
+
     const aiResponse = await CoreService.getAIMessage(aiMessagepayload);
+    
+    io.to(workspaceId).emit("ai_stop_responded", {
+      ticketId,
+      workspaceId,
+      channelId
+    });
+    
     if (!aiResponse?.error) {
 
       if (aiResponse.text === 'human_intervention_needed') {

@@ -83,7 +83,7 @@ const ZeonWidgetChat = () => {
   },[])
 
   const submitForm = async (data: FormDataType) => {
-    const channelId = localStorage.getItem("channelId");
+    const channelId = widgetDetails?.channelId;
     const ticketId = localStorage.getItem("ticketId");
     const createdAt = Date.now().toString();
     const type = MessageType.SENT;

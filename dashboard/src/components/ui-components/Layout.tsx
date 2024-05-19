@@ -48,11 +48,21 @@ const Layout = ({ children }: { children: any }) => {
     });
 
     socketInstance.on("widget_typing", (data)=> {
+      // have the check to compare the ticket with the selected ticketId
         dispatch(setTyping(true));
     });
  
     socketInstance.on("widget_stop_typing", (data)=> {
+      // have the check to compare the ticket with the selected ticketId
       dispatch(setTyping(false));
+    });
+
+    socketInstance.on("ai_responding", (data)=>{
+      
+    });
+
+    socketInstance.on("ai_stop_responded", (data)=>{
+      
     });
 
   }, [socketInstance, workspaceId]); // eslint-disable-line
