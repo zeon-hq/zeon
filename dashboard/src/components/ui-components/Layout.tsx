@@ -11,11 +11,13 @@ import {
   MessageType,
   updateConversation,
   updateInbox,
-  setTyping
+  setTyping,
+  updateConversationAIStatus
 } from "reducer/slice"
 import socketInstance from "socket"
 import styled from "styled-components"
 import FinanceTopbar from "../../finance/expense/FinanceTopbar"
+import { ITicketType } from "components/details/inbox/component/MessageContainer"
 
 const ChildWrapper = styled.div<{ isFinance: boolean, isCRM: boolean }>`
   height: ${(props) =>
@@ -58,11 +60,14 @@ const Layout = ({ children }: { children: any }) => {
     });
 
     socketInstance.on("ai_responding", (data)=>{
-      
+      dispatch(updateConversationAIStatus({
+        data, 
+        type:ITicketType.AI_RESPONDING
+      }));
     });
 
     socketInstance.on("ai_stop_responded", (data)=>{
-      
+      dispatch(updateConversationAIStatus({data}));
     });
 
   }, [socketInstance, workspaceId]); // eslint-disable-line

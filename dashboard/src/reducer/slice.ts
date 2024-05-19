@@ -268,7 +268,7 @@ export interface IInbox {
   channelId: string;
   customerEmail: string;
   createdAt: number;
-  info:string;
+  info:ITicketType | undefined;
   updatedAt: number;
   text: string;
   ticketId:string;
@@ -570,6 +570,16 @@ export const dashboardSlice = createSlice({
         state.activeChat.messages.push({...action.payload.data, type: action.payload.type})
       }
     },
+    updateConversationAIStatus: (state, action: PayloadAction<{data:IMessage, type?:ITicketType}>) => {
+      const conversation = state.inbox.allConversations.find((conversation) => conversation?.ticketId === action.payload.data.ticketId);
+      if (conversation) {
+        if (action?.payload?.type) {
+          conversation.info = action?.payload?.type;
+        } else {
+          conversation.info = undefined;
+        }
+      }
+    },
     setNewMessageToFalse:(state, action: PayloadAction<string>) => {
       const conversation = state.inbox.allConversations.find((conversation) => conversation.ticketId === action.payload)
       if (conversation) {
@@ -641,6 +651,7 @@ export const {
   updateIsAIEnabled,
   setDefaultWorkSpaceSettingTab,
   updateSlackTicketNotification,
+  updateConversationAIStatus,
   updateUserAvatarsVisibility,
   enableInChatWidget,
   updateSingleInChatWidget,

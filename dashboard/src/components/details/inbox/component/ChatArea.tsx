@@ -138,6 +138,8 @@ const ChatArea = () => {
           ticketId: activeChat?.ticketId || "",
           isRead: true,
           type,
+          workspaceId,
+          channelId:channelId as string,
           message,
         },
         type,
