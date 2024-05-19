@@ -210,6 +210,7 @@ const ChatArea = () => {
                       <>
                           {/* Hardcoding first message */}
                           <SingleMessage
+                          isLastCount={false}
                               info={{
                                   createdAt: activeChat.createdAt,
                                   ticketId: activeChat._id,
@@ -218,14 +219,12 @@ const ChatArea = () => {
                                   message: activeChat.text,
                               }}
                           />
-                          {activeChat?.messages?.map((message: IMessage) => (
-                              <SingleMessage info={message} />
+                          {activeChat?.messages?.map((message: IMessage, index:number) => (
+                              <SingleMessage 
+                              isLastCount={activeChat?.messages?.length - 1 == index}
+                              key={index} 
+                              info={message} />
                           ))}
-{
-  typing &&
-  <p>typing...</p>
-}
-                           {/* <div ref={elementRef} /> */}
                       </>
                   )}
               </div>
