@@ -34,14 +34,14 @@ import {
 import styled from "styled-components";
 
 const Wrapper = styled.div`
-  height: 70vh !important;
+  height: 700px !important;
   background-color: white;
   background: white;
   width: ${(props: IPropsType) => {
     return props.theme.isEmbeddable ? "100%" : "480px";
   }};
   max-height: ${(props: IPropsType) => {
-    return props.theme.isEmbeddable ? "100%" : "70vh";
+    return props.theme.isEmbeddable ? "100%" : "700px";
   }};
   ${(props: IPropsType) => (props.theme.isEmbeddable ? "height: 100%;" : "")}
   border: 1px solid #EAECF0;
