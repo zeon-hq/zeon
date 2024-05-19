@@ -228,7 +228,7 @@ const ZeonWidgetModal = () => {
       setEmail("");
       setShowEmailCollection(false);
     } catch (error) {
-      console.log("error", error);
+      // console.log("error", error);
     } finally {
       setLoading(false);
     }
@@ -236,7 +236,6 @@ const ZeonWidgetModal = () => {
 
   useEffect(() => {
     const handleBeforeUnload = (e: any) => {
-      console.log("Page is reloading..."); // Log to console
       dispatch(setShowWidget(false));
       dispatch(rSetMessage([]));
       dispatch(setStep(IUIStepType.INITIAL));

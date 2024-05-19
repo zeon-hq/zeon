@@ -283,7 +283,6 @@ io.on("connection", (socket:Socket) => {
 
 
   socket.on("join_ticket", (data)=> {
-    console.log('data', data);
     socket.join(data.workspaceId);
     
     // boom working one    

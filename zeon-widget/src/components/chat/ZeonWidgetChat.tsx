@@ -123,7 +123,7 @@ const ZeonWidgetChat = () => {
         reset();
       }
     } catch (error) {
-      console.log(">>>", error);
+      // console.log(">>>", error);
     }
   };
 

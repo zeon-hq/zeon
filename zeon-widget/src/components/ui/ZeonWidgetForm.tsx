@@ -133,7 +133,6 @@ const ZeonWidgetForm = () => {
         // },3000)
       }
     } catch (error) {
-      console.log("error", error);
     }
   };
 

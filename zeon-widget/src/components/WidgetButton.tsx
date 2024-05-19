@@ -30,8 +30,6 @@ const WidgetButton = () => {
   }
 
   const handleMessageReceived = (processData: any, isNewTicket:boolean) => {
-    console.log('step', step);
-    console.log('messages', messages);
     if (isNewTicket) {
       // Clone the current state of all open conversations to avoid direct mutation
       const copiedAllOpenConversations = cloneDeep(allOpenConversations);
@@ -60,7 +58,6 @@ const WidgetButton = () => {
       }
 
     } else {
-      console.log('Adding New messages:', messages);
       dispatch(
         setMessage({
           message: processData.message,
@@ -95,7 +92,6 @@ const WidgetButton = () => {
     });
 
     socketInstance.on("message", (data) => { 
-      console.log('Message Received:', data);
       if (data?.messageSource == IMessageSource.DASHBOARD || data?.messageSource ==  IMessageSource.BOTH) {
         setIsMessageUpdated((prev)=> !prev);
         const checkIsThisNewTicket:boolean = (!!allOpenConversations.find((conversation) => conversation.ticketId === data.ticketId))

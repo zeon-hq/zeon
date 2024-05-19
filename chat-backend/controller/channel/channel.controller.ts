@@ -19,7 +19,6 @@ export const createChannel = async (req: SessionRequest, res: Response) => {
         message: "No workspace found",
       });
     }
-    console.log("dashboard", workspace);
 
     const channel = await Channel.create({
       name,
