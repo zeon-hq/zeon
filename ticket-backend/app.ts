@@ -295,7 +295,23 @@ io.on("connection", (socket:Socket) => {
     // io.to(data.ticketId).emit("message", {
     //   "test":"new"
     //   });
-  })
+  });
+
+  socket.on("dashboard_typing", (data) =>{
+    io.to(data?.workspaceId).emit("dashboard_typing", data);
+  });
+
+  socket.on("dashboard_stop_typing", (data) =>{
+    io.to(data?.workspaceId).emit("dashboard_stop_typing", data);
+  }); 
+  
+  socket.on("widget_typing", (data) =>{
+    io.to(data?.workspaceId).emit("widget_typing", data);
+  });
+
+  socket.on("widget_stop_typing", (data) => {
+    io.to(data?.workspaceId).emit("widget_stop_typing", data);
+  });
 
 });
 const MONGODB_DB_URI: string = process.env.DB_URI as string + process.env.DB_NAME as string;

@@ -65,10 +65,11 @@ const ZeonWidgetChat = () => {
     handleSubmit,
     reset,
     watch,
+    setValue,
     formState: { isSubmitting },
   } = useForm<FormDataType>();
   const dispatch = useDispatch();
-  const { messages, widgetDetails } = useWidget();
+  const { messages, widgetDetails, typing } = useWidget();
 
 
   useEffect(() => {
@@ -164,10 +165,14 @@ const ZeonWidgetChat = () => {
           ))}
           <div ref={elementRef} />
         </ChatContainer>
-
+{
+typing && 
+<>
+<p>typing...</p>
+</>
+}
       <ChatMessageFooter 
-      register={register}
-      watch={watch}
+      setValue={setValue}
       submitForm={handleSubmit(submitForm)}
       />
       </Wrapper>

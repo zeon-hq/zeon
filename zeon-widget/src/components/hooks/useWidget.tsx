@@ -38,6 +38,8 @@ const useWidget = () => {
   const widgetDetails = useSelector((state: RootState ) => state.widget.widgetDetails);
   const allOpenConversations = useSelector((state: RootState ) => state.widget.allOpenConversations);
 
+  const typing = useSelector((state: RootState ) => state.widget.typing);
+
   return {
     step,
     email,
@@ -46,7 +48,8 @@ const useWidget = () => {
     formSubmitButtonLoading,
     widgetDetails,
     allOpenConversations,
-    isOutOfOperatingHours
+    isOutOfOperatingHours,
+    typing
   };
 };
 

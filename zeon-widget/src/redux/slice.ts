@@ -36,6 +36,7 @@ export type WidgetInterface = {
   messages: Array<Message> | [];
   showWidget: boolean;
   formSubmitButtonLoading: boolean;
+  typing: boolean;
   widgetDetails: IWidgetDetails,
   allOpenConversations: IAllOpenConversations[]
 };
@@ -104,6 +105,7 @@ export interface IWidgetDetails  {
   };
   inChatWidgets: InChatWidgetInterface[];
   channelId: string;
+  typing:boolean;
   workspaceId: string
   _id: string;
 }
@@ -116,6 +118,7 @@ const initialState: WidgetInterface = {
   formSubmitButtonLoading: false,
   //@ts-ignore
   widgetDetails: {},
+  typing:false,
   allOpenConversations: []
 };
 
@@ -159,6 +162,9 @@ export const widgetSlice = createSlice({
     },
     setAllOpenConversations: (state, action: PayloadAction<any>) => {
       state.allOpenConversations = action.payload;
+    },    
+    setTyping: (state, action: PayloadAction<any>) => {
+      state.typing = action.payload;
     }
   },
 });
@@ -172,7 +178,8 @@ export const {
   setFormSubmitButtonLoadingState,
   setWidgetDetails,
   setAllOpenConversations,
-  clearPrevChat
+  clearPrevChat,
+  setTyping
 } = widgetSlice.actions;
 
 export default widgetSlice.reducer;
