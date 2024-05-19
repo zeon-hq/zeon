@@ -64,6 +64,13 @@ const Layout = ({ children }: { children: any }) => {
         data, 
         type:ITicketType.AI_RESPONDING
       }));
+    });    
+    
+    socketInstance.on("human_intervention_needed", (data)=>{
+      dispatch(updateConversationAIStatus({
+        data, 
+        type:ITicketType.HUMAN_REQUIRED
+      }));
     });
 
     socketInstance.on("ai_stop_responded", (data)=>{

@@ -559,14 +559,6 @@ export const dashboardSlice = createSlice({
           conversation.hasNewMessage = conversation.hasNewMessage ? conversation.hasNewMessage + 1 : 1
         }
         conversation.messages.push({...action.payload.data, type: action.payload.type})
-
-        if (action.payload.data.message == 'human_intervention_needed') {
-          conversation.info = ITicketType.HUMAN_REQUIRED;
-        } 
-
-        if (conversation.info == ITicketType.HUMAN_REQUIRED) {
-          conversation.info = undefined;
-        }
       }
 
       // check if active chat is the same as the conversation, if yes update that as well
