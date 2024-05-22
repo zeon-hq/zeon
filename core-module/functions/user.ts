@@ -140,32 +140,51 @@ export const verifyIdentity = async (
 ) => {
   const authHeader = req.headers.authorization
   if (!authHeader) {
-    return res.status(401).json({ error: "Authorization header missing" })
+    return res.status(401).json({ error: "Authorization header missing" });
   }
+
+  const parts = authHeader.split(" ");
+
+  // Check if the header has two parts
+  if (parts.length !== 2) {
+    return res.status(401).json({ error: "Malformed token" });
+  }
+
+  const scheme = parts[0];
+  const token = parts[1];
+
+  // Check if the Scheme is Bearer
+  if (!/^Bearer$/i.test(scheme)) {
+    return res.status(401).json({ error: "Malformed token" });
+  }
+
   try {
-    const token = authHeader.split(" ")[1]
     const decoded = jwt.verify(
       token,
       "acnasjcnasjcnejfn3r823923r900239funcajsc"
     ) as {
-      userId: string
-    }
+      userId: string;
+    };
+
     // check if jwt.verify returns a valid userId
     if (!decoded.userId) {
-      return res.status(400).json({ error: "Invalid token" })
+      return res.status(400).json({ error: "Invalid token" });
     }
-    const user = await User.findOne({ userId: decoded.userId })
+
+    const user = await User.findOne({ userId: decoded.userId });
+
     if (!user) {
-      return res.status(400).json({ error: "User not found" })
+      return res.status(400).json({ error: "User not found" });
     }
+
     // @ts-ignore
-    req.user = user as UserInterface
+    req.user = user as UserInterface;
   } catch (error) {
-    console.error(error)
-    return res.status(401).json({ error: error.message })
+    console.error(error);
+    return res.status(401).json({ error: error.message });
   }
 
-  next()
+  next();
 }
 
 export const createInvite = async (params: CreateInviteDTO) => {
