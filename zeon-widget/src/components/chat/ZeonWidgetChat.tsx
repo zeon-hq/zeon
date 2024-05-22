@@ -14,13 +14,13 @@ import WidgetChatHeader from "./WidgetChatHeader";
 import { sendMessage } from "api/api";
 
 const Wrapper = styled.div`
-display: flex;
-flex-direction: column;
-justify-content: space-between;
-height: 93%;
-background-color: ${(props: IPropsType) => {
-  return props.theme.isEmbeddable ? 'white' :'white';
-}};
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 93%;
+  background-color: ${(props: IPropsType) => {
+    return props.theme.isEmbeddable ? "white" : "white";
+  }};
   border-radius: 12px;
   @media only screen and (max-width: 650px) {
     max-height: 100vh;
@@ -71,16 +71,15 @@ const ZeonWidgetChat = () => {
   const dispatch = useDispatch();
   const { messages, widgetDetails, typing } = useWidget();
 
-
   useEffect(() => {
     scrollToBottom();
   }, [messages?.length]);
 
-  useEffect(()=>{
-    return ()=>{
-      localStorage.removeItem("ticketId")
-    }
-  },[])
+  useEffect(() => {
+    return () => {
+      localStorage.removeItem("ticketId");
+    };
+  }, []);
 
   const submitForm = async (data: FormDataType) => {
     const channelId = widgetDetails?.channelId;
@@ -88,7 +87,8 @@ const ZeonWidgetChat = () => {
     const createdAt = Date.now().toString();
     const type = MessageType.SENT;
     const workspaceId = widgetDetails?.workspaceId;
-    const message =  data.message;
+    const message = data.message;
+    reset();
 
     const newMessagePayload = {
       workspaceId,
@@ -97,7 +97,7 @@ const ZeonWidgetChat = () => {
       message,
       type,
       createdAt,
-    }
+    };
     try {
       if (!isSubmitting) {
         dispatch(setMessage(newMessagePayload));
@@ -114,13 +114,13 @@ const ZeonWidgetChat = () => {
             isOpen: true,
             type: MessageType.SENT,
             ticketId,
-            messageSource: IMessageSource.WIDGET
+            messageSource: IMessageSource.WIDGET,
           },
-          messageSource: IMessageSource.WIDGET
-        }
-  
-        await sendMessage(sendMessagePayload)
-        reset();
+          messageSource: IMessageSource.WIDGET,
+        };
+
+        await sendMessage(sendMessagePayload);
+        
       }
     } catch (error) {
       // console.log(">>>", error);
@@ -129,53 +129,59 @@ const ZeonWidgetChat = () => {
 
   return (
     <>
-    <div className="" style={{
-      height: "100%",
-      overflow: "auto",
-    }}>
-      <WidgetChatHeader />
-      <Wrapper as={"form"} onSubmit={handleSubmit(submitForm)}>
-        <ChatContainer>
-          {!isOnScreen && (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Button
-                leftIcon={<BsArrow90DegDown size={"1rem"} />}
+      <div
+        className=""
+        style={{
+          height: "100%",
+          overflow: "auto",
+        }}
+      >
+        <WidgetChatHeader />
+        <Wrapper as={"form"} onSubmit={handleSubmit(submitForm)}>
+          <ChatContainer>
+            {!isOnScreen && (
+              <div
                 style={{
-                  color: "black",
-                  backgroundColor: "#f6f6f6",
-                  fontWeight: 500,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
-                onClick={() => scrollToBottom()}
               >
-                {" "}
-                Scroll to bottom!{" "}
-              </Button>
-            </div>
+                <Button
+                  leftIcon={<BsArrow90DegDown size={"1rem"} />}
+                  style={{
+                    color: "black",
+                    backgroundColor: "#f6f6f6",
+                    fontWeight: 500,
+                  }}
+                  onClick={() => scrollToBottom()}
+                >
+                  {" "}
+                  Scroll to bottom!{" "}
+                </Button>
+              </div>
+            )}
+
+            {messages.map((message: Message) => (
+              //@ts-ignore
+              <MessageCard
+                text={message.message}
+                type={message.type}
+                time={message.time || message.createdAt}
+              />
+            ))}
+            <div ref={elementRef} />
+          </ChatContainer>
+          {typing && (
+            <>
+              <p>typing...</p>
+            </>
           )}
-          
-          {messages.map((message: Message) => (
-            //@ts-ignore
-            <MessageCard text={message.message} type={message.type} time={message.time || message.createdAt}/>
-          ))}
-          <div ref={elementRef} />
-        </ChatContainer>
-{
-typing && 
-<>
-<p>typing...</p>
-</>
-}
-      <ChatMessageFooter 
-      setValue={setValue}
-      submitForm={handleSubmit(submitForm)}
-      />
-      </Wrapper>
+          <ChatMessageFooter
+            setValue={setValue}
+            submitForm={handleSubmit(submitForm)}
+          />
+        </Wrapper>
       </div>
     </>
   );
