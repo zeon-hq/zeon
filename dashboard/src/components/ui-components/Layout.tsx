@@ -11,11 +11,13 @@ import {
   MessageType,
   updateConversation,
   updateInbox,
-  setTyping
+  setTyping,
+  updateConversationAIStatus
 } from "reducer/slice"
 import socketInstance from "socket"
 import styled from "styled-components"
 import FinanceTopbar from "../../finance/expense/FinanceTopbar"
+import { ITicketType } from "components/details/inbox/component/MessageContainer"
 
 const ChildWrapper = styled.div<{ isFinance: boolean, isCRM: boolean }>`
   height: ${(props) =>
@@ -48,11 +50,31 @@ const Layout = ({ children }: { children: any }) => {
     });
 
     socketInstance.on("widget_typing", (data)=> {
+      // have the check to compare the ticket with the selected ticketId
         dispatch(setTyping(true));
     });
  
     socketInstance.on("widget_stop_typing", (data)=> {
+      // have the check to compare the ticket with the selected ticketId
       dispatch(setTyping(false));
+    });
+
+    socketInstance.on("ai_responding", (data)=>{
+      dispatch(updateConversationAIStatus({
+        data, 
+        type:ITicketType.AI_RESPONDING
+      }));
+    });    
+    
+    socketInstance.on("human_intervention_needed", (data)=>{
+      dispatch(updateConversationAIStatus({
+        data, 
+        type:ITicketType.HUMAN_REQUIRED
+      }));
+    });
+
+    socketInstance.on("ai_stop_responded", (data)=>{
+      dispatch(updateConversationAIStatus({data}));
     });
 
   }, [socketInstance, workspaceId]); // eslint-disable-line

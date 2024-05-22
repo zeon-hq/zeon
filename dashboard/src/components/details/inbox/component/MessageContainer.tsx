@@ -13,7 +13,7 @@ import { ISelectedPage, setActiveChat, setDefaultWorkSpaceSettingTab, setLoading
 import styled from "styled-components";
 import { getTime, preProcessText } from "util/dashboardUtils";
 
-enum ITicketType {
+export enum ITicketType {
   OPEN = "Open",
   RESOLVED = "Resolved",
   AI_RESPONDING = "AI Responding",
@@ -234,7 +234,7 @@ const MessageContainer = () => {
           const lengthCondition = messageLength > 1;
           const lastMessageIndex = messageLength - 1;
           const lastMessage = preProcessText(lengthCondition ? conversation.messages[lastMessageIndex].message || '' : conversation.text || '', {
-            email: conversation?.customerEmail,
+            email: conversation?.customerEmail
           });
           return (
             <>
@@ -278,7 +278,7 @@ const MessageContainer = () => {
                         </Flex>
                       </Text>
                       <TicketStatusBadge
-                      ticketType={conversation.isOpen ? ITicketType.OPEN : ITicketType.RESOLVED}/>
+                      ticketType={conversation.info == ITicketType.HUMAN_REQUIRED ? ITicketType.HUMAN_REQUIRED : conversation.info == ITicketType.AI_RESPONDING ? ITicketType.AI_RESPONDING : conversation.isOpen ? ITicketType.OPEN : ITicketType.RESOLVED}/>
                     </DetailWrapper>
                     <DetailWrapper>
                       <Flex

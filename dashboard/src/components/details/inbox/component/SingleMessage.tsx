@@ -3,7 +3,8 @@ import useDashboard from "hooks/useDashboard";
 import { MessageType } from "reducer/slice";
 import styled from "styled-components";
 import { getTime, preProcessText } from "util/dashboardUtils";
-
+import Lottie from "lottie-react";
+import TemplateGeneratingAnimation from "./template_generating.json";
 interface WrapperProps {
   type: string;
 }
@@ -29,8 +30,17 @@ const ParentWrapper = styled.div`
   width: "fit-content";
 `;
 
-const SingleMessage = ({ info }: any) => {
-  const { activeChat, user } = useDashboard();
+interface IInfo {
+  type:string;
+  message:string;
+}
+interface ISingleMessage {
+  info: IInfo | any;
+  isLastCount: boolean;
+}
+
+const SingleMessage = ({ info, isLastCount }: ISingleMessage) => {
+  const { activeChat, workspaceInfo, typing, user } = useDashboard();
   const { type, message } = info;
   const isReceivedMessage = (type === MessageType.RECEIVED);
   const isNote = (type === MessageType.NOTE);
@@ -64,6 +74,31 @@ const SingleMessage = ({ info }: any) => {
           </Wrapper>
         </ParentWrapper>
       </SingleChat>
+
+{
+(isLastCount && typing) && 
+      <SingleChat type={MessageType.SENT}>
+        <ParentWrapper>
+          <Flex justify={'space-between'} gap={'25px'}>
+          <Text mt={12} color="#344054" size="xs" weight={'500'} fs={'14'}>
+             {activeChat?.customerEmail}
+          </Text>
+          <Text mt={13} color="#495057" size="xs" weight={'400'} fs={'16'}>
+            {getTime(info.createdAt || parseInt(info.time))}{" "}
+          </Text>
+          </Flex>
+
+          <Wrapper type={MessageType.SENT}>
+          <Lottie
+          loop={true}
+          height={20}
+          style={{ height: "16px", width: "38px"}}
+          autoplay={true}
+          animationData={TemplateGeneratingAnimation}/>
+          </Wrapper>
+        </ParentWrapper>
+      </SingleChat>
+}
     </>
   );
 };

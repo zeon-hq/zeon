@@ -283,7 +283,6 @@ io.on("connection", (socket:Socket) => {
 
 
   socket.on("join_ticket", (data)=> {
-    console.log('data', data);
     socket.join(data.workspaceId);
     
     // boom working one    
@@ -516,25 +515,29 @@ app.post('/send/message', async (req, res) => {
       channelId
     }
 
+    io.to(workspaceId).emit("ai_responding", {
+      ticketId,
+      workspaceId,
+      channelId
+    });
+
     const aiResponse = await CoreService.getAIMessage(aiMessagepayload);
+    
+    io.to(workspaceId).emit("ai_stop_responded", {
+      ticketId,
+      workspaceId,
+      channelId
+    });
+    
     if (!aiResponse?.error) {
 
       if (aiResponse.text === 'human_intervention_needed') {
-        // human intervention needed
-        const message = `human_intervention_needed`;
-      const messageOptions: MessageOptions = {
-        workspaceId,
-        channelId,
-        type: IMessageType.SENT,
-        isRead: true,
-        time: messageData.createdAt,
-        message,
+      
+      io.to(workspaceId).emit("human_intervention_needed", {
         ticketId,
-        widgetId,
-        messageSource: "widget"
-      }
-      await createMessage({ ...messageData, createdAt: new Date(), message, type: IMessageType.SENT });
-      io.to(workspaceId).emit("message", messageOptions);
+        workspaceId,
+        channelId
+      });
 
       } else {
       // success

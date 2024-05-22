@@ -24,7 +24,7 @@ const useLocalStorage = <T,>(
       try {
         localStorage.setItem(key, JSON.stringify(state));
       } catch (err) {
-        console.log(err);
+        // console.log(err);
       }
     }
   }, [state, key]);

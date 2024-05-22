@@ -1,5 +1,6 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { ITicketType } from "components/details/inbox/component/MessageContainer";
 import { IMessage } from "components/details/inbox/inbox.types";
 import { ChronologyName, FilterName, IWorkSpaceSettings, SubFilterName } from "components/types";
 import { fetchUserInfo } from "service/CoreService";
@@ -267,6 +268,7 @@ export interface IInbox {
   channelId: string;
   customerEmail: string;
   createdAt: number;
+  info:ITicketType | undefined;
   updatedAt: number;
   text: string;
   ticketId:string;
@@ -552,14 +554,30 @@ export const dashboardSlice = createSlice({
     },
     updateConversation:(state, action: PayloadAction<{data:IMessage, type:MessageType}>) => {
       const conversation = state.inbox.allConversations.find((conversation) => conversation?.ticketId === action.payload.data.ticketId)
-      if(conversation){
-        if(action.payload.type ===  MessageType.SENT) conversation.hasNewMessage = conversation.hasNewMessage ? conversation.hasNewMessage + 1 : 1
+      if (conversation) {
+        if(action.payload.type ===  MessageType.SENT) {
+          conversation.hasNewMessage = conversation.hasNewMessage ? conversation.hasNewMessage + 1 : 1
+        }
         conversation.messages.push({...action.payload.data, type: action.payload.type})
+
+        if (conversation.info == ITicketType.HUMAN_REQUIRED && action.payload.data?.messageSource == "dashboard") {
+          conversation.info = undefined;
+        }
       }
 
       // check if active chat is the same as the conversation, if yes update that as well
       if (state.activeChat?.ticketId === action.payload.data.ticketId) { 
         state.activeChat.messages.push({...action.payload.data, type: action.payload.type})
+      }
+    },
+    updateConversationAIStatus: (state, action: PayloadAction<{data:IMessage, type?:ITicketType}>) => {
+      const conversation = state.inbox.allConversations.find((conversation) => conversation?.ticketId === action.payload.data.ticketId);
+      if (conversation) {
+        if (action?.payload?.type) {
+          conversation.info = action?.payload?.type;
+        } else {
+          conversation.info = undefined;
+        }
       }
     },
     setNewMessageToFalse:(state, action: PayloadAction<string>) => {
@@ -633,6 +651,7 @@ export const {
   updateIsAIEnabled,
   setDefaultWorkSpaceSettingTab,
   updateSlackTicketNotification,
+  updateConversationAIStatus,
   updateUserAvatarsVisibility,
   enableInChatWidget,
   updateSingleInChatWidget,

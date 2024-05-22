@@ -16,8 +16,6 @@ import oauthController from "./controller/oauthController";
 import notesRoutes from "./routes/notes";
 import AIRoute from "./routes/AIRoute";
 import Workspace from "./schema/Workspace";
-//@ts-ignore
-import {SubcriptionPlan} from "./constants/constants.ts"
 
 const app = express();
 const port = process.env.CORE_BACKEND_PORT
