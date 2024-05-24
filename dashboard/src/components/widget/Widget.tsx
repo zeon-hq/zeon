@@ -101,7 +101,7 @@ const Widget = ({ configType }: Props) => {
   const { channelsInfo, selectedPage } = useDashboard();
   const appearenceDetails = channelsInfo[selectedPage.name]?.appearance;
   const inChatWidgets = channelsInfo[selectedPage.name]?.inChatWidgets;
-
+  const topLogo = appearenceDetails?.widgetHeaderSection?.topLogo;
   return (
     <>
       <ModalWrapper>
@@ -110,7 +110,7 @@ const Widget = ({ configType }: Props) => {
             <Box>
               <img
                 width={"40px"}
-                src="https://zeon-assets.s3.ap-south-1.amazonaws.com/Logomark.svg"
+                src={topLogo || "https://zeon-assets.s3.ap-south-1.amazonaws.com/Logomark.svg"}
                 alt="zeon-logo"
               />
             </Box>
