@@ -88,6 +88,7 @@ const ChannelSchema: Schema = new Schema({
   slackChannelId: { type: String },
   emailNewTicketNotification: { type: Boolean, default: false },
   isAIEnabled: { type: Boolean, default: false },
+  customPrompt: { type: String, default: "" },
   accessToken: { type: String },
   appearance: {
     newConversationButton: {

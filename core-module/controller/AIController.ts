@@ -11,6 +11,7 @@ import { getCollectionName, makeChain } from "../utils/AIUtils";
 import { generateId } from "../utils/utils";
 import { ZeonServices } from "../types/types";
 import Logger from "../functions/logger";
+import { getCustomPrompt } from "../service/ChatService";
 
 const logger = new Logger(ZeonServices.CORE);
 const secretAccessKey = process.env.SECRET_ACCESS_KEY as string;
@@ -92,8 +93,11 @@ export default class AIController {
         },
       );
 
+      logger.info({message:`[AIController.getInjestFile] fetching custom prompt`})
+      const customPrompt = await getCustomPrompt(channelId)
+  
       logger.info({message:`[AIController.getInjestFile] makechain, question:${question}, workspaceId:${workspaceId}, channelId:${channelId}`})
-      const chain = makeChain(vectorStore, workspaceId, channelId);
+      const chain = makeChain(vectorStore, workspaceId, channelId, customPrompt);
 
       logger.info({message:`[AIController.getInjestFile] chain.call, question:${question}, workspaceId:${workspaceId}, channelId:${channelId}`})
       const response = await chain.call({
