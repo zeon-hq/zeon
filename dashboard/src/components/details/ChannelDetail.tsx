@@ -191,7 +191,7 @@ const ChannelDetail = () => {
           .filter((tab) => tab.active) // Filter tabs where active is true
         .map((tab: TabInfo, index) => {
           return (
-            <Tabs.Panel style={{ overflow:'scroll' }} value={tab.name} key={index}>
+            <Tabs.Panel style={{ overflow:'scroll', padding:"0px 20px" }} value={tab.name} key={index}>
               {getTabInfo(tab.name)}
             </Tabs.Panel>
           );

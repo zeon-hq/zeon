@@ -54,6 +54,8 @@ export interface ChannelsInfo {
     integration: {
       script: string;
     };
+    customPrompt: string,
+    enableHumanHandover: boolean;
     appearance: {
       widgetButtonSetting: {
         widgetButtonColor: string;

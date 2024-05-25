@@ -17,7 +17,7 @@ export enum IChannelTabsName {
     CANNED_RESPONSES = "Canned Responses",
     USER = "Users",
     KNOWLEDGE = "Knowledge",
-    DEPLOYMENT = "Installation",
+    DEPLOYMENT = "Overview",
     Overview = "Overview",
 }
 
