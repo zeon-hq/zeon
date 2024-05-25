@@ -16,7 +16,7 @@ router.get("/canned/:channelId",verifyIdentity, getAllCannedResponsedFromChannel
 router.get("/user/:channelId", getUserFromChannel)
 router.post("/addUser",verifyIdentity, addUserIdsToChannel)
 router.post("/removeUser",verifyIdentity, removeUserIdsFromChannel)
-router.put('/customPrompt', verifyIdentity, updateCustomPrompt)
+router.put('/:channelId/customPrompt', verifyIdentity, updateCustomPrompt)
 router.get('/:channelId/customPrompt', verifyIdentity, getCustomPrompt)
 
 module.exports = router;
