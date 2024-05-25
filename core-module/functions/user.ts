@@ -139,11 +139,13 @@ export const verifyIdentity = async (
   next: NextFunction
 ) => {
   const authHeader = req.headers.authorization
+  console.log(">>> bearer", authHeader)
   if (!authHeader) {
     return res.status(401).json({ error: "Authorization header missing" });
   }
 
   const parts = authHeader.split(" ");
+  console.log(">>> parts", parts)
 
   // Check if the header has two parts
   if (parts.length !== 2) {
@@ -157,6 +159,7 @@ export const verifyIdentity = async (
   if (!/^Bearer$/i.test(scheme)) {
     return res.status(401).json({ error: "Malformed token" });
   }
+  console.log(">>> token", token)
 
   try {
     const decoded = jwt.verify(
@@ -180,6 +183,12 @@ export const verifyIdentity = async (
     // @ts-ignore
     req.user = user as UserInterface;
   } catch (error) {
+    if (error instanceof jwt.TokenExpiredError) {
+      console.log(">>>>>> jwt expired",error);
+      return res.status(401).json({ error: "Session expired. Please log in again." });
+    }
+    console.error(error);
+    return res.status(401).json({ error: error.message });
     console.error(error);
     return res.status(401).json({ error: error.message });
   }
