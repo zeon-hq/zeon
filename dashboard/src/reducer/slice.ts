@@ -562,7 +562,7 @@ export const dashboardSlice = createSlice({
         }
         conversation.messages.push({...action.payload.data, type: action.payload.type})
 
-        if (conversation.info == ITicketType.HUMAN_REQUIRED && action.payload.data?.messageSource == "dashboard") {
+        if (conversation.info === ITicketType.HUMAN_REQUIRED && action.payload.data?.messageSource === "dashboard") {
           conversation.info = undefined;
         }
       }

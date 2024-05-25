@@ -4,7 +4,6 @@ import {
   Code,
   Flex,
   Grid,
-  Space,
   Switch,
   Textarea,
 } from "@mantine/core";
@@ -20,7 +19,6 @@ import { InfoContainer, WidgetContainer, Wrapper } from "../tabInfo.styles";
 import Widget from "components/widget/Widget";
 import Label from "components/ui-components/Label";
 import { saveCustomPrompt } from "service/DashboardService";
-import notification from "components/utils/notification";
 import { showNotification } from "@mantine/notifications";
 import { useEffect } from "react";
 
@@ -68,7 +66,7 @@ const Deployment = () => {
 
     setCustomPrompt(customPromptValue);
     setChecked(enableHumanHandover);
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const widgetChatEmbedding = `
     <!-- Add this in the body tag in your code -->
@@ -88,7 +86,7 @@ const Deployment = () => {
 
   const handleSaveCustomPrompt = async () => {
     try {
-      const res = await saveCustomPrompt(channelId, customPrompt, checked);
+      await saveCustomPrompt(channelId, customPrompt, checked);
       showNotification({
         title: "Notification",
         message: "Custom Prompt Saved",
