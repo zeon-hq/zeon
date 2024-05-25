@@ -94,10 +94,10 @@ export default class AIController {
       );
 
       logger.info({message:`[AIController.getInjestFile] fetching custom prompt`})
-      const customPrompt = await getCustomPrompt(channelId)
+      const {customPrompt, enableHumanHandover} = await getCustomPrompt(channelId)
   
       logger.info({message:`[AIController.getInjestFile] makechain, question:${question}, workspaceId:${workspaceId}, channelId:${channelId}`})
-      const chain = makeChain(vectorStore, workspaceId, channelId, customPrompt);
+      const chain = makeChain(vectorStore, workspaceId, channelId, customPrompt, enableHumanHandover);
 
       logger.info({message:`[AIController.getInjestFile] chain.call, question:${question}, workspaceId:${workspaceId}, channelId:${channelId}`})
       const response = await chain.call({
