@@ -241,7 +241,7 @@ const Deployment = () => {
                 {embeddSuportChatText}
               </Code>
             </CodeBlockWrapper>
-            <Grid>
+            <Grid mt="sm">
               {docsArray.map((data) => {
                 return (
                   <Grid.Col span={4}>

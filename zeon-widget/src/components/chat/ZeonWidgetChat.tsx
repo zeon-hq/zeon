@@ -88,7 +88,7 @@ const ZeonWidgetChat = () => {
     const type = MessageType.SENT;
     const workspaceId = widgetDetails?.workspaceId;
     const message = data.message;
-    reset();
+    setValue("message", "");
 
     const newMessagePayload = {
       workspaceId,
@@ -167,6 +167,7 @@ const ZeonWidgetChat = () => {
               <MessageCard
                 text={message.message}
                 type={message.type}
+                //@ts-ignore
                 time={message.time || message.createdAt}
               />
             ))}
@@ -180,6 +181,7 @@ const ZeonWidgetChat = () => {
           <ChatMessageFooter
             setValue={setValue}
             submitForm={handleSubmit(submitForm)}
+            watch={watch}
           />
         </Wrapper>
       </div>
