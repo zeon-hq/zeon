@@ -40,7 +40,7 @@ interface ISingleMessage {
 }
 
 const SingleMessage = ({ info, isLastCount }: ISingleMessage) => {
-  const { activeChat, workspaceInfo, typing, user } = useDashboard();
+  const { activeChat, typing, user } = useDashboard();
   const { type, message } = info;
   const isReceivedMessage = (type === MessageType.RECEIVED);
   const isNote = (type === MessageType.NOTE);

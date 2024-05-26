@@ -278,7 +278,7 @@ const MessageContainer = () => {
                         </Flex>
                       </Text>
                       <TicketStatusBadge
-                      ticketType={conversation.info == ITicketType.HUMAN_REQUIRED ? ITicketType.HUMAN_REQUIRED : conversation.info == ITicketType.AI_RESPONDING ? ITicketType.AI_RESPONDING : conversation.isOpen ? ITicketType.OPEN : ITicketType.RESOLVED}/>
+                      ticketType={conversation.info === ITicketType.HUMAN_REQUIRED ? ITicketType.HUMAN_REQUIRED : conversation.info === ITicketType.AI_RESPONDING ? ITicketType.AI_RESPONDING : conversation.isOpen ? ITicketType.OPEN : ITicketType.RESOLVED}/>
                     </DetailWrapper>
                     <DetailWrapper>
                       <Flex

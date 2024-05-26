@@ -357,3 +357,24 @@ export const removeUserFromChannel = async (
     return [];
   }
 };
+
+export const saveCustomPrompt = async (
+  channelId: string,
+  customPrompt: string,
+  enableHumanHandover: boolean
+) => {
+  try {
+    const res: any = await axiosInstance.put(
+      `${apiDomainUrl}/channel/${channelId}/customPrompt`,
+      {
+        channelId,
+        customPrompt,
+        enableHumanHandover,
+      }
+    );
+    return res.data;
+  } catch (error) {
+    console.log(`[saveCustomPrompt] error: ${error}`);
+    return [];
+  }
+}

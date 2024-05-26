@@ -1,5 +1,5 @@
 import express, { Express, Request, Response, Router } from 'express';
-import { createChannel,updateChannelInfo,getChannel, createCanned,getUserFromChannel, updatedCannedResponse, getAllCannedResponsedFromChannel, deleteCannedResponse, addUserIdsToChannel, removeUserIdsFromChannel } from '../controller/channel/channel.controller';
+import { createChannel,updateChannelInfo,getChannel, createCanned,getUserFromChannel, updatedCannedResponse, getAllCannedResponsedFromChannel, deleteCannedResponse, addUserIdsToChannel, removeUserIdsFromChannel, updateCustomPrompt, getCustomPrompt } from '../controller/channel/channel.controller';
 import { verifyIdentity } from 'zeon-core/dist/func'
 
 const router: Router = express.Router()
@@ -16,5 +16,7 @@ router.get("/canned/:channelId",verifyIdentity, getAllCannedResponsedFromChannel
 router.get("/user/:channelId", getUserFromChannel)
 router.post("/addUser",verifyIdentity, addUserIdsToChannel)
 router.post("/removeUser",verifyIdentity, removeUserIdsFromChannel)
+router.put('/:channelId/customPrompt', verifyIdentity, updateCustomPrompt)
+router.get('/:channelId/customPrompt', verifyIdentity, getCustomPrompt)
 
 module.exports = router;

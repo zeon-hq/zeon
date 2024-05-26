@@ -93,11 +93,11 @@ const TabContent = ({
 };
 
 const ChatArea = () => {
-  const { activeChat, workspaceInfo, typing } = useDashboard();
   const [value, handleChange] = useInputState("");
   const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState<string | null>("reply");
   const [query, setQuery] = useInputState("");
+  const {activeChat,workspaceInfo} = useDashboard();
 
   const scrollToBottom = () => {
       const chatContainerParentDiv: any = document.getElementById('chat_container_div');
@@ -222,7 +222,7 @@ const ChatArea = () => {
                           />
                           {activeChat?.messages?.map((message: IMessage, index:number) => (
                               <SingleMessage 
-                              isLastCount={activeChat?.messages?.length - 1 == index}
+                              isLastCount={activeChat?.messages?.length - 1 === index}
                               key={index} 
                               info={message} />
                           ))}

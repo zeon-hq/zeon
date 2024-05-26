@@ -6,9 +6,10 @@ import useWidget from "components/hooks/useWidget";
 interface IChatMessageFooter {
     submitForm: () => void;
     setValue: any;   
+    watch: any;
 }
 
-const ChatMessageFooter = ({submitForm, setValue}:IChatMessageFooter) => {
+const ChatMessageFooter = ({submitForm, setValue, watch}:IChatMessageFooter) => {
   const { widgetDetails, typing } = useWidget();
   const ticketId = localStorage.getItem("ticketId");
   const isEmbeddable: IEmbeddableOutput = useEmbeddable();
@@ -40,6 +41,7 @@ const ChatMessageFooter = ({submitForm, setValue}:IChatMessageFooter) => {
           source:'widget'
         }) 
       }}
+      value={watch("message")}
 
       onBlur={()=>{
         socketInstance.emit("widget_stop_typing", {

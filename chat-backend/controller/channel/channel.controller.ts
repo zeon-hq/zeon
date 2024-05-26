@@ -336,3 +336,52 @@ export const removeUserIdsFromChannel = async (req: SessionRequest, res: Respons
     })
   }
 }
+
+export const updateCustomPrompt = async (req: SessionRequest, res: Response) => {
+  const { channelId, customPrompt, enableHumanHandover } = req.body;
+  try {
+    const channel = await Channel.findOne({
+      channelId,
+    });
+    if (!channel) {
+      return res.status(400).json({
+        message: "No channel found",
+      });
+    }
+    channel.customPrompt = customPrompt;
+    channel.enableHumanHandover = enableHumanHandover;
+    await channel.save();
+    return res.status(200).json({
+      message: "Custom prompt updated successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Something went wrong",
+    });
+  }
+}
+
+export const getCustomPrompt = async (req: SessionRequest, res: Response) => {
+  const { channelId } = req.params;
+  try {
+    const channel = await Channel.findOne
+    ({channelId});
+    if (!channel) {
+      return res.status(400).json({
+        message: "No channel found",
+      });
+    }
+    return res.status(200).json({
+      message: "Custom prompt fetched successfully",
+      customPrompt: channel.customPrompt,
+      enableHumanHandover: channel.enableHumanHandover
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Something went wrong",
+    });
+  }
+  
+}

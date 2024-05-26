@@ -13,7 +13,7 @@ export function generateId(x: number): string {
 
 export function generateJWTToken(payload: any): string {
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
-        expiresIn: '1d',
+        expiresIn: '30d',
     });
 
     return token;

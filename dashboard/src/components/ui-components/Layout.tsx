@@ -28,7 +28,7 @@ const ChildWrapper = styled.div<{ isFinance: boolean, isCRM: boolean }>`
 const Layout = ({ children }: { children: any }) => {
   const dispatch = useDispatch()
   const { workspaceId } = useParams()
-  const { showSidebar, isFinance, isChat, isCRM, activeChat, typing } = useDashboard()
+  const { showSidebar, isFinance, isChat, isCRM} = useDashboard()
 
   useEffect(() => {
     //@ts-ignore
