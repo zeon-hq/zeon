@@ -13,12 +13,13 @@ Chat History:
 Follow Up Input: {question}
 Standalone question:`;
 
+const humanInterventionText = `If the question is not related to the context, respond with the word "${guardRailKeyword}"`
+
 const getQAPrompt = ({string, enableHumanHandover}:{string:string, enableHumanHandover:boolean}) => {
   const prompt = `${QA_PROMPT} ${string} ${enableHumanHandover ? humanInterventionText : ""}`;
   return prompt;
 }
 
-const humanInterventionText = `If the question is not related to the context, respond with the word "${guardRailKeyword}"`
 
 const QA_PROMPT = `You are a helpful AI assistant. Use the following pieces of context to answer the question at the end.
 If you don't know the answer, just say you don't know. DO NOT try to make up an answer.
