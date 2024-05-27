@@ -338,7 +338,7 @@ export const removeUserIdsFromChannel = async (req: SessionRequest, res: Respons
 }
 
 export const updateCustomPrompt = async (req: SessionRequest, res: Response) => {
-  const { channelId, customPrompt, enableHumanHandover } = req.body;
+  const { channelId, customPrompt, enableHumanHandover, channelName, aiName} = req.body;
   try {
     const channel = await Channel.findOne({
       channelId,
@@ -350,6 +350,8 @@ export const updateCustomPrompt = async (req: SessionRequest, res: Response) => 
     }
     channel.customPrompt = customPrompt;
     channel.enableHumanHandover = enableHumanHandover;
+    channel.name = channelName;
+    channel.aiName = aiName;
     await channel.save();
     return res.status(200).json({
       message: "Custom prompt updated successfully",
@@ -375,7 +377,7 @@ export const getCustomPrompt = async (req: SessionRequest, res: Response) => {
     return res.status(200).json({
       message: "Custom prompt fetched successfully",
       customPrompt: channel.customPrompt,
-      enableHumanHandover: channel.enableHumanHandover
+      enableHumanHandover: channel.enableHumanHandover,
     });
   } catch (error) {
     console.log(error);

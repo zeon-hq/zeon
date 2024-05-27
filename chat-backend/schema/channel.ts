@@ -89,6 +89,7 @@ const ChannelSchema: Schema = new Schema({
   emailNewTicketNotification: { type: Boolean, default: false },
   enableHumanHandover: {type:Boolean, default:false},
   isAIEnabled: { type: Boolean, default: false },
+  aiName: { type: String, default: "" },
   customPrompt: { type: String, default: "" },
   accessToken: { type: String },
   appearance: {
