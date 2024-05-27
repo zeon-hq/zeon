@@ -55,6 +55,7 @@ export interface ChannelsInfo {
       script: string;
     };
     customPrompt: string,
+    aiName: string,
     enableHumanHandover: boolean;
     appearance: {
       widgetButtonSetting: {

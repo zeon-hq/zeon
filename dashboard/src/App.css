@@ -13,6 +13,11 @@
   }
 }
 
+.mantine-UnstyledButton-root[aria-selected="true"] {
+  color: #3054B9 !important; /* Change this to the color you want */
+  background-color: #F5F8FF !important;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;

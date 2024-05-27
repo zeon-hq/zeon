@@ -4,7 +4,9 @@ import {
   Code,
   Flex,
   Grid,
+  Space,
   Switch,
+  TextInput,
   Textarea,
 } from "@mantine/core";
 import { useClipboard, useInputState } from "@mantine/hooks";
@@ -21,6 +23,9 @@ import Label from "components/ui-components/Label";
 import { saveCustomPrompt } from "service/DashboardService";
 import { showNotification } from "@mantine/notifications";
 import { useEffect } from "react";
+import { Tabs } from "@mantine/core";
+import { IoCubeOutline } from "react-icons/io5";
+
 
 export const SnippetHeading = styled.p`
   color: #475467;
@@ -56,6 +61,9 @@ const Deployment = () => {
   //useTextInput
   const [customPrompt, setCustomPrompt] = useInputState<string>("");
   const [checked, setChecked] = useInputState<boolean>(false);
+  const [channelName, setChannelName] = useInputState<string>("");
+  const [aiName, setAiName] = useInputState<string>("");
+  const [tokens, setTokens] = useInputState<number>(0);
 
   const channelId = channelsInfo[selectedPage.name]?.channelId;
 
@@ -63,9 +71,14 @@ const Deployment = () => {
     const customPromptValue = channelsInfo[selectedPage.name]?.customPrompt;
     const enableHumanHandover =
       channelsInfo[selectedPage.name]?.enableHumanHandover;
+    const channelName = channelsInfo[selectedPage.name]?.name;
+    const aiName = channelsInfo[selectedPage.name]?.aiName;
 
     setCustomPrompt(customPromptValue);
     setChecked(enableHumanHandover);
+    setChannelName(channelName);
+    setAiName(aiName);
+    setTokens(customPromptValue.split(" ").length);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const widgetChatEmbedding = `
@@ -86,10 +99,16 @@ const Deployment = () => {
 
   const handleSaveCustomPrompt = async () => {
     try {
-      await saveCustomPrompt(channelId, customPrompt, checked);
+      await saveCustomPrompt(
+        channelId,
+        customPrompt,
+        checked,
+        channelName,
+        aiName
+      );
       showNotification({
         title: "Notification",
-        message: "Custom Prompt Saved",
+        message: "Changes saved successfully",
       });
     } catch (error) {
       showNotification({
@@ -109,7 +128,29 @@ const Deployment = () => {
         />
         <Wrapper>
           <InfoContainer>
-            <Label text={"Craft your AI Agent’s persona here"} />
+            <Flex gap={"8px"} justify="space-between" align="center">
+              <Box w="100%">
+                <Label text={"Channel Name"} />
+                <TextInput
+                  placeholder="Channel Name"
+                  value={channelName}
+                  onChange={setChannelName}
+                />
+              </Box>
+
+              <Box w="100%">
+                <Label text={"AI Name"} />
+                <TextInput
+                  placeholder="Name of AI Agent"
+                  value={aiName}
+                  onChange={setAiName}
+                />
+              </Box>
+            </Flex>
+            <Flex justify="space-between">
+              <Label text={"Craft your AI Agent’s persona here"} />
+              <Label text={`Tokens: ${customPrompt.length}`} />
+            </Flex>
             <Textarea
               // description="Enter a description..."
               placeholder="Enter a description..."
@@ -135,121 +176,151 @@ const Deployment = () => {
                 Save{" "}
               </Button>
             </Flex>
-
-            <CodeBlockWrapper>
-              <CodeBlockContainer>
-                <SnippetHeading>Chat Widget</SnippetHeading>
-
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <Button
+            <Space h={20} />
+            <Label text={"Deploy your In-Bound AI Chat Pipeline"} />
+            <Space h={10} />
+            <Tabs  color="indigo" defaultValue="chatWidget">
+              <Tabs.List sx={{
+              borderBottom:"none"
+            }}>
+                <Tabs.Tab value="chatWidget">
+                  <div
                     style={{
-                      borderColor: "white",
-                      margin: 0,
-                      color: "#3054B9",
-                      fontSize: "12px",
-                      fontStyle: "normal",
+                      // color: "#3054B9",
+                      fontWeight: 600,
+                      display: "flex",
+                      gap: "6px",
                     }}
-                    sx={{
+                  >
+                    <div>
+                      <IoCubeOutline strokeWidth="1.5" />
+                    </div>
+                    Chat Widget
+                  </div>
+                </Tabs.Tab>
+                <Tabs.Tab value="embeddedChat">
+                  <div
+                    style={{
+                      // color: "#3054B9",
+                      fontWeight: 600,
+                      display: "flex",
+                      gap: "6px",
+                    }}
+                  >
+                    <div>
+                      <IoCubeOutline strokeWidth="1.5" />
+                    </div>
+                    Embedded Chat
+                  </div>
+                </Tabs.Tab>
+              </Tabs.List>
+
+              <Tabs.Panel value="chatWidget">
+                <CodeBlockWrapper>
+                  <CodeBlockContainer>
+                    <SnippetHeading>Chat Widget</SnippetHeading>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Button
+                        style={{
+                          borderColor: "white",
+                          margin: 0,
+                          color: "#3054B9",
+                          fontSize: "12px",
+                          fontStyle: "normal",
+                        }}
+                        sx={{
+                          "&:hover": {
+                            backgroundColor: "white",
+                          },
+                        }}
+                        onClick={() =>
+                          clipboardChatWidgetCopy.copy(widgetChatEmbedding)
+                        }
+                        mt={20}
+                        color="#3054B9"
+                        variant="outline"
+                        leftIcon={<img alt="copy" src={CopySVGIcon} />}
+                      >
+                        {clipboardChatWidgetCopy.copied ? "Copied" : "Copy"}
+                      </Button>
+                    </div>
+                  </CodeBlockContainer>
+                  <Code
+                    mt={10}
+                    sx={(theme) => ({
+                      backgroundColor: "#F9FAFB",
+                      border: "1px solid #E0E4E7",
+                      borderRadius: "12px",
+                      fontSize: "14px",
+                      fontWeight: 400,
                       "&:hover": {
-                        backgroundColor: "white",
+                        backgroundColor: theme.colors.gray[1],
                       },
-                    }}
-                    onClick={() =>
-                      clipboardChatWidgetCopy.copy(widgetChatEmbedding)
-                    }
-                    mt={20}
-                    color="#3054B9"
-                    variant="outline"
-                    leftIcon={<img alt="copy" src={CopySVGIcon} />}
+                    })}
+                    color="red"
+                    p={10}
+                    block
                   >
-                    {clipboardChatWidgetCopy.copied ? "Copied" : "Copy"}
-                  </Button>
-                </div>
-              </CodeBlockContainer>
+                    {widgetChatEmbedding}
+                  </Code>
+                </CodeBlockWrapper>
+              </Tabs.Panel>
 
-              <Code
-                mt={10}
-                sx={(theme) => ({
-                  backgroundColor: "#F9FAFB",
-                  border: "1px solid #E0E4E7",
-                  borderRadius: "12px",
-                  fontSize: "14px",
-                  fontWeight: 400,
-                  "&:hover": {
-                    backgroundColor: theme.colors.gray[1],
-                  },
-                })}
-                color="red"
-                p={10}
-                block
-              >
-                {widgetChatEmbedding}
-              </Code>
-            </CodeBlockWrapper>
-
-            <CodeBlockWrapper>
-              <CodeBlockContainer>
-                <SnippetHeading>Embedded Support Chat</SnippetHeading>
-
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <Button
-                    style={{
-                      borderColor: "white",
-                      backgroundColor: "white",
-                      color: "#3054B9",
-                      fontSize: "12px",
-                      fontStyle: "normal",
-                    }}
-                    onClick={() =>
-                      clipboardEmbeddableTextCopy.copy(embeddSuportChatText)
-                    }
-                    color="#3054B9"
-                    variant="outline"
-                    leftIcon={<img alt="copy" src={CopySVGIcon} />}
+              <Tabs.Panel value="embeddedChat">
+                <CodeBlockWrapper>
+                  <CodeBlockContainer>
+                    <SnippetHeading>Embedded Support Chat</SnippetHeading>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Button
+                        style={{
+                          borderColor: "white",
+                          backgroundColor: "white",
+                          color: "#3054B9",
+                          fontSize: "12px",
+                          fontStyle: "normal",
+                        }}
+                        onClick={() =>
+                          clipboardEmbeddableTextCopy.copy(embeddSuportChatText)
+                        }
+                        color="#3054B9"
+                        variant="outline"
+                        leftIcon={<img alt="copy" src={CopySVGIcon} />}
+                      >
+                        {clipboardEmbeddableTextCopy.copied ? "Copied" : "Copy"}
+                      </Button>
+                    </div>
+                  </CodeBlockContainer>
+                  <Code
+                    mt={10}
+                    sx={(theme) => ({
+                      backgroundColor: "#F9FAFB",
+                      border: "1px solid #E0E4E7",
+                      borderRadius: "12px",
+                      fontSize: "14px",
+                      fontWeight: 400,
+                      "&:hover": {
+                        backgroundColor: theme.colors.gray[1],
+                      },
+                    })}
+                    color="red"
+                    p={10}
+                    block
                   >
-                    {clipboardEmbeddableTextCopy.copied ? "Copied" : "Copy"}
-                  </Button>
-                </div>
-              </CodeBlockContainer>
-
-              <Code
-                mt={10}
-                sx={(theme) => ({
-                  backgroundColor: "#F9FAFB",
-                  border: "1px solid #E0E4E7",
-                  borderRadius: "12px",
-                  fontSize: "14px",
-                  fontWeight: 400,
-                  "&:hover": {
-                    backgroundColor: theme.colors.gray[1],
-                  },
-                })}
-                color="red"
-                p={10}
-                block
-              >
-                {embeddSuportChatText}
-              </Code>
-            </CodeBlockWrapper>
-            <Grid mt="sm">
-              {docsArray.map((data) => {
-                return (
-                  <Grid.Col span={4}>
-                    <GuideCards name={data.name} link={data.link} />
-                  </Grid.Col>
-                );
-              })}
-            </Grid>
+                    {embeddSuportChatText}
+                  </Code>
+                </CodeBlockWrapper>
+              </Tabs.Panel>
+            </Tabs>
           </InfoContainer>
           <WidgetContainer>
             <Widget configType="appearance" />
