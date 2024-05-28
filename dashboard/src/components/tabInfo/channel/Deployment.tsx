@@ -3,7 +3,6 @@ import {
   Button,
   Code,
   Flex,
-  Grid,
   Space,
   Switch,
   TextInput,
@@ -11,11 +10,9 @@ import {
 } from "@mantine/core";
 import { useClipboard, useInputState } from "@mantine/hooks";
 import Heading from "components/details/inbox/component/Heading";
-import GuideCards from "components/ui-components/workspaces/GuideCards";
 import { getConfig as Config } from "config/Config";
 import useDashboard from "hooks/useDashboard";
 import styled from "styled-components";
-import { docsArray } from "util/Constant";
 import CopySVGIcon from "assets/copy_svg_icon.svg";
 import { InfoContainer, WidgetContainer, Wrapper } from "../tabInfo.styles";
 import Widget from "components/widget/Widget";
@@ -63,8 +60,7 @@ const Deployment = () => {
   const [checked, setChecked] = useInputState<boolean>(false);
   const [channelName, setChannelName] = useInputState<string>("");
   const [aiName, setAiName] = useInputState<string>("");
-  const [tokens, setTokens] = useInputState<number>(0);
-
+  
   const channelId = channelsInfo[selectedPage.name]?.channelId;
 
   useEffect(() => {
@@ -78,7 +74,6 @@ const Deployment = () => {
     setChecked(enableHumanHandover);
     setChannelName(channelName);
     setAiName(aiName);
-    setTokens(customPromptValue.split(" ").length);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const widgetChatEmbedding = `
