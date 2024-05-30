@@ -10,7 +10,6 @@ import MessageModel, { IMessageSource, IMessageType } from "./model/MessageModel
 import TicketModel from "./model/TicketModel";
 import { sendMessageIo } from "./mq/producer";
 import { ITicketOptions, MessageOptions } from "./schema/types/ticket";
-
 import ChannelModel from "./model/ChannelModel";
 import User from "./model/UserModel";
 import CoreService, { ISendSlackMessage } from "./services/CoreService";
