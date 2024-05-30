@@ -81,7 +81,6 @@ const Integrations = () => {
         color: "red"
       });
     }
-    
   }
   };
 
