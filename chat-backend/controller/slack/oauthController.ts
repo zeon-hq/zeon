@@ -26,7 +26,7 @@ export default class oauthController {
 
             const slackRedirectionUrl = process.env.SLACK_REDIRECTION_URL;
 
-            const response = await axios({
+            const axiosParams = {
                 method: "get",
                 url: "https://slack.com/api/oauth.v2.access",
                 params: {
@@ -35,24 +35,25 @@ export default class oauthController {
                     client_secret: process.env.REACT_APP_SLACK_CLIENT_SECRET,
                     redirect_uri: slackRedirectionUrl
                 }
-            });
+            };
+            const response = await axios(axiosParams);
 
             const { data } = response;
 
-        
-        await Channel.findOneAndUpdate({ channelId: state.channelId }, {$set:{ slackChannelId: data.incoming_webhook.channelId, accessToken: data.access_token }});
-            
-        if (state?.currentUrl) {
+            await Channel.findOneAndUpdate({ channelId: state.channelId }, { $set: { slackChannelId: data?.authed_user?.id, accessToken: data?.access_token } });
+
+            if (state?.currentUrl) {
                 res.redirect(state?.currentUrl);
-              }
-            if (data.ok) {
-                console.log(`Got access token: ${data.access_token}`);
-            } else {
-                console.error(`Error getting access token: ${data.error}`);
-                res.status(500).json({ error: data.error });
             }
 
-        } catch (e:any) {
+            if (data?.ok && data?.access_token) {
+                console.log(`Got access token: ${data.access_token}`);
+            } else {
+                console.error(`Error getting access token: ${data?.error}`);
+                res.status(500).json({ error: data?.error });
+            }
+
+        } catch (e: any) {
             if (e.response) {
                 const ZeonResponse = {
                     code: e.response.data ? e.response.data.code : e.response.status,
