@@ -1,7 +1,7 @@
 import { Box, Button, Input, Modal, Space } from "@mantine/core"
 import { useInputState } from "@mantine/hooks"
 import { showNotification } from "@mantine/notifications"
-import { Industries, TeamSize } from "constants/core"
+import {  TeamSize } from "constants/core"
 import React from "react"
 import { useNavigate } from "react-router-dom"
 import Select from "react-select"
@@ -16,7 +16,6 @@ const CreateWorkspaceModal = ({ opened, setOpened }: ICreateWorkspaceModal) => {
   const [name, setName] = useInputState("")
   const [legalCompanyName, setLegalCompanyName] = useInputState("")
   const [teamSize, setTeamSize] = useInputState("")
-  const [industry, setIndustry] = useInputState("")
   const [loading, setLoading] = React.useState(false)
   const navigate = useNavigate()
 
@@ -36,7 +35,7 @@ const CreateWorkspaceModal = ({ opened, setOpened }: ICreateWorkspaceModal) => {
         modules: ["CHAT"],
         legalCompanyName,
         teamSize,
-        industry,
+        industry: "Default",
       })
       setLoading(false)
       return navigate(`/dashboard/${res.workspace.workspaceId}`)
@@ -74,13 +73,6 @@ const CreateWorkspaceModal = ({ opened, setOpened }: ICreateWorkspaceModal) => {
 
         {/* Dropdown to select industry using Controller and react-select */}
 
-        <Select
-          onChange={(e) => setIndustry(e?.value)}
-          placeholder="Select Industry"
-          options={Industries}
-        />
-
-        <Box mb={20} />
         <Space h={20} />
         <Button
           radius="md"

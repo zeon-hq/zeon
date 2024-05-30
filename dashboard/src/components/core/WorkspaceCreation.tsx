@@ -11,7 +11,7 @@ import {
   MainBackground,
 } from "components/auth/auth.styles";
 import notification from "components/utils/notification";
-import { TeamSize, Industries } from "constants/core";
+import { TeamSize } from "constants/core";
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from "react-router";
@@ -95,12 +95,12 @@ const WorkspaceCreation = (props: Props) => {
                   />
                 )}
               />
-              <Box mb={20} />
 
-              <AuthLabel> Purpose </AuthLabel>
+
+              
 
               {/* Dropdown to select industry using Controller and react-select */}
-              <Controller
+              {/* <Controller
                 name="industry"
                 control={control}
                 rules={{
@@ -113,7 +113,7 @@ const WorkspaceCreation = (props: Props) => {
                     options={Industries}
                   />
                 )}
-              />
+              /> */}
               <Box mb={20} />
               {/* @ts-ignore */}
               <AuthButton
