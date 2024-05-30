@@ -33,10 +33,7 @@ const Integrations = () => {
 
     // if (channelsInfo[selectedPage.name]?.channelId) return;
     
-    localStorage.setItem(
-      "userstak-dashboard-workspaceId",
-      workspaceInfo.workspaceId || ""
-    );
+    localStorage.setItem("workspaceId", workspaceInfo.workspaceId || "");
 
     // "channels:read,,,,,,,,,,,incoming-webhook,users.profile:read"
 

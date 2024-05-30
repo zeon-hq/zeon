@@ -25,7 +25,7 @@ const SlackOAuth = () => {
       );
       await integrateSlack(
         queryParams.code,
-        localStorage.getItem("userstak-dashboard-workspaceId") || "",
+        localStorage.getItem("workspaceId") || "",
         localStorage.getItem("zeon-dashboard-channelId") || ""
       );
 
@@ -49,12 +49,10 @@ const SlackOAuth = () => {
         className="primary"
         size="xl"
         loading={channelCreateState === "loading"}
-        onClick={() =>
-          navigate(
-            `/dashboard/${localStorage.getItem(
-              "userstak-dashboard-workspaceId"
-            )}`
-          )
+        onClick={() => {
+          
+          navigate(`/dashboard/${localStorage.getItem("workspaceId")}`)
+        }
         }
       >
         {channelCreateState === "loading"
