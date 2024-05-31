@@ -468,6 +468,7 @@ app.post('/send/message', async (req, res) => {
   const channelId = messageData?.channelId;
   const channel = await ChannelModel.findOne({ channelId });
   const isAIEnabled = channel?.toObject().isAIEnabled;
+  const agentName = channel?.toObject().agentName;
   const isEmailConfigured = channel?.emailNewTicketNotification;
   const isSlackConfigured = channel?.slackChannelId;
   
@@ -597,7 +598,8 @@ app.post('/send/message', async (req, res) => {
     io.to(workspaceId).emit("ai_responding", {
       ticketId,
       workspaceId,
-      channelId
+      channelId,
+      agentName
     });
 
     const aiResponse = await CoreService.getAIMessage(aiMessagepayload);
