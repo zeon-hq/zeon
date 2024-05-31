@@ -36,7 +36,6 @@ const Integrations = () => {
     localStorage.setItem("workspaceId", workspaceInfo.workspaceId || "");
 
     // "channels:read,,,,,,,,,,,incoming-webhook,users.profile:read"
-
     const scopes = [
       'channels:read',
       'chat:write',
@@ -48,7 +47,11 @@ const Integrations = () => {
       'files:read',
       'files:write',
       'channels:history',
-      'channels:join'
+      'channels:join',
+
+      // 'users.profile:read',
+      // 'conversations:read'
+      'incoming-webhook'
     ];
   
     const scopeString = scopes.join(',');
