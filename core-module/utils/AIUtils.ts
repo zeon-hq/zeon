@@ -15,12 +15,6 @@ Standalone question:`;
 
 const humanInterventionText = `If the question is not related to the context, respond with the word "${guardRailKeyword}"`
 
-const getQAPrompt = ({string, enableHumanHandover}:{string:string, enableHumanHandover:boolean}) => {
-  const prompt = `${QA_PROMPT} ${string} ${enableHumanHandover ? humanInterventionText : ""}`;
-  return prompt;
-}
-
-
 const QA_PROMPT = `You are a helpful AI assistant. Use the following pieces of context to answer the question at the end.
 If you don't know the answer, just say you don't know. DO NOT try to make up an answer.
 .
@@ -32,10 +26,11 @@ Helpful answer in markdown:
 This is some further context about knowledge that the AI assistant might need to answer the question.
 `;
 
-const combineDocumentsFn = (docs: Document[], separator = '\n\n') => {
-  const serializedDocs = docs.map((doc) => doc.pageContent);
-  return serializedDocs.join(separator);
-};
+const getQAPrompt = ({string, enableHumanHandover}:{string:string, enableHumanHandover:boolean}) => {
+  const prompt = `${QA_PROMPT} ${string} ${enableHumanHandover ? humanInterventionText : ""}`;
+  return prompt;
+}
+
 
 export const makeChain = (vectorstore: Chroma, workspaceId:string, channelId:string, customPrompt:string, enableHumanHandover:boolean) => {
   console.log(`[AIUtils.makeChain] invoking openAI, workspaceId:${workspaceId}, channalId:${channelId}`);
@@ -46,15 +41,12 @@ export const makeChain = (vectorstore: Chroma, workspaceId:string, channelId:str
   });
 
   console.log(`[AIUtils.makeChain] ConversationalRetrievalQAChain from LLM`)
-  const chain = ConversationalRetrievalQAChain.fromLLM(
-    model,
-    vectorstore.asRetriever(),
-    {
-      qaTemplate: getQAPrompt({string: customPrompt || "", enableHumanHandover: enableHumanHandover}),
-      questionGeneratorTemplate: CONDENSE_PROMPT,
-      returnSourceDocuments: true, //The number of source documents returned is 4 by default
-    },
-  );
+  const llmPayload = {
+    qaTemplate: getQAPrompt({string: customPrompt || "", enableHumanHandover: enableHumanHandover}),
+    questionGeneratorTemplate: CONDENSE_PROMPT,
+    returnSourceDocuments: true, //The number of source documents returned is 4 by default
+  };
+  const chain = ConversationalRetrievalQAChain.fromLLM(model, vectorstore.asRetriever(), llmPayload);
   return chain;
 };
 
