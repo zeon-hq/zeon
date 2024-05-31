@@ -69,7 +69,7 @@ const channelSchema = new Schema({
     agentName:{type:String},
     customPrompt:{type:String, default:""},
     enableHumanHandover: {type:Boolean, default:false},
-    appearance: {
+    appearance: { 
         newConversationButton: {
             buttonColor: String,
             title: String,
