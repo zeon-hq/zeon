@@ -38,6 +38,8 @@ export type WidgetInterface = {
   formSubmitButtonLoading: boolean;
   typing: boolean;
   widgetDetails: IWidgetDetails,
+  aiTyping: boolean,
+  agentName: string,
   allOpenConversations: IAllOpenConversations[]
 };
 
@@ -119,6 +121,7 @@ const initialState: WidgetInterface = {
   //@ts-ignore
   widgetDetails: {},
   typing:false,
+  aiTyping: false,
   allOpenConversations: []
 };
 
@@ -165,6 +168,12 @@ export const widgetSlice = createSlice({
     },    
     setTyping: (state, action: PayloadAction<any>) => {
       state.typing = action.payload;
+    },
+    setAiTyping: (state, action: PayloadAction<any>) => {
+      state.aiTyping = action.payload;
+    },
+    setAgentName: (state, action: PayloadAction<string>) => {
+      state.agentName = action.payload;
     }
   },
 });
@@ -179,7 +188,9 @@ export const {
   setWidgetDetails,
   setAllOpenConversations,
   clearPrevChat,
-  setTyping
+  setTyping,
+  setAiTyping,
+  setAgentName
 } = widgetSlice.actions;
 
 export default widgetSlice.reducer;

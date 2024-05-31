@@ -66,6 +66,7 @@ const channelSchema = new Schema({
     slackChannelId:{type:String},
     emailNewTicketNotification:{type:Boolean,default:false},
     accessToken:{type:String},
+    agentName:{type:String},
     customPrompt:{type:String, default:""},
     enableHumanHandover: {type:Boolean, default:false},
     appearance: {

@@ -56,7 +56,7 @@ const MessageCard = ({ text, time, type }: any) => {
               src="https://zeon-assets.s3.ap-south-1.amazonaws.com/Logomark.svg"
               alt="zeon-logo"
             />
-            <Text size="sm" weight="500" color="#344054">
+            <Text size="sm" weight={500} color="#344054">
               {
                 type === "received" ? "Zeon" : "You"
               }

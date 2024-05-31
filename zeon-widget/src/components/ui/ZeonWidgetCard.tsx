@@ -7,7 +7,7 @@ import useEmbeddable, { IEmbeddableOutput } from "components/hooks/useEmbeddable
 import useWidget from "components/hooks/useWidget";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { IMessageSource, IUIStepType, setAllOpenConversations, setEmail, setMessage, setStep, setWidgetDetails } from "redux/slice";
+import { IMessageSource, IUIStepType, setAiTyping, setAllOpenConversations, setEmail, setMessage, setStep, setWidgetDetails } from "redux/slice";
 import styled from "styled-components";
 import SingleCard from "./SingleCard";
 const WholeWrapper = styled.div`
@@ -36,6 +36,7 @@ const ZeonWidgetCard = () => {
 
   useEffect(() => {
     getOpenTicketData();
+    dispatch(setAiTyping(false));
   }, []);
 
 

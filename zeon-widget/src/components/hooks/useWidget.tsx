@@ -39,6 +39,8 @@ const useWidget = () => {
   const allOpenConversations = useSelector((state: RootState ) => state.widget.allOpenConversations);
 
   const typing = useSelector((state: RootState ) => state.widget.typing);
+  const aiTyping = useSelector((state: RootState ) => state.widget.aiTyping);
+  const agentName = useSelector((state: RootState ) => state.widget.agentName);
 
   return {
     step,
@@ -49,7 +51,9 @@ const useWidget = () => {
     widgetDetails,
     allOpenConversations,
     isOutOfOperatingHours,
-    typing
+    typing,
+    aiTyping,
+    agentName
   };
 };
 
