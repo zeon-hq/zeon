@@ -7,7 +7,7 @@ const logger = new Logger(ZeonServices.CORE);
 
 export const getCustomPrompt = async (channelId:string) => {
     try {
-        const res = await axios.get(`${CHAT_API_DOMAIN}/${channelId}/channel/customPrompt`);
+        const res = await axios.get(`${CHAT_API_DOMAIN}/channel/${channelId}/customPrompt`);
         return res.data;
     } catch (error) {
         logger.error({message: `[ChatService]: Error while fetching custom prompt for channel: ${channelId}`})
