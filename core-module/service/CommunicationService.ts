@@ -18,6 +18,7 @@ interface IEmailParams {
 
 export default class CommunicationService {
     public static sendEmail = async (emailPayload:IEmailTemplate) => {
+        const apiKey = process.env.BREVO_KEY;
         return new Promise(async (resolve, reject) => {
             return new Promise((resolve, reject) => {
                 try {
@@ -25,7 +26,7 @@ export default class CommunicationService {
                     const emailSendUrl = `https://api.brevo.com/v3/smtp/email`;
                     return axios.post(emailSendUrl,emailPayload,{
                         headers: {
-                            "api-key":process.env.BREVO_KEY,
+                            "api-key":apiKey,
                         }
                     })
                         .then(async (response: AxiosResponse<any>) => {
@@ -39,7 +40,7 @@ export default class CommunicationService {
                         })
                         .catch((error) => {
                             console.error(`Error Message in sending email from core service, Error: ${error}`);
-                            throw reject(error);
+                            return reject(error);
                         });
                 } catch (error) {
                     console.error(`Error in [sendEmail] communication service, error : ${error}`);

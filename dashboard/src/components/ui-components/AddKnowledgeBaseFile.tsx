@@ -180,9 +180,9 @@ const AddKnowledgeBaseFile = ({ opened, onClose }: IAddKnowledgeBaseFile) => {
                 }}>
                 Click to Upload
               </span>
-              &nbsp; or drag and drop the image here!
+              &nbsp; or drag and drop the file here!
             </HelperText>
-            <HelperText> pdf </HelperText>
+            {/* <HelperText> pdf </HelperText> */}
           </DNDContainer>
         </div>
 
@@ -241,7 +241,9 @@ const AddKnowledgeBaseFile = ({ opened, onClose }: IAddKnowledgeBaseFile) => {
             marginTop: "24px",
           }}
         >
-          <Button variant="default" radius="md" onClick={() => {}}>
+          <Button variant="default" radius="md" onClick={() => {
+            onClose();
+          }}>
             {"Cancel"}
           </Button>
           <Button 

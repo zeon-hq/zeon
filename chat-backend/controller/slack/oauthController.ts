@@ -40,7 +40,7 @@ export default class oauthController {
 
             const { data } = response;
 
-            await Channel.findOneAndUpdate({ channelId: state.channelId }, { $set: { slackChannelId: data?.authed_user?.id, accessToken: data?.access_token } });
+            await Channel.findOneAndUpdate({ channelId: state.channelId }, { $set: { slackChannelId: data?.incoming_webhook.channel_id, accessToken: data?.access_token } });
 
             if (state?.currentUrl) {
                 res.redirect(state?.currentUrl);
