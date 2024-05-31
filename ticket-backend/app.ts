@@ -487,7 +487,7 @@ app.post('/send/message', async (req, res) => {
     }
 
     if (isSlackConfigured) {
-      const locationData = await ExternalService.getLocationFromIp(ticketOptions.ipAddress)
+      const locationData = await ExternalService.getLocationFromIp(messageData.ipAddress)
 
 
       let locationName;

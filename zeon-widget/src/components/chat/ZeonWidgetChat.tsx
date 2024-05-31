@@ -11,7 +11,7 @@ import styled from "styled-components";
 import { IPropsType, MessageType } from "./Chat.types";
 import ChatMessageFooter from "./ChatMessageFooter";
 import WidgetChatHeader from "./WidgetChatHeader";
-import { sendMessage } from "api/api";
+import { getIPAddress, sendMessage } from "api/api";
 
 const Wrapper = styled.div`
   display: flex;
@@ -88,6 +88,7 @@ const ZeonWidgetChat = () => {
     const type = MessageType.SENT;
     const workspaceId = widgetDetails?.workspaceId;
     const message = data.message;
+    const output = await getIPAddress();
     setValue("message", "");
 
     const newMessagePayload = {
@@ -115,6 +116,7 @@ const ZeonWidgetChat = () => {
             isOpen: true,
             type: MessageType.SENT,
             ticketId,
+            ipAddress: output?.data?.ip || "",
             messageSource: IMessageSource.WIDGET,
           },
           messageSource: IMessageSource.WIDGET,
