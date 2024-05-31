@@ -31,7 +31,7 @@ export default class CommunicationController {
             }
 
         } catch (error) {
-            
+            console.log(`Error in Send Email, Error: ${error}`);   
         }
     }
 }

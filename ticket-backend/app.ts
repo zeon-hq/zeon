@@ -557,7 +557,7 @@ app.post('/send/message', async (req, res) => {
       const slackMessageResponse = await CoreService.sendSlackMessage(sendSlackPayload);
 
 
-      await TicketModel.updateMany({ ticketId: socketTicketPayload.ticketId }, { $set: { thread_ts: slackMessageResponse[0].result.ts } })
+      await TicketModel.updateMany({ ticketId: socketTicketPayload.ticketId }, { $set: { thread_ts: slackMessageResponse?.[0]?.result?.ts } })
     }
 
     if (isEmailConfigured) { 
