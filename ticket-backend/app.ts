@@ -471,6 +471,7 @@ app.post('/send/message', async (req, res) => {
   const channelId = messageData?.channelId;
   const channel = await ChannelModel.findOne({ channelId });
   const isAIEnabled = channel?.toObject().isAIEnabled;
+  const agentName = channel?.toObject().agentName;
   
   if (isNewTicket) {
     await openTicket(messageData, "no_socket_id"); // pass socketId
@@ -517,7 +518,8 @@ app.post('/send/message', async (req, res) => {
     io.to(workspaceId).emit("ai_responding", {
       ticketId,
       workspaceId,
-      channelId
+      channelId,
+      agentName
     });
 
     const aiResponse = await CoreService.getAIMessage(aiMessagepayload);
