@@ -69,7 +69,7 @@ const ZeonWidgetChat = () => {
     formState: { isSubmitting },
   } = useForm<FormDataType>();
   const dispatch = useDispatch();
-  const { messages, widgetDetails, typing } = useWidget();
+  const { messages, widgetDetails, typing, email } = useWidget();
 
   useEffect(() => {
     scrollToBottom();
@@ -109,6 +109,7 @@ const ZeonWidgetChat = () => {
           messageData: {
             workspaceId,
             channelId,
+            customerEmail: email,
             createdAt: Date.now().toString(),
             message,
             isOpen: true,
