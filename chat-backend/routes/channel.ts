@@ -18,5 +18,6 @@ router.post("/addUser",verifyIdentity, addUserIdsToChannel)
 router.post("/removeUser",verifyIdentity, removeUserIdsFromChannel)
 router.put('/:channelId/customPrompt', verifyIdentity, updateCustomPrompt)
 router.get('/:channelId/customPrompt', verifyIdentity, getCustomPrompt)
+router.get('/internal/:channelId/customPrompt', getCustomPrompt)
 
 module.exports = router;
