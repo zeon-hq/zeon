@@ -77,9 +77,6 @@ io.on("connection", (socket:Socket) => {
         widgetId: widgetId
       }
 
-      io.in(ticketId).emit("open-ticket", socketTicketPayload);
-
-
       const channel = await ChannelModel.findOne({ channelId: channelId });
       const isEmailConfigured = channel?.emailNewTicketNotification;
       const isSlackConfigured = channel?.slackChannelId;
@@ -487,6 +484,87 @@ app.post('/send/message', async (req, res) => {
       widgetId,
       isNewTicket,
       messageSource
+    }
+
+    if (isSlackConfigured) {
+      const locationData = await ExternalService.getLocationFromIp(ticketOptions.ipAddress)
+
+
+      let locationName;
+      if (!locationData?.city || !locationData?.regionName || !locationData?.country) {
+        locationName = 'Not Found'
+      } else {
+        locationName = `${locationData.city}, ${locationData.regionName}, ${locationData.country}` || '';
+      }
+      const blocks = [
+        {
+          "type": "section",
+          "text": {
+            "type": "mrkdwn",
+            "text": `You have a new ticket:\n${messageData.message}`
+          }
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "section",
+          "fields": [
+            {
+              "type": "mrkdwn",
+              "text": `Type:\n${channel.name}`
+            },
+            {
+              "type": "mrkdwn",
+              "text": `E-Mail:\n${socketTicketPayload.customerEmail}`
+            },
+            {
+              "type": "mrkdwn",
+              "text": `Ticket ID:\n${socketTicketPayload.ticketId}`
+            },
+            {
+              "type": "mrkdwn",
+              "text": `Location:\n${locationName}`
+            }
+          ]
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "section",
+          "text": {
+            "type": "mrkdwn",
+            "text": "Head over to your dashboard to reply"
+          },
+          "accessory": {
+            "type": "button",
+            "text": {
+              "type": "plain_text",
+              "text": "Go to chat ->"
+            },
+            "url": `${process.env.WEBSITE_URL}/${workspaceId}/chat?channelId=${channelId}&ticketId=${socketTicketPayload.ticketId}`
+          }
+        }
+      ]
+      const sendSlackPayload: ISendSlackMessage = {
+        channelId: channel.slackChannelId,
+        message: messageData.message,
+        token: channel.accessToken,
+        blocks
+      }
+
+      const slackMessageResponse = await CoreService.sendSlackMessage(sendSlackPayload);
+
+
+      await TicketModel.updateMany({ ticketId: socketTicketPayload.ticketId }, { $set: { thread_ts: slackMessageResponse[0].result.ts } })
+    }
+
+    if (isEmailConfigured) { 
+      channel?.members.forEach(async (member: any) => {
+        const user = await User.findOne({ userId: member })
+        await CoreService.sendMail(`You have a new ticket:\n${messageData.message}` , user?.email, messageData.customerEmail, ticketId, channelId, workspaceId);
+      })
     }
 
     io.to(workspaceId).emit("message", socketTicketPayload)
