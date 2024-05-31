@@ -241,7 +241,9 @@ const AddKnowledgeBaseFile = ({ opened, onClose }: IAddKnowledgeBaseFile) => {
             marginTop: "24px",
           }}
         >
-          <Button variant="default" radius="md" onClick={() => {}}>
+          <Button variant="default" radius="md" onClick={() => {
+            onClose();
+          }}>
             {"Cancel"}
           </Button>
           <Button 
