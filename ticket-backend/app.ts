@@ -471,6 +471,8 @@ app.post('/send/message', async (req, res) => {
   const channelId = messageData?.channelId;
   const channel = await ChannelModel.findOne({ channelId });
   const isAIEnabled = channel?.toObject().isAIEnabled;
+  const isEmailConfigured = channel?.emailNewTicketNotification;
+  const isSlackConfigured = channel?.slackChannelId;
   
   if (isNewTicket) {
     await openTicket(messageData, "no_socket_id"); // pass socketId
@@ -537,6 +539,76 @@ app.post('/send/message', async (req, res) => {
         workspaceId,
         channelId
       });
+
+      // send slack message to the channel
+
+      const blocks = [
+        {
+          "type": "section",
+          "text": {
+            "type": "mrkdwn",
+            "text": `You have a new ticket for the human intervention`
+          }
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "section",
+          "fields": [
+            {
+              "type": "mrkdwn",
+              "text": `Type:\n${channel.name}`
+            },
+            {
+              "type": "mrkdwn",
+              "text": `E-Mail:\n${socketTicketPayload?.customerEmail}`
+            },
+            {
+              "type": "mrkdwn",
+              "text": `Ticket ID:\n${socketTicketPayload?.ticketId}`
+            }
+          ]
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "section",
+          "text": {
+            "type": "mrkdwn",
+            "text": "Head over to your dashboard to reply"
+          },
+          "accessory": {
+            "type": "button",
+            "text": {
+              "type": "plain_text",
+              "text": "Go to chat ->"
+            },
+            "url": `${process.env.WEBSITE_URL}/${workspaceId}/chat?channelId=${channelId}&ticketId=${socketTicketPayload.ticketId}`
+          }
+        }
+      ]
+
+      if (isSlackConfigured) {
+        const sendSlackPayload: ISendSlackMessage = {
+          channelId: channel.slackChannelId,
+          message: 'Human Intervention Needed',
+          token: channel.accessToken,
+          blocks
+        }
+
+        const slackMessageResponse = await CoreService.sendSlackMessage(sendSlackPayload);
+      }
+
+      // send email to the configured email
+
+        if (isEmailConfigured) {
+          channel?.members.forEach(async (member: any) => {
+            const user = await User.findOne({ userId: member })
+            await CoreService.sendMail('human intervention needed', user?.email, messageData?.customerEmail, ticketId, channelId, workspaceId);
+          })
+        }
 
       } else {
       // success
