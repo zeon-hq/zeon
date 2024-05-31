@@ -40,7 +40,7 @@ export default class CommunicationService {
                         })
                         .catch((error) => {
                             console.error(`Error Message in sending email from core service, Error: ${error}`);
-                            throw reject(error);
+                            return reject(error);
                         });
                 } catch (error) {
                     console.error(`Error in [sendEmail] communication service, error : ${error}`);
