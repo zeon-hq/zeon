@@ -9,7 +9,7 @@ import { Server, Socket } from "socket.io";
 import MessageModel, { IMessageSource, IMessageType } from "./model/MessageModel";
 import TicketModel from "./model/TicketModel";
 import { sendMessageIo } from "./mq/producer";
-import { ITicketOptions, MessageOptions } from "./schema/types/ticket";
+import { MessageOptions } from "./schema/types/ticket";
 import ChannelModel from "./model/ChannelModel";
 import User from "./model/UserModel";
 import CoreService, { ISendSlackMessage } from "./services/CoreService";
@@ -208,33 +208,30 @@ app.post('/slack/events', async (req, res) => {
 
   if (event.type === 'message') {
     const { text, thread_ts, bot_profile, app_id } = event;
-    // send this message to the widget
-    // get channelId, ticketId using thread_ts
     if (text && thread_ts && (!bot_profile || !app_id)) {
       const getTicketInformation = await TicketModel.findOne({ thread_ts });
       if (getTicketInformation.workspaceId && getTicketInformation.channelId && getTicketInformation.ticketId) {
-        
+        // SLACK TODO: when message is sent from the slack send to both dashboar and widget 
+
+        const message = event.text;
         const messageOptions: MessageOptions = {
           workspaceId: getTicketInformation.workspaceId,
           channelId: getTicketInformation.channelId,
-          type: "received",
+          type: IMessageType.RECEIVED,
           isRead: true,
-          message: text,
-          ticketId: getTicketInformation?.ticketId,
+          time: Date.now().toString(),
+          createdAt: Date.now().toString(),
+          message: message,
+          ticketId: getTicketInformation.ticketId,
+          messageSource: IMessageSource.BOTH,
+          source: IMessageSource.BOTH
         }
 
-        const data = {
-          source: "dashboard",
-          messageOptions
-        }
-
-        // configure send message here
-        await sendMessageIo(socket, data);
+        await createMessage({ ...messageOptions, createdAt: new Date(), message, type: IMessageType.RECEIVED });
+        io.to(getTicketInformation.workspaceId).emit("message", messageOptions);
       }
     }
-    // send this message to the dashboard
   }
-
 });
 
 app.post('/send/message', async (req, res) => {
@@ -457,7 +454,7 @@ app.post('/send/message', async (req, res) => {
           blocks
         }
 
-        const slackMessageResponse = await CoreService.sendSlackMessage(sendSlackPayload);
+        await CoreService.sendSlackMessage(sendSlackPayload);
       }
 
       // send email to the configured email

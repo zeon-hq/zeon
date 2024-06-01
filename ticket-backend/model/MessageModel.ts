@@ -4,6 +4,7 @@ export enum IMessageSource {
   DASHBOARD = "dashbaord",
   WIDGET = "widget",
   BOTH = "both",
+  SLACK = "slack",
   HUMAN_INTERVENTION = "human_intervention"
 }
 

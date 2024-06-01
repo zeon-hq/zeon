@@ -11,8 +11,10 @@ export enum IUIStepType  {
 
 export enum IMessageSource {
   DASHBOARD = "dashboard",
+  WIDGET = "widget",
   BOTH = "both",
-  WIDGET = "widget"
+  SLACK = "slack",
+  HUMAN_INTERVENTION = "human_intervention"
 }
 
 export interface Message {
