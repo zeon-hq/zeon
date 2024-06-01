@@ -105,6 +105,12 @@ const MessageContainer = () => {
     const ticketIdInUrl = queryParameters.get("ticketId");
     const pageName = queryParameters.get("pageName");
 
+    socketInstance.emit("join_ticket", {
+      workspaceId,
+      ticketId:ticketIdInUrl,
+      channelId:channelIdInUrl,
+      source:'dashboard'
+    })
     if (channelIdInUrl && ticketIdInUrl) {
       localStorage.setItem(
         "zeon-dashboard-channelId",
