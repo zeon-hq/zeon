@@ -107,8 +107,8 @@ const MessageContainer = () => {
 
     socketInstance.emit("join_ticket", {
       workspaceId,
-      ticketId:ticketIdInUrl,
-      channelId:channelIdInUrl,
+      ticketId:ticketIdInUrl || undefined,
+      channelId:channelIdInUrl || undefined,
       source:'dashboard'
     })
     if (channelIdInUrl && ticketIdInUrl) {
