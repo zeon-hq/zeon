@@ -2,7 +2,7 @@ import socketInstance from "api/socket";
 import ZeonWidgetModal from "components/modal/ZeonWidgetModal";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { IMessageSource, setAllOpenConversations, setMessage, setShowWidget, setTyping } from "redux/slice";
+import { IMessageSource, setAgentName, setAiTyping, setAllOpenConversations, setMessage, setShowWidget, setTyping } from "redux/slice";
 import styled from "styled-components";
 import { MessageType } from "./chat/Chat.types";
 import useWidget from "./hooks/useWidget";
@@ -90,6 +90,18 @@ const WidgetButton = () => {
         });
       }
     });
+
+    socketInstance.on("ai_responding", (data)=>{
+      console.log("ai_responding", data);
+      dispatch(setAiTyping(true));
+      dispatch(setAgentName(data?.agentName || "Agent"));
+    });  
+    
+    socketInstance.on("ai_stop_responded", (data)=>{
+      console.log("ai_stop_responding", data);
+      dispatch(setAiTyping(false));
+      dispatch(setAgentName(data?.agentName || "Agent"));
+    });  
 
     socketInstance.on("message", (data) => { 
       if (data?.messageSource == IMessageSource.DASHBOARD || data?.messageSource ==  IMessageSource.BOTH) {

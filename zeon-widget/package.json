@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/react": "^11.11.4",
     "@hookform/error-message": "^2.0.1",
-    "@mantine/core": "^6.0.19",
-    "@mantine/hooks": "^6.0.19",
+    "@mantine/core": "^6.0.21",
+    "@mantine/hooks": "^6.0.21",
     "@reduxjs/toolkit": "^1.8.3",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",

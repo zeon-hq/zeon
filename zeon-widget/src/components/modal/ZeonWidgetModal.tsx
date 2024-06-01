@@ -362,9 +362,9 @@ const ZeonWidgetModal = () => {
                             src="https://zeon-assets.s3.ap-south-1.amazonaws.com/Logomark.svg"
                             alt="zeon-logo"
                           />
-                          <Text size="sm" weight="600" color="#344054">
+                          <Text size="sm" weight={600} color="#344054">
                             Zeon
-                          </Text>
+                          </Text> 
                         </Box>
                       </BrandingWrapper>
                     )}
