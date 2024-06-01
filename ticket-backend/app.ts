@@ -206,11 +206,11 @@ app.post('/slack/events', async (req, res) => {
 
   const { event } = req.body;
 
-  if (event.type === 'message') {
+  if (event?.type === 'message') {
     const { text, thread_ts, bot_profile, app_id } = event;
     if (text && thread_ts && (!bot_profile || !app_id)) {
       const getTicketInformation = await TicketModel.findOne({ thread_ts });
-      if (getTicketInformation.workspaceId && getTicketInformation.channelId && getTicketInformation.ticketId) {
+      if (getTicketInformation?.workspaceId && getTicketInformation?.channelId && getTicketInformation?.ticketId) {
         // SLACK TODO: when message is sent from the slack send to both dashboar and widget 
 
         const message = event.text;
@@ -228,7 +228,7 @@ app.post('/slack/events', async (req, res) => {
         }
 
         await createMessage({ ...messageOptions, createdAt: new Date(), message, type: IMessageType.RECEIVED });
-        io.to(getTicketInformation.workspaceId).emit("message", messageOptions);
+        io.to(getTicketInformation?.workspaceId).emit("message", messageOptions);
       }
     }
   }
