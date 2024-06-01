@@ -53,7 +53,7 @@ export default class CoreService {
 
     public static sendSlackMessage = async (sendSlackPayload:ISendSlackMessage): Promise<any> => {
         return new Promise((resolve, reject) => {
-            const slackURL = coreServiceUrl + '/internal/slack/message';
+            const slackURL = process.env.CORE_SERVICE_URL + '/internal/slack/message';
             try {
                 return axios.post(slackURL, sendSlackPayload)
                     .then(async (response: AxiosResponse<any>) => {
