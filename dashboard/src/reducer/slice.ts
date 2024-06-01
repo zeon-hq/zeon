@@ -548,7 +548,7 @@ export const dashboardSlice = createSlice({
     },
     setDefaultWorkSpaceSettingTab: (state, action:PayloadAction<IWorkSpaceSettings>) => {
       state.defaultWorkSpaceSettingTab = action.payload;
-    },
+  },
     setTyping: (state, action: PayloadAction<boolean>) => {
       state.typing = action.payload;
     },

@@ -199,12 +199,22 @@ app.get("/channel/:channelId", async (req, res) => {
   }
 });
 
+// const processedEvents = new Set();
+
 app.post('/slack/events', async (req, res) => {
   if (req.body.challenge) {
     return res.send(req.body.challenge); // Used only for the Slack Event callback URL verification process
   }
 
   const { event } = req.body;
+
+  if (!event
+    //  || processedEvents.has(event.event_id)
+    ) {
+    return res.sendStatus(200);
+  }
+
+  // processedEvents.add(event.event_id);
 
   if (event?.type === 'message') {
     const { text, thread_ts, bot_profile, app_id } = event;
@@ -214,25 +224,26 @@ app.post('/slack/events', async (req, res) => {
         // SLACK TODO: when message is sent from the slack send to both dashboar and widget 
 
         const message = event.text;
-        const messageOptions: MessageOptions = {
+        const messageOptions = {
           workspaceId: getTicketInformation.workspaceId,
           channelId: getTicketInformation.channelId,
-          type: IMessageType.RECEIVED,
           isRead: true,
           time: Date.now().toString(),
           createdAt: Date.now().toString(),
           message: message,
           ticketId: getTicketInformation.ticketId,
-          messageSource: IMessageSource.BOTH,
-          source: IMessageSource.BOTH
-        }
+          messageSource: 'SLACK',
+          source: 'SLACK'
+        };
 
-        await createMessage({ ...messageOptions, createdAt: new Date(), message, type: IMessageType.RECEIVED });
-        io.to(getTicketInformation?.workspaceId).emit("message", messageOptions);
+        createMessage({ ...messageOptions, createdAt: new Date(), message, type: 'RECEIVED' });
+        io.to(getTicketInformation.workspaceId).emit("message", messageOptions);
       }
     }
   }
+  res.sendStatus(200);
 });
+
 
 app.post('/send/message', async (req, res) => {
   const { ticketId, workspaceId, messageData, messageSource, isNewTicket } = req.body;

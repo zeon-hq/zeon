@@ -99,6 +99,7 @@ const ZeonWidgetChat = () => {
       type,
       createdAt,
     };
+    
     try {
       if (!isSubmitting) {
         dispatch(setMessage(newMessagePayload));

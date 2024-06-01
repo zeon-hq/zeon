@@ -18,7 +18,6 @@ export const getIPAddress = async () => {
   return res
 }
 
-
 export const getOpenTicket = async (widgetId:string)=>{
   const res:any = await axios.get(`${ticketServiceUrl}/ticket/${widgetId}`);
   return res

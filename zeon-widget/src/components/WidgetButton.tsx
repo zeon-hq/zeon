@@ -104,7 +104,7 @@ const WidgetButton = () => {
     });  
 
     socketInstance.on("message", (data) => { 
-      if (data?.messageSource == IMessageSource.DASHBOARD || data?.messageSource ==  IMessageSource.BOTH) {
+      if (data?.messageSource == IMessageSource.DASHBOARD || data?.messageSource ==  IMessageSource.BOTH || data?.messageSource ==  IMessageSource.SLACK) {
         setIsMessageUpdated((prev)=> !prev);
         const checkIsThisNewTicket:boolean = (!!allOpenConversations.find((conversation) => conversation.ticketId === data.ticketId))
         handleMessageReceived(data, checkIsThisNewTicket);

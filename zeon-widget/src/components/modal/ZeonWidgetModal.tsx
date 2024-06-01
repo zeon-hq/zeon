@@ -174,7 +174,7 @@ const ZeonWidgetModal = () => {
           message,
           isOpen: true,
           widgetId,
-          type: "Computer (laptop)",
+          type: MessageType.SENT,
           ticketId,
           ipAddress: output?.data?.ip || "",
         },

@@ -39,12 +39,12 @@ const Layout = ({ children }: { children: any }) => {
     // })
 
     socketInstance.on("message", (data) => {
-      if (data?.messageSource === 'widget' || data?.messageSource ===  "both") {
+      if (data?.messageSource === 'widget' || data?.messageSource ===  "both" || data?.messageSource ===  "slack") {
         if (data?.isNewTicket) {
           //@ts-ignore
           dispatch(updateInbox(workspaceId));
         } else {
-          dispatch(updateConversation({ data, type: MessageType.SENT }));
+          dispatch(updateConversation({ data:{...data}, type: MessageType.SENT }));
         }
       }
     });
