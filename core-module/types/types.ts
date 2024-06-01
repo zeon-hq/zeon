@@ -297,3 +297,27 @@ export enum ZSubscriptionPlan {
   ZEON_PROFESSIONAL = "ZEON_PROFESSIONAL",
   ZEON_ADVANCED = "ZEON_ADVANCED"
 }
+
+export interface ICreateAIAgentDTO {
+  workspaceId: string;
+  channelId: string;
+  type: string;
+  name: string;
+  voiceId: string;
+  responseThrottle: number;
+  modelId: string;
+  language: string;
+  customGreeting: string;
+  customVocabulary?: string;
+  fileId: string;
+  enableRecording: boolean;
+  actions: any[];
+  customPrompt?: string;
+}
+
+export interface CreateTwilioIntegrationDTO {
+  workspaceId: string;
+  accountSid: string;
+  authToken: string;
+  phoneNumber: string;
+}
