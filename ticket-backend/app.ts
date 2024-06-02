@@ -230,13 +230,14 @@ app.post('/slack/events', async (req, res) => {
           isRead: true,
           time: Date.now().toString(),
           createdAt: Date.now().toString(),
+          type: IMessageType.RECEIVED,
           message: message,
           ticketId: getTicketInformation.ticketId,
-          messageSource: 'SLACK',
-          source: 'SLACK'
+          messageSource: IMessageSource.SLACK,
+          source: IMessageSource.SLACK
         };
 
-        createMessage({ ...messageOptions, createdAt: new Date(), message, type: 'RECEIVED' });
+        createMessage(messageOptions);
         io.to(getTicketInformation.workspaceId).emit("message", messageOptions);
       }
     }

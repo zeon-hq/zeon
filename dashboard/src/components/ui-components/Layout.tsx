@@ -44,7 +44,11 @@ const Layout = ({ children }: { children: any }) => {
           //@ts-ignore
           dispatch(updateInbox(workspaceId));
         } else {
-          dispatch(updateConversation({ data:{...data}, type: MessageType.SENT }));
+          if(data?.messageSource ===  "slack") {
+            dispatch(updateConversation({ data:{...data}, type: MessageType.RECEIVED }));
+          } else {
+            dispatch(updateConversation({ data:{...data}, type: MessageType.SENT }));
+          }
         }
       }
     });
