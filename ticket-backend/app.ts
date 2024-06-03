@@ -488,9 +488,6 @@ app.post('/send/message', async (req, res) => {
         widgetId,
         messageSource: "widget"
       }
-      await createMessage({ ...messageData, createdAt: new Date(), message, type: IMessageType.SENT });
-      io.to(workspaceId).emit("message", messageOptions);
-
       if (isSlackConfigured) {
         const sendSlackPayload: ISendSlackMessage = {
           channelId: channel.slackChannelId,
@@ -501,6 +498,9 @@ app.post('/send/message', async (req, res) => {
 
         await CoreService.sendSlackMessage(sendSlackPayload);
       }
+      await createMessage({ ...messageData, createdAt: new Date(), message, type: IMessageType.SENT });
+      io.to(workspaceId).emit("message", messageOptions);
+
     }
   }
   
