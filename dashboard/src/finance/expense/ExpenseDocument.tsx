@@ -3,6 +3,8 @@
 // import { Button } from "@mantine/core";
 // import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 
+import exp from "constants";
+
 // import React, { ReactNode, useCallback, useEffect } from "react";
 // import { useDropzone } from "react-dropzone";
 // import useFinance from "finance/useFinance";
@@ -252,3 +254,11 @@
 // };
 
 // export default ExpenseDocument;
+
+const ExpenseDocument = () => {
+  return <div>ExpenseDocument</div>;
+}
+
+export default ExpenseDocument;
+
+// Path: dashboard/src/finance/expense/ExpenseListing.tsx
