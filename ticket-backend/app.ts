@@ -221,7 +221,6 @@ app.post('/slack/events', async (req, res) => {
     if (text && thread_ts && (!bot_profile || !app_id)) {
       const getTicketInformation = await TicketModel.findOne({ thread_ts });
       if (getTicketInformation?.workspaceId && getTicketInformation?.channelId && getTicketInformation?.ticketId) {
-        // SLACK TODO: when message is sent from the slack send to both dashboar and widget 
 
         const message = event.text;
         const messageOptions = {
@@ -259,6 +258,8 @@ app.post('/send/message', async (req, res) => {
   const agentName = channel?.toObject().agentName;
   const isEmailConfigured = channel?.emailNewTicketNotification;
   const isSlackConfigured = channel?.slackChannelId;
+
+  const getThread_rs = await TicketModel.findOne({ ticketId });
   
   if (isNewTicket) {
     await openTicket(messageData, "no_socket_id"); // pass socketId
@@ -346,7 +347,7 @@ app.post('/send/message', async (req, res) => {
       const slackMessageResponse = await CoreService.sendSlackMessage(sendSlackPayload);
 
       const thread_ts = slackMessageResponse?.[0]?.result?.ts;
-      if (thread_ts){
+      if (thread_ts) {
         await TicketModel.updateMany({ ticketId: socketTicketPayload.ticketId }, { $set: { thread_ts } });
       } else {
         console.error('Error in sending slack message')
@@ -377,6 +378,21 @@ app.post('/send/message', async (req, res) => {
     }
 
     io.to(workspaceId).emit("message", socketTicketPayload);
+
+    if (isSlackConfigured) {
+      // send to slack thread
+      if (isSlackConfigured) {
+        const sendSlackPayload: ISendSlackMessage = {
+          channelId: channel.slackChannelId,
+          message: messageData.message,
+          token: channel.accessToken,
+          thread_ts: getThread_rs?.thread_ts
+        }
+
+        await CoreService.sendSlackMessage(sendSlackPayload);
+      }
+    }
+
   }
 
   if (isAIEnabled && messageSource ==  "widget") {
@@ -412,68 +428,16 @@ app.post('/send/message', async (req, res) => {
         channelId
       });
 
-      // send slack message to the channel
-
-      const blocks = [
-        {
-          "type": "section",
-          "text": {
-            "type": "mrkdwn",
-            "text": `You have a new ticket for the human intervention`
-          }
-        },
-        {
-          "type": "divider"
-        },
-        {
-          "type": "section",
-          "fields": [
-            {
-              "type": "mrkdwn",
-              "text": `Type:\n${channel.name}`
-            },
-            {
-              "type": "mrkdwn",
-              "text": `E-Mail:\n${socketTicketPayload?.customerEmail}`
-            },
-            {
-              "type": "mrkdwn",
-              "text": `Ticket ID:\n${socketTicketPayload?.ticketId}`
-            }
-          ]
-        },
-        {
-          "type": "divider"
-        },
-        {
-          "type": "section",
-          "text": {
-            "type": "mrkdwn",
-            "text": "Head over to your dashboard to reply"
-          },
-          "accessory": {
-            "type": "button",
-            "text": {
-              "type": "plain_text",
-              "text": "Go to chat ->"
-            },
-            "url": `${process.env.WEBSITE_URL}/${workspaceId}/chat?channelId=${channelId}&ticketId=${socketTicketPayload.ticketId}`
-          }
-        }
-      ]
-
       if (isSlackConfigured) {
         const sendSlackPayload: ISendSlackMessage = {
           channelId: channel.slackChannelId,
           message: 'Human Intervention Needed',
           token: channel.accessToken,
-          blocks
+          thread_ts: getThread_rs?.thread_ts
         }
 
         await CoreService.sendSlackMessage(sendSlackPayload);
       }
-
-      // send email to the configured email
 
         if (isEmailConfigured) {
           channel?.members.forEach(async (member: any) => {
@@ -499,6 +463,17 @@ app.post('/send/message', async (req, res) => {
       await createMessage({ ...messageData, createdAt: new Date(), message, type: IMessageType.RECEIVED });
       // io.emit("message", messageOptions);
       io.to(workspaceId).emit("message", messageOptions);
+
+      if (isSlackConfigured) {
+        const sendSlackPayload: ISendSlackMessage = {
+          channelId: channel.slackChannelId,
+          message: message,
+          token: channel.accessToken,
+          thread_ts: getThread_rs?.thread_ts
+        }
+
+        await CoreService.sendSlackMessage(sendSlackPayload);
+      }
     }
     } else {
       const message = `${aiResponse?.error} \n Note: this is only appears in the dashboard, customers won't see this message`;
@@ -515,6 +490,17 @@ app.post('/send/message', async (req, res) => {
       }
       await createMessage({ ...messageData, createdAt: new Date(), message, type: IMessageType.SENT });
       io.to(workspaceId).emit("message", messageOptions);
+
+      if (isSlackConfigured) {
+        const sendSlackPayload: ISendSlackMessage = {
+          channelId: channel.slackChannelId,
+          message: message,
+          token: channel.accessToken,
+          thread_ts: getThread_rs?.thread_ts
+        }
+
+        await CoreService.sendSlackMessage(sendSlackPayload);
+      }
     }
   }
   
