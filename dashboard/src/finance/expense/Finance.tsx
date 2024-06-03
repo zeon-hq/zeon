@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import ExpenseListing from './ExpenseListing'
 import ExpenseDetails from './ExpenseDetails'
-import ExpenseDocument from './ExpenseDocument'
 import { FinanceContainer } from 'finance/styles'
 import { useDispatch } from 'react-redux'
 import { initFinance } from 'reducer/financeSlice'
@@ -50,7 +49,7 @@ const Finance = () => {
    <FinanceContainer>
     <ExpenseListing />
     <ExpenseDetails/>
-    <ExpenseDocument/>
+    {/* <ExpenseDocument/> */}
    </FinanceContainer>
   )
 }
