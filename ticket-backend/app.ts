@@ -353,7 +353,7 @@ app.post('/send/message', async (req, res) => {
 
       const thread_ts = slackMessageResponse?.[0]?.result?.ts;
       if (thread_ts) {
-        TicketModel.updateMany({ ticketId: socketTicketPayload.ticketId }, { $set: { thread_ts } });
+        await TicketModel.updateMany({ ticketId: socketTicketPayload.ticketId }, { $set: { thread_ts } });
       } else {
         console.error('Error in sending slack message')
       }
@@ -362,7 +362,7 @@ app.post('/send/message', async (req, res) => {
     if (isEmailConfigured) { 
       channel?.members.forEach(async (member: any) => {
         const user = await User.findOne({ userId: member })
-        CoreService.sendMail(`You have a new ticket:\n${messageData.message}` , user?.email, messageData.customerEmail, ticketId, channelId, workspaceId);
+        await CoreService.sendMail(`You have a new ticket:\n${messageData.message}` , user?.email, messageData.customerEmail, ticketId, channelId, workspaceId);
       })
     }
 
@@ -394,7 +394,7 @@ app.post('/send/message', async (req, res) => {
           thread_ts: getThread_rs?.thread_ts
         }
 
-       CoreService.sendSlackMessage(sendSlackPayload);
+       await CoreService.sendSlackMessage(sendSlackPayload);
       }
     }
 
@@ -441,13 +441,13 @@ app.post('/send/message', async (req, res) => {
           thread_ts: getThread_rs?.thread_ts
         }
 
-        CoreService.sendSlackMessage(sendSlackPayload);
+        await CoreService.sendSlackMessage(sendSlackPayload);
       }
 
         if (isEmailConfigured) {
           channel?.members.forEach(async (member: any) => {
             const user = await User.findOne({ userId: member })
-            CoreService.sendMail('human intervention needed', user?.email, messageData?.customerEmail, ticketId, channelId, workspaceId);
+            await CoreService.sendMail('human intervention needed', user?.email, messageData?.customerEmail, ticketId, channelId, workspaceId);
           })
         }
 
@@ -477,7 +477,7 @@ app.post('/send/message', async (req, res) => {
           thread_ts: getThread_rs?.thread_ts
         }
 
-        CoreService.sendSlackMessage(sendSlackPayload);
+        await CoreService.sendSlackMessage(sendSlackPayload);
       }
     }
     } else {
@@ -501,7 +501,7 @@ app.post('/send/message', async (req, res) => {
           thread_ts: getThread_rs?.thread_ts
         }
 
-        CoreService.sendSlackMessage(sendSlackPayload);
+        await CoreService.sendSlackMessage(sendSlackPayload);
       }
       createMessage({ ...messageData, createdAt: new Date(), message, type: IMessageType.SENT });
       io.to(workspaceId).emit("message", messageOptions);
