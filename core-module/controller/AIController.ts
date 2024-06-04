@@ -79,6 +79,7 @@ export default class AIController {
     const { question, history, workspaceId, channelId, userId} = req.body;
     const aiQuestionLogId = generateId(6);
     try {
+      console.log('chromaDbUrl: ',chromaDbUrl);
       logger.info({message:`[AIController.getInjestFile] gettingInjestedFile, question:${question}, workspaceId:${workspaceId}, channelId:${channelId}`})
       const collectionName = getCollectionName(workspaceId,channelId);
       const sanitizedQuestion = question.trim().replaceAll('\n', ' ');
@@ -107,6 +108,7 @@ export default class AIController {
       await AIQuestionLogModel.create({aiQuestionLogId, question, workspaceId, channelId, userId, response, status:IStatus.SUCCESS});
       res.status(200).json(response);
     } catch (e) {
+      logger.error({message:`[AIController.getInjestFile] error in getInjestFile, question:${question}, workspaceId:${workspaceId}, channelId:${channelId}`})
       await AIQuestionLogModel.create({aiQuestionLogId, question, workspaceId, channelId, userId, status: IStatus.FAILURE, error:e?.message});
       if (e.response) {
         return res.status(e.response.status).json({
