@@ -355,7 +355,7 @@ app.post('/send/message', async (req, res) => {
 
       
       threadNumber = slackMessageResponse?.[0]?.result?.ts;
-      if (thread_ts) {
+      if (threadNumber) {
         await TicketModel.updateMany({ ticketId: socketTicketPayload.ticketId }, { $set: { thread_ts: threadNumber } });
       } else {
         console.error('Error in sending slack message')
