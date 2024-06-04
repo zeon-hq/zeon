@@ -568,9 +568,6 @@ export const forgetPasswordController = async (req: Request, res: Response) => {
       { email, token, expiresAt },
       { upsert: true }
     );
-    console.log(
-      `>>>>> token generated for user with email ${email} is ${token} <<<<<<< `
-    );
 
     try {
       const body = {

@@ -159,8 +159,6 @@ export const verifyIdentity = async (
   if (!/^Bearer$/i.test(scheme)) {
     return res.status(401).json({ error: "Malformed token" });
   }
-  console.log(">>> token", token)
-
   try {
     const decoded = jwt.verify(
       token,
