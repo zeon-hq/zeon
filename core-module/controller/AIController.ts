@@ -79,6 +79,7 @@ export default class AIController {
     const { question, history, workspaceId, channelId, userId} = req.body;
     const aiQuestionLogId = generateId(6);
     try {
+      
       console.log('chromaDbUrl: ',chromaDbUrl);
       logger.info({message:`[AIController.getInjestFile] gettingInjestedFile, question:${question}, workspaceId:${workspaceId}, channelId:${channelId}`})
       const collectionName = getCollectionName(workspaceId,channelId);
