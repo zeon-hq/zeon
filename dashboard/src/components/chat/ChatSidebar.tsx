@@ -18,8 +18,12 @@ const MainWrapper = styled.div`
     border-right: 1px solid #eaecf0;
     padding: 16px;
 `
+ 
+ interface IChatSidebarProps {
+  isConnected: boolean;
+ }
 
-const ChatSidebar = ({ workspaceId }: { workspaceId: string }) => {
+const ChatSidebar = ({isConnected}:IChatSidebarProps) => {
   const dispatch = useDispatch();
   const [openChannelModal, setOpenChannelModal] = useState(false);
   const { channel, loading, workspaceInfo } = useDashboard();
@@ -68,7 +72,7 @@ const ChatSidebar = ({ workspaceId }: { workspaceId: string }) => {
         <SideBarTopWrapper>
           <SideBarInnerWrapper style={{ paddingBottom: "12px" }}>
             <PanelLabel
-              labelTitle="Channels"
+              labelTitle={isConnected ? "Connected" : "Disconnected"}
               icon={channelCreate}
               iconOnClick={() => {
                 setOpenChannelModal(true);

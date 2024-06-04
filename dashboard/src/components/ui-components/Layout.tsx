@@ -3,7 +3,7 @@ import Topbar from "components/topbar/Topbar"
 import CRMSidebar from "crm/CRMSidebar"
 import FinanceSidebar from "finance/expense/FinanceSidebar"
 import useDashboard from "hooks/useDashboard"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 import { useParams } from "react-router-dom"
 import {
@@ -29,7 +29,7 @@ const Layout = ({ children }: { children: any }) => {
   const dispatch = useDispatch()
   const { workspaceId } = useParams()
   const { showSidebar, isFinance, isChat, isCRM} = useDashboard()
-
+  const [isConnected, setIsConnected] = useState(false)
   useEffect(() => {
     //@ts-ignore
     dispatch(initDashboard(workspaceId))
@@ -81,6 +81,16 @@ const Layout = ({ children }: { children: any }) => {
       dispatch(updateConversationAIStatus({data}));
     });
 
+    socketInstance.on('disconnect', () => {
+      console.log('Disconnected from server');
+      setIsConnected(false);
+    });
+
+    socketInstance.on('connect', () => {
+      console.log('Connected to server');
+      setIsConnected(true);
+    });
+
   }, [socketInstance, workspaceId]); // eslint-disable-line
 
   return (
@@ -100,7 +110,7 @@ const Layout = ({ children }: { children: any }) => {
           isFinance ? (
             <FinanceSidebar workspaceId={workspaceId} />
           ) : isChat ? (
-            <ChatSidebar workspaceId={workspaceId} />
+            <ChatSidebar isConnected={isConnected}/>
           ) : (
             <CRMSidebar workspaceId={workspaceId} />
           )

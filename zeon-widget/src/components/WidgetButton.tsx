@@ -103,6 +103,10 @@ const WidgetButton = () => {
       dispatch(setAgentName(data?.agentName || "Agent"));
     });  
 
+    socketInstance.on('disconnect', () => {
+      console.log('Disconnected from server');
+    });
+
     socketInstance.on("message", (data) => { 
       if (data?.messageSource == IMessageSource.DASHBOARD || data?.messageSource ==  IMessageSource.BOTH || data?.messageSource ==  IMessageSource.SLACK) {
         setIsMessageUpdated((prev)=> !prev);

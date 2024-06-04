@@ -87,6 +87,11 @@ io.on("connection", (socket:Socket) => {
     io.to(data?.workspaceId).emit("widget_stop_typing", data);
   });
 
+  socket.on('disconnect', () => {
+    console.log('Client disconnected');
+  });
+
+
 });
 const MONGODB_DB_URI: string = process.env.DB_URI as string + process.env.DB_NAME as string;
 

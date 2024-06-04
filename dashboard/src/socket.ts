@@ -5,7 +5,10 @@ const socketUrl = Config('TICKET_SERVICE');
 const socket = io(socketUrl,{
     transports: ["websocket"],
     reconnection: true,
-    // reconnectionAttempts: 0
+    reconnectionAttempts:Infinity,
+    reconnectionDelay: 1000,
+    reconnectionDelayMax: 5000,
+    timeout: 20000
 });
 
 const socketInstance = socket.connect();
