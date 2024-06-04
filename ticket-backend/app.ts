@@ -265,6 +265,8 @@ app.post('/send/message', async (req, res) => {
   const isSlackConfigured = channel?.slackChannelId;
 
   const getThread_rs = await TicketModel.findOne({ ticketId });
+
+  let threadNumber = getThread_rs?.thread_ts || '';
   
   if (isNewTicket) {
     openTicket(messageData, "no_socket_id"); // pass socketId
@@ -351,9 +353,10 @@ app.post('/send/message', async (req, res) => {
 
       const slackMessageResponse = await CoreService.sendSlackMessage(sendSlackPayload);
 
-      const thread_ts = slackMessageResponse?.[0]?.result?.ts;
+      
+      threadNumber = slackMessageResponse?.[0]?.result?.ts;
       if (thread_ts) {
-        await TicketModel.updateMany({ ticketId: socketTicketPayload.ticketId }, { $set: { thread_ts } });
+        await TicketModel.updateMany({ ticketId: socketTicketPayload.ticketId }, { $set: { thread_ts: threadNumber } });
       } else {
         console.error('Error in sending slack message')
       }
@@ -391,13 +394,12 @@ app.post('/send/message', async (req, res) => {
           channelId: channel.slackChannelId,
           message: messageData.message,
           token: channel.accessToken,
-          thread_ts: getThread_rs?.thread_ts
+          thread_ts: threadNumber
         }
 
        await CoreService.sendSlackMessage(sendSlackPayload);
       }
     }
-
   }
 
   if (isAIEnabled && messageSource ==  "widget") {
@@ -438,7 +440,7 @@ app.post('/send/message', async (req, res) => {
           channelId: channel.slackChannelId,
           message: 'Human Intervention Needed',
           token: channel.accessToken,
-          thread_ts: getThread_rs?.thread_ts
+          thread_ts: threadNumber
         }
 
         await CoreService.sendSlackMessage(sendSlackPayload);
@@ -465,7 +467,7 @@ app.post('/send/message', async (req, res) => {
         widgetId,
         messageSource: IMessageSource.BOTH
       }
-      createMessage({ ...messageData, createdAt: new Date(), message, type: IMessageType.RECEIVED });
+      await createMessage({ ...messageData, createdAt: new Date(), message, type: IMessageType.RECEIVED });
       // io.emit("message", messageOptions);
       io.to(workspaceId).emit("message", messageOptions);
 
@@ -474,7 +476,7 @@ app.post('/send/message', async (req, res) => {
           channelId: channel.slackChannelId,
           message: message,
           token: channel.accessToken,
-          thread_ts: getThread_rs?.thread_ts
+          thread_ts: threadNumber
         }
 
         await CoreService.sendSlackMessage(sendSlackPayload);
@@ -498,7 +500,7 @@ app.post('/send/message', async (req, res) => {
           channelId: channel.slackChannelId,
           message: message,
           token: channel.accessToken,
-          thread_ts: getThread_rs?.thread_ts
+          thread_ts: threadNumber
         }
 
         await CoreService.sendSlackMessage(sendSlackPayload);
