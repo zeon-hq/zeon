@@ -139,13 +139,11 @@ export const verifyIdentity = async (
   next: NextFunction
 ) => {
   const authHeader = req.headers.authorization
-  console.log(">>> bearer", authHeader)
   if (!authHeader) {
     return res.status(401).json({ error: "Authorization header missing" });
   }
 
   const parts = authHeader.split(" ");
-  console.log(">>> parts", parts)
 
   // Check if the header has two parts
   if (parts.length !== 2) {
