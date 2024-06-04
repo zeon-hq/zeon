@@ -127,7 +127,6 @@ const ZeonWidgetChat = () => {
         
       }
     } catch (error) {
-      // console.log(">>>", error);
     }
   };
 

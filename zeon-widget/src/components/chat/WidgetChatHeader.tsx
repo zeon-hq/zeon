@@ -1,11 +1,9 @@
-import { ActionIcon, Box, Button } from "@mantine/core";
+import { Button } from "@mantine/core";
 import useWidget from "components/hooks/useWidget";
 import { AiOutlineArrowLeft } from "components/icons/icons";
-import { Text } from "components/ui-components/uStyleComponents";
 import { useDispatch } from "react-redux";
 import { IUIStepType, setMessage, setStep } from "redux/slice";
 import styled from "styled-components";
-import { Mail } from "tabler-icons-react";
 
 const Wrapper = styled.div`
   background-color: ${(props: { bg: string }) => props.bg};
@@ -28,35 +26,21 @@ const IconWrapper = styled.div`
 const WidgetChatHeader = () => {
   const dispatch = useDispatch();
   const { widgetDetails } = useWidget();
-  const ticketNumber = localStorage.getItem("ticketId")?.slice(-6);
   const handleBackClick = () => {
     dispatch(setStep(IUIStepType.INITIAL));
     dispatch(setMessage([]));
   };
 
   return (
-    <Wrapper
-      
-      bg={widgetDetails?.appearance?.widgetHeaderSection?.topBannerColor}
-    >
+    <Wrapper bg={widgetDetails?.appearance?.widgetHeaderSection?.topBannerColor}>
       <IconWrapper>
         <Button
           onClick={handleBackClick}
           variant="outline"
           color="dark"
           radius="md"
-          leftIcon={
-            <AiOutlineArrowLeft
-              color={
-                widgetDetails?.appearance.widgetHeaderSection.textColor ||
-                "black"
-              }
-              size={"1rem"}
-            />
-          }
-        >
-          {" "}
-          Go Back{" "}
+          leftIcon={<AiOutlineArrowLeft color={widgetDetails?.appearance.widgetHeaderSection.textColor || "black"} size={"1rem"}/>}>
+          Go Back
         </Button>
       </IconWrapper>
     </Wrapper>
