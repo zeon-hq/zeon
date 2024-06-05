@@ -117,6 +117,7 @@ const ChatArea = () => {
       messageData: {
         workspaceId,
         channelId,
+        widgetId:activeChat?.widgetId,
         createdAt: Date.now().toString(),
         message,
         isOpen: true,

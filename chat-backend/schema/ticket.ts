@@ -10,6 +10,7 @@ interface ITicket {
   updatedAt: number;
   isOpen: boolean;
   type: string;
+  widgetId: string;
   socketId: string;
   ticketId?:string; // making the ticketId optional, because this is adding after 1 year, so it won't break in older structure
   messages?: any[];
@@ -20,6 +21,7 @@ interface ITicket {
 const TicketSchema: Schema = new Schema({
   workspaceId: {type: String, required: true},
   channelId: {type: String, required: true},
+  widgetId: {type: String, required: true},
   text: {type: String, required: true},
   createdAt: {type: Number,  required: true},
   updatedAt: {type: Number,  required: true},

@@ -81,6 +81,7 @@ const WidgetButton = () => {
 
   useEffect(() => {
     const ticketId = localStorage.getItem("ticketId");
+    const getWidgetId = localStorage.getItem("widgetId");
     socketInstance.on('connect', function() {
       if (ticketId) {
         socketInstance.emit("join_ticket", {
@@ -108,7 +109,7 @@ const WidgetButton = () => {
     });
 
     socketInstance.on("message", (data) => { 
-      if (data?.messageSource == IMessageSource.DASHBOARD || data?.messageSource ==  IMessageSource.BOTH || data?.messageSource ==  IMessageSource.SLACK) {
+      if ((data?.messageSource == IMessageSource.DASHBOARD || data?.messageSource ==  IMessageSource.BOTH || data?.messageSource ==  IMessageSource.SLACK) && data?.widgetId == getWidgetId) {
         setIsMessageUpdated((prev)=> !prev);
         const checkIsThisNewTicket:boolean = (!!allOpenConversations.find((conversation) => conversation.ticketId === data.ticketId))
         handleMessageReceived(data, checkIsThisNewTicket);
