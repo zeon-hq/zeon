@@ -3,6 +3,11 @@ import { SessionRequest } from "supertokens-node/framework/express"
 import { Message } from "../../schema/message"
 import { Ticket } from "../../schema/ticket"
 import { getUser } from "zeon-core/dist/func"
+import {Logger} from "zeon-core/dist/index"
+import {ZeonServices} from "zeon-core/dist/types/types"
+
+
+const logger = new Logger(ZeonServices.CHAT)
 
 export const getAllTickets = async (req: SessionRequest, res: Response) => {
   const { workspaceId } = req.params
@@ -25,6 +30,10 @@ export const getAllTickets = async (req: SessionRequest, res: Response) => {
     return res.status(200).json({ tickets })
   } catch (error) {
     console.log(error)
+    logger.error({
+      message: "Error in getting all tickets",
+      error,
+    })
     return res.status(500).json({
       message: "Something went wrong",
     })
@@ -44,7 +53,16 @@ export const searchTicket = async (req: SessionRequest, res: Response) => {
     }).exec()
 
     return res.status(200).json({ results: searchResults })
-  } catch (error) {}
+  } catch (error) {
+    console.log(error)
+    logger.error({
+      message: "Error in searching ticket",
+      error,
+    })
+    return res.status(500).json({
+      message: "Something went wrong",
+    })
+  }
 }
 
 export const updateAssignedUser = async (
@@ -71,6 +89,10 @@ export const updateAssignedUser = async (
       .json({ message: "Assigned user updated", assignedUserInfo: user })
   } catch (error) {
     console.log(error)
+    logger.error({
+      message: "Error in updating assigned user",
+      error,
+    })
     return res.status(500).json({
       message: "Something went wrong",
     })

@@ -5,13 +5,19 @@ import { getUser, getWorkspaceByWorkspaceId } from "zeon-core/dist/func";
 import { CannedResponse } from "../../schema/cannedResponse";
 import { Channel } from "../../schema/channel";
 import { generateRandomString } from "../../utils/blocks";
+import {Logger} from "zeon-core/dist/index"
+import {ZeonServices} from "zeon-core/dist/types/types"
+import { log } from "console";
+
+
+const logger = new Logger(ZeonServices.CHAT)
 dotenv.config();
 
 
 export const createChannel = async (req: SessionRequest, res: Response) => {
   try {
     const workspaceId = req.body.workspaceId;
-    const {userId} = req.user;
+    const {userId}:any = req.user;
     const name = req.body.name;
     const workspace = await getWorkspaceByWorkspaceId(workspaceId);
     if(!workspace){
@@ -27,13 +33,16 @@ export const createChannel = async (req: SessionRequest, res: Response) => {
       members:[ userId]
     });
 
-    console.log("using types");
     return res.status(200).json({
       message: "Channels created successfully",
       id: channel.channelId,
     });
   } catch (error) {
     console.log(error);
+    logger.error({
+      message: "Error in creating channel",
+      error,
+    })
     return res.status(500).json({
       message: "Something went wrong",
     });
@@ -57,6 +66,10 @@ export const updateChannelInfo = async (req: SessionRequest, res: Response) => {
     });
   } catch (error) {
     console.log(error);
+    logger.error({
+      message: "Error in updating channel",
+      error,
+    })
     return res.status(500).json({
       message: "Something went wrong",
     });
@@ -78,6 +91,10 @@ export const getChannel = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.log(error);
+    logger.error({
+      message: "Error in fetching channel",
+      error,
+    })
     return res.status(500).json({
       message: "Something went wrong",
     });
@@ -125,6 +142,10 @@ export const createCanned = async (req: SessionRequest, res: Response) => {
 
   } catch (e) {
     console.log(e);
+    logger.error({
+      message: "Error in creating canned response",
+      error: e,
+    })
     return res.status(500).json({
       message: "Something went wrong",
     });
@@ -157,6 +178,10 @@ export const getAllCannedResponsedFromChannel = async (req: SessionRequest, res:
 
   } catch (e) {
     console.log(e);
+    logger.error({
+      message: "Error in fetching canned response",
+      error: e,
+    })
     return res.status(500).json({
       message: "Something went wrong",
     });
@@ -196,6 +221,10 @@ export const updatedCannedResponse = async (req: SessionRequest, res: Response) 
 
   } catch (e) {
     console.log(e);
+    logger.error({
+      message: "Error in updating canned response",
+      error: e,
+    })
     return res.status(500).json({
       message: "Something went wrong",
     });
@@ -227,6 +256,10 @@ export const deleteCannedResponse = async (req: SessionRequest, res: Response) =
 
   } catch (e) {
     console.log(e);
+    logger.error({
+      message: "Error in deleting canned response",
+      error: e,
+    })
     return res.status(500).json({
       message: "Something went wrong",
     });
@@ -269,6 +302,10 @@ export const getUserFromChannel = async (req: SessionRequest, res: Response) => 
 
   } catch (error) {
     console.log(error);
+    logger.error({
+      message: "Error in fetching user from channel",
+      error,
+    })
     return res.status(500).json({
       message: "Something went wrong",
 
@@ -296,6 +333,11 @@ export const addUserIdsToChannel = async (req: SessionRequest, res: Response) =>
     return res.status(200).json({ channelId });
 
   } catch (error) {
+    console.log(error);
+    logger.error({
+      message: "Error in adding user to channel",
+      error,
+    })
     return res.status(500).json({
       message: "Something went wrong",
 
@@ -330,6 +372,11 @@ export const removeUserIdsFromChannel = async (req: SessionRequest, res: Respons
     return res.status(200).json({ channelId });
 
   } catch (error) {
+    console.log(error);
+    logger.error({
+      message: "Error in removing user from channel",
+      error,
+    })
     return res.status(500).json({
       message: "Something went wrong",
 
@@ -358,6 +405,10 @@ export const updateCustomPrompt = async (req: SessionRequest, res: Response) => 
     });
   } catch (error) {
     console.log(error);
+    logger.error({
+      message: "Error in updating custom prompt",
+      error,
+    })
     return res.status(500).json({
       message: "Something went wrong",
     });
@@ -381,6 +432,10 @@ export const getCustomPrompt = async (req: SessionRequest, res: Response) => {
     });
   } catch (error) {
     console.log(error);
+    logger.error({
+      message: "Error in fetching custom prompt",
+      error,
+    })
     return res.status(500).json({
       message: "Something went wrong",
     });

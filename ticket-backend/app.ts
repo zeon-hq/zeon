@@ -25,6 +25,12 @@ import ExternalService from "./services/ExternalService";
 import {
   openTicket,
 } from "./services/SlackService";
+import {Logger} from "zeon-core/dist/index"
+import {ZeonServices} from "zeon-core/dist/types/types"
+
+const logger = new Logger(ZeonServices.TICKET);
+
+
 
 export interface ISocketTicketPayload {
   workspaceId: string;
@@ -98,7 +104,11 @@ const MONGODB_DB_URI: string = process.env.DB_URI as string + process.env.DB_NAM
 mongoose.connect(MONGODB_DB_URI).then(() => {
   console.log("Connected to DB in ticket backend!");
 }).catch((err: any) => {
+  
   console.log(`Error: MongoDB connection error for  Db. Please make sure MongoDB is running. ${err}`);
+  logger.error({
+    message: `Error: MongoDB connection error for  Db. Please make sure MongoDB is running. ${err}`,
+  });
 });
 
 

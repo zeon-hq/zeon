@@ -3,6 +3,10 @@ import { User } from "../../schema/user";
 import { Team } from "../../schema/team";
 import { Invite } from "../../schema/invite";
 import { sendEmailOnSignUp } from "../../utils/notifications";
+import {Logger} from "zeon-core/dist/index"
+import {ZeonServices} from "zeon-core/dist/types/types"
+
+const logger = new Logger(ZeonServices.CHAT)
 
 export const signupController = async (
   fields: SigninControllerArgs,
@@ -44,6 +48,10 @@ export const signupController = async (
     return;
   } catch (error) {
     console.log(error);
+    logger.error({
+      message: "Error in signup",
+      error,
+    });
     return;
   }
 };

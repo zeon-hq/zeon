@@ -6,6 +6,11 @@ import os from "os";
 import { initializeDB } from "zeon-core/dist/func";
 import { UserInterface } from "zeon-core/dist/types";
 import oauthController from "./controller/slack/oauthController";
+import {Logger} from "zeon-core/dist/index"
+import {ZeonServices} from "zeon-core/dist/types/types"
+
+
+const logger = new Logger(ZeonServices.CHAT)
 const app: Express = express();
 dotenv.config()
 
@@ -13,6 +18,7 @@ dotenv.config()
 declare global {
   namespace Express {
     interface Request {
+      //@ts-ignore
       user : UserInterface;
     }
   }
@@ -46,6 +52,10 @@ mongoose
   })
   .catch((e) => {
     console.log('DB Connection Failed Error Message: ',e);
+    logger.error({
+      message: "Error in connecting to DB",
+      error: e,
+    })
   });
 
 app.use("/channel", channelRouter);

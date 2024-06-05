@@ -8,7 +8,7 @@ export default class Logger {
     service: ZeonServices
     constructor(service: ZeonServices) {
         // private variable for webhook
-        this.webhook = process.env.SLACK_WEBHOOK;
+        this.webhook = process.env.DISCORD_WEBHOOK;
         this.service = service;
     }
     
@@ -28,21 +28,23 @@ export default class Logger {
     }
     
     error(input:ZLoggerInput) {
-        // input.type = "ERROR";
-        // input.service = this.service;
-        // console.log(`[ERROR]: ${JSON.stringify(input)}`);
-        // this.sendToSlack(input);
+        input.type = "ERROR";
+        input.service = this.service;
+        console.log(`[ERROR]: ${JSON.stringify(input)}`);
+        this.sendToDiscord(input);
     }
 
-    private async sendToSlack(message: any) {
+    private async sendToDiscord(message: any) {
         // send message to slack
         try {
-            // await axios.post(this.webhook, {
-            //     text: JSON.stringify(message)
-            // })
+            await axios.post(this.webhook, {
+                "content": JSON.stringify(message),
+                "embeds": null,
+                "attachments": []
+              })
         } catch (error) {
-            // console.log("Error sending to slack");
-            // console.log(error);
+            console.log("Error sending to slack");
+            console.log(error);
         }
         
     }
