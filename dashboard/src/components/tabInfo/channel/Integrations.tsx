@@ -30,12 +30,9 @@ const Integrations = () => {
     };
 
     const stateParameter = encodeURIComponent(JSON.stringify(stateObject));
-
-    // if (channelsInfo[selectedPage.name]?.channelId) return;
     
     localStorage.setItem("workspaceId", workspaceInfo.workspaceId || "");
 
-    // "channels:read,,,,,,,,,,,incoming-webhook,users.profile:read"
     const scopes = [
       'channels:read',
       'chat:write',
@@ -48,9 +45,6 @@ const Integrations = () => {
       'files:write',
       'channels:history',
       'channels:join',
-
-      // 'users.profile:read',
-      // 'conversations:read'
       'incoming-webhook'
     ];
   
