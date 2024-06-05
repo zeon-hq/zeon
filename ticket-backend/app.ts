@@ -422,6 +422,7 @@ app.post('/send/message', async (req, res) => {
 
     io.to(workspaceId).emit("ai_responding", {
       ticketId,
+      widgetId,
       workspaceId,
       channelId,
       agentName
@@ -432,7 +433,8 @@ app.post('/send/message', async (req, res) => {
     io.to(workspaceId).emit("ai_stop_responded", {
       ticketId,
       workspaceId,
-      channelId
+      channelId,
+      widgetId
     });
     
     if (!aiResponse?.error) {
@@ -442,7 +444,8 @@ app.post('/send/message', async (req, res) => {
       io.to(workspaceId).emit("human_intervention_needed", {
         ticketId,
         workspaceId,
-        channelId
+        channelId,
+        widgetId
       });
 
       if (isSlackConfigured) {
