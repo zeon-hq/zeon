@@ -56,7 +56,7 @@ const Integrations = () => {
   
     const scopeString = scopes.join(',');
 
-    const slackClientId = process.env.REACT_APP_SLACK_CLIENT_ID;
+    const slackClientId = '6207890042583.6324605514052';
     const url = `https://slack.com/oauth/v2/authorize?state=${stateParameter}&redirect_uri=${slackRedirectionUrl}&client_id=${slackClientId}&scope=${scopeString}&user_scope=`;
     window.open(url,"_blank");
   } else {
