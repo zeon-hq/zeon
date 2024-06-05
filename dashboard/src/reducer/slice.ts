@@ -275,6 +275,7 @@ export interface IInbox {
   updatedAt: number;
   text: string;
   ticketId:string;
+  widgetId?: string;
   isOpen: boolean;
   type: string;
   socketId: string;
