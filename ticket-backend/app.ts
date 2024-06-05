@@ -11,7 +11,7 @@ import TicketModel from "./model/TicketModel";
 import { sendMessageIo } from "./mq/producer";
 import { MessageOptions } from "./schema/types/ticket";
 import ChannelModel from "./model/ChannelModel";
-import User from "./model/UserModel";
+// import User from "./model/UserModel";
 import CoreService, { ISendSlackMessage } from "./services/CoreService";
 import {
   createMessage,
@@ -27,6 +27,8 @@ import {
 } from "./services/SlackService";
 import {Logger} from "zeon-core/dist/index"
 import {ZeonServices} from "zeon-core/dist/types/types"
+import { getUser } from "zeon-core/dist/functions/user";
+import { initializeDB } from "zeon-core/dist/func";
 
 const logger = new Logger(ZeonServices.TICKET);
 
@@ -99,17 +101,21 @@ io.on("connection", (socket:Socket) => {
 
 
 });
-const MONGODB_DB_URI: string = process.env.DB_URI as string + process.env.DB_NAME as string;
+// const MONGODB_DB_URI: string = process.env.DB_URI as string + process.env.DB_NAME as string;
 
-mongoose.connect(MONGODB_DB_URI).then(() => {
-  console.log("Connected to DB in ticket backend!");
-}).catch((err: any) => {
+// mongoose.connect(MONGODB_DB_URI).then(() => {
+//   console.log("Connected to DB in ticket backend!");
+//   initializeDB();
+// }).catch((err: any) => {
   
-  console.log(`Error: MongoDB connection error for  Db. Please make sure MongoDB is running. ${err}`);
-  logger.error({
-    message: `Error: MongoDB connection error for  Db. Please make sure MongoDB is running. ${err}`,
-  });
-});
+//   console.log(`Error: MongoDB connection error for  Db. Please make sure MongoDB is running. ${err}`);
+//   logger.error({
+//     message: `Error: MongoDB connection error for  Db. Please make sure MongoDB is running. ${err}`,
+//   });
+// });
+initializeDB();
+
+
 
 
 
@@ -374,7 +380,7 @@ app.post('/send/message', async (req, res) => {
 
     if (isEmailConfigured) { 
       channel?.members.forEach(async (member: any) => {
-        const user = await User.findOne({ userId: member })
+        const user = await getUser({ userId: member, workspaceId })
         await CoreService.sendMail(`You have a new ticket:\n${messageData.message}` , user?.email, messageData.customerEmail, ticketId, channelId, workspaceId);
       })
     }
@@ -461,7 +467,7 @@ app.post('/send/message', async (req, res) => {
 
         if (isEmailConfigured) {
           channel?.members.forEach(async (member: any) => {
-            const user = await User.findOne({ userId: member })
+            const user = await getUser({ userId: member, workspaceId })
             await CoreService.sendMail('human intervention needed', user?.email, messageData?.customerEmail, ticketId, channelId, workspaceId);
           })
         }

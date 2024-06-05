@@ -244,7 +244,7 @@ export const createUserInvite = async (req: Request, res: Response) => {
       params: {
         inviter: user.name,
         workspacename: workspace.workspaceName,
-        invitelink: `https://dev.zeonhq.com`,
+        invitelink: `https://app.zeonhq.com`,
       },
     };
 
