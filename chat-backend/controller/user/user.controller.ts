@@ -6,6 +6,11 @@ import {
   getUser,
   getWorkspaceByWorkspaceId,
 } from "zeon-core/dist/func"
+import {Logger} from "zeon-core/dist/index"
+import {ZeonServices} from "zeon-core/dist/types/types"
+
+
+const logger = new Logger(ZeonServices.CHAT)
 
 export const getUserInfo = async (req: Request, res: Response) => {
   try {
@@ -47,6 +52,10 @@ export const getUserInfo = async (req: Request, res: Response) => {
     })
   } catch (error) {
     console.log(error)
+    logger.error({
+      message: "Error in getting user info",
+      error,
+    })
     return res.status(500).json({
       message: "Something went wrong",
     })
@@ -55,7 +64,7 @@ export const getUserInfo = async (req: Request, res: Response) => {
 
 export const getUserChannels = async (req: SessionRequest, res: Response) => {
   const { workspaceId } = req.body
-  let user = req.user
+  let user:any = req.user
 
   try {
     // get all channels of the workspace
@@ -74,6 +83,10 @@ export const getUserChannels = async (req: SessionRequest, res: Response) => {
     })
   } catch (error) {
     console.log(error)
+    logger.error({
+      message: "Error in getting user channels",
+      error,
+    })
     return res.status(500).json({
       message: "Something went wrong",
     })

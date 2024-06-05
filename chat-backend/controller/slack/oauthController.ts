@@ -1,6 +1,11 @@
 import { Request, Response } from 'express';
 import axios from "axios";
 import { Channel } from '../../schema/channel';
+import {Logger} from "zeon-core/dist/index"
+import {ZeonServices} from "zeon-core/dist/types/types"
+
+
+const logger = new Logger(ZeonServices.CHAT)
 export default class oauthController {
 
     public static async oauthSlackAuthorize(req: Request, res: Response): Promise<any> {
@@ -60,6 +65,10 @@ export default class oauthController {
                     message: e.response.data ? e.response.data.message : e.message,
                     data: e.response.data ? e.response.data.data : null
                 };
+                logger.error({
+                    message: "Error in slack oauth authorize",
+                    error: ZeonResponse,
+                })
                 return res.status(e.response.status).json(ZeonResponse);
             }
             else if (e) {
@@ -67,6 +76,10 @@ export default class oauthController {
                     code: "400",
                     message: e.message
                 };
+                logger.error({
+                    message: "Error in slack oauth authorize",
+                    error: ZeonResponse,
+                })
                 return res.status(400).json(ZeonResponse);
             }
             else {
@@ -74,6 +87,10 @@ export default class oauthController {
                     code: "500",
                     message: e.message || e
                 };
+                logger.error({
+                    message: "Error in slack oauth authorize",
+                    error: ZeonResponse,
+                })
                 return res.status(500).json(ZeonResponse);
             }
         }

@@ -38,7 +38,7 @@
     "stripe": "^10.16.0",
     "supertokens-node": "^12.1.4",
     "ts-node": "^10.9.1",
-    "zeon-core": "^1.0.32"
+    "zeon-core": "^1.0.34"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",

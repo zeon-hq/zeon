@@ -16,6 +16,11 @@ import {
   sendEmailOnInvite,
   sendEmailOnSignUp_PersonalHello,
 } from "../../utils/notifications"
+import {Logger} from "zeon-core/dist/index"
+import {ZeonServices} from "zeon-core/dist/types/types"
+
+
+const logger = new Logger(ZeonServices.CHAT)
 
 dotenv.config()
 
@@ -23,7 +28,7 @@ const WEBSITE_URL = process.env.WEBSITE_URL as string
 
 
 export const createTeam = async (req: Request, res: Response) => {
-  const user: UserInterface = req.user
+  const user: UserInterface | any = req.user
   try {
     const workspaceName = req.body.workspaceName
     const modules: ZeonModulesArray = req.body.modules
@@ -98,6 +103,11 @@ export const inviteTeamMember = async (req: SessionRequest, res: Response) => {
 
     return res.send({ inviteId })
   } catch (error) {
+    console.log(error)
+    logger.error({
+      message: "Error in inviting team member",
+      error,
+    })
     return res.status(500).json({
       message: "Something went wrong",
     })
@@ -111,6 +121,11 @@ export const removeTeamMember = async (req: SessionRequest, res: Response) => {
     await Team.updateOne({ _id: workspaceId }, { $pull: { members: email } })
     return res.send({ workspaceId })
   } catch (error) {
+    console.log(error)
+    logger.error({
+      message: "Error in removing team member",
+      error,
+    })
     return res.status(500).json({
       message: "Something went wrong",
     })
@@ -124,6 +139,11 @@ export const addAdmin = async (req: SessionRequest, res: Response) => {
     await Team.updateOne({ _id: workspaceId }, { $push: { admins: userId } })
     return res.send({ workspaceId })
   } catch (error) {
+    console.log(error)
+    logger.error({
+      message: "Error in adding admin",
+      error,
+    })
     return res.status(500).json({
       message: "Something went wrong",
     })
@@ -147,6 +167,11 @@ export const changeUserRole = async (req: SessionRequest, res: Response) => {
       message: "Role changed",
     })
   } catch (error) {
+    console.log(error)
+    logger.error({
+      message: "Error in changing user role",
+      error,
+    })
     return res.status(500).json({
       message: "Something went wrong",
     })
@@ -160,6 +185,11 @@ export const removeAdmin = async (req: SessionRequest, res: Response) => {
     await Team.updateOne({ _id: workspaceId }, { $pull: { admins: userId } })
     return res.send({ workspaceId })
   } catch (error) {
+    console.log(error)
+    logger.error({
+      message: "Error in removing admin",
+      error,
+    })
     return res.status(500).json({
       message: "Something went wrong",
     })
@@ -177,6 +207,11 @@ export const getTeam = async (req: Request, res: Response) => {
       workspace,
     })
   } catch (error) {
+    console.log(error)
+    logger.error({
+      message: "Error in getting team",
+      error,
+    })
     return res.status(500).json({
       message: "Something went wrong",
       error,
@@ -237,6 +272,11 @@ export const getTeamData = async (req: SessionRequest, res: Response) => {
       payload,
     })
   } catch (error) {
+    console.log(error)
+    logger.error({
+      message: "Error in getting team data",
+      error,
+    })
     return res.status(500).json({
       message: "Something went wrong",
     })

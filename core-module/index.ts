@@ -16,6 +16,8 @@ import oauthController from "./controller/oauthController";
 import notesRoutes from "./routes/notes";
 import AIRoute from "./routes/AIRoute";
 import Workspace from "./schema/Workspace";
+import Logger from "./functions/logger";
+
 
 const app = express();
 const port = process.env.CORE_BACKEND_PORT
@@ -320,5 +322,6 @@ app.listen(port, () => {
 // export verifyIdentity so that it can be imported when this package is used as a dependency
 
 export {
-  verifyIdentity
+  verifyIdentity,
+  Logger
 }
