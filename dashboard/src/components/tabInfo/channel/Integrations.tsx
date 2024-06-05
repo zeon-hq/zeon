@@ -30,12 +30,9 @@ const Integrations = () => {
     };
 
     const stateParameter = encodeURIComponent(JSON.stringify(stateObject));
-
-    // if (channelsInfo[selectedPage.name]?.channelId) return;
     
     localStorage.setItem("workspaceId", workspaceInfo.workspaceId || "");
 
-    // "channels:read,,,,,,,,,,,incoming-webhook,users.profile:read"
     const scopes = [
       'channels:read',
       'chat:write',
@@ -48,9 +45,6 @@ const Integrations = () => {
       'files:write',
       'channels:history',
       'channels:join',
-
-      // 'users.profile:read',
-      // 'conversations:read'
       'incoming-webhook'
     ];
   
@@ -58,6 +52,7 @@ const Integrations = () => {
 
     const slackClientId = '6207890042583.6324605514052';
     const url = `https://slack.com/oauth/v2/authorize?state=${stateParameter}&redirect_uri=${slackRedirectionUrl}&client_id=${slackClientId}&scope=${scopeString}&user_scope=`;
+    console.log('--------------- url',url);
     window.open(url,"_blank");
   } else {
     const slackUpdatePayload = {accessToken:'', slackChannelId:''};
