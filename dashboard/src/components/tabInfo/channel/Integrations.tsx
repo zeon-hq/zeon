@@ -52,6 +52,7 @@ const Integrations = () => {
 
     const slackClientId = '6207890042583.6324605514052';
     const url = `https://slack.com/oauth/v2/authorize?state=${stateParameter}&redirect_uri=${slackRedirectionUrl}&client_id=${slackClientId}&scope=${scopeString}&user_scope=`;
+    console.log('--------------- url',url);
     window.open(url,"_blank");
   } else {
     const slackUpdatePayload = {accessToken:'', slackChannelId:''};
