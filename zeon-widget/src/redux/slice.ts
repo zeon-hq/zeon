@@ -34,6 +34,7 @@ export interface IAllOpenConversations {
 
 export type WidgetInterface = {
   step: IUIStepType;
+  widgetId: String;
   email: String;
   messages: Array<Message> | [];
   showWidget: boolean;
@@ -117,6 +118,7 @@ export interface IWidgetDetails  {
 const initialState: WidgetInterface = {
   step: IUIStepType.INITIAL,
   email: "",
+  widgetId: "",
   messages: [],
   showWidget: false,
   formSubmitButtonLoading: false,
@@ -133,6 +135,9 @@ export const widgetSlice = createSlice({
   reducers: {
     setStep: (state, action: PayloadAction<IUIStepType>) => {
       state.step = action.payload;
+    },   
+    setWidgetId: (state, action: PayloadAction<String>) => {
+      state.widgetId = action.payload;
     },
     setEmail: (state, action: PayloadAction<String>) => {
       state.email = action.payload;
@@ -192,6 +197,7 @@ export const {
   clearPrevChat,
   setTyping,
   setAiTyping,
+  setWidgetId,
   setAgentName
 } = widgetSlice.actions;
 

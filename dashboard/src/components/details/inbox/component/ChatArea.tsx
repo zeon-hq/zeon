@@ -31,7 +31,7 @@ const TabContent = ({
   inputPlaceHolder,
 }: ITabContent) => {
   const {workspaceId} = useParams();
-  const { activeChat } = useDashboard();
+  const { activeChat, } = useDashboard();
   
   return (
     <>
@@ -56,6 +56,7 @@ const TabContent = ({
                 workspaceId,
                 ticketId:activeChat?.ticketId,
                 channelId:activeChat?.channelId,
+                widgetId:activeChat?.widgetId,
                 source:'dashboard'
               })
             }}
@@ -65,7 +66,8 @@ const TabContent = ({
                 workspaceId,
                 ticketId:activeChat?.ticketId,
                 channelId:activeChat?.channelId,
-                source:'dashboard'
+                widgetId:activeChat?.widgetId,
+                source:'dashboard',
               })
               onInputOnChange(e?.target?.value)
             }}

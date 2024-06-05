@@ -41,6 +41,7 @@ const useWidget = () => {
   const typing = useSelector((state: RootState ) => state.widget.typing);
   const aiTyping = useSelector((state: RootState ) => state.widget.aiTyping);
   const agentName = useSelector((state: RootState ) => state.widget.agentName);
+  const widgetId = useSelector((state: RootState ) => state.widget.widgetId);
 
   return {
     step,
@@ -53,7 +54,8 @@ const useWidget = () => {
     isOutOfOperatingHours,
     typing,
     aiTyping,
-    agentName
+    agentName,
+    widgetId
   };
 };
 

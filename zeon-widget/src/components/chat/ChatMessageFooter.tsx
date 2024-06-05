@@ -54,7 +54,7 @@ const ChatMessageFooter = ({
   setValue,
   watch,
 }: IChatMessageFooter) => {
-  const { widgetDetails, aiTyping, agentName } = useWidget();
+  const { widgetDetails, aiTyping, agentName, widgetId } = useWidget();
   const ticketId = localStorage.getItem("ticketId");
   const isEmbeddable: IEmbeddableOutput = useEmbeddable();
   return (
@@ -89,6 +89,7 @@ const ChatMessageFooter = ({
               ticketId: ticketId,
               channelId: isEmbeddable.channelId,
               source: "widget",
+              widgetId:widgetId,
             });
           }}
           value={watch("message")}
@@ -98,6 +99,7 @@ const ChatMessageFooter = ({
               ticketId: ticketId,
               channelId: isEmbeddable.channelId,
               source: "widget",
+              widgetId:widgetId,
             });
           }}
           size="md"

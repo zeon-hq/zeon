@@ -2,11 +2,10 @@ import socketInstance from "api/socket";
 import ZeonWidgetModal from "components/modal/ZeonWidgetModal";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { IMessageSource, setAgentName, setAiTyping, setAllOpenConversations, setMessage, setShowWidget, setTyping } from "redux/slice";
+import { IMessageSource, setAgentName, setAiTyping, setAllOpenConversations, setMessage, setShowWidget, setTyping, setWidgetId } from "redux/slice";
 import styled from "styled-components";
 import { MessageType } from "./chat/Chat.types";
 import useWidget from "./hooks/useWidget";
-import { AiOutlineClose } from "react-icons/ai";
 import { chevronDown, notificationSound, widgetImageUrl } from "config/Config";
 import { generateRandomString } from "./hooks/commonUtils";
 import { cloneDeep } from "lodash";
@@ -24,7 +23,7 @@ const ZeonWidgetWrapper = styled.div`
 const WidgetButton = () => {
   const audioPlayer = useRef<HTMLAudioElement>(null);
   const [isMessageUpdated, setIsMessageUpdated] = useState(false);
-  const { step ,widgetDetails, showWidget, allOpenConversations, messages, typing } = useWidget();
+  const { widgetDetails, showWidget, allOpenConversations, typing, widgetId } = useWidget();
   const playAudio = () => {
     // audioPlayer?.current?.play();
   }
@@ -118,30 +117,32 @@ const WidgetButton = () => {
     });
 
     socketInstance.on("dashboard_typing",(data)=>{
-      if (!typing && data.ticketId == localStorage.getItem("ticketId")) {
+      if (!typing && data.ticketId == localStorage.getItem("ticketId") && data?.widgetId == getWidgetId) {
         dispatch(setTyping(true));
       }
     });
 
     socketInstance.on("dashboard_stop_typing",(data)=>{
-      // if (typing && data.ticketId == localStorage.getItem("ticketId")) {
+      if (typing && data.ticketId == localStorage.getItem("ticketId") && data?.widgetId == getWidgetId) {
         dispatch(setTyping(false));
-      // }
+      }
     });
 
     return () => {
       socketInstance.off("message");
     }
-  }, [socketInstance, isMessageUpdated]);
+  }, [socketInstance, isMessageUpdated, widgetId]);
 
   const openWidget = () => {
     const getWidgetId = localStorage.getItem("widgetId");
     if (getWidgetId){
+      dispatch(setWidgetId(getWidgetId));
       dispatch(setShowWidget(true))
     }else {
       const widgetId = generateRandomString(6);
       localStorage.setItem("widgetId", widgetId);
       dispatch(setShowWidget(true))
+      dispatch(setWidgetId(widgetId));
     }
   }
 
