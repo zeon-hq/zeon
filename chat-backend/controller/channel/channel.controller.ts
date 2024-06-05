@@ -32,14 +32,7 @@ export const createChannel = async (req: SessionRequest, res: Response) => {
       channelId:generateRandomString(6),
       members:[ userId]
     });
-    logger.error({
-      message: "Error in creating channel"
-    })
 
-    console.log("using types");
-    logger.info({
-      message: "Channel created successfully"
-    })
     return res.status(200).json({
       message: "Channels created successfully",
       id: channel.channelId,
