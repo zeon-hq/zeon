@@ -44,7 +44,7 @@ export async function fetchUserInfo(workspaceId: string) {
     const res: AxiosResponse = await axiosInstance.get(
       `${coreAPIDomain}/user/workspace/${workspaceId}`
     );
-    return res.data;
+    return res?.data;
   } catch (error: any) {
     console.log(error);
     return Promise.reject(error?.response?.data?.error);

@@ -64,7 +64,7 @@ const ChatSidebar = ({isConnected}:IChatSidebarProps) => {
         channel[0].channelId
       );
     }
-  }, [channel.length > 0]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [channel?.length > 0]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
