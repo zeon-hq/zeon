@@ -9,13 +9,18 @@ const ErrorBoundaryHelper: React.FC<FallbackProps> = ({
   resetErrorBoundary,
 }) => {
   const { user } = useDashboard();
+
+  const reset = () => {
+    resetErrorBoundary();
+    window.location.reload();
+  }
   
   const handleErrorLogging = async (error: string) => {
     if (window.location.hostname !== "app.zeonhq.com") return;
 
     try {
       await axios.post(
-        "https://discord.com/api/webhooks/1247953988893020213/8w9dByZJfkif_P",
+        "https://discord.com/api/webhooks/1247953988893020213/8w9dByZJfkif_PPXi5EjT53m4TJQTl3dYvrL92rl83HMQXjmGFyrEu5lP5rW3oTTJ9Ht",
         {
           content: `Error: ${error}`,
           embeds: [
@@ -67,7 +72,7 @@ const ErrorBoundaryHelper: React.FC<FallbackProps> = ({
         variant="outline"
         color="gray"
         mt="md"
-        onClick={() => resetErrorBoundary()}
+        onClick={reset}
       >
         Refresh
       </Button>
