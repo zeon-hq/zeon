@@ -7,5 +7,6 @@
   "CHAT_WIDGET_URL": "",
   "FINANCE_API_DOMAIN": "",
   "API_URL": "",
-  "SOCKET_URL": ""
+  "SOCKET_URL": "",
+  "LOGGING_API_DOMAIN": ""
 }
