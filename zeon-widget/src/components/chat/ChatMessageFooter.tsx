@@ -58,7 +58,7 @@ const ChatMessageFooter = ({
   const ticketId = localStorage.getItem("ticketId");
   const isEmbeddable: IEmbeddableOutput = useEmbeddable();
   return (
-    <>
+    <div>
       {aiTyping && (
         <>
           <TypingDots>{agentName} is typing</TypingDots>
@@ -72,6 +72,7 @@ const ChatMessageFooter = ({
           padding: "0px 6px",
         }}
       >
+        
         <Input
           sx={{
             position: "sticky",
@@ -124,7 +125,7 @@ const ChatMessageFooter = ({
           />
         </ActionIcon>
       </Flex>
-    </>
+    </div>
   );
 };
 
