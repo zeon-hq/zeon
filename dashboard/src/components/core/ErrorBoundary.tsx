@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { Button, Text, Container } from "@mantine/core";
 import axios from "axios";
 import { FallbackProps } from "react-error-boundary";
+import { getConfig as Config } from "config/Config";
 
 const ErrorBoundaryHelper: React.FC<FallbackProps> = ({
   error: propError,
@@ -20,7 +21,7 @@ const ErrorBoundaryHelper: React.FC<FallbackProps> = ({
 
     try {
       await axios.post(
-        "https://discord.com/api/webhooks/1247953988893020213/8w9dByZJfkif_PPXi5EjT53m4TJQTl3dYvrL92rl83HMQXjmGFyrEu5lP5rW3oTTJ9Ht",
+        Config("LOGGING_API_DOMAIN"),
         {
           content: `Error: ${error}`,
           embeds: [
