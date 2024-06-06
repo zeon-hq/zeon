@@ -619,7 +619,7 @@ export const dashboardSlice = createSlice({
         state.user = action.payload.user;
         state.workspaceInfo = action.payload.workspaceInfo;
         state.loading = false;
-        state.inbox.allConversations = [...action.payload.conversations.reverse()]
+        state.inbox.allConversations = action.payload.conversations ? [...action.payload.conversations.reverse()] : [];
         const allUsers = action.payload.allUsers
         state.workspaceInfo.allUsers = allUsers
       })
