@@ -73,7 +73,8 @@ const WidgetButton = () => {
         socketInstance.emit("join_ticket", {
           ticketId,
           workspaceId: widgetDetails?.workspaceId,
-          source:IMessageSource.WIDGET
+          source:IMessageSource.WIDGET,
+          widgetId:localStorage.getItem("widgetId"),
         });
       }
   },[])
@@ -86,7 +87,8 @@ const WidgetButton = () => {
         socketInstance.emit("join_ticket", {
           ticketId,
           workspaceId: widgetDetails?.workspaceId,
-          source:IMessageSource.WIDGET
+          source:IMessageSource.WIDGET,
+          widgetId:localStorage.getItem("widgetId"),
         });
       }
     });

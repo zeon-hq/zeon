@@ -66,7 +66,11 @@ const port: string | number = process.env.TICKET_BACKEND_PORT || 8080;
 
 io.on("connection", (socket:Socket) => {
   socket.on("join_ticket", (data)=> {
-    socket.join(data.workspaceId);
+    if (data.source == IMessageSource.WIDGET) {
+      socket.join(data.widgetId);
+    } else if (data.source == IMessageSource.DASHBOARD) {
+      socket.join(data.workspaceId);
+    }
     // poc
     // boom working one    
     // socket.broadcast.to(data.ticketId).emit("message", {
@@ -80,19 +84,23 @@ io.on("connection", (socket:Socket) => {
   });
 
   socket.on("dashboard_typing", (data) =>{
-    io.to(data?.workspaceId).emit("dashboard_typing", data);
+    // when we are sending the typing event to the widget, use widgetId as the roomId
+    io.to(data?.widgetId).emit("dashboard_typing", data);  // done
   });
 
   socket.on("dashboard_stop_typing", (data) =>{
-    io.to(data?.workspaceId).emit("dashboard_stop_typing", data);
+    // when we are sending the typing event to the widget, use widgetId as the roomId
+    io.to(data?.widgetId).emit("dashboard_stop_typing", data);  // done
   }); 
   
   socket.on("widget_typing", (data) =>{
-    io.to(data?.workspaceId).emit("widget_typing", data);
+    // sending event to the dashboard
+    io.to(data?.workspaceId).emit("widget_typing", data);  // done
   });
 
   socket.on("widget_stop_typing", (data) => {
-    io.to(data?.workspaceId).emit("widget_stop_typing", data);
+    // sending event to the dashboard
+    io.to(data?.workspaceId).emit("widget_stop_typing", data); // done
   });
 
   socket.on('disconnect', () => {
@@ -258,7 +266,11 @@ app.post('/slack/events', async (req, res) => {
         };
 
         createMessage(messageOptions);
-        io.to(getTicketInformation.workspaceId).emit("message", messageOptions);
+        // sending event to the dashboard
+        io.to(getTicketInformation.workspaceId).emit("message", messageOptions); // done
+
+        // sending event to the widget
+        io.to(getTicketInformation.widgetId).emit("message", messageOptions); // done
       }
     }
   }
@@ -384,8 +396,13 @@ app.post('/send/message', async (req, res) => {
         await CoreService.sendMail(`You have a new ticket:\n${messageData.message}` , user?.email, messageData.customerEmail, ticketId, channelId, workspaceId);
       })
     }
-
-    io.to(workspaceId).emit("message", socketTicketPayload)
+    if (messageSource == "widget") {
+      // sending event to the dashboard
+      io.to(workspaceId).emit("message", socketTicketPayload) // done
+    } else if(messageSource == "dashboard") {
+      // sending event to the widget
+      io.to(widgetId).emit("message", socketTicketPayload) // done
+    }
   } else {
     // store the actual message in the message collection
     createMessage({...messageData, createdAt: new Date()});
@@ -401,7 +418,14 @@ app.post('/send/message', async (req, res) => {
       messageSource
     }
 
-    io.to(workspaceId).emit("message", socketTicketPayload);
+    if (messageSource == "widget") {
+      // sending event to the dashboard
+      io.to(workspaceId).emit("message", socketTicketPayload) // done
+    } else if(messageSource == "dashboard") {
+      // sending event to the widget
+      io.to(widgetId).emit("message", socketTicketPayload) //  done
+    }
+    
 
     if (isSlackConfigured) {
       // send to slack thread
@@ -426,33 +450,36 @@ app.post('/send/message', async (req, res) => {
       channelId
     }
 
+    // sending event to the dashboard
     io.to(workspaceId).emit("ai_responding", {
       ticketId,
       widgetId,
       workspaceId,
       channelId,
       agentName
-    });
+    });// done
 
     const aiResponse = await CoreService.getAIMessage(aiMessagepayload);
     
+    // sending event to the dashboard
     io.to(workspaceId).emit("ai_stop_responded", {
       ticketId,
       workspaceId,
       channelId,
       widgetId
-    });
+    }); // done
     
     if (!aiResponse?.error) {
 
       if (aiResponse.text === 'human_intervention_needed') {
       
+      // sending event to the dashboard
       io.to(workspaceId).emit("human_intervention_needed", {
         ticketId,
         workspaceId,
         channelId,
         widgetId
-      });
+      }); // done
 
       if (isSlackConfigured) {
         const sendSlackPayload: ISendSlackMessage = {
@@ -488,7 +515,11 @@ app.post('/send/message', async (req, res) => {
       }
       await createMessage({ ...messageData, createdAt: new Date(), message, type: IMessageType.RECEIVED });
       // io.emit("message", messageOptions);
-      io.to(workspaceId).emit("message", messageOptions);
+      // sending event to the dashboard
+      io.to(workspaceId).emit("message", messageOptions); // done
+
+      // sending event to the widget
+      io.to(widgetId).emit("message", messageOptions); // done
 
       if (isSlackConfigured) {
         const sendSlackPayload: ISendSlackMessage = {
@@ -525,7 +556,9 @@ app.post('/send/message', async (req, res) => {
         await CoreService.sendSlackMessage(sendSlackPayload);
       }
       createMessage({ ...messageData, createdAt: new Date(), message, type: IMessageType.SENT });
-      io.to(workspaceId).emit("message", messageOptions);
+      
+      // sending event to the dashboard
+      io.to(workspaceId).emit("message", messageOptions); // done
 
     }
   }
