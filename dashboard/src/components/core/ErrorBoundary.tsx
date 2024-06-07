@@ -21,7 +21,7 @@ const ErrorBoundaryHelper: React.FC<FallbackProps> = ({
 
     try {
       await axios.post(
-        "https://discord.com/api/webhooks/1247953988893020213/8w9dByZJfkif_PPXi5EjT53m4TJQTl3dYvrL92rl83HMQXjmGFyrEu5lP5rW3oTTJ9Ht",
+        process.env.DISCORD_WEBHOOK as string,
         {
           content: `Error: ${error}`,
           embeds: [
