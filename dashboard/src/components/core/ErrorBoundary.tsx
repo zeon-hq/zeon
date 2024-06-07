@@ -13,6 +13,7 @@ const ErrorBoundaryHelper: React.FC<FallbackProps> = ({
   const reset = () => {
     resetErrorBoundary();
     window.location.reload();
+    console.log("reset");
   }
   
   const handleErrorLogging = async (error: string) => {
