@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema } from "mongoose";
 
 export enum IMessageSource {
-  DASHBOARD = "dashbaord",
+  DASHBOARD = "dashboard",
   WIDGET = "widget",
   BOTH = "both",
   SLACK = "slack",
