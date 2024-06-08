@@ -107,8 +107,6 @@ const MessageContainer = () => {
 
     socketInstance.emit("join_ticket", {
       workspaceId,
-      ticketId:ticketIdInUrl || undefined,
-      channelId:channelIdInUrl || undefined,
       source:'dashboard'
     })
     if (channelIdInUrl && ticketIdInUrl) {
@@ -248,8 +246,6 @@ const MessageContainer = () => {
                 onClick={() => {
                   socketInstance.emit("join_ticket", {
                     workspaceId,
-                    ticketId:conversation.ticketId,
-                    channelId:conversation.channelId,
                     source:'dashboard'
                   })
                   localStorage.setItem("channelId", conversation.channelId);

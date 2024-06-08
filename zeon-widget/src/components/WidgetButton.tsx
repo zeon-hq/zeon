@@ -71,10 +71,8 @@ const WidgetButton = () => {
     const ticketId = localStorage.getItem("ticketId");
       if (ticketId) {
         socketInstance.emit("join_ticket", {
-          ticketId,
-          workspaceId: widgetDetails?.workspaceId,
           source:IMessageSource.WIDGET,
-          widgetId:localStorage.getItem("widgetId"),
+          widgetId:localStorage.getItem("widgetId")
         });
       }
   },[])
@@ -85,8 +83,6 @@ const WidgetButton = () => {
     socketInstance.on('connect', function() {
       if (ticketId) {
         socketInstance.emit("join_ticket", {
-          ticketId,
-          workspaceId: widgetDetails?.workspaceId,
           source:IMessageSource.WIDGET,
           widgetId:localStorage.getItem("widgetId"),
         });

@@ -47,7 +47,6 @@ const ZeonWidgetCard = () => {
       const res = await getChannelById(channelId);
       if (res.status != 200) {
         socketInstance.emit("join_ticket", {
-          workspaceId:res.data.channel.workspaceId,
           widgetId:localStorage.getItem("widgetId"),
           source:IMessageSource.WIDGET
         })
@@ -94,11 +93,8 @@ const ZeonWidgetCard = () => {
                         text={`${data.messages[data.messages.length - 1]?.type === MessageType.SENT ? "You" : "Agent"} : ${replacedMessage}`}
                         onClick={() => {
                           socketInstance.emit("join_ticket", {
-                            workspaceId:widgetDetails?.workspaceId,
-                            ticketId:data.ticketId,
-                            channelId:isEmbeddable?.channelId,
+                            widgetId:localStorage.getItem("widgetId"),
                             source:IMessageSource.WIDGET,
-                            widgetId:localStorage.getItem("widgetId")
                           })
 
                           localStorage.setItem("ticketId", data.ticketId);
