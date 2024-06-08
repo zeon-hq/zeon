@@ -59,7 +59,7 @@ const ErrorBoundaryHelper: React.FC<FallbackProps> = ({
         handleErrorLogging(propError);
       }
     }
-  }, [propError]);
+  }, [propError]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Container style={{ textAlign: "center", marginTop: "20px" }}>
