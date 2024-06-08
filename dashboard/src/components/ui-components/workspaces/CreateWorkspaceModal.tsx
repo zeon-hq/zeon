@@ -38,7 +38,7 @@ const CreateWorkspaceModal = ({ opened, setOpened }: ICreateWorkspaceModal) => {
         industry: "Default",
       })
       setLoading(false)
-      return navigate(`/dashboard/${res.workspace.workspaceId}`)
+      navigate(`/dashboard/${res.workspace.workspaceId}`)
     } catch (error) {
       setLoading(false)
       showNotification({
