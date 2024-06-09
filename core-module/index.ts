@@ -17,10 +17,12 @@ import notesRoutes from "./routes/notes";
 import AIRoute from "./routes/AIRoute";
 import Workspace from "./schema/Workspace";
 import Logger from "./functions/logger";
+import { ZeonServices } from "./types/types";
 
 
 const app = express();
 const port = process.env.CORE_BACKEND_PORT
+const logger = new Logger(ZeonServices.CORE);
 
 declare global {
   namespace Express {
@@ -70,23 +72,42 @@ app.get("/health", (req: Request, res: Response)=>{
 
 // Fetch the Checkout Session to display the JSON result on the success page
 app.get("/checkout-session", async (req, res) => {
-  const { sessionId } = req.query;
+  try {
+    const { sessionId } = req.query;
   const session = await stripe.checkout.sessions.retrieve(sessionId);
   res.send(session);
+  } catch (error) {
+    logger.error({
+      message: 'Error fetching checkout session',
+      error
+    });
+    console.log('error', error);
+  }
+  
 });
 
 app.post('/create-customer-portal-session', async (req, res) => {
-  const { customerId } = req.body;
-  const session = await stripe.billingPortal.sessions.create({
-    customer: customerId,
-    return_url: `${domainURL}`,
-    
-  });
-  res.json({ url: session.url });
+  try {
+    const { customerId } = req.body;
+    const session = await stripe.billingPortal.sessions.create({
+      customer: customerId,
+      return_url: `${domainURL}`,
+      
+    });
+    res.json({ url: session.url });
+  } catch (error) {
+    console.log('error', error);
+    logger.error({
+      message: 'Error creating customer portal session',
+      error
+    });
+  }
+  
 })
 
 app.post('/create-customer-seesion', async (req, res) => {
-  const { customerId } = req.body;
+  try {
+    const { customerId } = req.body;
   const customerSession = await stripe.customerSessions.create({
     customer: customerId,
     components: {
@@ -96,6 +117,14 @@ app.post('/create-customer-seesion', async (req, res) => {
     },
   });
   return res.json({ client_secret: customerSession.client_secret });
+  } catch (error) {
+    logger.error({
+      message: 'Error creating customer session',
+      error
+    });
+    console.log('error', error);
+  }
+  
 })
 
 app.post("/create-checkout-session", async (req, res) => {
@@ -180,7 +209,8 @@ app.get("/config", (req, res) => {
 });
 
 app.post('/customer-portal', async (req, res) => {
-  // For demonstration purposes, we're using the Checkout session to retrieve the customer ID.
+  try {
+    // For demonstration purposes, we're using the Checkout session to retrieve the customer ID.
   // Typically this is stored alongside the authenticated user in your database.
   const { sessionId } = req.body;
   const checkoutSession = await stripe.checkout.sessions.retrieve(sessionId);
@@ -195,6 +225,14 @@ app.post('/customer-portal', async (req, res) => {
   });
 
   res.redirect(303, portalSession.url);
+  } catch (error) {
+    console.log('error', error);
+    logger.error({
+      message: 'Error creating customer portal session',
+      error
+    });
+  }
+  
 });
 
 app.post('/stripe_webhooks', express.json({type: 'application/json'}), async (request, response) => {

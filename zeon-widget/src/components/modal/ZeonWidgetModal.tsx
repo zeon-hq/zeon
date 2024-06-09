@@ -145,7 +145,14 @@ const ZeonWidgetModal = () => {
     try {
       const output = await getIPAddress();
       dispatch(clearPrevChat());
-
+      dispatch(
+        rSetMessage({
+          message: message || "Hey this is hardcoded",
+          type: MessageType.SENT,
+          time: Date.now().toString(),
+        })
+      );
+      dispatch(setStep(IUIStepType.CHAT));
       const sendMessagePayload = {
         ticketId: ticketId,
         workspaceId,
@@ -179,7 +186,7 @@ const ZeonWidgetModal = () => {
       const checkIsOutOfOperatingHours = isOutOfOperatingHours( widgetDetails?.behavior.operatingHours.operatingHours.from, widgetDetails?.behavior.operatingHours.operatingHours.to, widgetDetails?.behavior.operatingHours.timezone);
 
       const sendAutoReplyMessageWhenOffline = widgetDetails?.behavior.operatingHours.enableOperatingHours && checkIsOutOfOperatingHours;
-
+      
       if (sendAutoReplyMessageWhenOffline) {
         setTimeout(() => {
           dispatch(

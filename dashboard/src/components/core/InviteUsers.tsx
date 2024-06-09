@@ -20,11 +20,13 @@ import {
 } from "components/auth/auth.styles";
 import { Plus } from "tabler-icons-react";
 import { AiOutlineDelete } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
 
 const InviteUsers = () => {
   // get workspace id from url
   const { workspaceId } = useParams();
   const [roles, setRoles] = useState([]);
+  const navigate = useNavigate();
 
   const { register, handleSubmit, control } = useForm({
     defaultValues: {
@@ -74,6 +76,7 @@ const InviteUsers = () => {
     try {
       await bulkInviteUserToWorkspace(invites);
       notification("success", "Invites sent successfully!");
+      navigate('/workspaces/chat')
     } catch (error) {
       console.log(error);
       notification("error", "Error sending invites");

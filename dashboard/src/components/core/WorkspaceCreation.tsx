@@ -34,7 +34,7 @@ const WorkspaceCreation = (props: Props) => {
         modules: ["CHAT"],
         legalCompanyName: data.legalCompanyName,
         teamSize: data.teamSize.value,
-        industry: data.industry.value,
+        industry: "Default"
       });
       setLoading(false);
       notification("success", "Workspace created successfully!");

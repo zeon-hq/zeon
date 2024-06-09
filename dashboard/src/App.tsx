@@ -19,6 +19,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import PaymentSuccess from "components/tabInfo/account/PaymentSuccess";
 import PaymentFailed from "components/tabInfo/account/PaymentFailed";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorBoundaryHelper from "components/core/ErrorBoundary";
 
 function MyGlobalStyles() {
   return (
@@ -37,15 +39,18 @@ function MyGlobalStyles() {
 
 function App() {
   return (
-    <>
-      <MantineProvider withNormalizeCSS withGlobalStyles 
+    <ErrorBoundary FallbackComponent={ErrorBoundaryHelper} onError={console.log}>
+      <MantineProvider
+        withNormalizeCSS
+        withGlobalStyles
         theme={{
-          colorScheme: 'light',
+          colorScheme: "light",
           colors: {
-            grey: ['#475467','#344054','#475467'],
-            blue: ['#3054B9','#3C69E7']
-          }
-        }}>
+            grey: ["#475467", "#344054", "#475467"],
+            blue: ["#3054B9", "#3C69E7"],
+          },
+        }}
+      >
         <MyGlobalStyles />
         <Notifications position="top-center" />
 
@@ -65,11 +70,9 @@ function App() {
             <Route
               path="/:workspaceId/chat"
               element={
-               
                 <Layout>
                   <Details />
                 </Layout>
-               
               }
             />
             <Route
@@ -189,7 +192,7 @@ function App() {
           </Routes>
         </BrowserRouter>
       </MantineProvider>
-    </>
+    </ErrorBoundary>
   );
 }
 
