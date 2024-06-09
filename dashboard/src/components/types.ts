@@ -39,7 +39,7 @@ export enum RightPanelSettingName {
     X_LINK = "X/Twitter",
     BLOG = "Blog",
     LOGOUT = "Logout",
-}
+} 
 
 export type TabInfo = {
     name: IChannelTabsName | IWorkSpaceSettings,
