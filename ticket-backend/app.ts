@@ -4,35 +4,17 @@ import { createAdapter } from "@socket.io/mongo-adapter";
 import cors from "cors";
 import express, { Request, Response } from "express";
 import { createServer } from "http";
-import mongoose from "mongoose";
 import { Server, Socket } from "socket.io";
 import MessageModel, { IMessageSource, IMessageType } from "./model/MessageModel";
 import TicketModel from "./model/TicketModel";
-import { sendMessageIo } from "./mq/producer";
 import { MessageOptions } from "./schema/types/ticket";
 import ChannelModel from "./model/ChannelModel";
-// import User from "./model/UserModel";
 import CoreService, { ISendSlackMessage } from "./services/CoreService";
-import {
-  createMessage,
-  getAdapterCollection,
-  getChannelByID,
-  getChannelIDByReferenceCode,
-  getMessagesByTicketID,
-  updateTicketStatus
-} from "./services/DataBaseService";
+import { createMessage, getAdapterCollection, getChannelByID, getChannelIDByReferenceCode, getMessagesByTicketID, updateTicketStatus} from "./services/DataBaseService";
 import ExternalService from "./services/ExternalService";
-import {
-  openTicket,
-} from "./services/SlackService";
-import {Logger} from "zeon-core/dist/index"
-import {ZeonServices} from "zeon-core/dist/types/types"
+import { openTicket } from "./services/SlackService";
 import { getUser } from "zeon-core/dist/functions/user";
 import { initializeDB } from "zeon-core/dist/func";
-
-const logger = new Logger(ZeonServices.TICKET);
-
-
 
 export interface ISocketTicketPayload {
   workspaceId: string;
@@ -109,22 +91,7 @@ io.on("connection", (socket:Socket) => {
 
 
 });
-// const MONGODB_DB_URI: string = process.env.DB_URI as string + process.env.DB_NAME as string;
-
-// mongoose.connect(MONGODB_DB_URI).then(() => {
-//   console.log("Connected to DB in ticket backend!");
-//   initializeDB();
-// }).catch((err: any) => {
-  
-//   console.log(`Error: MongoDB connection error for  Db. Please make sure MongoDB is running. ${err}`);
-//   logger.error({
-//     message: `Error: MongoDB connection error for  Db. Please make sure MongoDB is running. ${err}`,
-//   });
-// });
 initializeDB();
-
-
-
 
 
 app.post("/ticket/status", async (req, res) => {
@@ -432,7 +399,7 @@ app.post('/send/message', async (req, res) => {
       if (isSlackConfigured) {
         const sendSlackPayload: ISendSlackMessage = {
           channelId: channel.slackChannelId,
-          message: messageData.message,
+          message:  `${messageSource == "widget" ? 'user: ' : 'Dashboard: '}` + messageData.message,
           token: channel.accessToken,
           thread_ts: threadNumber
         }
@@ -484,7 +451,7 @@ app.post('/send/message', async (req, res) => {
       if (isSlackConfigured) {
         const sendSlackPayload: ISendSlackMessage = {
           channelId: channel.slackChannelId,
-          message: 'Human Intervention Needed',
+          message: 'AI: Human Intervention Needed',
           token: channel.accessToken,
           thread_ts: threadNumber
         }
@@ -524,7 +491,7 @@ app.post('/send/message', async (req, res) => {
       if (isSlackConfigured) {
         const sendSlackPayload: ISendSlackMessage = {
           channelId: channel.slackChannelId,
-          message: message,
+          message:  'AI: '+ message,
           token: channel.accessToken,
           thread_ts: threadNumber
         }
@@ -548,7 +515,7 @@ app.post('/send/message', async (req, res) => {
       if (isSlackConfigured) {
         const sendSlackPayload: ISendSlackMessage = {
           channelId: channel.slackChannelId,
-          message: message,
+          message: 'AI: '+ message,
           token: channel.accessToken,
           thread_ts: threadNumber
         }
