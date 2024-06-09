@@ -11,6 +11,7 @@ import MessageCard from "components/ui/MessageCard";
 import ZeonWidgetCard from "components/ui/ZeonWidgetCard";
 import ZeonWidgetForm from "components/ui/ZeonWidgetForm";
 import { generateId } from "components/util/utils";
+import { isEmpty } from "lodash";
 import { useEffect, useRef, useState } from "react";
 import { IoMdArrowForward } from "react-icons/io";
 import { useDispatch } from "react-redux";
@@ -145,14 +146,6 @@ const ZeonWidgetModal = () => {
     try {
       const output = await getIPAddress();
       dispatch(clearPrevChat());
-      dispatch(
-        rSetMessage({
-          message: message || "Hey this is hardcoded",
-          type: MessageType.SENT,
-          time: Date.now().toString(),
-        })
-      );
-      dispatch(setStep(IUIStepType.CHAT));
       const sendMessagePayload = {
         ticketId: ticketId,
         workspaceId,
@@ -222,7 +215,7 @@ const ZeonWidgetModal = () => {
 
         },3000)
 
-      } else if (widgetDetails?.behavior?.widgetBehavior.autoReply) {
+      } else if (!isEmpty(widgetDetails?.behavior?.widgetBehavior.autoReply)) {
         setTimeout(() => {
           dispatch(
             rSetMessage({
