@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Flex,
-  Loader,
-  Space,
-  Text,
-  TextInput,
-} from "@mantine/core";
+import {Box,Button,Flex,Loader,Space,Text,TextInput} from "@mantine/core";
 import { useInputState } from "@mantine/hooks";
 import { getIPAddress, sendMessage } from "api/api";
 import { IPropsType, MessageType } from "components/chat/Chat.types";
@@ -22,15 +14,7 @@ import { generateId } from "components/util/utils";
 import { useEffect, useRef, useState } from "react";
 import { IoMdArrowForward } from "react-icons/io";
 import { useDispatch } from "react-redux";
-import {
-  setEmail as rSetEmail,
-  IMessageSource,
-  IUIStepType,
-  clearPrevChat,
-  setMessage as rSetMessage,
-  setShowWidget,
-  setStep,
-} from "redux/slice";
+import { setEmail as rSetEmail, IMessageSource, IUIStepType, clearPrevChat, setMessage as rSetMessage, setShowWidget, setStep} from "redux/slice";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -209,7 +193,6 @@ const ZeonWidgetModal = () => {
           const sendMessagePayload = {
             ticketId: ticketId,
             workspaceId,
-            isNewTicket: true,
             messageData: {
               workspaceId,
               channelId,
@@ -244,7 +227,6 @@ const ZeonWidgetModal = () => {
           const sendMessagePayload = {
             ticketId: ticketId,
             workspaceId,
-            isNewTicket: true,
             messageData: {
               workspaceId,
               channelId,
@@ -292,12 +274,7 @@ const ZeonWidgetModal = () => {
     };
   }, []);
 
-  const showBrandingImage =
-    widgetDetails?.appearance?.miscellaneous?.showBranding;
-
-  const openZeon = () => {
-    window.open("https://zeonhq.com", "_blank");
-  };
+  const showBrandingImage = widgetDetails?.appearance?.miscellaneous?.showBranding;
 
   return (
     <>
@@ -368,7 +345,6 @@ const ZeonWidgetModal = () => {
                       onChange={setMessage}
                       onKeyDown={(e) => {
                         if (e.key === "Enter") {
-                          //@ts-ignore
                           if (showEmailCollection) {
                             submitForm();
                           } else {
@@ -386,8 +362,7 @@ const ZeonWidgetModal = () => {
                       <BrandingWrapper
                         onClick={() =>
                           window.open("https://zeonhq.com", "_blank")
-                        }
-                      >
+                        }>
                         <Text align="center" size="xs" color="gray">
                           {" "}
                           Powered By
@@ -397,8 +372,7 @@ const ZeonWidgetModal = () => {
                             display: "flex",
                             alignItems: "center",
                             gap: "4px",
-                          }}
-                        >
+                          }}>
                           <img
                             width={"25px"}
                             src="https://zeon-assets.s3.ap-south-1.amazonaws.com/Logomark.svg"
@@ -431,13 +405,11 @@ const ZeonWidgetModal = () => {
                           size={15}
                           style={{ color: "white" }}
                         />
-                      }
-                    >
+                      }>
                       {loading ? <Loader size={20} /> : "Submit"}
                     </Button>
                   </Flex>
                 </div>
-              
             </>
           )}
         </Wrapper>

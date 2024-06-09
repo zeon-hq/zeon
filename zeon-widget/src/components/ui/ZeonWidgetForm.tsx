@@ -51,7 +51,7 @@ const ZeonWidgetForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormDataType>({
+  } = useForm<FormDataType>({ 
     defaultValues: {
       email: "",
       message: "",
@@ -119,7 +119,6 @@ const ZeonWidgetForm = () => {
           const sendMessagePayload = {
             ticketId: ticketId,
             workspaceId,
-            isNewTicket: true,
             messageData: {
               workspaceId,
               channelId,
@@ -154,7 +153,6 @@ const ZeonWidgetForm = () => {
           const sendMessagePayload = {
             ticketId: ticketId,
             workspaceId,
-            isNewTicket: true,
             messageData: {
               workspaceId,
               channelId,
