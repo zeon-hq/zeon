@@ -203,10 +203,10 @@ const Behavior = () => {
                     subType: "widgetBehavior",
                     type: "behavior",
                     value: e.currentTarget.checked,
-                    key: "autoReply",
+                    key: "collectUserEmail",
                   });
                 }}
-                value={!!autoReplyConfig || false}
+                value={behaviourDetails.widgetBehavior.collectUserEmail || false}
                 heading="Auto Responder"
                 description="Collect e-mail before a conversation is created."
               />

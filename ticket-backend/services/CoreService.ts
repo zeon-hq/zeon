@@ -87,7 +87,7 @@ export default class CoreService {
                         }
                     })
                     .catch((error) => {
-                        console.error(`Error in Send slack, Error: ${error?.message || error}`);
+                        console.error(`Error in getAIMessage, Error: ${error?.message || error}`);
                         const errorObj = {
                             error: error?.message || error
                         }
@@ -95,7 +95,7 @@ export default class CoreService {
                         return resolve(errorObj);
                     });
             } catch (error) {
-                console.error(`Error in Send slack, Error: ${error}`);
+                console.error(`Error in getAIMessage, Error: ${error}`);
                 return resolve(error);
             }
         });

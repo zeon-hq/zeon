@@ -4,35 +4,17 @@ import { createAdapter } from "@socket.io/mongo-adapter";
 import cors from "cors";
 import express, { Request, Response } from "express";
 import { createServer } from "http";
-import mongoose from "mongoose";
 import { Server, Socket } from "socket.io";
 import MessageModel, { IMessageSource, IMessageType } from "./model/MessageModel";
 import TicketModel from "./model/TicketModel";
-import { sendMessageIo } from "./mq/producer";
 import { MessageOptions } from "./schema/types/ticket";
 import ChannelModel from "./model/ChannelModel";
-// import User from "./model/UserModel";
 import CoreService, { ISendSlackMessage } from "./services/CoreService";
-import {
-  createMessage,
-  getAdapterCollection,
-  getChannelByID,
-  getChannelIDByReferenceCode,
-  getMessagesByTicketID,
-  updateTicketStatus
-} from "./services/DataBaseService";
+import { createMessage, getAdapterCollection, getChannelByID, getChannelIDByReferenceCode, getMessagesByTicketID, updateTicketStatus} from "./services/DataBaseService";
 import ExternalService from "./services/ExternalService";
-import {
-  openTicket,
-} from "./services/SlackService";
-import {Logger} from "zeon-core/dist/index"
-import {ZeonServices} from "zeon-core/dist/types/types"
+import { openTicket } from "./services/SlackService";
 import { getUser } from "zeon-core/dist/functions/user";
 import { initializeDB } from "zeon-core/dist/func";
-
-const logger = new Logger(ZeonServices.TICKET);
-
-
 
 export interface ISocketTicketPayload {
   workspaceId: string;
@@ -66,7 +48,11 @@ const port: string | number = process.env.TICKET_BACKEND_PORT || 8080;
 
 io.on("connection", (socket:Socket) => {
   socket.on("join_ticket", (data)=> {
-    socket.join(data.workspaceId);
+    if (data.source == IMessageSource.WIDGET) {
+      socket.join(data.widgetId);
+    } else if (data.source == IMessageSource.DASHBOARD) {
+      socket.join(data.workspaceId);
+    }
     // poc
     // boom working one    
     // socket.broadcast.to(data.ticketId).emit("message", {
@@ -80,19 +66,23 @@ io.on("connection", (socket:Socket) => {
   });
 
   socket.on("dashboard_typing", (data) =>{
-    io.to(data?.workspaceId).emit("dashboard_typing", data);
+    // when we are sending the typing event to the widget, use widgetId as the roomId
+    io.to(data?.widgetId).emit("dashboard_typing", data);  // done
   });
 
   socket.on("dashboard_stop_typing", (data) =>{
-    io.to(data?.workspaceId).emit("dashboard_stop_typing", data);
+    // when we are sending the typing event to the widget, use widgetId as the roomId
+    io.to(data?.widgetId).emit("dashboard_stop_typing", data);  // done
   }); 
   
   socket.on("widget_typing", (data) =>{
-    io.to(data?.workspaceId).emit("widget_typing", data);
+    // sending event to the dashboard
+    io.to(data?.workspaceId).emit("widget_typing", data);  // done
   });
 
   socket.on("widget_stop_typing", (data) => {
-    io.to(data?.workspaceId).emit("widget_stop_typing", data);
+    // sending event to the dashboard
+    io.to(data?.workspaceId).emit("widget_stop_typing", data); // done
   });
 
   socket.on('disconnect', () => {
@@ -101,22 +91,7 @@ io.on("connection", (socket:Socket) => {
 
 
 });
-// const MONGODB_DB_URI: string = process.env.DB_URI as string + process.env.DB_NAME as string;
-
-// mongoose.connect(MONGODB_DB_URI).then(() => {
-//   console.log("Connected to DB in ticket backend!");
-//   initializeDB();
-// }).catch((err: any) => {
-  
-//   console.log(`Error: MongoDB connection error for  Db. Please make sure MongoDB is running. ${err}`);
-//   logger.error({
-//     message: `Error: MongoDB connection error for  Db. Please make sure MongoDB is running. ${err}`,
-//   });
-// });
 initializeDB();
-
-
-
 
 
 app.post("/ticket/status", async (req, res) => {
@@ -258,7 +233,11 @@ app.post('/slack/events', async (req, res) => {
         };
 
         createMessage(messageOptions);
-        io.to(getTicketInformation.workspaceId).emit("message", messageOptions);
+        // sending event to the dashboard
+        io.to(getTicketInformation.workspaceId).emit("message", messageOptions); // done
+
+        // sending event to the widget
+        io.to(getTicketInformation.widgetId).emit("message", messageOptions); // done
       }
     }
   }
@@ -279,6 +258,8 @@ app.post('/send/message', async (req, res) => {
   const agentName = channel?.toObject().agentName;
   const isEmailConfigured = channel?.emailNewTicketNotification;
   const isSlackConfigured = channel?.slackChannelId;
+  const isAutoReply = messageData?.autoReply;
+  const isAutoReplyMessageWhenOffline = messageData?.autoReplyMessageWhenOffline;
 
   const getThread_rs = await TicketModel.findOne({ ticketId });
 
@@ -384,8 +365,13 @@ app.post('/send/message', async (req, res) => {
         await CoreService.sendMail(`You have a new ticket:\n${messageData.message}` , user?.email, messageData.customerEmail, ticketId, channelId, workspaceId);
       })
     }
-
-    io.to(workspaceId).emit("message", socketTicketPayload)
+    if (messageSource == "widget") {
+      // sending event to the dashboard
+      io.to(workspaceId).emit("message", socketTicketPayload) // done
+    } else if(messageSource == "dashboard") {
+      // sending event to the widget
+      io.to(widgetId).emit("message", socketTicketPayload) // done
+    }
   } else {
     // store the actual message in the message collection
     createMessage({...messageData, createdAt: new Date()});
@@ -401,14 +387,30 @@ app.post('/send/message', async (req, res) => {
       messageSource
     }
 
-    io.to(workspaceId).emit("message", socketTicketPayload);
+    if (messageSource == "widget") {
+      // sending event to the dashboard
+      io.to(workspaceId).emit("message", socketTicketPayload) // done
+    } else if(messageSource == "dashboard") {
+      // sending event to the widget
+      io.to(widgetId).emit("message", socketTicketPayload) //  done
+    }
+    
 
     if (isSlackConfigured) {
+      let messagePrefix = messageSource == "widget" ? 'user: ' : 'Dashboard: ';
+      if (isAutoReply) {
+        messagePrefix = 'AutoReply: ';
+      }
+
+      if (isAutoReplyMessageWhenOffline) {
+        messagePrefix = 'OfflineMessage: ';
+      }
+      
       // send to slack thread
       if (isSlackConfigured) {
         const sendSlackPayload: ISendSlackMessage = {
           channelId: channel.slackChannelId,
-          message: messageData.message,
+          message:  messagePrefix + messageData.message,
           token: channel.accessToken,
           thread_ts: threadNumber
         }
@@ -418,7 +420,9 @@ app.post('/send/message', async (req, res) => {
     }
   }
 
-  if (isAIEnabled && messageSource ==  "widget") {
+  const disableAIMessage = !isAutoReply || !isAutoReplyMessageWhenOffline;
+  if (isAIEnabled && messageSource ==  "widget" && disableAIMessage) {
+    
     const aiMessagepayload = {
       question: messageData.message,
       history: [],
@@ -426,38 +430,41 @@ app.post('/send/message', async (req, res) => {
       channelId
     }
 
+    // sending event to the dashboard
     io.to(workspaceId).emit("ai_responding", {
       ticketId,
       widgetId,
       workspaceId,
       channelId,
       agentName
-    });
+    });// done
 
     const aiResponse = await CoreService.getAIMessage(aiMessagepayload);
     
+    // sending event to the dashboard
     io.to(workspaceId).emit("ai_stop_responded", {
       ticketId,
       workspaceId,
       channelId,
       widgetId
-    });
+    }); // done
     
     if (!aiResponse?.error) {
 
       if (aiResponse.text === 'human_intervention_needed') {
       
+      // sending event to the dashboard
       io.to(workspaceId).emit("human_intervention_needed", {
         ticketId,
         workspaceId,
         channelId,
         widgetId
-      });
+      }); // done
 
       if (isSlackConfigured) {
         const sendSlackPayload: ISendSlackMessage = {
           channelId: channel.slackChannelId,
-          message: 'Human Intervention Needed',
+          message: 'AI: Human Intervention Needed',
           token: channel.accessToken,
           thread_ts: threadNumber
         }
@@ -488,12 +495,16 @@ app.post('/send/message', async (req, res) => {
       }
       await createMessage({ ...messageData, createdAt: new Date(), message, type: IMessageType.RECEIVED });
       // io.emit("message", messageOptions);
-      io.to(workspaceId).emit("message", messageOptions);
+      // sending event to the dashboard
+      io.to(workspaceId).emit("message", messageOptions); // done
+
+      // sending event to the widget
+      io.to(widgetId).emit("message", messageOptions); // done
 
       if (isSlackConfigured) {
         const sendSlackPayload: ISendSlackMessage = {
           channelId: channel.slackChannelId,
-          message: message,
+          message:  'AI: '+ message,
           token: channel.accessToken,
           thread_ts: threadNumber
         }
@@ -517,7 +528,7 @@ app.post('/send/message', async (req, res) => {
       if (isSlackConfigured) {
         const sendSlackPayload: ISendSlackMessage = {
           channelId: channel.slackChannelId,
-          message: message,
+          message: 'AI: '+ message,
           token: channel.accessToken,
           thread_ts: threadNumber
         }
@@ -525,7 +536,9 @@ app.post('/send/message', async (req, res) => {
         await CoreService.sendSlackMessage(sendSlackPayload);
       }
       createMessage({ ...messageData, createdAt: new Date(), message, type: IMessageType.SENT });
-      io.to(workspaceId).emit("message", messageOptions);
+      
+      // sending event to the dashboard
+      io.to(workspaceId).emit("message", messageOptions); // done
 
     }
   }

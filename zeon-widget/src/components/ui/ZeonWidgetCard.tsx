@@ -14,14 +14,6 @@ const WholeWrapper = styled.div`
 ${(props: IPropsType) => props.theme.isEmbeddable ? 'height: 100%;' : ''}
 `;
 
-
-/**
- *
- * Include props as Icon, Heading and Text
- */
-
-// Remove after test
-
 const ZeonWidgetCard = () => {
   const dispatch = useDispatch();
   const { widgetDetails, isOutOfOperatingHours, allOpenConversations } = useWidget();
@@ -55,7 +47,7 @@ const ZeonWidgetCard = () => {
       const res = await getChannelById(channelId);
       if (res.status != 200) {
         socketInstance.emit("join_ticket", {
-          workspaceId:res.data.channel.workspaceId,
+          widgetId:localStorage.getItem("widgetId"),
           source:IMessageSource.WIDGET
         })
         dispatch(setWidgetDetails(res.data.channel));
@@ -101,10 +93,8 @@ const ZeonWidgetCard = () => {
                         text={`${data.messages[data.messages.length - 1]?.type === MessageType.SENT ? "You" : "Agent"} : ${replacedMessage}`}
                         onClick={() => {
                           socketInstance.emit("join_ticket", {
-                            workspaceId:widgetDetails?.workspaceId,
-                            ticketId:data.ticketId,
-                            channelId:isEmbeddable?.channelId,
-                            source:IMessageSource.WIDGET
+                            widgetId:localStorage.getItem("widgetId"),
+                            source:IMessageSource.WIDGET,
                           })
 
                           localStorage.setItem("ticketId", data.ticketId);

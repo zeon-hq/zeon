@@ -132,7 +132,7 @@ const MessageContainer = () => {
       workspaceId,
       ticketId: ticketIdInUrl || undefined,
       channelId: channelIdInUrl || undefined,
-      source: "dashboard",
+      source: "dashboard"
     });
     if (channelIdInUrl && ticketIdInUrl) {
       localStorage.setItem("zeon-dashboard-channelId", channelIdInUrl);
@@ -296,7 +296,7 @@ const MessageContainer = () => {
                     workspaceId,
                     ticketId: conversation.ticketId,
                     channelId: conversation.channelId,
-                    source: "dashboard",
+                    source: "dashboard"
                   });
                   localStorage.setItem("channelId", conversation.channelId);
                   dispatch(setActiveChat(conversation));

@@ -18,7 +18,7 @@ function App({ widgetId }: any) {
     try {
       const res = await getChannelById(id);
       socketInstance.emit("join_ticket", {
-        workspaceId:res.data.channel.workspaceId,
+        widgetId:localStorage.getItem("widgetId"),
         source:IMessageSource.WIDGET
       })
       dispatch(setWidgetDetails(res.data.channel));
