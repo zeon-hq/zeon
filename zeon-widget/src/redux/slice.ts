@@ -55,6 +55,7 @@ export interface InChatWidgetInterface {
 }
 
 export interface IWidgetDetails  {
+  aiName?: string;
   appearance: {
     widgetButtonSetting: {
       widgetButtonColor: string;

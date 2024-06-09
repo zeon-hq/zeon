@@ -295,7 +295,7 @@ export type DashboardInterface = {
   channel: IChannel[];
   channelsInfo: ChannelsInfo;
   invoices: Invoice[];
-  admins: Admin[];
+admins: Admin[];
   referralLink: string;
   editedChannelsInfo: ChannelsInfo;
   selectedPage: ISelectedPage;

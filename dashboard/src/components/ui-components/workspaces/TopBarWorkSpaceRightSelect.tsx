@@ -22,6 +22,7 @@ import { setDefaultWorkSpaceSettingTab, setSelectedPage, setShowSidebar } from "
 import styled from "styled-components";
 import { logOutUtils } from "util/dashboardUtils";
 import CreateWorkspaceModal from "./CreateWorkspaceModal";
+import { RiTwitterXLine } from "react-icons/ri";
 
 type MenuItem = {
   name: RightPanelSettingName;
@@ -87,7 +88,15 @@ const TopBarWorkSpaceRightSelect = ({
           navigate(`/${workspaceId}/chat?pageName=Users`)
         }
         break;
-
+      case RightPanelSettingName.SLACK_COMMUNITY:
+        window.open("https://discord.gg/wdCJcYyj4e", "_blank");
+        break;
+      case RightPanelSettingName.READ_NEWS_AND_BLOGS:
+        window.open("https://www.zeonhq.com/blog", "_blank");
+        break;
+      case RightPanelSettingName.X_LINK:
+        window.open("https://x.com/zeonhq", "_blank");
+        break
       default:
         break;
     }
@@ -121,6 +130,11 @@ const TopBarWorkSpaceRightSelect = ({
     {
       name: RightPanelSettingName.SLACK_COMMUNITY,
       icon: <StyledImage src={SlackCommunity} />,
+      showBottomOrder: false,
+    },
+    {
+      name: RightPanelSettingName.X_LINK,
+      icon: <div style={{display:"flex", alignItems:"center", paddingLeft:"10px"}}><RiTwitterXLine/></div>,
       showBottomOrder: false,
     },
     {

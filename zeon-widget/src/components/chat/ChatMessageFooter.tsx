@@ -61,7 +61,7 @@ const ChatMessageFooter = ({
     <div>
       {aiTyping && (
         <>
-          <TypingDots>{agentName} is typing</TypingDots>
+          <TypingDots>{widgetDetails.aiName || "Agent"} is typing</TypingDots>
         </>
       )}
       <Flex
