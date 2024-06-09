@@ -192,36 +192,78 @@ const ZeonWidgetModal = () => {
 
       dispatch(setStep(IUIStepType.CHAT));
 
-      const checkIsOutOfOperatingHours = isOutOfOperatingHours(
-        widgetDetails?.behavior.operatingHours.operatingHours.from,
-        widgetDetails?.behavior.operatingHours.operatingHours.to,
-        widgetDetails?.behavior.operatingHours.timezone
-      );
+      const checkIsOutOfOperatingHours = isOutOfOperatingHours( widgetDetails?.behavior.operatingHours.operatingHours.from, widgetDetails?.behavior.operatingHours.operatingHours.to, widgetDetails?.behavior.operatingHours.timezone);
 
-      const sendAutoReplyMessageWhenOffline =
-        widgetDetails?.behavior.operatingHours.enableOperatingHours &&
-        checkIsOutOfOperatingHours;
+      const sendAutoReplyMessageWhenOffline = widgetDetails?.behavior.operatingHours.enableOperatingHours && checkIsOutOfOperatingHours;
+
       if (sendAutoReplyMessageWhenOffline) {
+        setTimeout(() => {
+          dispatch(
+            rSetMessage({
+              message: widgetDetails?.behavior?.operatingHours.autoReplyMessageWhenOffline,
+              type: MessageType.RECEIVED,
+              time: Date.now().toString(),
+            })
+          );
+
+          const sendMessagePayload = {
+            ticketId: ticketId,
+            workspaceId,
+            isNewTicket: true,
+            messageData: {
+              workspaceId,
+              channelId,
+              customerEmail: email,
+              createdAt: Date.now().toString(),
+              message:widgetDetails?.behavior?.operatingHours.autoReplyMessageWhenOffline,
+              isOpen: true,
+              widgetId,
+              type: MessageType.RECEIVED,
+              ticketId,
+              ipAddress: output?.data?.ip || "",
+              messageSource: IMessageSource.WIDGET
+            },
+            messageSource: IMessageSource.WIDGET,
+          };
+    
+          sendMessage(sendMessagePayload);
+
+
+        },3000)
+
       } else if (widgetDetails?.behavior?.widgetBehavior.autoReply) {
-        // commenting out for some testing purpose
-        // setTimeout(() => {
-        //   dispatch(
-        //     setMessage({
-        //       message: widgetDetails?.behavior?.widgetBehavior.autoReply,
-        //       type: MessageType.RECEIVED,
-        //       time: Date.now().toString(),
-        //     })
-        //   );
-        //   socketInstance.emit("message", {
-        //     workspaceId: widgetDetails?.workspaceId,
-        //     channelId: localStorage.getItem("channelId"),
-        //     message: widgetDetails?.behavior?.widgetBehavior.autoReply,
-        //     createdAt: Date.now().toString(),
-        //     ticketId: localStorage.getItem("ticketId"),
-        //     type: MessageType.RECEIVED,
-        //     isAIEnabled:false
-        //   })
-        // },3000)
+        setTimeout(() => {
+          dispatch(
+            rSetMessage({
+              message: widgetDetails?.behavior?.widgetBehavior.autoReply,
+              type: MessageType.RECEIVED,
+              time: Date.now().toString(),
+            })
+          );
+
+          const sendMessagePayload = {
+            ticketId: ticketId,
+            workspaceId,
+            isNewTicket: true,
+            messageData: {
+              workspaceId,
+              channelId,
+              customerEmail: email,
+              createdAt: Date.now().toString(),
+              message:widgetDetails?.behavior?.widgetBehavior.autoReply,
+              isOpen: true,
+              widgetId,
+              type: MessageType.RECEIVED,
+              ticketId,
+              ipAddress: output?.data?.ip || "",
+              messageSource: IMessageSource.WIDGET
+            },
+            messageSource: IMessageSource.WIDGET,
+          };
+    
+          sendMessage(sendMessagePayload);
+
+        },3000)
       }
       setFinalMessage("");
       setMessage("");
