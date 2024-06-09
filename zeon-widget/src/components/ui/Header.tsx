@@ -110,13 +110,13 @@ const Header = ({ isForm }: { isForm: boolean }) => {
       )} */}
       <Box>
           <Flex justify="center" align="center" mb="lg" gap="4px">
-            {/* <Box>
+            <Box>
               <img
                 width={"40px"}
-                src="https://zeon-assets.s3.ap-south-1.amazonaws.com/Logomark.svg"
+                src={widgetDetails?.appearance?.widgetHeaderSection?.topLogo}
                 alt="zeon-logo"
               />
-            </Box> */}
+            </Box>
             {/* <Text weight={"bolder"} size={"xl"}>
               {" "}
               Zeon{" "}
