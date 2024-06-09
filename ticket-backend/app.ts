@@ -258,6 +258,8 @@ app.post('/send/message', async (req, res) => {
   const agentName = channel?.toObject().agentName;
   const isEmailConfigured = channel?.emailNewTicketNotification;
   const isSlackConfigured = channel?.slackChannelId;
+  const isAutoReply = messageData?.autoReply;
+  const isAutoReplyMessageWhenOffline = messageData?.autoReplyMessageWhenOffline;
 
   const getThread_rs = await TicketModel.findOne({ ticketId });
 
@@ -395,11 +397,20 @@ app.post('/send/message', async (req, res) => {
     
 
     if (isSlackConfigured) {
+      let messagePrefix = messageSource == "widget" ? 'user: ' : 'Dashboard: ';
+      if (isAutoReply) {
+        messagePrefix = 'AutoReply: ';
+      }
+
+      if (isAutoReplyMessageWhenOffline) {
+        messagePrefix = 'OfflineMessage: ';
+      }
+      
       // send to slack thread
       if (isSlackConfigured) {
         const sendSlackPayload: ISendSlackMessage = {
           channelId: channel.slackChannelId,
-          message:  `${messageSource == "widget" ? 'user: ' : 'Dashboard: '}` + messageData.message,
+          message:  messagePrefix + messageData.message,
           token: channel.accessToken,
           thread_ts: threadNumber
         }
@@ -409,7 +420,9 @@ app.post('/send/message', async (req, res) => {
     }
   }
 
-  if (isAIEnabled && messageSource ==  "widget") {
+  const disableAIMessage = !isAutoReply || !isAutoReplyMessageWhenOffline;
+  if (isAIEnabled && messageSource ==  "widget" && disableAIMessage) {
+    
     const aiMessagepayload = {
       question: messageData.message,
       history: [],
