@@ -227,7 +227,7 @@ const connectWithRetry = async (retries = 5, delay = 5000): Promise<void> => {
       });
       console.log("Connected to DB in core module");
       // Ping the database periodically to keep the connection alive
-      const pingInterval = 10000; // Ping every 5 minutes
+      const pingInterval = 5*60*1000 // Ping every 5 minutes
 
       setInterval(async () => {
         try {
