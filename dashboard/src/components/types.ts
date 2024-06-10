@@ -34,10 +34,12 @@ export enum RightPanelSettingName {
     PROFILE_SETTINGS = "Profile Settings",
     WORKSPACE_SETTING = "Workspace Setting",
     ROADMAP = "Roadmap",
-    SLACK_COMMUNITY = "Slack Community",
+    SLACK_COMMUNITY = "Discord Community",
     READ_NEWS_AND_BLOGS = "Read News and Blog",
+    X_LINK = "X/Twitter",
+    BLOG = "Blog",
     LOGOUT = "Logout",
-}
+} 
 
 export type TabInfo = {
     name: IChannelTabsName | IWorkSpaceSettings,

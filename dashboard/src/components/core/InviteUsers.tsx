@@ -26,7 +26,7 @@ const InviteUsers = () => {
   // get workspace id from url
   const { workspaceId } = useParams();
   const [roles, setRoles] = useState([]);
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
 
   const { register, handleSubmit, control } = useForm({
     defaultValues: {

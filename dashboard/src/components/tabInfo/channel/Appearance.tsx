@@ -118,8 +118,6 @@ const Appearance = () => {
     }
   }
 
-
-
   const handleSave = async () => {
     try {
       //@ts-ignore

@@ -151,6 +151,7 @@ const Deployment = () => {
               placeholder="Enter a description..."
               value={customPrompt}
               onChange={setCustomPrompt}
+              minRows={7}
             />
             <Flex mt="md" justify="space-between" align="center" gap="10px">
               <Switch
@@ -251,6 +252,7 @@ const Deployment = () => {
                       backgroundColor: "#F9FAFB",
                       border: "1px solid #E0E4E7",
                       borderRadius: "12px",
+                      padding:"0px",
                       fontSize: "14px",
                       fontWeight: 400,
                       "&:hover": {
@@ -258,7 +260,7 @@ const Deployment = () => {
                       },
                     })}
                     color="red"
-                    p={10}
+                    // p={10}
                     block
                   >
                     {widgetChatEmbedding}

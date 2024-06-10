@@ -114,10 +114,10 @@ const Widget = ({ configType }: Props) => {
                 alt="zeon-logo"
               />
             </Box>
-            <Text weight={"bolder"} size={"xl"}>
+            {/* <Text weight={"bolder"} size={"xl"}>
               {" "}
               Zeon{" "}
-            </Text>
+            </Text>  */}
           </Flex>
           {appearenceDetails?.userAvatars?.enableUserAvatars && (
             <Avatar.Group

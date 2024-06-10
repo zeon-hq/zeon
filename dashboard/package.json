@@ -69,7 +69,7 @@
     "tabler-icons-react": "^1.52.0",
     "typescript": "^4.7.4",
     "web-vitals": "^2.1.4",
-    "zeon-core": "^1.0.32"
+    "zeon-core": "^1.0.37"
   },
   "scripts": {
     "start:local": "cross-env PORT=3001 && REACT_APP_ENVIRONMENT=local react-scripts start",
