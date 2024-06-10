@@ -97,6 +97,9 @@ const TopBarWorkSpaceRightSelect = ({
       case RightPanelSettingName.X_LINK:
         window.open("https://x.com/zeonhq", "_blank");
         break
+      case RightPanelSettingName.ROADMAP:
+        window.open("https://sites.plane.so/zeonhq/d6a47961-4acf-4da7-a50a-25ba47f1fdf2/", "_blank");
+        break;
       default:
         break;
     }
