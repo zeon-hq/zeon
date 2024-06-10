@@ -417,11 +417,11 @@ app.post('/send/message', async (req, res) => {
 
        await CoreService.sendSlackMessage(sendSlackPayload);
       }
-    }
+    } 
   }
 
-  const disableAIMessage = !isAutoReply || !isAutoReplyMessageWhenOffline;
-  if (isAIEnabled && messageSource ==  "widget" && disableAIMessage) {
+  const disableAIMessage = isAutoReply || isAutoReplyMessageWhenOffline;
+  if ((isAIEnabled && messageSource ==  "widget") && !disableAIMessage) {
     
     const aiMessagepayload = {
       question: messageData.message,
