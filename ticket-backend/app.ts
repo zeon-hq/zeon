@@ -439,10 +439,27 @@ app.post('/send/message', async (req, res) => {
       agentName
     });// done
 
+    // sending event to the widget
+    io.to(widgetId).emit("ai_responding", {
+      ticketId,
+      widgetId,
+      workspaceId,
+      channelId,
+      agentName
+    });// done
+
     const aiResponse = await CoreService.getAIMessage(aiMessagepayload);
     
     // sending event to the dashboard
     io.to(workspaceId).emit("ai_stop_responded", {
+      ticketId,
+      workspaceId,
+      channelId,
+      widgetId
+    }); // done
+
+     // sending event to the widget
+     io.to(widgetId).emit("ai_stop_responded", {
       ticketId,
       workspaceId,
       channelId,
