@@ -123,7 +123,7 @@ const Behavior = () => {
                 description="E-Mail will be collect before a conversation is created."
               /> */}
 
-              <Label text={"E-Mail Input Label"} />
+              {/* <Label text={"E-Mail Input Label"} />
               <Grid>
                 <Grid.Col>
                   <TextInput
@@ -143,7 +143,7 @@ const Behavior = () => {
                     }
                   />
                 </Grid.Col>
-              </Grid>
+              </Grid> */}
 
               <TetInputLabel text={"E-Mail Input Placeholder"} />
               <Grid>
@@ -168,7 +168,7 @@ const Behavior = () => {
                 </Grid.Col>
               </Grid>
 
-              <Label text={"E-Mail Input Helper Text"} />
+              {/* <Label text={"E-Mail Input Helper Text"} />
               <Grid>
                 <Grid.Col>
                   <TextInput
@@ -195,7 +195,8 @@ const Behavior = () => {
                     }
                   />
                 </Grid.Col>
-              </Grid>
+              </Grid> */}
+
               <Space mt={16} />
               <SwitchWithLabel
                 onClick={(e) => {

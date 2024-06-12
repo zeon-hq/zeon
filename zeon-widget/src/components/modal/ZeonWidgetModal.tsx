@@ -317,7 +317,7 @@ const ZeonWidgetModal = () => {
                 <div>
                   {showEmailCollection ? (
                     <TextInput
-                      placeholder="Type your email here..."
+                      placeholder={widgetDetails?.behavior?.widgetBehavior?.placeholderTextForEmailCapture || "Type your email here..."}
                       radius="md"
                       value={email}
                       // disabled={loading}
