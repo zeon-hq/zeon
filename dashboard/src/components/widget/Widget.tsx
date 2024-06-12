@@ -148,8 +148,7 @@ const Widget = ({ configType }: Props) => {
             style={{ fontSize: "16px", marginTop: "10px", color: "#101828" }}
             align="center"
           >
-            {" "}
-            Chat with us{" "}
+            {appearenceDetails?.widgetHeaderSection?.mainHeading || "Chat with us"}
           </Text>
           <Text
             size="md"

@@ -151,8 +151,7 @@ const Header = ({ isForm }: { isForm: boolean }) => {
             style={{ fontSize: "16px", marginTop: "10px", color: "#101828" }}
             align="center"
           >
-            {" "}
-            Chat with us{" "}
+            {widgetDetails?.appearance?.widgetHeaderSection?.mainHeading || "Chat with us "}
           </Text>
           <Text
             size="md"
