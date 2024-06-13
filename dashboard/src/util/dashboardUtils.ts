@@ -17,19 +17,19 @@ function urlify(text: string) {
   let modifiedText = "";
 
   allText.forEach((word, index) => {
-    if (word[0] === "<" && word[word.length - 1] === ">") {
-      word = word.replace("<", "").replace(">", "");
+    if(word[0] === "<"  && word[word.length - 1] === ">") {
+      word = word.replace("<", "").replace(">", "")
     }
-    if (urlRegex.test(word)) {
+    if(urlRegex.test(word)){
       // if word has "|", then split it and take the first part
-      if (word.includes("|")) {
-        word = word.split("|")[0];
+      if(word.includes("|")) {
+        word = word.split("|")[0]
       }
-      modifiedText += ` <a href="//${word}" target="_blank">${word}</a> `;
+      modifiedText += ` [${word}](//${word}) `
     } else {
-      modifiedText += ` ${word}`;
+      modifiedText += ` ${word}`
     }
-  });
+  })
 
   return modifiedText;
 }
