@@ -17,12 +17,11 @@ function urlify(text:string) {
       if(word.includes("|")) {
         word = word.split("|")[0]
       }
-      modifiedText += ` <a href="//${word}" target="_blank">${word}</a> `
+      modifiedText += ` [${word}](//${word}) `
     } else {
       modifiedText += ` ${word}`
     }
   })
-
   return modifiedText
 }
 

@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { getTime, preProcessText } from "util/dashboardUtils";
 import Lottie from "lottie-react";
 import TemplateGeneratingAnimation from "./template_generating.json";
+import ReactMarkdown from "react-markdown";
 interface WrapperProps {
   type: string;
 }
@@ -39,6 +40,16 @@ interface ISingleMessage {
   isLastCount: boolean;
 }
 
+const markdownText = `# This is a Heading
+
+This is a normal text paragraph.
+
+Another paragraph here.
+
+## This is a Sub-heading
+
+More text here.`
+
 const SingleMessage = ({ info, isLastCount }: ISingleMessage) => {
   const { activeChat, typing, user } = useDashboard();
   const { type, message } = info;
@@ -61,7 +72,7 @@ const SingleMessage = ({ info, isLastCount }: ISingleMessage) => {
           </Flex>
 
           <Wrapper type={type}>
-            <Text
+            {/* <Text
               dangerouslySetInnerHTML={{ __html: newMessage }}
               color={
                 isReceivedMessage || type === "SENT"
@@ -70,6 +81,14 @@ const SingleMessage = ({ info, isLastCount }: ISingleMessage) => {
               }
               size="sm"
               weight="normal"
+            /> */}
+            <ReactMarkdown
+              children={markdownText}
+              components={{
+                //@ts-ignore
+                p: ({node, ...props}) => <Text {...props} />,
+                a: ({node, ...props}) => <a {...props} target="_blank" />
+              }}
             />
           </Wrapper>
         </ParentWrapper>

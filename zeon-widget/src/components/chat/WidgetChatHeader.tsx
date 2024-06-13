@@ -39,6 +39,10 @@ const WidgetChatHeader = () => {
           variant="outline"
           color="dark"
           radius="md"
+          sx={{
+            borderColor:"#D0D5DD",
+            boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+          }}
           leftIcon={<AiOutlineArrowLeft color={widgetDetails?.appearance.widgetHeaderSection.textColor || "black"} size={"1rem"}/>}>
           Go Back
         </Button>

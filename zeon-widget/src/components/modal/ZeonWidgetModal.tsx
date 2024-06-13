@@ -18,8 +18,8 @@ import { useDispatch } from "react-redux";
 import { setEmail as rSetEmail, IMessageSource, IUIStepType, clearPrevChat, setMessage as rSetMessage, setShowWidget, setStep} from "redux/slice";
 import styled from "styled-components";
 
-const Wrapper = styled.div`
-  height: 700px !important;
+const Wrapper = styled.div<{height:any}>`
+  height: ${(props:any) => props.height}px !important;
   background-color: white;
   background: white;
   width: ${(props: IPropsType) => {
@@ -38,7 +38,8 @@ const Wrapper = styled.div`
     return props.theme.isEmbeddable ? "0px" : "16px";
   }};
   bottom: ${(props: IPropsType) => {
-    return props.theme.isEmbeddable ? "0vh" : "12vh";
+    //@ts-ignore
+    return props.theme.isEmbeddable ? "0vh" : props?.height < 700 ? "14vh" : "12vh";
   }};
   z-index: 100000000000;
   display: flex;
@@ -47,6 +48,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  overflow: auto;
 
   @media only screen and (max-width: 1300px) {
     ${(props: IPropsType) => (props.theme.isEmbeddable ? "height: 100%;" : "")}
@@ -127,6 +129,32 @@ const ZeonWidgetModal = () => {
   const [finalMessage, setFinalMessage] = useInputState("");
   const [showEmailCollection, setShowEmailCollection] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const [height, setHeight] = useState(window.innerHeight - 150);
+  const wrapperBottomRef = useRef(null);
+
+
+  useEffect(() => {
+    if (finalMessage) {
+      //@ts-ignore
+      wrapperBottomRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+  }, [finalMessage]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerHeight < 801) {
+        setHeight(window.innerHeight - 150);
+      } else {
+        setHeight(700);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useOutsideAlerter(wrapperRef, () => {
     dispatch(setShowWidget(false));
@@ -281,7 +309,7 @@ const ZeonWidgetModal = () => {
   return (
     <>
       {widgetDetails?.channelId && (
-        <Wrapper ref={wrapperRef}>
+        <Wrapper height={height} ref={wrapperRef}>
           {step === IUIStepType.CHAT ? (
             <ZeonWidgetChat />
           ) : (
@@ -414,6 +442,7 @@ const ZeonWidgetModal = () => {
                 </div>
             </>
           )}
+          <div ref={wrapperBottomRef} />
         </Wrapper>
       )}
     </>

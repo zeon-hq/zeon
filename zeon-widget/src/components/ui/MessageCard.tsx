@@ -5,6 +5,7 @@ import useWidget from "components/hooks/useWidget";
 import { format, isToday } from "date-fns";
 import { Box, Flex, Text } from "@mantine/core";
 import { differenceInMinutes } from "date-fns";
+import ReactMarkdown from "react-markdown";
 
 const Wrapper = styled(Box)<{type:any}>`
   background-color:${(props:any) => props.type === "received" ? "#f2f4f7" :"#ECF3FF"};
@@ -15,6 +16,15 @@ const Wrapper = styled(Box)<{type:any}>`
   border-radius: 8px;
   margin-left: 20px;
   margin-bottom: 10px;
+`;
+
+const markdownText =`
+### Order Confirmation
+
+- Order Number: 12345
+- Order Date: ${new Date().toLocaleDateString()}
+
+[Track Your Order](https://example.com/orders/12345)
 `;
 
 const MessageCard = ({ text, time, type }: any) => {
@@ -74,7 +84,17 @@ const MessageCard = ({ text, time, type }: any) => {
         </Flex>
         {/* @ts-ignore */}
         <Wrapper type={type}>
-          <Text dangerouslySetInnerHTML={{ __html: newMessage }} />
+          <ReactMarkdown
+            children={newMessage}
+            components={{
+              //@ts-ignore
+              p: ({ node, ...props }) => <Text {...props} />,
+              //@ts-ignore
+              a: ({ node, ...props }) => <a {...props} target="_blank" />,
+              //@ts-ignore
+              // h2: ({ node, ...props }) => <Text {...props} />,
+            }}
+          />
         </Wrapper>
       </Box>
     </>

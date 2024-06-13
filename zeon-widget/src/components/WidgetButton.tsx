@@ -9,6 +9,7 @@ import useWidget from "./hooks/useWidget";
 import { chevronDown, notificationSound, widgetImageUrl } from "config/Config";
 import { generateRandomString } from "./hooks/commonUtils";
 import { cloneDeep } from "lodash";
+import { IoChevronDown } from "react-icons/io5";
 
 const ZeonWidgetWrapper = styled.div`
   z-index: 10000000000;
@@ -154,7 +155,7 @@ const WidgetButton = () => {
             <img width={"35px"} src={widgetImageUrl} alt="wserstak-widget"/>
           ) : (
             <div style={{paddingTop:"4px"}}>
-            <img  width={"35px"} src={chevronDown} alt="wserstak-widget"/>
+              <IoChevronDown size={30} color={"white"}/>
             </div>
           )
         }
