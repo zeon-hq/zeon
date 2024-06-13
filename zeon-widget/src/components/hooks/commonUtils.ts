@@ -17,6 +17,10 @@ function urlify(text:string) {
       if(word.includes("|")) {
         word = word.split("|")[0]
       }
+      // Remove trailing period if it exists
+      if(word.endsWith(".")) {
+        word = word.slice(0, -1);
+      }
       modifiedText += ` [${word}](//${word}) `
     } else {
       modifiedText += ` ${word}`
@@ -55,8 +59,8 @@ export const preProcessText = (str:string, obj:any) => {
       const a = str.replaceAll(word, emoji.getUnicode(word))
       str = a
     })
-    let finalString = urlify(str)
-    finalString = replaceUserstakVariables(finalString,obj)
+    // let finalString = urlify(str)
+    let finalString = replaceUserstakVariables(str,obj)
 
     return finalString
   }

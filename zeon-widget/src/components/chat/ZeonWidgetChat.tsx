@@ -174,6 +174,8 @@ const ZeonWidgetChat = () => {
                 type={message.type}
                 //@ts-ignore
                 time={message.time || message.createdAt}
+                //@ts-ignore
+                key={message.time || message.createdAt}
               />
             ))}
             <div ref={elementRef} />

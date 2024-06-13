@@ -66,7 +66,7 @@ const ChatMessageFooter = ({
       )}
       <Flex
         style={{
-          width: "100%",
+          width: "98%",
           justifyContent: "space-between",
           alignItems: "end",
           padding: "0px 6px",
