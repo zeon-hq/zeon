@@ -24,6 +24,8 @@ If you don't know the answer, just say you don't know. DO NOT try to make up an 
 Question: {question}
 Helpful answer in markdown:
 This is some further context about knowledge that the AI assistant might need to answer the question.
+Return the response in markdown format. Dont add h1 or h2 tags. Add h3, bullet points, new lines and links as needed.
+Dont mention context in the response. Just answer the question. Also, dont add headings like "Answer" or "Solution" in the response. Only add headings if the or it is needed.
 `;
 
 const getQAPrompt = ({string, enableHumanHandover}:{string:string, enableHumanHandover:boolean}) => {

@@ -9,30 +9,34 @@ import { format, isToday } from "date-fns";
 
 export type Rank = "owner" | "admin" | "member";
 
-function urlify(text: string) {
-  const urlRegex = new RegExp(
-    /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
-  );
-  const allText = text.split(" ") || [];
-  let modifiedText = "";
+// function urlify(text: string) {
+//   const urlRegex = new RegExp(
+//     /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
+//   );
+//   const allText = text.split(" ") || [];
+//   let modifiedText = "";
 
-  allText.forEach((word, index) => {
-    if (word[0] === "<" && word[word.length - 1] === ">") {
-      word = word.replace("<", "").replace(">", "");
-    }
-    if (urlRegex.test(word)) {
-      // if word has "|", then split it and take the first part
-      if (word.includes("|")) {
-        word = word.split("|")[0];
-      }
-      modifiedText += ` <a href="//${word}" target="_blank">${word}</a> `;
-    } else {
-      modifiedText += ` ${word}`;
-    }
-  });
+//   allText.forEach((word, index) => {
+//     if(word[0] === "<"  && word[word.length - 1] === ">") {
+//       word = word.replace("<", "").replace(">", "")
+//     }
+//     if(urlRegex.test(word)){
+//       // if word has "|", then split it and take the first part
+//       if(word.includes("|")) {
+//         word = word.split("|")[0]
+//       }
+//       // Remove trailing period if it exists
+//       if(word.endsWith(".")) {
+//         word = word.slice(0, -1);
+//       }
+//       modifiedText += ` [${word}](//${word}) `
+//     } else {
+//       modifiedText += ` ${word}`
+//     }
+//   })
 
-  return modifiedText;
-}
+//   return modifiedText;
+// }
 
 const replaceUserstakVariables = (str: string, obj: any) => {
   // get array
@@ -59,8 +63,8 @@ export const preProcessText = (str: string, obj: any) => {
     const a = str.replaceAll(word, emoji.getUnicode(word));
     str = a;
   });
-  let finalString = urlify(str);
-  finalString = replaceUserstakVariables(finalString, obj);
+  // let finalString = urlify(str);
+  let finalString = replaceUserstakVariables(str, obj);
   return finalString;
 };
 

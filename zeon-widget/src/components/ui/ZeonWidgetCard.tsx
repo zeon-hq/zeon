@@ -87,7 +87,7 @@ const ZeonWidgetCard = () => {
                   return (
                     <>
                       <SingleCard
-                        key={index}
+                        key={data.ticketId}
                         totalUnreadMessage={data.unreadMessage}
                         heading={`Ticket Number: ${data.ticketId}`}
                         text={`${data.messages[data.messages.length - 1]?.type === MessageType.SENT ? "You" : "Agent"} : ${replacedMessage}`}
