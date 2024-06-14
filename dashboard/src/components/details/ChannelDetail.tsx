@@ -172,6 +172,8 @@ const ChannelDetail = () => {
           .map((tab: TabInfo, index) => {
             return (
               <Tabs.Tab
+               data-id={tab.name.replace(" ", "_").toLocaleLowerCase()}
+              id={tab.name.replace(" ", "_")}
               key={index}
                 style={{
                   color: "#101828",
