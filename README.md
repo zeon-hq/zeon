@@ -98,7 +98,6 @@ Please ensure that your code adheres to the project's coding standards and conve
 
 [Ducalis](https://ducalis.io/) for providing us an awesome roadmap and changelog tool management tool to help us keep track of our progress as an open-source company.
 
-[RabbitMQ](https://www.rabbitmq.com/) for creating an amazing message broker that powers our microservices.
 
 ## 📄 License
 

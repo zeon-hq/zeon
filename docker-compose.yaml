@@ -90,7 +90,6 @@ services:
       - TICKET_BACKEND_PORT=${TICKET_BACKEND_PORT}
       - DB_URI=${DB_URI}
       - DB_NAME=${DB_NAME}
-      - MQ_URI=${MQ_URI}
     command: npm start
     depends_on:
       - zeon_db
@@ -102,14 +101,6 @@ services:
       - "8080:80"
     volumes:
       - ./server-folder/:/usr/share/nginx/html:ro 
-
-  rabbitmq:
-    container_name: rabbitmq
-    image: rabbitmq:3.9-management
-    ports:
-      - "5672:5672"
-      - "15672:15672" # default username: guest and password: guest
-    restart: always
 
 volumes:
   zeon_db: {}

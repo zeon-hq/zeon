@@ -7,7 +7,7 @@ import useEmbeddable, { IEmbeddableOutput } from "components/hooks/useEmbeddable
 import useWidget from "components/hooks/useWidget";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { IMessageSource, IUIStepType, setAiTyping, setAllOpenConversations, setEmail, setMessage, setStep, setWidgetDetails } from "redux/slice";
+import { IChatType, IMessageSource, IUIStepType, setAiTyping, setAllOpenConversations, setEmail, setMessage, setStep, setWidgetDetails } from "redux/slice";
 import styled from "styled-components";
 import SingleCard from "./SingleCard";
 const WholeWrapper = styled.div`
@@ -80,7 +80,8 @@ const ZeonWidgetCard = () => {
               }
               {allOpenConversations.length > 0 &&
                 allOpenConversations.map((data: any, index: number) => {
-                  const message = data.messages[data.messages.length - 1]?.message || "";
+                  const messageArray = data.messages.filter((data:any)=> data.chatType != IChatType.ERROR);
+                  const message = messageArray[messageArray.length - 1]?.message || "";
                   const contextMessage = { email: data.customerEmail };
                   const replacedMessage = preProcessText(message, contextMessage);
 
@@ -90,7 +91,7 @@ const ZeonWidgetCard = () => {
                         key={data.ticketId}
                         totalUnreadMessage={data.unreadMessage}
                         heading={`Ticket Number: ${data.ticketId}`}
-                        text={`${data.messages[data.messages.length - 1]?.type === MessageType.SENT ? "You" : "Agent"} : ${replacedMessage}`}
+                        text={`${messageArray.filter((data:any)=> data.chatType != IChatType.ERROR)[messageArray.length - 1]?.type === MessageType.SENT ? "You" : "Agent"} : ${replacedMessage}`}
                         onClick={() => {
                           socketInstance.emit("join_ticket", {
                             widgetId:localStorage.getItem("widgetId"),
@@ -106,7 +107,7 @@ const ZeonWidgetCard = () => {
                                 message: data.text,
                               },
                             ],
-                            ...data.messages,
+                            ...messageArray,
                           ];
                           dispatch(setMessage(messageDataArray));
                           dispatch(setEmail(data.customerEmail));

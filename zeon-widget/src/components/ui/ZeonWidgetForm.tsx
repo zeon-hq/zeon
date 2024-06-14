@@ -11,6 +11,7 @@ import socketInstance from "api/socket";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import {
   clearPrevChat,
+  IChatType,
   IMessageSource,
   IUIStepType,
   setEmail,
@@ -77,6 +78,7 @@ const ZeonWidgetForm = () => {
         messageData: {
           workspaceId,
           channelId,
+          chatType: IChatType.HUMAN_MESSAGE,
           customerEmail: email,
           createdAt: Date.now().toString(),
           message,
@@ -124,6 +126,7 @@ const ZeonWidgetForm = () => {
               channelId,
               customerEmail: email,
               createdAt: Date.now().toString(),
+              chatType: IChatType.OUT_OF_OFFICE,
               message:widgetDetails?.behavior?.operatingHours.autoReplyMessageWhenOffline,
               isOpen: true,
               widgetId,
@@ -158,6 +161,7 @@ const ZeonWidgetForm = () => {
               channelId,
               customerEmail: email,
               createdAt: Date.now().toString(),
+              chatType: IChatType.AUTO_REPLY,
               message:widgetDetails?.behavior?.widgetBehavior.autoReply,
               isOpen: true,
               widgetId,
