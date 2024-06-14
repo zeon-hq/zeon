@@ -113,7 +113,7 @@ const SingleMessage = ({ info, isLastCount }: ISingleMessage) => {
               children={newMessage}
               components={{
                 
-                p: ({ node, ...props }) => (
+                p: ({ node, ...props }:any) => (
                   //@ts-ignore
                   <Text
                     color={
@@ -122,7 +122,7 @@ const SingleMessage = ({ info, isLastCount }: ISingleMessage) => {
                     {...props}
                   />
                 ),
-                a: ({ node, ...props }) => (
+                a: ({ node, ...props }:any) => (
                   <a {...props} aria-label="link" target="_blank" />
                 ),
               }}
