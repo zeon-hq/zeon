@@ -109,7 +109,6 @@ const Widget = ({ configType }: Props) => {
           <Flex justify="center" align="center" mb="lg" gap="4px">
             <Box>
               <img
-                width={"40px"}
                 src={topLogo || "https://zeon-assets.s3.ap-south-1.amazonaws.com/Logomark.svg"}
                 alt="zeon-logo"
               />
