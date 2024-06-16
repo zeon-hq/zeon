@@ -53,7 +53,11 @@ const MessageCard = ({ text, time, type, message }: any) => {
               style={{
                 borderRadius:"6px"
               }}
-              src={type === "received" ? (message?.messageSenderProfilePicUrl) : "https://zeon-assets.s3.ap-south-1.amazonaws.com/userimg1.svg"}
+              src={
+                type === "received"
+                  ? (message?.messageSenderProfilePicUrl || widgetDetails?.appearance?.miscellaneous?.botAvatar || "https://zeon-assets.s3.ap-south-1.amazonaws.com/Logomark.svg")
+                  : "https://zeon-assets.s3.ap-south-1.amazonaws.com/userimg1.svg"
+              }
               alt="zeon-logo"
             />
             <Text size="sm" weight={500} color="#344054">
