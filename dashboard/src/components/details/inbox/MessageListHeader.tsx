@@ -1,10 +1,12 @@
 import { Box, Flex, Image, Select, Space, Text } from "@mantine/core";
 import settingIcon from "assets/settingIcon.svg";
+import AIIconImg from "assets/ai_icon.svg";
 import { ChronologyName, FilterName, SubFilterName } from "components/types";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import useDashboard from "hooks/useDashboard";
 import { showNotification } from "@mantine/notifications";
+import {  Switch } from "@mantine/core";
 import { updateChannel } from "service/DashboardService";
 import {
     ISelectedPage,
@@ -75,7 +77,8 @@ export const MessageListHeader = () => {
             <div style={{ padding: "0px 12px" }}>
                 <Flex justify={"space-between"} align={"center"}>
                     <Box display={'flex'} style={{
-                        gap: '12px'
+                        gap: '12px',
+                        width: "50%",
                     }}>
                         <Text
                             style={{
@@ -101,35 +104,57 @@ export const MessageListHeader = () => {
                         style={{
                             display: "flex",
                             alignItems: "center",
-                            justifyContent: "flex-end"
+                            justifyContent: "flex-end",
+                            width: "50%",
                         }}>
+                            <div style={{
+                                display: "flex",
+                                gap: "8px",
+                            }}>
                         <Text
                             style={{
                                 border: "1px solid #D0D5DD",
                                 borderRadius: "6px",
                                 paddingLeft: "8px",
-                                paddingRight: "8px",
-                                marginLeft: "0px",
+                                color:'#344054',
+                                fontSize:'12px',
+                                fontWeight:'500',
+                                paddingRight: "4px",
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "4px",
+                                height: "24px",
+                                // marginLeft: "0px",
                             }}
                             color="#344054" fw={"500"} fz="12px">
-                            {'Enable AI'}
-                        </Text>
-                        <SwitchWithLabel
-                            onClick={async (e) => {
-                                const aiEnablePayload = { isAIEnabled: e.target.checked };
-
-                                const updateNotificatonMessage = await updateChannel(channelId, { ...currentChannelInfo, ...aiEnablePayload });
-                                await dispatch(updateIsAIEnabled({ ...aiEnablePayload, channelId }));
-                                if (updateNotificatonMessage?.status !== 200) {
-                                    showNotification({
-                                        title: "Notification",
-                                        message: "Something went wrong",
-                                        color: "red"
-                                    });
-                                }
-                            }}
-                            value={!!currentChannelInfo?.isAIEnabled}
+                                  <Image
+                            style={{ cursor: "pointer" }}
+                            maw={13}
+                            onClick={gotoSettingsPage}
+                            radius="md"
+                            src={AIIconImg }
                         />
+                            {'AI Chat Agent'}
+                        </Text>
+
+                        <Switch
+            checked={!!currentChannelInfo?.isAIEnabled}
+            onClick={async (e:any) => {
+                const aiEnablePayload = { isAIEnabled: e.target.checked };
+
+                const updateNotificatonMessage = await updateChannel(channelId, { ...currentChannelInfo, ...aiEnablePayload });
+                await dispatch(updateIsAIEnabled({ ...aiEnablePayload, channelId }));
+                if (updateNotificatonMessage?.status !== 200) {
+                    showNotification({
+                        title: "Notification",
+                        message: "Something went wrong",
+                        color: "red"
+                    });
+                }
+            }}
+            color="indigo"
+          />
+                        </div>
                     </Box>
                 </Flex>
             </div>
