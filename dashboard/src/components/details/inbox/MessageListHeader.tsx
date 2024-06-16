@@ -110,6 +110,7 @@ export const MessageListHeader = () => {
                             <div style={{
                                 display: "flex",
                                 gap: "8px",
+                                alignItems: "center",
                             }}>
                         <Text
                             style={{
