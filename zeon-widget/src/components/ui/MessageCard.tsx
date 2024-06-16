@@ -1,11 +1,9 @@
-import styled from "styled-components";
+import { Box, Flex, Text } from "@mantine/core";
 import { preProcessText } from "components/hooks/commonUtils";
 import useWidget from "components/hooks/useWidget";
-//@ts-ignore
-import { format, isToday } from "date-fns";
-import { Box, Flex, Text } from "@mantine/core";
-import { differenceInMinutes } from "date-fns";
+import { differenceInMinutes, format, isToday } from "date-fns";
 import ReactMarkdown from "react-markdown";
+import styled from "styled-components";
 
 const Wrapper = styled(Box)<{type:any}>`
   background-color:${(props:any) => props.type === "received" ? "#f2f4f7" :"#ECF3FF"};
@@ -18,17 +16,7 @@ const Wrapper = styled(Box)<{type:any}>`
   margin-bottom: 10px;
 `;
 
-const markdownText =`
-### Order Confirmation
-
-- Order Number: 12345
-- Order Date: ${new Date().toLocaleDateString()}
-
-[Track Your Order](https://example.com/orders/12345)
-`;
-
-const MessageCard = ({ text, time, type }: any) => {
-  const { widgetDetails } = useWidget();
+const MessageCard = ({ text, time, type, message }: any) => {
   const getTime = (time: string) => {
     const inputTime = +time;
     const date = new Date(inputTime);
@@ -64,16 +52,11 @@ const MessageCard = ({ text, time, type }: any) => {
               style={{
                 borderRadius:"6px"
               }}
-              src={
-                type === "received"
-                  ? widgetDetails?.appearance?.miscellaneous?.botAvatar ||
-                    "https://zeon-assets.s3.ap-south-1.amazonaws.com/Logomark.svg"
-                  : "https://zeon-assets.s3.ap-south-1.amazonaws.com/userimg1.svg"
-              }
+              src={type === "received" ? (message?.messageSenderProfilePicUrl) : "https://zeon-assets.s3.ap-south-1.amazonaws.com/userimg1.svg"}
               alt="zeon-logo"
             />
             <Text size="sm" weight={500} color="#344054">
-              {type === "received" ? widgetDetails.aiName || "Agent" : "You"}
+              {type === "received" ? (message.messageSenderName) : "You"}
             </Text>
           </Flex>
           <Flex>

@@ -182,6 +182,7 @@ const ZeonWidgetChat = () => {
             {messages.filter((data)=> data.chatType != IChatType.ERROR).map((message: Message) => (
               //@ts-ignore
               <MessageCard
+              message={message}
                 text={message.message}
                 type={message.type}
                 //@ts-ignore

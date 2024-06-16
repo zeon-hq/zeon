@@ -99,16 +99,6 @@ const SingleMessage = ({ info, isLastCount }: ISingleMessage) => {
           </Flex>
 
           <Wrapper type={type}>
-            {/* <Text
-              dangerouslySetInnerHTML={{ __html: newMessage }}
-              color={
-                isReceivedMessage || type === "SENT"
-                  ? "white"
-                  : "black"
-              }
-              size="sm"
-              weight="normal"
-            /> */}
             <ReactMarkdown
               children={newMessage}
               components={{

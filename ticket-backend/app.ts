@@ -218,6 +218,7 @@ app.post('/slack/events', async (req, res) => {
       const getTicketInformation = await TicketModel.findOne({ thread_ts });
       if (getTicketInformation?.workspaceId && getTicketInformation?.channelId && getTicketInformation?.ticketId) {
 
+        // bot able to get the slack image and slack name, need to check this.
         const message = event.text;
         const messageOptions = {
           workspaceId: getTicketInformation.workspaceId,
@@ -228,6 +229,8 @@ app.post('/slack/events', async (req, res) => {
           type: IMessageType.RECEIVED,
           message: message,
           chatType: IMessageType.SLACK_MESSAGE,
+          messageSenderProfilePicUrl:'',
+          messageSenderName:'',
           ticketId: getTicketInformation.ticketId,
           messageSource: IMessageSource.SLACK,
           source: IMessageSource.SLACK
@@ -256,12 +259,14 @@ app.post('/send/message', async (req, res) => {
   const channelId = messageData?.channelId;
   const channel = await ChannelModel.findOne({ channelId });
   const isAIEnabled = channel?.toObject().isAIEnabled;
-  const agentName = channel?.toObject().agentName;
+  const agentName = channel?.toObject().agentName || channel?.toObject().aiName;
   const isEmailConfigured = channel?.emailNewTicketNotification;
   const isSlackConfigured = channel?.slackChannelId;
   const isAutoReply = messageData?.autoReply;
   const isAutoReplyMessageWhenOffline = messageData?.autoReplyMessageWhenOffline;
-  const chatType = messageData?.chatType;
+  let chatType = messageData?.chatType;
+  let messageSenderName = messageData?.messageSenderName;
+  let messageSenderProfilePicUrl = messageData?.messageSenderProfilePicUrl;
 
   const getThread_rs = await TicketModel.findOne({ ticketId });
 
@@ -280,7 +285,9 @@ app.post('/send/message', async (req, res) => {
       widgetId,
       isNewTicket,
       messageSource,
-      chatType
+      chatType,
+      messageSenderName,
+      messageSenderProfilePicUrl
     }
 
     if (isSlackConfigured) {
@@ -378,7 +385,7 @@ app.post('/send/message', async (req, res) => {
 
   } else {
     // store the actual message in the message collection
-    createMessage({ ...messageData, createdAt: new Date(), chatType });
+    createMessage({ ...messageData, createdAt: new Date() });
     socketTicketPayload = {
       workspaceId: workspaceId,
       message: messageData.message,
@@ -386,6 +393,8 @@ app.post('/send/message', async (req, res) => {
       type: messageData.type,
       isRead: messageData.isRead,
       chatType,
+      messageSenderName,
+      messageSenderProfilePicUrl,
       ticketId,
       isNewTicket,
       widgetId,
@@ -504,20 +513,24 @@ app.post('/send/message', async (req, res) => {
 
       } else {
         // success
+        chatType = IChatType.AI_MESSAGE;
+        messageSenderName = '';
         const message = aiResponse?.text;
         const messageOptions: MessageOptions = {
           workspaceId,
           channelId,
           type: IMessageType.RECEIVED,
           isRead: true,
-          chatType: IChatType.AI_MESSAGE,
+          chatType,
+          messageSenderName: agentName || messageSenderName,
+          messageSenderProfilePicUrl: `https://api.dicebear.com/7.x/fun-emoji/svg?seed=${agentName || 'Agent'}`,
           time: messageData.createdAt,
           message,
           ticketId,
           widgetId,
           messageSource: IMessageSource.BOTH
         }
-        await createMessage({ ...messageData, createdAt: new Date(), message, type: IMessageType.RECEIVED, chatType: IChatType.AI_MESSAGE });
+        await createMessage({ ...messageData, createdAt: new Date(), message, type: IMessageType.RECEIVED, chatType, messageSenderName });
         // io.emit("message", messageOptions);
         // sending event to the dashboard
         io.to(workspaceId).emit("message", messageOptions); // done
@@ -538,6 +551,7 @@ app.post('/send/message', async (req, res) => {
       }
     } else {
       const message = `${aiResponse?.error} \n Note: this is only appears in the dashboard, customers won't see this message`;
+      chatType = IChatType.ERROR;
       const messageOptions: MessageOptions = {
         workspaceId,
         channelId,
@@ -545,11 +559,14 @@ app.post('/send/message', async (req, res) => {
         isRead: true,
         time: messageData.createdAt,
         message,
-        chatType: IChatType.ERROR,
+        chatType,
+        messageSenderName,
+        messageSenderProfilePicUrl,
         ticketId,
         widgetId,
         messageSource: "widget"
       }
+      
       if (isSlackConfigured) {
         const sendSlackPayload: ISendSlackMessage = {
           channelId: channel.slackChannelId,
@@ -560,7 +577,7 @@ app.post('/send/message', async (req, res) => {
 
         await CoreService.sendSlackMessage(sendSlackPayload);
       }
-      createMessage({ ...messageData, createdAt: new Date(), message, type: IMessageType.SENT, chatType: IChatType.ERROR });
+      createMessage({ ...messageData, createdAt: new Date(), message, type: IMessageType.SENT });
 
       // sending event to the dashboard
       io.to(workspaceId).emit("message", messageOptions); // done
