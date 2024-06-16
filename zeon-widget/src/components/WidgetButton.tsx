@@ -43,11 +43,13 @@ const WidgetButton = () => {
       if (currentActiveConversation) {
         // Push the new message into the messages array of the active conversation
         currentActiveConversation.unreadMessage = (currentActiveConversation?.unreadMessage || 0) + 1;
-        currentActiveConversation.messages.push({
-        message: processData.message,
-          type: MessageType.RECEIVED,
-          time: Date.now().toString()
-        });
+        const tempData = {
+          message: processData.message,
+            type: MessageType.RECEIVED,
+            time: Date.now().toString(),
+            ...processData
+          }
+        currentActiveConversation.messages.push(tempData);
 
         // Dispatch the updated conversations to the Redux store
         dispatch(setAllOpenConversations(copiedAllOpenConversations));
@@ -62,7 +64,8 @@ const WidgetButton = () => {
         setMessage({
           message: processData.message,
           type: MessageType.RECEIVED,
-          time: Date.now().toString()
+          time: Date.now().toString(),
+          ...processData
         })
       );
     }
