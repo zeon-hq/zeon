@@ -17,6 +17,7 @@ const Wrapper = styled(Box)<{type:any}>`
 `;
 
 const MessageCard = ({ text, time, type, message }: any) => {
+  const { widgetDetails } = useWidget();
   const getTime = (time: string) => {
     const inputTime = +time;
     const date = new Date(inputTime);
@@ -56,7 +57,7 @@ const MessageCard = ({ text, time, type, message }: any) => {
               alt="zeon-logo"
             />
             <Text size="sm" weight={500} color="#344054">
-              {type === "received" ? (message.messageSenderName) : "You"}
+              {type === "received" ? (message?.messageSenderName || widgetDetails?.aiName || "Agent") : "You"}
             </Text>
           </Flex>
           <Flex>
