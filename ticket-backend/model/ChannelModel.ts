@@ -16,6 +16,7 @@ const widgetHeaderSectionSchema = new Schema({
 
 const miscellaneousSchema = new Schema({
     showBranding: Boolean,
+    botAvatar: String
 });
 
 const widgetBehaviorSchema = new Schema({
@@ -79,7 +80,7 @@ const channelSchema = new Schema({
         widgetButtonSetting: widgetButtonSettingSchema,
         widgetHeaderSection: widgetHeaderSectionSchema,
         miscellaneous: miscellaneousSchema,
-        userAvatars: userAvatarsSchema,
+        userAvatars: userAvatarsSchema
     },
     behavior: {
         widgetBehavior: widgetBehaviorSchema,

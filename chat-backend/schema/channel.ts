@@ -32,6 +32,7 @@ export interface IChannelsInfo {
     };
     miscellaneous: {
       showBranding: boolean;
+      botAvatar: string
     };
     userAvatars: {
       enableUserAvatars: boolean;
@@ -124,6 +125,7 @@ const ChannelSchema: Schema = new Schema({
     },
     miscellaneous: {
       showBranding: { type: Boolean, default: true },
+      botAvatar: { type: String, default: "https://zeon-assets.s3.ap-south-1.amazonaws.com/userimg5+(1).svg" },
     },
     userAvatars: {
       enableUserAvatars: { type: Boolean, default: true },
@@ -156,7 +158,7 @@ const ChannelSchema: Schema = new Schema({
         ],
       },
       additonalUserAvatars: { type: String, default: "+5" },
-    },
+    }
   },
   behavior: {
     widgetBehavior: {
