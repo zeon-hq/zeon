@@ -1,5 +1,5 @@
 import { ReadStream } from "fs";
-import { IMessageSource } from "../../model/MessageModel";
+import { IChatType, IMessageSource } from "../../model/MessageModel";
 
 /**
  * Ticket event data options
@@ -31,6 +31,7 @@ export interface MessageOptions {
   isRead?:  boolean;
   file?: ReadStream;
   userId?: string;
+  chatType: IChatType;
   firstName?: string;
   lastName?: string;
   image?: string;

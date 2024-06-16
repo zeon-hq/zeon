@@ -8,6 +8,16 @@ export enum IMessageSource {
   HUMAN_INTERVENTION = "human_intervention"
 }
 
+export enum IChatType {
+  AI_MESSAGE = 'AI_MESSAGE',
+  HUMAN_MESSAGE = 'HUMAN_MESSAGE',
+  AUTO_REPLY = 'AUTO_REPLY',
+  OUT_OF_OFFICE = 'OUT_OF_OFFICE',
+  NOTE = 'NOTE',
+  SLACK_MESSAGE = 'SLACK_MESSAGE',
+  ERROR = 'ERROR'
+}
+
 export enum IMessageType {
   SENT = "sent",
   RECEIVED = "received",
@@ -20,6 +30,7 @@ export interface IMessage extends Document {
   workspaceId: string;
   createdAt: number;
   type: IMessageType;
+  chatType: IChatType;
   messageSource: IMessageSource;
   isRead: boolean;
 }
@@ -30,6 +41,7 @@ const messageSchema = new Schema<IMessage>({
   workspaceId: { type: String },
   createdAt: { type: Number },
   type: { type: String },
+  chatType: { type: String },
   messageSource: {type: String},
   isRead: { type: Boolean },
 }, {

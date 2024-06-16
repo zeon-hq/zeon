@@ -6,7 +6,7 @@ import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { BsArrow90DegDown } from "react-icons/bs";
 import { useDispatch } from "react-redux";
-import { IMessageSource, Message, setMessage } from "redux/slice";
+import { IChatType, IMessageSource, Message, setMessage } from "redux/slice";
 import styled from "styled-components";
 import { IPropsType, MessageType } from "./Chat.types";
 import ChatMessageFooter from "./ChatMessageFooter";
@@ -117,6 +117,7 @@ const ZeonWidgetChat = () => {
             widgetId,
             message,
             isOpen: true,
+            chatType: IChatType.HUMAN_MESSAGE,
             type: MessageType.SENT,
             ticketId,
             ipAddress: output?.data?.ip || "",
@@ -167,7 +168,7 @@ const ZeonWidgetChat = () => {
               </div>
             )}
 
-            {messages.map((message: Message) => (
+            {messages.filter((data)=> data.chatType != IChatType.ERROR).map((message: Message) => (
               //@ts-ignore
               <MessageCard
                 text={message.message}

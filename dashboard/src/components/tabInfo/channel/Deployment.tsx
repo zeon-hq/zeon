@@ -143,7 +143,9 @@ const Deployment = () => {
               </Box>
             </Flex>
             <Flex justify="space-between">
-              <Label text={"Craft your AI Agent’s persona here"} />
+              <Label 
+              data-id="custom-prompt-label"
+              text={"Craft your AI Agent’s persona here"} />
               <Label text={`Tokens: ${customPrompt.length}`} />
             </Flex>
             <Textarea
@@ -155,6 +157,7 @@ const Deployment = () => {
             />
             <Flex mt="md" justify="space-between" align="center" gap="10px">
               <Switch
+              data-id="enable-human-handover-switch"
                 checked={checked}
                 color="indigo"
                 onChange={(event: any) =>
@@ -222,6 +225,7 @@ const Deployment = () => {
                       }}
                     >
                       <Button
+                      data-id="copy-widget-chat"
                         style={{
                           borderColor: "white",
                           margin: 0,

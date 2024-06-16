@@ -15,7 +15,7 @@ import { isEmpty } from "lodash";
 import { useEffect, useRef, useState } from "react";
 import { IoMdArrowForward } from "react-icons/io";
 import { useDispatch } from "react-redux";
-import { setEmail as rSetEmail, IMessageSource, IUIStepType, clearPrevChat, setMessage as rSetMessage, setShowWidget, setStep} from "redux/slice";
+import { setEmail as rSetEmail, IMessageSource, IUIStepType, clearPrevChat, setMessage as rSetMessage, setShowWidget, setStep, IChatType} from "redux/slice";
 import styled from "styled-components";
 
 const Wrapper = styled.div<{height:any}>`
@@ -193,6 +193,7 @@ const ZeonWidgetModal = () => {
           customerEmail: email,
           createdAt: Date.now().toString(),
           message,
+          chatType: IChatType.HUMAN_MESSAGE,
           isOpen: true,
           widgetId,
           type: MessageType.SENT,
@@ -227,6 +228,7 @@ const ZeonWidgetModal = () => {
               customerEmail: email,
               createdAt: Date.now().toString(),
               message:widgetDetails?.behavior?.operatingHours.autoReplyMessageWhenOffline,
+              chatType: IChatType.OUT_OF_OFFICE,
               isOpen: true,
               widgetId,
               autoReplyMessageWhenOffline:true,
@@ -263,6 +265,7 @@ const ZeonWidgetModal = () => {
               createdAt: Date.now().toString(),
               message:widgetDetails?.behavior?.widgetBehavior.autoReply,
               isOpen: true,
+              chatType: IChatType.AUTO_REPLY,
               autoReply:true,
               widgetId,
               type: MessageType.RECEIVED,
