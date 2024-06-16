@@ -246,7 +246,7 @@ app.post('/slack/events', async (req, res) => {
 
 
 app.post('/send/message', async (req, res) => {
-  const { ticketId, workspaceId, messageData, messageSource, isNewTicket } = req.body;
+  const { ticketId, workspaceId, messageData, messageSource, isNewTicket, history} = req.body;
 
   // create new ticket
   // store the data in mongo
@@ -445,7 +445,8 @@ app.post('/send/message', async (req, res) => {
       widgetId,
       workspaceId,
       channelId,
-      agentName
+      agentName,
+      history
     });// done
 
     const aiResponse = await CoreService.getAIMessage(aiMessagepayload);
