@@ -60,13 +60,13 @@ const MessageCard = ({ text, time, type }: any) => {
         <Flex mb="xs" justify="space-between" align="center">
           <Flex gap="4px">
             <img
-              width={"17px"}
+              width={"20px"}
               style={{
                 borderRadius:"6px"
               }}
               src={
                 type === "received"
-                  ? widgetDetails?.appearance?.widgetHeaderSection?.topLogo ||
+                  ? widgetDetails?.appearance?.miscellaneous?.botAvatar ||
                     "https://zeon-assets.s3.ap-south-1.amazonaws.com/Logomark.svg"
                   : "https://zeon-assets.s3.ap-south-1.amazonaws.com/userimg1.svg"
               }

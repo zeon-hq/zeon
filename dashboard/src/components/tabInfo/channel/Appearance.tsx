@@ -29,6 +29,18 @@ import {
   Wrapper,
 } from "../tabInfo.styles";
 
+function getFilenameFromUrl(urlString: string): string {
+  try {
+    const url = new URL(urlString);
+    const pathname = url.pathname;
+    const filename = pathname.split("/").pop();
+    return decodeURIComponent(filename || '');
+  } catch (e) {
+    console.error(e);
+    return '';
+  }
+}
+
 const Appearance = () => {
   const { channelsInfo, selectedPage } = useDashboard();
   const dispatch = useDispatch();
@@ -38,6 +50,7 @@ const Appearance = () => {
 
   const [value, setValue] = useState<File | null>(null);
   const [userAvatarValue, setUserAvatarValue] = useState<string | null>(null);
+  const [botAvatarValue, setBotAvatarValue] = useState<File | null>(null);
   const [userAvatarIndex, setUserAvatarIndex] = useState<number>(0);
   const [loading, setLoading] = useState(false);
 
@@ -49,7 +62,7 @@ const Appearance = () => {
   }: IUpdateDashboardAction) => {
     dispatch(
       updateDashboardSetting({
-        type: "appearance",
+        type: type || "appearance",
         subType,
         value,
         key,
@@ -118,6 +131,35 @@ const Appearance = () => {
     }
   }
 
+  const handleBotAvatarSubmit = async () => {
+    setLoading(true);
+    try {
+      if (botAvatarValue) {
+        const formData = new FormData();
+        formData.append("file", botAvatarValue);
+        // formData.append('fileName', value.name);
+        const res = await uploadFile(formData);
+
+        handleChange({
+          subType: "miscellaneous",
+          type: "appearance",
+          value: res.uploadedUrl,
+          key: "botAvatar",
+        });
+
+        setLoading(false);
+      }
+      setLoading(false);
+    } catch (error) {
+      showNotification({
+        title: "Error",
+        message: "Error while uploading file",
+      });
+      setLoading(false);
+      console.log(error);
+    }
+  }
+
   const handleSave = async () => {
     try {
       //@ts-ignore
@@ -148,6 +190,10 @@ const Appearance = () => {
   useEffect(() => {
     handleUserAvatarSubmit();
   }, [userAvatarValue]); // eslint-disable-line
+
+  useEffect(() => {
+    handleBotAvatarSubmit();
+  }, [botAvatarValue]); // eslint-disable-line
 
   return (
     <>
@@ -203,12 +249,48 @@ const Appearance = () => {
                       //@ts-ignore
                       placeholder={
                         appearenceDetails?.widgetHeaderSection?.topLogo ?
-                          "Click to change the top logo"
-                          : "Select top logo"
+                          getFilenameFromUrl(appearenceDetails?.widgetHeaderSection?.topLogo || '')
+                          : "Click to change the top logo"
                       }
                       // withAsterisk
                       accept="image/png,image/jpeg"
                       onChange={setValue}
+                      
+                      name="img"
+                      disabled={loading}
+                    />
+                  </Grid.Col>
+                </Grid>
+
+                <Space style={{ marginTop: "16px" }} />
+
+                <Grid
+                  style={{
+                    gridTemplateColumns:
+                      "repeat(auto-fill, minmax(200px, 1fr))",
+                  }}
+                >
+                  <Grid.Col>
+                    <FileInput
+                      inputWrapperOrder={inputWrapperData}
+                      description="Upload your bot avatar"
+                      // placeholder={
+                      //   appearenceDetails?.widgetHeaderSection?.topLogo
+                      //     ? "Click to change the top logo"
+                      //     : "Select top logo"
+                      // }
+                      label={
+                        <Text size="12px"> Bot Avatar </Text>
+                      }
+                      //@ts-ignore
+                      placeholder={
+                        appearenceDetails?.widgetHeaderSection?.topLogo ?
+                          getFilenameFromUrl(appearenceDetails?.miscellaneous?.botAvatar || '')
+                          : "Click to change the bot avatar"
+                      }
+                      // withAsterisk
+                      accept="image/png,image/jpeg"
+                      onChange={setBotAvatarValue}
                       
                       name="img"
                       disabled={loading}
@@ -316,8 +398,8 @@ const Appearance = () => {
                       //@ts-ignore
                       placeholder={
                         appearenceDetails.userAvatars.userAvatarsLinks[0].link
-                          ? "Click to change the avatar"
-                          : "Select Avatar 1"
+                          ? getFilenameFromUrl(appearenceDetails.userAvatars.userAvatarsLinks[0].link)
+                          : "Click to change the avatar"
                       }
                       // withAsterisk
                       accept="image/png,image/jpeg"
@@ -363,8 +445,8 @@ const Appearance = () => {
                       //@ts-ignore
                       placeholder={
                         appearenceDetails.userAvatars.userAvatarsLinks[1].link
-                          ? "Click to change the avatar"
-                          : "Select Avatar 2"
+                          ? getFilenameFromUrl(appearenceDetails.userAvatars.userAvatarsLinks[1].link)
+                          : "Click to change the avatar"
                       }
                       // withAsterisk
                       accept="image/png,image/jpeg"
@@ -411,8 +493,8 @@ const Appearance = () => {
                        //@ts-ignore
                        placeholder={
                         appearenceDetails.userAvatars.userAvatarsLinks[2].link
-                          ? "Click to change the avatar"
-                          : "Select Avatar 3"
+                          ? getFilenameFromUrl(appearenceDetails.userAvatars.userAvatarsLinks[2].link)
+                          : "Click to change the avatar"
                       }
                       // withAsterisk
                       accept="image/png,image/jpeg"
@@ -457,8 +539,8 @@ const Appearance = () => {
                        //@ts-ignore
                        placeholder={
                         appearenceDetails.userAvatars.userAvatarsLinks[3].link
-                          ? "Click to change the avatar"
-                          : "Select Avatar 4"
+                          ? getFilenameFromUrl(appearenceDetails.userAvatars.userAvatarsLinks[3].link)
+                          : "Click to change the avatar"
                       }
                       // withAsterisk
                       accept="image/png,image/jpeg"
@@ -503,8 +585,8 @@ const Appearance = () => {
                        //@ts-ignore
                        placeholder={
                         appearenceDetails.userAvatars.userAvatarsLinks[4].link
-                          ? "Click to change the avatar"
-                          : "Select Avatar 5"
+                          ? getFilenameFromUrl(appearenceDetails.userAvatars.userAvatarsLinks[4].link)
+                          : "Click to change the avatar"
                       }
                       // withAsterisk
                       accept="image/png,image/jpeg"

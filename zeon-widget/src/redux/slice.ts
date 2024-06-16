@@ -88,6 +88,7 @@ export interface IWidgetDetails  {
     };
     miscellaneous: {
       showBranding: boolean;
+      botAvatar: string
     }
   };
   behavior: {

@@ -138,7 +138,7 @@ const Widget = ({ configType }: Props) => {
                   />
                 ))}
               <Avatar radius="xl">
-                +{appearenceDetails?.userAvatars?.additonalUserAvatars}
+                {appearenceDetails?.userAvatars?.additonalUserAvatars}
               </Avatar>
             </Avatar.Group>
           )}

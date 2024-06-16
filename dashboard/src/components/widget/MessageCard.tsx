@@ -20,7 +20,8 @@ const Wrapper = styled(Box)`
 const MessageCard = ({ text }: Props) => {
   const { channelsInfo, selectedPage } = useDashboard();
   const appearenceDetails = channelsInfo[selectedPage.name]?.appearance;
-  const topLogo = appearenceDetails?.widgetHeaderSection?.topLogo;
+  // const topLogo = appearenceDetails?.widgetHeaderSection?.topLogo;
+  const botAvatar = appearenceDetails?.miscellaneous?.botAvatar;
   const aiName = channelsInfo[selectedPage.name]?.aiName || "Agent";
   return (
     <Box>
@@ -29,7 +30,7 @@ const MessageCard = ({ text }: Props) => {
           <img
             width={"25px"}
             src={
-              topLogo ??
+              botAvatar ??
               "https://zeon-assets.s3.ap-south-1.amazonaws.com/Logomark.svg"
             }
             alt="zeon-logo"

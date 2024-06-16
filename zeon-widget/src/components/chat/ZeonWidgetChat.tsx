@@ -100,6 +100,16 @@ const ZeonWidgetChat = () => {
       type,
       createdAt,
     };
+
+    let history:any = ""
+
+    // loop through messages and construct the history
+    messages.forEach((message: Message) => {
+      let persona = message.type === "sent" ? "User" : "AI"
+      let text = message.message
+      let thisMessage =  `${persona}: ${text} \n`
+      history += thisMessage
+    })
     
     try {
       if (!isSubmitting) {
@@ -124,6 +134,7 @@ const ZeonWidgetChat = () => {
             messageSource: IMessageSource.WIDGET,
           },
           messageSource: IMessageSource.WIDGET,
+          history
         };
 
         await sendMessage(sendMessagePayload);

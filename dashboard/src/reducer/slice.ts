@@ -78,6 +78,7 @@ export interface ChannelsInfo {
       };
       miscellaneous: {
         showBranding: boolean;
+        botAvatar: string
 
       };
       userAvatars: {
@@ -131,7 +132,7 @@ export interface ChannelsInfo {
 
 export interface IUpdateDashboardAction {
   value: string | boolean | { to: Date; from: Date };
-  type: "appearance" | "behavior";
+  type: "appearance" | "behavior" | "miscellaneous"
   subType:
     | "widgetButtonSetting"
     | "widgetHeaderSection"
@@ -141,7 +142,8 @@ export interface IUpdateDashboardAction {
     | "inChatWidgets"
     | "miscellaneous"
     | "operatingHours"
-    | "userAvatars";
+    | "userAvatars"
+    | "botAvatar"
   key:
     | "widgetButtonColor"
     | "widgetLogo"
@@ -170,7 +172,8 @@ export interface IUpdateDashboardAction {
     | "operatingHours"
     | "autoReplyMessageWhenOffline"
     | "enableUserAvatars"
-    | "userAvatarsLinks";
+    | "userAvatarsLinks"
+    | "botAvatar"
 }
 
 export interface ICannedResponse {
