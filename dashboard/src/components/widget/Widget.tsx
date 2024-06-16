@@ -103,7 +103,7 @@ const Widget = ({ configType }: Props) => {
   const inChatWidgets = channelsInfo[selectedPage.name]?.inChatWidgets;
   const topLogo = appearenceDetails?.widgetHeaderSection?.topLogo;
   return (
-    <>
+    <> 
       <ModalWrapper>
         <Box>
           <Flex justify="center" align="center" mb="lg" gap="4px">
