@@ -112,7 +112,6 @@ const Header = ({ isForm }: { isForm: boolean }) => {
           <Flex justify="center" align="center" mb="lg" gap="4px">
             <Box>
               <img
-                width={"40px"}
                 src={widgetDetails?.appearance?.widgetHeaderSection?.topLogo}
                 alt="zeon-logo"
               />
