@@ -108,43 +108,8 @@ const FinanceSidebar = ({ workspaceId }: { workspaceId: string }) => {
           })}
 
           <Space h="md" />
-
-          {/* <PanelLabel
-            labelTitle="Chronological"
-            icon={channelCreate}
-            iconOnClick={() => {}}
-            hideRightImage={true}
-          />
-
-          <Space h="md" /> */}
-
-          {/* <PanelLabel
-            labelTitle="Tags"
-            icon={channelCreate}
-            iconOnClick={() => {}}
-            hideRightImage={true}
-          />
-          <Space h="md" />
-
-          {
-            tags.map((item, index) => {
-              return (
-                <NavItem
-                  key={index}
-                  onClick={item.onClick}
-                  icon={item.icon}
-                  label={item.label}
-                />
-              );
-            })
-          } */}
         </SideBarTopWrapper>
       </MainWrapper>
-
-      {/* <CreateChannelModal
-        opened={openChannelModal}
-        setOpened={setOpenChannelModal}
-      /> */}
 
       {isWorkSpaceEmpty && <SubscribeModal openModal={open} />}
     </>

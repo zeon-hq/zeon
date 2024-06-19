@@ -10,7 +10,7 @@ import { createChannel } from "service/DashboardService"
 import useDashboard from "hooks/useDashboard";
 import { useDispatch } from "react-redux";
 import {  initDashboard } from 'reducer/slice';
-
+import {  useNavigate } from "react-router";
 type ICreateChannelModalNew = {
   opened: boolean;
   setOpened: (value: boolean) => void;
@@ -21,6 +21,7 @@ const CreateChannelModalNew = ({
   setOpened,
 }: ICreateChannelModalNew) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [channelName, setChannelName] = useState<string>();
   const [loading, setLoading] = useState(false);
   const [CTABtnTitle, setCTABtnTitle] = useState('Next');
@@ -142,6 +143,7 @@ const CreateChannelModalNew = ({
                         //@ts-ignore
                         dispatch(initDashboard(workspaceInfo.workspaceId));
                         onModalClose();
+                        navigate(`/${workspaceInfo.workspaceId}/chat?channelId=${channelId}&pageName=${'Overview'}`);
                       }
                       // setStep((value) => {
                       //     return value + 1;

@@ -136,11 +136,6 @@ const Sidebar = ({ workspaceId }: { workspaceId: string }) => {
         </SideBarTopWrapper>
       </MainWrapper>
 
-      {/* <CreateChannelModal
-        opened={openChannelModal}
-        setOpened={setOpenChannelModal}
-      /> */}
-
       <CreateChannelModalNew
         opened={openChannelModal}
         setOpened={setOpenChannelModal}

@@ -103,11 +103,6 @@ const ChatSidebar = ({isConnected}:IChatSidebarProps) => {
         </SideBarTopWrapper>
       </MainWrapper>
 
-      {/* <CreateChannelModal
-        opened={openChannelModal}
-        setOpened={setOpenChannelModal}
-      /> */}
-
       <CreateChannelModalNew
         opened={openChannelModal}
         setOpened={setOpenChannelModal}
