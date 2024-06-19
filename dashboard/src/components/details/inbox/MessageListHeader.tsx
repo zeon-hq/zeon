@@ -135,6 +135,7 @@ export const MessageListHeader = () => {
                             radius="md"
                             src={AIIconImg }
                         />
+                        
                             {'AI Chat Agent'}
                         </Text>
 
