@@ -18,7 +18,6 @@ import {
 } from "reducer/slice";
 import styled from "styled-components";
 import TicketSearch from "./TicketSearch";
-import SwitchWithLabel from "components/ui-components/SwitchWithLabel";
 
 const Wrapper = styled.div`
     border-bottom: 1px solid #eaecf0;
