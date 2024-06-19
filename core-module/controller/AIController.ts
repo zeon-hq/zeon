@@ -95,6 +95,11 @@ export default class AIController {
         },
       );
 
+      /**
+       * give me the data of last one week,
+       * search api (sorting:{createdOm: })
+       */
+
       logger.info({message:`[AIController.getInjestFile] fetching custom prompt`})
       const {customPrompt, enableHumanHandover} = await getCustomPrompt(channelId)
   

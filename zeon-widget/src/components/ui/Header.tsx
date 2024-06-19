@@ -190,6 +190,10 @@ const Header = ({ isForm }: { isForm: boolean }) => {
                     border: "1px solid #D0D5DD !important",
                     color: "#344054",
                   }}
+                  onClick={() => {
+                    window.open(widget.link, "_blank");
+                  }
+                  }
                 >
                   {widget.title}
                 </Button>
