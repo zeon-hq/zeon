@@ -72,7 +72,7 @@ const ChatSidebar = ({isConnected}:IChatSidebarProps) => {
         <SideBarTopWrapper>
           <SideBarInnerWrapper style={{ paddingBottom: "12px" }}>
             <PanelLabel
-              labelTitle={isConnected ? "Connected" : "Disconnected"}
+              labelTitle={isConnected ? "connected" : "disconnected"}
               icon={channelCreate}
               iconOnClick={() => {
                 setOpenChannelModal(true);
