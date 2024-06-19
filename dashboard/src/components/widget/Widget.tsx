@@ -9,8 +9,11 @@ import {
   BsSlack,
   BsTwitter,
   BsWhatsapp,
-  BsYoutube,
+  BsYoutube
 } from "react-icons/bs";
+import {
+  IoCalendarNumberOutline
+} from "react-icons/io5"
 import { Book } from "tabler-icons-react";
 
 type Props = {
@@ -92,6 +95,8 @@ const getIcons = (type: string) => {
       return <BsWhatsapp />;
     case "youtube":
       return <BsYoutube />;
+    case "calendar":
+      return <IoCalendarNumberOutline />;
     default:
       return <Book />;
   }

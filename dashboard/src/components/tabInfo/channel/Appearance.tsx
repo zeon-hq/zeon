@@ -647,9 +647,10 @@ const Appearance = () => {
                         { value: "slack", label: "Slack" },
                         { value: "docs", label: "Documentation" },
                         { value: "discord", label: "Discord" },
-                        { value: "twitter", label: "Twiiter" },
+                        { value: "twitter", label: "Twitter" },
                         {value:"whatsapp", label:"Whatsapp"},
-                        {value:'youtube', label:'Youtube'}
+                        {value:'youtube', label:'Youtube'},
+                        {value: "calendar", label: "Calendar"}
                       ]}
                       placeholder="Select an option"
                       label={
