@@ -80,7 +80,6 @@ const CreateChannelModalNew = ({
       <Modal
           radius={"8px"}
           centered
-          // mt={"90px"}
           withCloseButton={false}
           opened={opened}
           onClose={onModalClose}
