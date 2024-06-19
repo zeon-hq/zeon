@@ -99,7 +99,7 @@ const ChatArea = () => {
   const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState<string | null>("reply");
   const [query, setQuery] = useInputState("");
-  const {activeChat,workspaceInfo} = useDashboard();
+  const {activeChat, workspaceInfo, user} = useDashboard();
 
   const scrollToBottom = () => {
       const chatContainerParentDiv: any = document.getElementById('chat_container_div');
@@ -123,6 +123,8 @@ const ChatArea = () => {
         createdAt: Date.now().toString(),
         message,
         isOpen: true,
+        messageSenderName: user.email,
+        messageSenderProfilePicUrl: user?.profilePic || `https://api.dicebear.com/7.x/fun-emoji/svg?seed=${user?.name}`,
         type: MessageType.RECEIVED,
         ticketId,
         messageSource: "dashboard"

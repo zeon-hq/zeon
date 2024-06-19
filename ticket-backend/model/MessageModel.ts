@@ -26,6 +26,8 @@ export enum IMessageType {
 
 export interface IMessage extends Document {
   message: string;
+  messageSenderName: string;
+  messageSenderProfilePicUrl: string;
   ticketId: string;
   workspaceId: string;
   createdAt: number;
@@ -41,6 +43,8 @@ const messageSchema = new Schema<IMessage>({
   workspaceId: { type: String },
   createdAt: { type: Number },
   type: { type: String },
+  messageSenderName: { type: String },
+  messageSenderProfilePicUrl: { type: String },
   chatType: { type: String },
   messageSource: {type: String},
   isRead: { type: Boolean },
