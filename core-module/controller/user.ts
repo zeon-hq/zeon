@@ -120,9 +120,9 @@ export const newSignup = async (req: Request, res: Response) => {
       updateEnabled: false,
     };
 
-    await sendSignupEmail(body);
-
     await sendAlertToDiscordOnSignup({ user });
+    await sendSignupEmail(body);
+   
 
     // Return the token to the client
     return res.status(200).json({ at: token });
