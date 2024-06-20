@@ -6,6 +6,7 @@ const useDashboard = () => {
     const selectedPage = useSelector((item:RootState) => item.dashboard.selectedPage);
     const channelsInfo = useSelector((item:RootState) => item.dashboard.channelsInfo);
     const channel = useSelector((item:RootState) => item.dashboard.channel);
+    const isChannelInfoFetched = useSelector((item:RootState) => item.dashboard.isChannelInfoFetched);
     const loading = useSelector((item:RootState) => item.dashboard.loading);
     const workspaces = useSelector((item:RootState) => item.dashboard.workspaces);
     const user = useSelector((item:RootState) => item.dashboard.user);
@@ -42,7 +43,8 @@ const useDashboard = () => {
         activeEntity,
         isChat,
         isFinance,
-        isCRM
+        isCRM,
+        isChannelInfoFetched
     }
 }
 

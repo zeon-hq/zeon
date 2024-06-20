@@ -296,6 +296,7 @@ export interface IChannel {
 
 export type DashboardInterface = {
   channel: IChannel[];
+  isChannelInfoFetched:boolean;
   channelsInfo: ChannelsInfo;
   invoices: Invoice[];
 admins: Admin[];
@@ -343,6 +344,7 @@ allUsers : any[];
 
 const initialState: DashboardInterface = {
   channel: [],
+  isChannelInfoFetched:false,
   showSidebar:true,
   inbox: {
     allConversations: [],
@@ -615,6 +617,7 @@ export const dashboardSlice = createSlice({
       })
       .addCase(initDashboard.fulfilled, (state, action) => {
         state.channel = action.payload.channelsInfo.channels;
+        state.isChannelInfoFetched = true;
         state.channelsInfo = action.payload.channelsInfo;
         state.invoices = action.payload.invoice;
         state.admins = action.payload.admins;

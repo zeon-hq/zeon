@@ -25,9 +25,8 @@ const MainWrapper = styled.div`
 
 const ChatSidebar = ({isConnected}:IChatSidebarProps) => {
   const dispatch = useDispatch();
-  const { channel, loading, workspaceInfo } = useDashboard();
-  const [openChannelModal, setOpenChannelModal] = useState(channel?.length === 0 ? true : false);
-
+  const { channel, loading, workspaceInfo, isChannelInfoFetched } = useDashboard();
+  const [openChannelModal, setOpenChannelModal] = useState(false);
   const isWorkSpaceEmpty = !!_.isEmpty(workspaceInfo);
 
   const handleClick = ({ type, name, channelId }: ISelectedPage) => {
@@ -57,14 +56,20 @@ const ChatSidebar = ({isConnected}:IChatSidebarProps) => {
       );
   }, [workspaceInfo]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  useEffect(() => {
-    if (channel.length > 0) {
+
+  useEffect(()=>{
+    if (isChannelInfoFetched) {
+      if (channel?.length > 0) {
+        setOpenChannelModal(false);
       localStorage.setItem(
         "zeon-dashboard-channelId",
-        channel[0].channelId
-      );
-    }
-  }, [channel?.length > 0]); // eslint-disable-line react-hooks/exhaustive-deps
+      channel[0].channelId
+    );
+  } else {
+    setOpenChannelModal(true);
+  }
+}
+  },[channel?.length, loading, isChannelInfoFetched])
 
   return (
     <>
