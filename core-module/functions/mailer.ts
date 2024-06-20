@@ -69,7 +69,7 @@ export const sendInviteUserEmail = (body: any) => {
 
 export const sendAlertToDiscordOnSignup = async ({user}:{user:any}) => {
   try {
-     await axios.post(process.env.DISCORD_WEBHOOK_URL as string, {
+     await axios.post(process.env.SIGNUP_DISCORD_WEBHOOK as string, {
       content: `New user signed up: \n Email: ${user.email} \n Name: ${user.name} \n user: ${JSON.stringify(user)}`,
 
     });

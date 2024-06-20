@@ -120,7 +120,9 @@ export const newSignup = async (req: Request, res: Response) => {
       updateEnabled: false,
     };
 
-    await sendAlertToDiscordOnSignup({ user });
+    user.password = undefined
+
+    await sendAlertToDiscordOnSignup({ user: user });
     await sendSignupEmail(body);
    
 
