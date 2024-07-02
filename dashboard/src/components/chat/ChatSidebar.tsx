@@ -25,6 +25,7 @@ const MainWrapper = styled.div`
 
 const ChatSidebar = ({isConnected}:IChatSidebarProps) => {
   const dispatch = useDispatch();
+  
   const { channel, loading, workspaceInfo, isChannelInfoFetched } = useDashboard();
   const [openChannelModal, setOpenChannelModal] = useState(false);
   const isWorkSpaceEmpty = !!_.isEmpty(workspaceInfo);
