@@ -59,6 +59,10 @@ const ChatSidebar = ({isConnected}:IChatSidebarProps) => {
 
 
   useEffect(()=>{
+    console.log("channel", channel);
+    console.log('isChannelInfoFetched',isChannelInfoFetched);
+    console.log('loading',loading);
+    
     if (isChannelInfoFetched) {
       if (channel?.length > 0) {
         setOpenChannelModal(false);
