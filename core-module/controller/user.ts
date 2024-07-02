@@ -19,6 +19,7 @@ import { IInviteUserBody, ISignupBody, ZeonModules } from "../types/types";
 import UserWorkspace from "../schema/UserWorkspace";
 import ForgetPassword from "../schema/ForgetPassword";
 import {
+  sendAlertToDiscordOnSignup,
   sendForgetPasswordEmail,
   sendInviteEmail,
   sendSignupEmail,
@@ -119,7 +120,11 @@ export const newSignup = async (req: Request, res: Response) => {
       updateEnabled: false,
     };
 
+    user.password = undefined
+
+    await sendAlertToDiscordOnSignup({ user: user });
     await sendSignupEmail(body);
+   
 
     // Return the token to the client
     return res.status(200).json({ at: token });
