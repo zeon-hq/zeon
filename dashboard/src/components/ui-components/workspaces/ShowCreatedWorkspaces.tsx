@@ -156,9 +156,13 @@ const ShowCreatedWorkspaces = ({ workspaces, invites, getWorkspaceToWhichUserIsI
           ) : (
             <></>
           )}
-          <Flex
+         
+
+          <CreateWorkspaceModal opened={open} setOpened={setOpened} />
+        </SubWrapper>
+        <Flex
             gap={"md"}
-            style={{ width: "100%", paddingLeft: "1rem", paddingRight: "3rem" }}
+            style={{ width: "38rem", marginTop:"16px", paddingLeft: "1rem", paddingRight: "3rem" }}
             direction={{ base: "column", sm: "row" }} // Stack vertically on small screens, row on larger screens
             justify={"space-around"}
           >
@@ -205,9 +209,6 @@ const ShowCreatedWorkspaces = ({ workspaces, invites, getWorkspaceToWhichUserIsI
               Create Workspace{" "}
             </Button>
           </Flex>
-
-          <CreateWorkspaceModal opened={open} setOpened={setOpened} />
-        </SubWrapper>
       </Wrapper>
     </>
   )

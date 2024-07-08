@@ -652,6 +652,20 @@ const Appearance = () => {
                         {value:'youtube', label:'Youtube'},
                         {value: "calendar", label: "Calendar"}
                       ]}
+                      styles={(theme) => ({
+                        item: {
+                          // applies styles to selected item
+                          '&[data-selected]': {
+                            '&, &:hover': {
+                              backgroundColor: '#4263EB',
+                              color: 'white'
+                            },
+                          },
+                
+                          // applies styles to hovered item (with mouse or keyboard)
+                          '&[data-hovered]': {},
+                        },
+                      })}
                       placeholder="Select an option"
                       label={
                         <Text size="12px"> Icon </Text>

@@ -10,6 +10,7 @@ export const Wrapper = styled.div`
 export const InfoContainer = styled.div`
   height: 75vh;
   overflow-y: auto;
+  padding-right: 20px;
   overflow-x: hidden;
 `;
 
