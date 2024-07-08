@@ -118,7 +118,7 @@ const Login = () => {
                 <Image
                   maw={150}
                   mx="left"
-                  src="https://framerusercontent.com/images/oZHYGFoJF8rwIgs3MTgCCfA.svg"
+                  src="https://www.zeonhq.com/appupdates"
                   alt="Zeon Logo"
                 />
                 <Space h={8} />

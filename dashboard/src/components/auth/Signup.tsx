@@ -80,7 +80,7 @@ const Signup = () => {
         <Image
           maw={100}
           mx="auto"
-          src="https://framerusercontent.com/images/oZHYGFoJF8rwIgs3MTgCCfA.svg"
+          src="https://www.zeonhq.com/appupdates"
           alt="Zeon Logo"
         />
         <Space h={16} />
