@@ -200,7 +200,7 @@ const Login = () => {
           </AuthContainer>
           <Box>
             <iframe
-              src="https://forum.zeonhq.com/c/product-updates/5"
+              src="https://www.zeonhq.com/appupdates"
               height={"100%"}
               width={600}
               title="Changelog"
