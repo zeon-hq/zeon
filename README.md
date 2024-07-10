@@ -28,29 +28,17 @@
 
 ## 🙋‍♂️ What is Zeon
 
-Zeon is an open-source platform that let's you manage your customer support, customer relations and manage your finance all in one place.
+Welcome to Zeon, an open-source platform revolutionizing customer support and relationship management with AI.
 
-We built Zeon so that businesses can have a solid foundation to build their business on. We believe that businesses should be able to focus on what they do best and not have to worry about the tools they use to run their business.
-
-Zeon is also built with the future of work in mind. We believe that the future of work is remote and that businesses should be able to operate from anywhere in the world.
-
-The fastest way to get started is to use our [cloud version](https://app.zeonhq.com/) managed by us or if you prefer to self-host, please view our [self-hosting documentation](https://docs.zeonhq.com/gettingstarted/opensource/self-host). You can also read the general product documentation [here](https://docs.zeonhq.com/).
+Zeon integrates advanced AI technologies to enhance customer interactions and streamline support operations. Designed with remote-first principles, Zeon empowers businesses to deliver exceptional customer service anytime, anywhere.
 
 ## 🚀 What you can do with Zeon
 
-**Chat Module**
-
-- **Deploy a chat widget to your website** - Deploy a chat widget to your website and start chatting with your customers in real-time.
-
-- **Manage your support tickets** - Manage your support tickets and assign them to your agents, set up auto responses, canned messages and more.
-
-**Coming Soon**
-
-- **Customer Relationship Management** - Manage your customer relationships and keep track of your customers.
-
-- **Finance & Account** - Manage your finance and account and keep track of your expenses and revenue. Automate and track your financial statements and more.
-
-Check out our [roadmap](http://roadmap.zeonhq.com/) and keep an eye on what's coming next. You're free to [submit](http://roadmap.zeonhq.com/) new ideas and vote on features.
+**AI-Powered Customer Support** Deploy 24/7 AI chat agents for instant customer assistance.
+**Seamless Integration** Easily embed chat widgets into websites or applications.
+**CRM Module - 'Relations'** Coming soon! Revolutionizing relationship management with AI insights and predictive analytics.
+**Data Privacy** We prioritize user trust by not selling your data. Your privacy matters to us.
+**Open Source** Collaborate and innovate with our community-driven platform. Customize Zeon to suit your business needs.
 
 ## 🤘 Why choose Zeon?
 
@@ -67,7 +55,11 @@ Zeon is built with the following principles in mind:
 ## 🧚‍♀️ Community
 
 For a place to have open discussions on features, voice your ideas, or get help
-with general questions please visit our [discord community](https://discord.gg/PvPxhHAX).
+with general questions please visit: 
+
+Discord Invite Link - https://discord.gg/wdCJcYyj4e
+Twitter - https://x.com/zeonhq
+Book a Meeting - https://cal.com/zeonhq/30min 
 
 ## 💪 Contribution Guidelines
 
@@ -75,7 +67,7 @@ We're always on the lookout for contributions to Zeon, and we're glad you're con
 
 **Contributing**: We are actively looking for contributors, no matter your skill level or experience. To contribute check out [contributing guide](https://docs.zeonhq.com/contributing/)
 
-**Join Our Discord**: Our [Discord](https://discord.gg/PvPxhHAX) is the best place to get help on your Reflex project and to discuss how you can contribute.
+**Join Our Discord**: Our [Discord](https://discord.gg/wdCJcYyj4e) is the best place to get help on your Reflex project and to discuss how you can contribute.
 
 **GitHub Issues**: [Issues](https://github.com/zeon-hq/zeon/issues) are an excellent way to report bugs. Additionally, you can try and solve an existing issue and submit a PR.
 
@@ -90,15 +82,8 @@ We have these base guidelines:
 
 Please ensure that your code adheres to the project's coding standards and conventions.
 
-## ⚡️ Technologies Used
-
-- [TypeScript](https://www.typescriptlang.org):A typed superset of JavaScript that provides enhanced tooling and developer productivity.
-
-## 🫡 Acknowledgements
-
-[Ducalis](https://ducalis.io/) for providing us an awesome roadmap and changelog tool management tool to help us keep track of our progress as an open-source company.
-
-
 ## 📄 License
 
 Zeon is licensed under the [MIT License](https://license.com/licenses/mit/).
+
+
