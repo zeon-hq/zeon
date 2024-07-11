@@ -1,22 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <meta charset="utf-8" />
-    <link rel="icon" href="https://zeonhq.b-cdn.net/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta name="Zeon" content="Zeon Web App" />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
+
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <meta charset="utf-8" />
+  <link rel="icon" href="https://zeonhq.b-cdn.net/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="Zeon" content="Zeon Web App" />
+  <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+  <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+  <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
       Only files inside the `public` folder can be referenced from the HTML.
@@ -25,12 +23,13 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>Zeon</title>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
+  <title>Zeon</title>
+</head>
+
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root"></div>
+  <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
 
@@ -40,44 +39,47 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-    <script src="https://unpkg.com/jwt-decode@2.2.0/build/jwt-decode.min.js"></script>
-    <script
-    async
-    src="https://js.stripe.com/v3/pricing-table.js">
+  <script src="https://unpkg.com/jwt-decode@2.2.0/build/jwt-decode.min.js"></script>
+  <script async src="https://js.stripe.com/v3/pricing-table.js">
   </script>
-    <script>
-      const at = localStorage.getItem("at");
-      if (at) {
-        const decoded = jwt_decode(at);
-        !(function (b, c, f, d, a, e) {
-          b.dclsPxl ||
-            ((((d = b.dclsPxl =
-              function () {
-                d.callMethod
-                  ? d.callMethod.apply(d, arguments)
-                  : d.queue.push(arguments);
-              }).push = d).queue = []),
+  <script>
+    const at = localStorage.getItem("at");
+    if (at) {
+      const decoded = jwt_decode(at);
+      !(function (b, c, f, d, a, e) {
+        b.dclsPxl ||
+          ((((d = b.dclsPxl =
+            function () {
+              d.callMethod
+                ? d.callMethod.apply(d, arguments)
+                : d.queue.push(arguments);
+            }).push = d).queue = []),
             ((a = c.createElement("script")).async = !0),
             (a.src = f),
             (e = c.getElementsByTagName("script")[0]).parentNode.insertBefore(
               a,
               e
             ));
-        })(window, document, "https://ducalis.io/js/widget.js");
-        dclsPxl("initWidget", {
-          appId: "e760d0ac71ed98e637dc9b3e2c69bedf5441be54", // Required
-          boardId: "e030a925513f5f875977c3ee49894126", // Required
-          user: {
-            // required
-            email: decoded.email,
-            hash: at,
-            // optional
-            userID: decoded.userId,
-            name: decoded.name,
-            avatar: `https://api.dicebear.com/7.x/fun-emoji/svg?seed=${decoded.name}`,
-          },
-        });
-      }
-    </script>
-  </body>
+      })(window, document, "https://ducalis.io/js/widget.js");
+      dclsPxl("initWidget", {
+        appId: "e760d0ac71ed98e637dc9b3e2c69bedf5441be54", // Required
+        boardId: "e030a925513f5f875977c3ee49894126", // Required
+        user: {
+          // required
+          email: decoded.email,
+          hash: at,
+          // optional
+          userID: decoded.userId,
+          name: decoded.name,
+          avatar: `https://api.dicebear.com/7.x/fun-emoji/svg?seed=${decoded.name}`,
+        },
+      });
+    }
+  </script>
+<script>
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys getNextSurveyStep onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  posthog.init('phc_bZJkocXeDM6sN0BuPTEj52haEduz2HXC26tzkfKuXwQ',{api_host:'https://us.i.posthog.com', person_profiles: 'identified_only' // or 'always' to create profiles for anonymous users as well
+      })
+</script>
+</body>
 </html>
