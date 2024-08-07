@@ -80,7 +80,7 @@ const Signup = () => {
         <Image
           maw={100}
           mx="auto"
-          src="https://www.zeonhq.com/appupdates"
+          src="https://zeon-user-assets.s3.us-east-1.amazonaws.com/Logo.png-nu19f33t8w"
           alt="Zeon Logo"
         />
         <Space h={16} />
