@@ -35,7 +35,7 @@
     "@socket.io/admin-ui": "^0.5.1",
     "@socket.io/mongo-adapter": "^0.2.1",
     "@socket.io/mongo-emitter": "^0.1.0",
-    "axios": "^0.27.2",
+    "axios": "^0.28.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.2",
     "express": "^4.18.1",
